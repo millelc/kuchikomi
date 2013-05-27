@@ -1,0 +1,71 @@
+
+################################################# Spécifications fonctionnelles ############################
+
+
+
+1° Le QRcode et/ou la puce RIFD contiendront une url qui seront affiché(e)(s) à la vue des utilisateurs par le commerçant.
+
+2° Ce téléphone devra être équipé d'un lecteur RFID ou d'un appareil photo. En outre, il devra posséder une interface graphique et un navigateur internet pour afficher les réponses reçues.
+
+3° Le commerçant est une personne inscrite ou souhaitant s'inscrire au réseau.
+
+4° L'appareil du commerçant devra impérativement comporter une interface graphique et un navigateur. Éventuellement, un appareil photo pourra être un plus non négligeable pour l'envoi de photos accompagnant les Kuchikomi écrits.
+
+5° Le serveur sera constitué de scripts et devra reconnaître qui le contacte (utilisateur, commerçant ou admin)
+
+6° Les données seront stockées par un système de gestion de base de données relationnelle qui ne pourra dialoguer qu'avec le serveur.
+
+7° L'administrateur devra devra pouvoir dialoguer d'une manière ou d'une autre avec les commerçants souhaitant s'inscrire et recevoir leurs données (logo, image de présentation, adresse, horaires, etc...) L'utilisation du téléphone/email pourra être requise.
+
+8° La page d'administration devra impérativement être lue depuis une machine avec une résolution d'écran suffisamment grande pour afficher les données nombreuses (ordinateur/tablette) et l'interface de la page d'administration.
+
+9° L'utilisateur prend son appareil et scanne le QRcode par reconnaissance de photo ou lit la puce par le lecteur RFID.
+
+|=>TEST : Le scan d'un QRcode d'un magasin par un téléphone sera décypté convenablement.
+|=>TEST : Idem avec puce.
+
+
+10° L'appareil de l'utilisateur enverra et recevra au serveur des requêtes web.
+
+|=>TEST : Une adresse décryptée par le téléphone ouvrira le navigateur pour correspondre avec le serveur.
+
+11° Le serveur peut éventuellement être capable d'émettre vers des appareils (2) d'utilisateurs des notifications PUSH.
+
+|=>TEST : Une notification PUSH envoyée par le serveur sera correctement réceptionnée par le téléphone de l'utilisateur.
+
+12-13° L'interface admin et l'appareil du commerçant dialogueront avec le serveur uniquement à l'aide de pages web.
+
+|=>TEST : L'ajout d'un kuchikomi par un commerçant sera bien reçu par le serveur (renvoi d'un AR)
+|=>TEST : Idem pour la réception (affichage) d'un array de statistiques par le commerçant venant du serveur.
+|=>TEST : L'ajout d'un commerce par un admin sera bien reçu par le serveur (AR).
+|=>TEST : Idem pour l'ajout d'un admin.
+|=>TEST : L'envoi d'un bandeau sera correctement reçu et « rangé » par le serveur.
+|=>TEST : Idem pour toutes les modifications entrées par l'admin.
+
+14° Le commerçant doit contacter l'administrateur d'une manière ou d'une autre (téléphone mail... à décider)
+
+|=>TEST : À voir plus tard.
+
+15° L'administrateur envoie (par poste, par mail ?) au commerçant les objets nécessaires (QRcode, puce RFID ?)
+
+|=>TEST : Pour commencer, la génération d'un code (url) sur demande en fonction de l'identifiant du commerce (nouveau ou pas)
+
+16° L'utilisateur est une personne munie d'un appareil (2) et souhaitant scanner le code ou la puce du commerçant.
+
+17°  Le commerçant affichera/publiera/exposera à sa discrétion le QRcode/puce qu'il aura reçu.
+
+18° La base de données (6) et le serveur (5) dialogueront ensemble via des requêtes préparées et des tableaux de données.
+
+|=>TEST : Les requêtes d'insertions, mises à jour, suppressions, lectures envoyées par le serveur recevront en réponse de la BDD des tableaux de données correpondants.
+
+################################################# Questions #################################################
+
+QRcode ou RFID ?
+Application obligatoire ? (appel direct, mail direct, config gps, etc...)
+Combien d'admins ?
+Comment inscrire les commerçants ? (par tél, par mail, par formulaire web ?)
+Que devra renvoyer l'administrateur au commerçant ?
+Bandeau d'information de l'union comerciale ?
+Auto-promotion ? (page admin du cdc)
+Action de partage ? (faites passer)
+

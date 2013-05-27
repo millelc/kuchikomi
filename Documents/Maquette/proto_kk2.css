@@ -1,0 +1,24 @@
+header
+{
+  text-align: center; 
+  padding-bottom:30px;
+}
+
+
+section
+{
+ border: 3px black solid;
+}
+
+.droite
+{
+ margin-left:50% 
+}
+
+
+#ajout
+{
+ float:left;
+ width:50%;
+ border: none;
+}

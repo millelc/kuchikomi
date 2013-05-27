@@ -1,0 +1,124 @@
+body
+{
+ width:28%; 
+}
+
+header
+{
+  text-align:center;
+}
+
+article
+{
+  border: 3px black solid;
+}
+
+#logo
+{
+  width:80%;
+  margin-left:auto;
+}
+
+div p img
+{
+ float:left; 
+}
+
+
+article form
+{
+ clear:both; 
+}
+
+footer
+{
+ clear:both;
+}
+
+#cadre
+{
+ border: 3px black solid;
+ clear:both;
+}
+
+.stopfloat
+
+{
+ clear:both; 
+}
+
+
+a
+{
+ text-decoration: none;
+ color:black;
+}
+
+#droite
+{
+ float:right; 
+}
+
+#gauche
+{
+ float:left;
+ width:60%;
+}
+
+.decale
+{
+ padding-left:300px; 
+}
+
+
+#img_prez
+{
+ width:70%;
+ margin-left:auto;
+ margin-right:auto;
+ height:125px;
+}
+
+
+section
+{
+ width:100%; 
+}
+
+
+.gauche
+{
+ float:left;
+ width:60%;
+}
+
+#centrer
+{
+ text-align:center;
+}
+
+
+.bouton form
+{
+ width:50%; 
+}
+
+
+
+/*
+#bandeau
+{
+ clear:both;
+ width:50%;
+ margin-left:auto;
+ margin-right:auto;
+}
+
+
+#bandeau_englobe
+{
+  border: 3px blue solid;
+  padding-top: 100px;
+}
+
+*/

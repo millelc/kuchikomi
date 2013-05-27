@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="proto_kk2.css" />
+        <title>Administration</title>
+    </head>
+
+    <body>
+	
+	<header>
+	<p>Panneau d'administration</p>
+	</header>
+		<section id="ajout">
+		
+		<h3>Ajouter un commerce</h3>
+		
+		<form action="interface_com.html" method="post" enctype="multipart/form-data">
+		<label for="pseudo">Nom d'utilisateur du gérant :</label><br /><input type="text" /><br /><br />
+		<label for="logo">Logo du commerce</label><br /><input type="file" name="fichier" /><br /><br />
+		<label for="logo">Image de présentation :</label><br /><input type="file" name="fichier" /><br /><br />
+		<label for="pseudo">Horaires:</label><br /><input type="text" /><br /><br />
+		<label for="pseudo">Téléphone :</label><br /><input type="text" /><br /><br />
+		<label for="pseudo">E-mail :</label><br /><input type="text" /><br /><br />
+		<label for="pseudo">Adresse du commerce :</label><br /><input type="text" /><br /><br />
+		<label for="pseudo">Ligne de bus:</label><br /><input type="text" /><br /><br />
+		<label for="pseudo">Arrêt :</label><br /><input type="text" /><br /><br />
+		</form>
+		</section>
+		
+		<section class="droite">
+		
+		<h3>Modification du bandeau</h3>
+		
+		<label for="logo">Modifier le bandeau</label><br /><input type="file" name="fichier" /><br /><br />
+		
+		</section>
+		
+		<section class="droite">
+		
+		<h3>Modifier le statut d'un commerce</h3>
+		
+		<form method="post" action="traitement.php">
+			<p>
+			<label for="commerce">Quel commerce à modifier ?</label><br />
+				<select name="commerce" id="commerce">
+				<option value="france">Commerce 1</option>
+				<option value="espagne">Commerce 2</option>
+				<option value="italie">Commerce 3</option>
+				<option value="royaume-uni">Commerce 4</option>
+				<option value="canada">Commerce 5</option>
+				<option value="etats-unis">Commerce 6</option>
+				<option value="chine">Commerce 6</option>
+				<option value="japon">Commerce 7</option>
+				</select>
+				<br />
+			<label for="statut">Quel doit être son statut ?</label><br />
+				<select name="statut" id="statut">
+				<option value="france">statut 1</option>
+				<option value="espagne">statut 2</option>
+				<option value="italie">statut 3</option>
+				<option value="royaume-uni">statut 4</option>
+				<option value="canada">statut 5</option>
+				<option value="etats-unis">statut 6</option>
+				<option value="chine">statut 6</option>
+				<option value="japon">statut 7</option>
+				</select>
+			</p>
+		</form>
+		</section>
+		
+		
+		
+		<section class="droite">
+		<h3>Statistiques générales</h3>
+		
+		<p>6857 clients inscrits depuis le 01.01.13</p>
+		
+		<p>146 commerçants actifs depuis le 01.01.13</p>
+		
+		<p>2134 KuchiKomi envoyés depuis le 01.01.13</p>
+		
+		
+		</section>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+	<footer>
+	</footer>
+    </body>
+</html>

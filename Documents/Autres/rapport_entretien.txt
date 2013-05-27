@@ -1,0 +1,20 @@
+
+############################################## Réponses #########################################################
+############################################ Rapport de l'entretien #############################################
+
+À terme, l'application devra intégrer les QRcodes ET les champs NFC.
+L'application sera obligatoire mais pas pour maintenant.
+Il n'y aura qu'un seul admin.
+L'inscription des commerçants se fera à la discrétion des admins.
+L'administrateur imprimera un QRcode qu'il préparera à sa manière et donnera/enverra au commerçant. Éventuellement autre chose...
+Le bandeau sera un footer et sera une publivité automatique du client (ici la cci)
+L'auto-promotion se rapporte au bandeau d'information. Celui-ci permet de faire des annonces choisies par la cci.
+L'action de partage se résume à l'envoi d'un mail ou d'un sms (couche applicative)
+
+
+À retenir de cet entretien :
+
+Une application sera nécessaire et impérative. Mais elle ne sera implantée que plus tard. Se mettre d'accord au plus tôt sur le protocole de connexion/inscription lors de la première utilisation est capital.
+Cette application sera vendue à plusieurs cci différentes, il faut donc le prendre en compte en séparant bien et en permettant une modification simplissime des fichiers de configuration. Chaque cci aura bien sûr une bdd différente.
+Il n'y aura pas de statuts pour le commerce. Il n'y aura pas d'argent qui transitera. Tout sera accessible et égalitaire au début. Les options payantes ne seront rajoutées que plus tard.
+Le premier prototype pour la v1 devra être la plus simple possible. Plusieurs commerçants dans la base. Plusieurs abonnés inscrits et abonnés à un ou plusieurs commerce. Un abonné peut afficher sa liste d'abonnements. Un abonné peut consulter la liste de kk d'un de ses abonnements. Un abonné peut s'abonner à un nouveau commerce, sa liste d'abonnements se mettra à jour et il pourra consulter de même les nouveaux kk de ce nouvel abonnement. Un commerçant pourra écrire un nouveau kk, un abonné qui consultera après verre ce nouveau kk dans sa liste. Un admin pourra voir de simples statistiques (COUNT) sur sa page admin.
