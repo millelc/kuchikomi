@@ -97,15 +97,23 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			{
 			echo '<br />Votre identifiant : ';
 			echo $_SESSION['id'];
-			echo '<br />Voici la liste de vos abonnements : ';
+			echo '<br />Voici la liste de vos abonnements :<br /> ';
 			
 			$bdd = Outils_Bd::getInstance()->getConnexion();
 			$req = $bdd->prepare('SELECT id_commerce FROM abonnement WHERE id_abonne = ?');
 			$req->execute(array($_SESSION['id']));
+			
 			while ($donnees = $req->fetch())
 				{
-				echo '<br />';
 				echo $donnees['id_commerce'];
+				echo ' ';
+				$req2 = $bdd->prepare('SELECT nom FROM commerce WHERE id_commerce = ?');
+				$req2->execute(array($donnees['id_commerce']));
+				while ($donnees = $req2->fetch())
+					{
+					echo $donnees['nom'];
+					echo '   <br />';
+					}
 				}
 			
 			
