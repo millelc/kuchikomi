@@ -7,7 +7,7 @@ include_once('Connexion.class.php');
 
 
 
-class GestionAbonne
+class GestionAbonnement
 	{
 	private $_bdd;
 	
@@ -21,9 +21,9 @@ class GestionAbonne
 	public function ajout(Abonnement $abo)
 		{
 		try
-			{			
+			{
 			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, ?)');
-			$q->execute(array($abo->id_abonne(), $abo->id_commerce(), $abo->date()));
+			$q->execute(array($abo->id_abonne(), $abo->id_commerce(), $abo->ladate()));
 			
 			
 			}

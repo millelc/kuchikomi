@@ -5,6 +5,7 @@ session_start();
 include_once('modeles/Abonne.class.php');
 include_once('modeles/Abonnement.class.php');
 include_once('modeles/GestionAbonne.class.php');
+include_once('modeles/GestionAbonnement.class.php');
 
 
 /*
@@ -75,8 +76,8 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 		if ($_GET['appel']=='deco')
 			{
 			echo '<br />';
-			echo $_GET['appel'];
 			session_destroy();
+			echo 'Cette page devra renvoyer immédiatement vers la page listant les kuchikomi. Comme on ne sera plus connecté, ce sera le formulaire de connexion qui appraîtra en premier lieu.';
 			}
 		else if ($_GET['appel']=='abo')
 			{
@@ -84,10 +85,14 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			echo $_GET['id'];
 			echo '<br />Votre identifiant est : ';
 			echo $_SESSION['id'];
-			$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
+			echo '<br />';
+			$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'], 'ladate' => date("d-m-Y") ));
+			echo $nouvel_abo->id_commerce();
+			echo $nouvel_abo->id_abonne();
+			echo $nouvel_abo->ladate();
 			$connexion = Outils_Bd::getInstance()->getConnexion();
-			$inscription= new GestionAbonne($connexion);
-			//$inscription->ajout($nouvel_inscrit);
+			$inscription= new GestionAbonnement($connexion);
+			$inscription->ajout($nouvel_abo);
 			
 			
 			

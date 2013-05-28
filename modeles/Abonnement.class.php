@@ -9,9 +9,9 @@ class Abonnement
 	{
 	private $_id_commerce;
 	private $_id_abonne;
-	private $_date;
+	private $_ladate;
 	
-	public function __consctruct(array $donnees)
+	public function __construct(array $donnees)
 		{
 		echo "Appel de la classe d'abonnement réussi.";
 		$this->hydrate($donnees);
@@ -21,7 +21,7 @@ class Abonnement
 		{
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setId_abonne($donnees['id_abonne']);
-		$this->setDate($donnees['date']);
+		$this->setLaDate($donnees['ladate']);
 		}
 	
 	
@@ -48,9 +48,9 @@ class Abonnement
 			}
 		}
 		
-	private function setDate($date)
+	private function setLaDate($date)
 		{
-		$this->_id_date = $date;
+		$this->_ladate = $date;
 		}
 #####################################################			
 	
@@ -67,9 +67,9 @@ class Abonnement
 		return $this->_id_abonne;
 		}
 	
-	public function date()
+	public function ladate()
 		{
-		return $this->_date;
+		return $this->_ladate;
 		}
 #####################################################	
 	
