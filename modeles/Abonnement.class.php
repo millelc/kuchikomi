@@ -21,7 +21,6 @@ class Abonnement
 		{
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setId_abonne($donnees['id_abonne']);
-		$this->setLaDate($donnees['ladate']);
 		}
 	
 	
@@ -48,7 +47,7 @@ class Abonnement
 			}
 		}
 		
-	private function setLaDate($date)
+	private function setLa_date($date)
 		{
 		$this->_ladate = $date;
 		}
@@ -67,7 +66,7 @@ class Abonnement
 		return $this->_id_abonne;
 		}
 	
-	public function ladate()
+	public function la_date()
 		{
 		return $this->_ladate;
 		}

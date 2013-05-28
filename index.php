@@ -86,10 +86,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			echo '<br />Votre identifiant est : ';
 			echo $_SESSION['id'];
 			echo '<br />';
-			$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'], 'ladate' => date("d-m-Y") ));
-			echo $nouvel_abo->id_commerce();
-			echo $nouvel_abo->id_abonne();
-			echo $nouvel_abo->ladate();
+			$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
 			$connexion = Outils_Bd::getInstance()->getConnexion();
 			$inscription= new GestionAbonnement($connexion);
 			$inscription->ajout($nouvel_abo);

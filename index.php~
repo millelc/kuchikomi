@@ -92,7 +92,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			echo $nouvel_abo->ladate();
 			$connexion = Outils_Bd::getInstance()->getConnexion();
 			$inscription= new GestionAbonnement($connexion);
-			//$inscription->ajout($nouvel_abo);
+			$inscription->ajout($nouvel_abo);
 			
 			
 			

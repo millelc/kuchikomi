@@ -21,11 +21,6 @@ class Abonnement
 		{
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setId_abonne($donnees['id_abonne']);
-		$this->setLaDate($donnees['ladate']);
-		echo $donnees['ladate'];
-		echo $this->id_commerce();
-		echo $this->id_abonne();
-		echo $this->ladate();
 		}
 	
 	

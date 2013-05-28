@@ -22,9 +22,8 @@ class GestionAbonnement
 		{
 		try
 			{
-			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, ?)');
-			$q->execute(array($abo->id_abonne(), $abo->id_commerce(), $abo->ladate()));
-			
+			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, NOW())');
+			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));			
 			
 			}
 		catch (Exception $e)
