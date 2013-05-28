@@ -2,7 +2,6 @@
 
 include_once('includes/configuration.php');
 include_once('Connexion.class.php');
-//include("includes/configuration.php");
 
 
 
@@ -33,19 +32,29 @@ class GestionAbonne
 			die('Erreur : ' . $e->getMessage());
 			}
 		
+		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	public function dejaInscrit(Abonne $perso)
+		{
+		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
+		$req->execute(array($perso->pseudo()));
+		$donnees = $req->fetch();
+		echo '<br />';
+		if ($donnees['id_abonne']=='')				// Cet abonné n'existe  pas.
+			{
+			return 0;
+			}
+		else
+			{
+			if ($perso->mdp()==$donnees['mot_de_passe'])						// Cet aboné existe mais est-ce le bon mot de passe ?
+				{
+				return $donnees['id_abonne'];								// Oui, c'est le bon mot de passe.
+				}
+			else
+				{
+				return 0;
+				}
+			}
 		}
 
   

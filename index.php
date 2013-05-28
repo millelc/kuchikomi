@@ -71,7 +71,29 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 	echo $_GET['id'];
 	if (isset($_SESSION['connexion']) AND $_SESSION['connexion']==1)	//Les variables ont été reçues et on est connecté.
 		{
-		echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
+		if ($_GET['appel']=='deco')
+			{
+			echo '<br />';
+			echo $_GET['appel'];
+			session_destroy();
+			}
+		else if ($_GET['appel']=='abo')
+			{
+			echo 'Vous souhaitez vous abonner au magasin n° ';
+			echo $_GET['id'];
+			}
+		else
+			{
+			echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
+			echo 'Vous voulez ';
+			echo $_GET['appel'];
+			echo '<br /> L\'identifiant est ';
+			echo $_GET['id'];
+			
+			echo '<br />Vous êtes ';
+			echo $_SESSION['pseudo'];
+			echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+			}
 		}
 	
 	else									//Les variables ont été reçues et on n'est pas connecté.
@@ -81,6 +103,20 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			{
 			echo "<br />Vous avez choisi de vous connecter.";
 			$nouveau_connecte= new Abonne(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));
+			$connexion = Outils_Bd::getInstance()->getConnexion();
+			$connecte= new GestionAbonne($connexion);
+			if ($connecte->dejaInscrit($nouveau_connecte)==0)
+				{
+				echo 'Pseudo ou mot de passe incorrect';
+				}
+			else
+				{
+				$_SESSION['id']= $connecte->dejaInscrit($nouveau_connecte);
+				$_SESSION['pseudo']= $_POST['pseudo'];
+				$_SESSION['connexion']=1;
+				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
+				}
+			
 			}
 			
 			
@@ -92,14 +128,17 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			$inscription= new GestionAbonne($connexion);
 			$inscription->ajout($nouvel_inscrit);
 			
-			
-			
-			
-			
-			
+			$_SESSION['connexion']=1;
+			$_SESSION['pseudo']= $_POST['pseudo'];
+			echo '<br />';
+			echo '<p>test</p>';
+			echo $_SESSION['connexion'];
+			echo '<p>test</p>';
+			header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 			//echo $nouvel_inscrit->pseudo();
 			//echo $nouvel_inscrit->mdp();
 			}
+		
 			
 		else								//Variables reçues, non connecté mais formulaire non rempli 
 			{
