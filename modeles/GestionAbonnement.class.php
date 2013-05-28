@@ -18,13 +18,14 @@ class GestionAbonne
 		  
 		  }
 
-	public function ajout(Abonne $perso)
+	public function ajout(Abonnement $abo)
 		{
 		try
 			{			
-			$q = $this->_bdd->prepare('INSERT INTO abonne (pseudo, mot_de_passe) VALUES(?, ?)');
-			$q->execute(array($perso->pseudo(), $perso->mdp()));
-			return $this->_bdd->lastInsertId();			
+			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, ?)');
+			$q->execute(array($abo->id_abonne(), $abo->id_commerce(), $abo->date()));
+			
+			
 			}
 		catch (Exception $e)
 			{
@@ -32,7 +33,7 @@ class GestionAbonne
 			}
 		
 		}
-		
+		/*
 	public function dejaInscrit(Abonne $perso)
 		{
 		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
@@ -55,7 +56,7 @@ class GestionAbonne
 				}
 			}
 		}
-
+*/
   
 	
 	

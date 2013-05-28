@@ -2,6 +2,7 @@
 
 
 include_once('Connexion.class.php');
+include("../includes/configuration.php");
 
 
 

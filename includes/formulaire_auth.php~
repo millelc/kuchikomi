@@ -1,0 +1,43 @@
+<?php
+
+
+if (isset($_POST['conx']))
+	{
+	echo "Vous avez choisi de vous connecter.";
+	}
+	
+else if (isset($_POST['inscr']))
+	{
+	echo "Vous avez choisi de vous inscrire.";
+	}
+
+
+else
+	{
+	echo 	'<form method="post" action="index.php?appel=';
+	echo $_GET['appel'];
+	echo '&id=';
+	echo $_GET['id'];
+	echo '">
+		<p>
+		<label for="pseudo">Votre pseudo :</label><br />
+		<input type="text" name="pseudo" id="pseudo" /><br />
+		<label for="pwd">Votre mot de passe :</label><br />
+		<input type="password" name="pwd" id="pwd" /><br />
+		<input type="submit" value="Connexion" name="connexion" />
+		<input type="submit" value="Inscription" name="inscription" />
+		</p>
+		</form>';
+	
+	}
+
+
+
+
+
+
+
+
+
+
+?>

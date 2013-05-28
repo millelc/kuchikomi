@@ -80,7 +80,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			}
 		else if ($_GET['appel']=='abo')
 			{
-			echo '<br />Vous souhaitez vous abonner au magasin n° ';
+			echo 'Vous souhaitez vous abonner au magasin n° ';
 			echo $_GET['id'];
 			echo '<br />Votre identifiant est : ';
 			echo $_SESSION['id'];

@@ -1,83 +1,84 @@
 <?php
 
-include_once('includes/configuration.php');
+
 include_once('Connexion.class.php');
+//include("includes/configuration.php");
 
 
 
 
 
-class GestionAbonne
+class Abonne
 	{
-	private $_bdd;
+	private $_id;
+	private $_pseudo;
+	private $_mdp;
 	
+	public function __construct(array $donnees)
+		{
+		echo "Appel de la classe réussi.";
+		$this->hydrate($donnees);
+		}
 	
-	public function __construct($bdd)
-		  {
-		  $this->setBdd($bdd);
-		  
-		  }
-
-	public function ajout(Abonne $perso)
+	public function hydrate (array $donnees)
 		{
-		try
-			{			
-			$q = $this->_bdd->prepare('INSERT INTO abonne (pseudo, mot_de_passe) VALUES(?, ?)');
-			$q->execute(array($perso->pseudo(), $perso->mdp()));
-			return $this->_bdd->lastInsertId();			
-			}
-		catch (Exception $e)
-			{
-			die('Erreur : ' . $e->getMessage());
-			}
-		
+		$this->setPseudo($donnees['pseudo']);
+		$this->setMdp($donnees['mdp']);
 		}
-		
-	public function dejaInscrit(Abonne $perso)
-		{
-		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
-		$req->execute(array($perso->pseudo()));
-		$donnees = $req->fetch();
-		echo '<br />';
-		if ($donnees['id_abonne']=='')				// Cet abonné n'existe  pas.
-			{
-			return 0;
-			}
-		else
-			{
-			if ($perso->mdp()==$donnees['mot_de_passe'])						// Cet aboné existe mais est-ce le bon mot de passe ?
-				{
-				return $donnees['id_abonne'];								// Oui, c'est le bon mot de passe.
-				}
-			else
-				{
-				return 0;
-				}
-			}
-		}
-
-  
+	
 	
 	
 ################## Setters #########################	
 	
-	 public function setBdd(/*PDO*/ $bdd)
-		{
-		$this->_bdd = $bdd;
-		}
-  
-#####################################################	
 	
-
+	public function setId($id)
+		{
+		$id = (int) $id;
+		if ($id > 0)
+			{
+			$this->_id = $id;
+			}
+		}
+		
+	
+	public function setPseudo($pseudo)
+		{
+		if (is_string($pseudo))
+			{
+			$this->_pseudo = $pseudo;
+			}
+		}
+		
+	public function setMdp($mdp)
+		{
+		if (is_string($mdp))
+			{
+			$this->_mdp = $mdp;
+			}
+		}
+	
+	
+	
+	
 #################### Getters ########################
 
-	public function bdd()
+	public function id()
 		{
-		return $this->_bdd;
+		return $this->_id;
 		}
-		
+	
+	public function pseudo()
+		{
+		return $this->_pseudo;
+		}
+	
+	public function mdp()
+		{
+		return $this->_mdp;
+		}
 #####################################################	
-		
+	
+	
 	}
 
 
