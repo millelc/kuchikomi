@@ -24,6 +24,7 @@ class Abonne
 		{
 		$this->setPseudo($donnees['pseudo']);
 		$this->setMdp($donnees['mdp']);
+		
 		}
 	
 	

@@ -47,7 +47,7 @@ class Abonnement
 			}
 		}
 		
-	private function setLa_date($date)
+	private function setLadate($date)
 		{
 		$this->_ladate = $date;
 		}
@@ -66,7 +66,7 @@ class Abonnement
 		return $this->_id_abonne;
 		}
 	
-	public function la_date()
+	public function ladate()
 		{
 		return $this->_ladate;
 		}

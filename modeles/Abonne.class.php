@@ -32,7 +32,7 @@ class Abonne
 ################## Setters #########################	
 	
 	
-	public function setId($id)
+	private function setId($id)
 		{
 		$id = (int) $id;
 		if ($id > 0)
@@ -42,7 +42,7 @@ class Abonne
 		}
 		
 	
-	public function setPseudo($pseudo)
+	private function setPseudo($pseudo)
 		{
 		if (is_string($pseudo))
 			{
@@ -50,7 +50,7 @@ class Abonne
 			}
 		}
 		
-	public function setMdp($mdp)
+	private function setMdp($mdp)
 		{
 		if (is_string($mdp))
 			{

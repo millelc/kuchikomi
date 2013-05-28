@@ -47,7 +47,7 @@ class Abonnement
 			}
 		}
 		
-	private function setLaDate($date)
+	private function setLa_date($date)
 		{
 		$this->_ladate = $date;
 		}
