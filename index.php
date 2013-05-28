@@ -90,12 +90,31 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			$connexion = Outils_Bd::getInstance()->getConnexion();
 			$inscription= new GestionAbonnement($connexion);
 			$inscription->ajout($nouvel_abo);
+			header('Location: index.php?appel=liste&id=none');
+			}
 			
+		else if ($_GET['appel']=='liste')
+			{
+			echo '<br />Votre identifiant : ';
+			echo $_SESSION['id'];
+			echo '<br />Voici la liste de vos abonnements : ';
 			
-			
+			$bdd = Outils_Bd::getInstance()->getConnexion();
+			$req = $bdd->prepare('SELECT id_commerce FROM abonnement WHERE id_abonne = ?');
+			$req->execute(array($_SESSION['id']));
+			while ($donnees = $req->fetch())
+				{
+				echo '<br />';
+				echo $donnees['id_commerce'];
+				}
 			
 			
 			}
+			
+			
+			
+			
+			
 		else
 			{
 			echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
@@ -163,7 +182,11 @@ else
 	{
 	echo "<p>Cette page n'a pas vocation a être vue. Seule une modification d'adresse peut y amener.<p>
 	      <p>Une redirection vers un formulaire de connexion ramenant vers la liste des abonnements sera implémentée</p>
-	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan</a></p>
+	      <p><a href=\"index.php?appel=scan&id=1\">Émulation d'un scan du commerce 1</a></p>
+	      <p><a href=\"index.php?appel=scan&id=2\">Émulation d'un scan du commerce 2</a></p>
+	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
+	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan du commerce 4</a></p>
+	      <p><a href=\"index.php?appel=scan&id=5\">Émulation d'un scan du commerce 5</a></p>
 	      <p><a href=\"org/admin.php\">Espace admin</a></p>";
 	}
 
