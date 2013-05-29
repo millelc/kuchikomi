@@ -23,7 +23,8 @@ class GestionAbonnement
 		try
 			{
 			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, NOW())');
-			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));			
+			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));
+			$this->incremente($abo);
 			}
 			
 		catch (Exception $e)
@@ -60,7 +61,15 @@ class GestionAbonnement
  		return False; 		
 		}
 		
-		
+	private function incremente(Abonnement $abo)
+		{
+		$idcom=$abo->id_commerce();
+		echo '<br />J\'incrémente ';
+		echo $idcom;
+		$req = $this->_bdd->prepare('UPDATE commerce SET nb_abonnes = nb_abonnes+1 WHERE id_commerce = ?');
+		$req->execute(array($idcom));
+		echo '<br /<Variable incrémentée.<br />';
+		}
   
 	
 	
