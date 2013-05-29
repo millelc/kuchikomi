@@ -104,7 +104,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				{
 				echo 'Ce commerce n\'existe pas';
 				}
-			//header('Location: index.php?appel=liste&id=none');
+			header('Location: index.php?appel=liste&id=none');
 			}
 			
 		else if ($_GET['appel']=='scan')
@@ -126,24 +126,45 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				$bdd = Outils_Bd::getInstance()->getConnexion();
 				$req = $bdd->prepare('SELECT id_commerce FROM abonnement WHERE id_abonne = ?');
 				$req->execute(array($_SESSION['id']));
+				
 				while ($donnees = $req->fetch())
 					{
-					echo $donnees['id_commerce'];
-					echo ' ';
-					$req2 = $bdd->prepare('SELECT nom FROM commerce WHERE id_commerce = ?');
+					$req2 = $bdd->prepare('SELECT id_commerce, nom FROM commerce WHERE id_commerce = ?');
 					$req2->execute(array($donnees['id_commerce']));
 					while ($donnees = $req2->fetch())
 						{
+						echo '<a href="index.php?appel=liste&id=';
+						echo $donnees['id_commerce'];
+						echo '">';
 						echo $donnees['nom'];
-						echo '   <br />';
+						echo '</a>';
 						}
 					}
 				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
 				}
+						
 			else
 				{
-				echo 'Vous ne voulez pas la liste de vos abonnements ? Celle d\'un magasin en particulier alors ?';
-				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+				echo '<br />';
+				$idcom = $_GET['id'] + 0;
+				if ($idcom==0)
+					{
+					echo 'La variable reçue n\'est pas du type adéquat.';
+					}
+				else
+					{
+					echo '<p>Voici la liste des kuchikomi de ce commerce :</p>';
+					$bdd = Outils_Bd::getInstance()->getConnexion();
+					$req = $bdd->prepare('SELECT id_kuchikomi, texte_alerte FROM kuchikomi WHERE id_commerce = ?');
+					$req->execute(array($idcom));
+					while ($donnees = $req->fetch())
+						{
+						echo '<br />';
+						echo $donnees['texte_alerte'];
+						}
+					}
+				
+				
 				}
 			}
 			
