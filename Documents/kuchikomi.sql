@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mer 29 Mai 2013 à 11:19
+-- Généré le: Mer 29 Mai 2013 à 15:29
 -- Version du serveur: 5.5.27
 -- Version de PHP: 5.4.7
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `abonne` (
   `pseudo` varchar(100) NOT NULL,
   `mot_de_passe` varchar(200) NOT NULL,
   PRIMARY KEY (`id_abonne`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Contenu de la table `abonne`
@@ -54,7 +54,10 @@ INSERT INTO `abonne` (`id_abonne`, `pseudo`, `mot_de_passe`) VALUES
 (14, 'user14', 'user14'),
 (15, 'user15', 'user15'),
 (16, 'user16', 'user16'),
-(17, 'user17', 'user17');
+(17, 'user17', 'user17'),
+(18, 'user18', 'user18'),
+(19, 'user19', 'user19'),
+(20, 'user20', 'user20');
 
 -- --------------------------------------------------------
 
@@ -88,7 +91,10 @@ INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
 (8, 1, '2013-05-28 16:50:11'),
 (2, 3, '2013-05-28 16:56:38'),
 (6, 1, '2013-05-28 17:07:36'),
-(6, 2, '2013-05-29 08:44:38');
+(6, 2, '2013-05-29 08:44:38'),
+(19, 3, '2013-05-29 15:02:11'),
+(20, 1, '2013-05-29 15:02:39'),
+(20, 5, '2013-05-29 15:02:47');
 
 -- --------------------------------------------------------
 
@@ -119,11 +125,11 @@ CREATE TABLE IF NOT EXISTS `commerce` (
 --
 
 INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `logo`, `image`, `horaires`, `num_tel`, `email`, `ligne_bus`, `arret`, `nb_abonnes`, `donnees_google_map`, `donnees_GPS`) VALUES
-(1, 1, 'nom-commerce1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 1, 'arrêt-commerce1', 0, 'données google map commerce 1', 'données GPS commerce 1'),
+(1, 1, 'nom-commerce1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 1, 'arrêt-commerce1', 1, 'données google map commerce 1', 'données GPS commerce 1'),
 (2, 2, 'nom_commerce2', 'logo-commerce2', 'image-commerce2', 'horaires-commerce2', 'num_tél-commerce2', 'email-commerce2', 2, 'arrêt 2', 0, 'Données gm c2', 'données gps 2'),
-(3, 3, 'nom commerce3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 3, 'arrêt-commerce3', 0, 'données gm commerce3', 'données gps commerce3'),
+(3, 3, 'nom commerce3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 3, 'arrêt-commerce3', 1, 'données gm commerce3', 'données gps commerce3'),
 (4, 0, 'nom-commerce4', 'logo-commerce4', 'image-commerce4', 'horaires-commerce4', 'numtél-commerce4', 'email-commerce4', 4, 'arrêt-commerce4', 1, 'données google map du commerce4', 'données gps du commerce4'),
-(5, 5, 'nom_commerce5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 5, 'arrêt5', 1, 'données gm commerce 5', 'données gps commerce5');
+(5, 5, 'nom_commerce5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 5, 'arrêt5', 2, 'données gm commerce 5', 'données gps commerce5');
 
 -- --------------------------------------------------------
 
