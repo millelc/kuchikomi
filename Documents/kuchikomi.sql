@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mar 28 Mai 2013 à 15:15
+-- Généré le: Mer 29 Mai 2013 à 11:19
 -- Version du serveur: 5.5.27
 -- Version de PHP: 5.4.7
 
@@ -65,7 +65,7 @@ INSERT INTO `abonne` (`id_abonne`, `pseudo`, `mot_de_passe`) VALUES
 CREATE TABLE IF NOT EXISTS `abonnement` (
   `id_abonne` int(10) unsigned NOT NULL,
   `id_commerce` mediumint(8) unsigned NOT NULL,
-  `date` date NOT NULL,
+  `date` datetime NOT NULL,
   KEY `id_abonne` (`id_abonne`,`id_commerce`),
   KEY `id_commerce` (`id_commerce`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -75,12 +75,20 @@ CREATE TABLE IF NOT EXISTS `abonnement` (
 --
 
 INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
-(10, 4, '2013-05-28'),
-(9, 8, '2013-05-28'),
-(11, 4, '2013-05-28'),
-(1, 4, '2013-05-28'),
-(2, 2, '2013-05-28'),
-(4, 6, '2013-05-28');
+(10, 4, '2013-05-28 00:00:00'),
+(9, 8, '2013-05-28 00:00:00'),
+(11, 4, '2013-05-28 00:00:00'),
+(1, 4, '2013-05-28 00:00:00'),
+(2, 2, '2013-05-28 00:00:00'),
+(4, 6, '2013-05-28 00:00:00'),
+(1, 2, '2013-05-28 00:00:00'),
+(1, 1, '2013-05-28 00:00:00'),
+(5, 5, '2013-05-28 00:00:00'),
+(7, 1, '2013-05-28 00:00:00'),
+(8, 1, '2013-05-28 16:50:11'),
+(2, 3, '2013-05-28 16:56:38'),
+(6, 1, '2013-05-28 17:07:36'),
+(6, 2, '2013-05-29 08:44:38');
 
 -- --------------------------------------------------------
 
@@ -104,14 +112,18 @@ CREATE TABLE IF NOT EXISTS `commerce` (
   `donnees_GPS` text NOT NULL,
   PRIMARY KEY (`id_commerce`),
   KEY `id_statut` (`id_statut`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Contenu de la table `commerce`
 --
 
 INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `logo`, `image`, `horaires`, `num_tel`, `email`, `ligne_bus`, `arret`, `nb_abonnes`, `donnees_google_map`, `donnees_GPS`) VALUES
-(4, 0, 'commerce1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtél-commerce1', 'email-commerce1', 1, 'arrêt-commerce1', 0, 'données google map du commerce1', 'données gps du commerce1');
+(1, 1, 'nom-commerce1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 1, 'arrêt-commerce1', 0, 'données google map commerce 1', 'données GPS commerce 1'),
+(2, 2, 'nom_commerce2', 'logo-commerce2', 'image-commerce2', 'horaires-commerce2', 'num_tél-commerce2', 'email-commerce2', 2, 'arrêt 2', 0, 'Données gm c2', 'données gps 2'),
+(3, 3, 'nom commerce3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 3, 'arrêt-commerce3', 0, 'données gm commerce3', 'données gps commerce3'),
+(4, 0, 'nom-commerce4', 'logo-commerce4', 'image-commerce4', 'horaires-commerce4', 'numtél-commerce4', 'email-commerce4', 4, 'arrêt-commerce4', 1, 'données google map du commerce4', 'données gps du commerce4'),
+(5, 5, 'nom_commerce5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 5, 'arrêt5', 1, 'données gm commerce 5', 'données gps commerce5');
 
 -- --------------------------------------------------------
 
@@ -158,7 +170,24 @@ CREATE TABLE IF NOT EXISTS `kuchikomi` (
   `nb_passe` mediumint(9) NOT NULL,
   PRIMARY KEY (`id_kuchikomi`),
   KEY `id_commerce` (`id_commerce`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+
+--
+-- Contenu de la table `kuchikomi`
+--
+
+INSERT INTO `kuchikomi` (`id_kuchikomi`, `id_commerce`, `texte_alerte`, `texte`, `photo`, `date_debut`, `date_fin`, `nb_jaime`, `nb_passe`) VALUES
+(1, 1, 'texte-alerte_du_kuchikomi du commerce_1', 'texte du kuchikomi 1 du commerce 1', 'photo du kuchikomi 1 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
+(2, 1, 'texte alerte du kuchikomi 2 du commerce 1', 'texte du kuchikomi 2 du commerce 1', 'photo du kuchikomi 2 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
+(3, 1, 'texte alerte du kuchikomi 3 du commerce 1', 'texte du kuchikomi 3 du commerce 1', 'photo du kuchikomi 3 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
+(4, 1, 'texte alerte du kuchikomi 4 du commerce 1', 'texte du kuchikomi 4 du commerce 1', 'photo du kuchikomi 4 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
+(5, 2, 'texte alerte du kuchikomi 1 du commerce 2', 'texte du kuchikomi 1 du commerce 2', 'photo du kuchikomi 1 du commerce 2', '0000-00-00', '0000-00-00', 0, 0),
+(6, 2, 'texte alerte du kuchikomi 2 du commerce 2', 'texte du kuchikomi 2 du commerce 2', 'photo du kuchikomi 2 du commerce 2', '0000-00-00', '0000-00-00', 0, 0),
+(7, 3, 'texte alerte du kuchikomi 1 du commerce 3', 'texte du kuchikomi 1 du commerce 3', 'photo du kuchikomi 1 du commerce 3', '0000-00-00', '0000-00-00', 0, 0),
+(8, 3, 'texte alerte du kuchikomi 2 du commerce 3', 'texte du kuchikomi 2 du commerce 3', 'photo du kuchikomi 2 du commerce 3', '0000-00-00', '0000-00-00', 0, 0),
+(9, 3, 'texte alerte du kuchikomi 3 du commerce 3', 'texte du kuchikomi 3 du commerce 3', 'photo du kuchikomi 3 du commerce 3', '0000-00-00', '0000-00-00', 0, 0),
+(10, 4, 'texte alerte du kuchikomi 1 du commerce 4', 'texte du kuchikomi 1 du commerce 4', 'photo du kuchikomi 1 du commerce 4', '0000-00-00', '0000-00-00', 0, 0),
+(11, 5, 'texte alerte du kuchikomi 1 du commerce 5', 'texte du kuchikomi 1 du commerce 5', 'photo du kuchikomi 1 du commerce 5', '0000-00-00', '0000-00-00', 0, 0);
 
 -- --------------------------------------------------------
 
