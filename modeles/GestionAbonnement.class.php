@@ -48,7 +48,17 @@ class GestionAbonnement
 		}
 		
 		
-		
+	public function commerceExistant(Abonnement $abo)
+		{
+		$idcom=$abo->id_commerce();
+		$req = $this->_bdd->prepare('SELECT id_commerce FROM commerce WHERE id_commerce = ?');
+		$req->execute(array($idcom));
+		while ($donnees = $req->fetch())
+ 			{
+ 			return True;
+ 			}
+ 		return False; 		
+		}
 		
 		
   

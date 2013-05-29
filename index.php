@@ -89,14 +89,20 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
 			$connexion = Outils_Bd::getInstance()->getConnexion();
 			$inscription= new GestionAbonnement($connexion);
-			if ($inscription->dejaAbonne($nouvel_abo)==True)
-				{
-				$inscription->ajout($nouvel_abo);
-				echo '<p>Vous êtes désormais abonné à ce commerce.</p>';
-				}
+			$inscription->commerceExistant($nouvel_abo);
+			if ($inscription->commerceExistant($nouvel_abo)==True)				// Le commerce existe bel et bien.
+				if ($inscription->dejaAbonne($nouvel_abo)==True)			// Si on peut s'abonner car l'abonnement n'existe pas déjà.
+					{
+					$inscription->ajout($nouvel_abo);
+					echo '<p>Vous êtes désormais abonné à ce commerce.</p>';
+					}
+				else									// L'abonnement existe déjà.
+					{
+					echo '<p>Vous êtes déjà abonné à ce commerce.</p>';
+					}
 			else
 				{
-				echo '<p>Vous êtes déjà abonné à ce commerce.</p>';
+				echo 'Ce commerce n\'existe pas';
 				}
 			//header('Location: index.php?appel=liste&id=none');
 			}
