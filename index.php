@@ -89,34 +89,56 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
 			$connexion = Outils_Bd::getInstance()->getConnexion();
 			$inscription= new GestionAbonnement($connexion);
-			$inscription->ajout($nouvel_abo);
-			header('Location: index.php?appel=liste&id=none');
+			if ($inscription->dejaAbonne($nouvel_abo)==True)
+				{
+				$inscription->ajout($nouvel_abo);
+				echo '<p>Vous êtes désormais abonné à ce commerce.</p>';
+				}
+			else
+				{
+				echo '<p>Vous êtes déjà abonné à ce commerce.</p>';
+				}
+			//header('Location: index.php?appel=liste&id=none');
 			}
+			
+		else if ($_GET['appel']=='scan')
+			{
+			echo '<br />Vous êtes connecté et vous souhaitez vous abonner au magasin n° ';
+			echo $_GET['id'];
+			header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
+			}
+			
+			
 			
 		else if ($_GET['appel']=='liste')
 			{
-			echo '<br />Votre identifiant : ';
-			echo $_SESSION['id'];
-			echo '<br />Voici la liste de vos abonnements :<br /> ';
-			
-			$bdd = Outils_Bd::getInstance()->getConnexion();
-			$req = $bdd->prepare('SELECT id_commerce FROM abonnement WHERE id_abonne = ?');
-			$req->execute(array($_SESSION['id']));
-			
-			while ($donnees = $req->fetch())
+			if ($_GET['id']=='none')
 				{
-				echo $donnees['id_commerce'];
-				echo ' ';
-				$req2 = $bdd->prepare('SELECT nom FROM commerce WHERE id_commerce = ?');
-				$req2->execute(array($donnees['id_commerce']));
-				while ($donnees = $req2->fetch())
+				echo '<br />Votre identifiant : ';
+				echo $_SESSION['id'];
+				echo '<br />Voici la liste de vos abonnements :<br /> ';
+				$bdd = Outils_Bd::getInstance()->getConnexion();
+				$req = $bdd->prepare('SELECT id_commerce FROM abonnement WHERE id_abonne = ?');
+				$req->execute(array($_SESSION['id']));
+				while ($donnees = $req->fetch())
 					{
-					echo $donnees['nom'];
-					echo '   <br />';
+					echo $donnees['id_commerce'];
+					echo ' ';
+					$req2 = $bdd->prepare('SELECT nom FROM commerce WHERE id_commerce = ?');
+					$req2->execute(array($donnees['id_commerce']));
+					while ($donnees = $req2->fetch())
+						{
+						echo $donnees['nom'];
+						echo '   <br />';
+						}
 					}
+				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
 				}
-			
-			
+			else
+				{
+				echo 'Vous ne voulez pas la liste de vos abonnements ? Celle d\'un magasin en particulier alors ?';
+				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+				}
 			}
 			
 			
@@ -173,8 +195,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			$_SESSION['pseudo']= $_POST['pseudo'];
 			
 			header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
-			//echo $nouvel_inscrit->pseudo();
-			//echo $nouvel_inscrit->mdp();
 			}
 		
 			
@@ -189,13 +209,14 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 else
 	{
 	echo "<p>Cette page n'a pas vocation a être vue. Seule une modification d'adresse peut y amener.<p>
-	      <p>Une redirection vers un formulaire de connexion ramenant vers la liste des abonnements sera implémentée</p>
+	      <p>Une redirection vers un formulaire de connexion pointant vers la liste des abonnements sera implémentée</p>
 	      <p><a href=\"index.php?appel=scan&id=1\">Émulation d'un scan du commerce 1</a></p>
 	      <p><a href=\"index.php?appel=scan&id=2\">Émulation d'un scan du commerce 2</a></p>
 	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
 	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan du commerce 4</a></p>
 	      <p><a href=\"index.php?appel=scan&id=5\">Émulation d'un scan du commerce 5</a></p>
 	      <p><a href=\"org/admin.php\">Espace admin</a></p>";
+	echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
 	}
 
 

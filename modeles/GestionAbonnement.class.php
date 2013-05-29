@@ -24,14 +24,33 @@ class GestionAbonnement
 			{
 			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, NOW())');
 			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));			
-			
 			}
+			
 		catch (Exception $e)
 			{
 			die('Erreur : ' . $e->getMessage());
 			}
 		
 		}
+		
+	public function dejaAbonne(Abonnement $abo)
+		{
+ 		$req = $this->_bdd->prepare('SELECT * FROM abonnement WHERE id_abonne = ?');
+ 		$req->execute(array($abo->id_abonne()));
+ 		while ($donnees = $req->fetch())
+ 			{
+ 			if ($donnees['id_commerce']==$abo->id_commerce())
+				{
+				return False;
+				}
+ 			}
+ 		return True;
+		}
+		
+		
+		
+		
+		
   
 	
 	
