@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mer 29 Mai 2013 à 15:29
+-- Généré le: Ven 31 Mai 2013 à 12:21
 -- Version du serveur: 5.5.27
 -- Version de PHP: 5.4.7
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `abonne` (
   `pseudo` varchar(100) NOT NULL,
   `mot_de_passe` varchar(200) NOT NULL,
   PRIMARY KEY (`id_abonne`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 --
 -- Contenu de la table `abonne`
@@ -57,7 +57,8 @@ INSERT INTO `abonne` (`id_abonne`, `pseudo`, `mot_de_passe`) VALUES
 (17, 'user17', 'user17'),
 (18, 'user18', 'user18'),
 (19, 'user19', 'user19'),
-(20, 'user20', 'user20');
+(20, 'user20', 'user20'),
+(22, 'user21', 'user21');
 
 -- --------------------------------------------------------
 
@@ -79,13 +80,10 @@ CREATE TABLE IF NOT EXISTS `abonnement` (
 
 INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
 (10, 4, '2013-05-28 00:00:00'),
-(9, 8, '2013-05-28 00:00:00'),
 (11, 4, '2013-05-28 00:00:00'),
 (1, 4, '2013-05-28 00:00:00'),
 (2, 2, '2013-05-28 00:00:00'),
-(4, 6, '2013-05-28 00:00:00'),
 (1, 2, '2013-05-28 00:00:00'),
-(1, 1, '2013-05-28 00:00:00'),
 (5, 5, '2013-05-28 00:00:00'),
 (7, 1, '2013-05-28 00:00:00'),
 (8, 1, '2013-05-28 16:50:11'),
@@ -94,7 +92,12 @@ INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
 (6, 2, '2013-05-29 08:44:38'),
 (19, 3, '2013-05-29 15:02:11'),
 (20, 1, '2013-05-29 15:02:39'),
-(20, 5, '2013-05-29 15:02:47');
+(20, 5, '2013-05-29 15:02:47'),
+(21, 1, '2013-05-29 16:03:28'),
+(6, 3, '2013-05-29 16:18:04'),
+(22, 3, '2013-05-29 16:20:02'),
+(4, 1, '2013-05-31 09:04:13'),
+(1, 1, '2013-05-31 11:09:14');
 
 -- --------------------------------------------------------
 
@@ -106,11 +109,13 @@ CREATE TABLE IF NOT EXISTS `commerce` (
   `id_commerce` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `id_statut` tinyint(3) unsigned NOT NULL,
   `nom` varchar(100) NOT NULL,
+  `gerant` varchar(75) NOT NULL,
   `logo` varchar(200) NOT NULL,
   `image` varchar(200) NOT NULL,
   `horaires` varchar(25) NOT NULL,
   `num_tel` varchar(20) NOT NULL,
   `email` varchar(150) NOT NULL,
+  `adresse` varchar(150) NOT NULL,
   `ligne_bus` tinyint(3) unsigned NOT NULL,
   `arret` varchar(100) NOT NULL,
   `nb_abonnes` mediumint(8) unsigned NOT NULL,
@@ -124,12 +129,12 @@ CREATE TABLE IF NOT EXISTS `commerce` (
 -- Contenu de la table `commerce`
 --
 
-INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `logo`, `image`, `horaires`, `num_tel`, `email`, `ligne_bus`, `arret`, `nb_abonnes`, `donnees_google_map`, `donnees_GPS`) VALUES
-(1, 1, 'nom-commerce1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 1, 'arrêt-commerce1', 1, 'données google map commerce 1', 'données GPS commerce 1'),
-(2, 2, 'nom_commerce2', 'logo-commerce2', 'image-commerce2', 'horaires-commerce2', 'num_tél-commerce2', 'email-commerce2', 2, 'arrêt 2', 0, 'Données gm c2', 'données gps 2'),
-(3, 3, 'nom commerce3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 3, 'arrêt-commerce3', 1, 'données gm commerce3', 'données gps commerce3'),
-(4, 0, 'nom-commerce4', 'logo-commerce4', 'image-commerce4', 'horaires-commerce4', 'numtél-commerce4', 'email-commerce4', 4, 'arrêt-commerce4', 1, 'données google map du commerce4', 'données gps du commerce4'),
-(5, 5, 'nom_commerce5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 5, 'arrêt5', 2, 'données gm commerce 5', 'données gps commerce5');
+INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `gerant`, `logo`, `image`, `horaires`, `num_tel`, `email`, `adresse`, `ligne_bus`, `arret`, `nb_abonnes`, `donnees_google_map`, `donnees_GPS`) VALUES
+(1, 1, 'nom-commerce1', 'gerant1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 'adresse1', 1, 'arret-commerce1', 4, 'données google map commerce 1', 'données GPS commerce 1'),
+(2, 2, 'nom_commerce2', 'gerant2', 'logo-commerce2', 'image-commerce2', 'horaires-commerce2', 'num_tél-commerce2', 'email-commerce2', 'adresse2', 2, 'arret 2', 0, 'Données gm c2', 'données gps 2'),
+(3, 3, 'nom commerce3', 'gerant3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 'adresse3', 3, 'arret-commerce3', 2, 'données gm commerce3', 'données gps commerce3'),
+(4, 0, 'nom-commerce4', 'gerant4', 'logo-commerce4', 'image-commerce4', 'horaires-commerce4', 'numtél-commerce4', 'email-commerce4', 'adresse4', 4, 'arret-commerce4', 1, 'données google map du commerce4', 'données gps du commerce4'),
+(5, 5, 'nom_commerce5', 'gerant5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 'adresse5', 5, 'arret5', 2, 'données gm commerce 5', 'données gps commerce5');
 
 -- --------------------------------------------------------
 
