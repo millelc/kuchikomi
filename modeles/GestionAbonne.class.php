@@ -33,6 +33,22 @@ class GestionAbonne
 		
 		}
 		
+	public function desinscription($id)	// Cette fonction DÉSACTIVE un abonné en mettant le champ « actif » à 0.
+		{
+		try
+			{
+			echo 'Désinscription en cours.';
+			$req = $this->_bdd->prepare('UPDATE abonne SET actif = 0 WHERE id_abonne = ?');
+ 			$req->execute(array($id));
+			}
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
+		
+		}
+		
+		
 	public function dejaInscrit(Abonne $perso)		// Cette fonction vérifie si un abonné est déjà dans la base.
 		{
 		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
@@ -47,7 +63,14 @@ class GestionAbonne
 			{
 			if ($perso->mdp()==$donnees['mot_de_passe'])						// Cet aboné existe mais est-ce le bon mot de passe ?
 				{
-				return $donnees['id_abonne'];								// Oui, c'est le bon mot de passe.
+				if ($donnees['actif']==1)
+					{
+					return $donnees['id_abonne'];								// Oui, c'est le bon mot de passe.
+					}
+				else
+					{
+					echo 'Utilisateur inactif';
+					}
 				}
 			else
 				{

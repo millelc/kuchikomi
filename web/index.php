@@ -199,6 +199,16 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			case 'scan':						// Dans le cas où on aurait simplement scanné un QRcode/champNFC
 				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 				break;
+				
+			case 'desinscr':
+				echo 'Vous voulez vous désinscrire.';
+				$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());
+				$desinscription->desinscription($_SESSION['id']);
+				session_destroy();
+				header('Location: index.php?appel=liste&id=none');
+				
+				
+				break;
 			
 				
 			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
@@ -227,6 +237,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 							}
 						}
 					echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+					echo '<br /><a href="index.php?appel=desinscr&id=none">Désinscription</a>';
 					}
 				else
 					{
@@ -291,6 +302,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			if ($connecte->dejaInscrit($nouveau_connecte)==0)		// Le pseudo est-il le bon ?
 				{
 				echo 'Pseudo ou mot de passe incorrect';						// Le pseudo n'est pas correct
+				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 				}
 			else
 				{

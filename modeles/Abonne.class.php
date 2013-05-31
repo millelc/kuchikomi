@@ -5,13 +5,12 @@ include_once('Connexion.class.php');
 
 
 
-// Tout commenter 
-
 class Abonne
 	{
 	private $_id;
 	private $_pseudo;
 	private $_mdp;
+	private $_actif;
 	
 	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
@@ -56,7 +55,13 @@ class Abonne
 			}
 		}
 	
-	
+	private function setActif($actif)
+		{
+		if (is_bool($actif))
+			{
+			$this->_actif = $actif;
+			}
+		}
 	
 	
 #################### Getters ########################
@@ -74,6 +79,11 @@ class Abonne
 	public function mdp()
 		{
 		return $this->_mdp;
+		}
+	
+	public function actif()
+		{
+		return $this->_actif;
 		}
 #####################################################	
 	
