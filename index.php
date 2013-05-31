@@ -123,7 +123,14 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				$abo_a_suppr= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
 				$connexion = Outils_Bd::getInstance()->getConnexion();
 				$desinscription= new GestionAbonnement($connexion);
-				$desinscription->suppr($abo_a_suppr);
+				if ($desinscription->dejaAbonne($abo_a_suppr)==True)				// True signifie que l'abonnement n'existe pas.
+					{
+					echo 'Cet abonnement n\'existe pas.';
+					}
+				else
+					{
+					$desinscription->suppr($abo_a_suppr);
+					}
 				break;
 				
 				
