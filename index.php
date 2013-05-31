@@ -125,7 +125,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				$desinscription= new GestionAbonnement($connexion);
 				if ($desinscription->dejaAbonne($abo_a_suppr)==True)				// True signifie que l'abonnement n'existe pas.
 					{
-					echo 'Cet abonnement n\'existe pas.';
+					echo 'Cet abonnement n\'existe pas.';					// Ceci pour empêcher un désabonnement n'existant pas
 					}
 				else
 					{
