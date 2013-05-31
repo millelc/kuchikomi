@@ -15,8 +15,16 @@ class GestionCommerce
 	public function __construct($bdd)
 		  {
 		  $this->setBdd($bdd);
-		  
+		  echo 'Classe de GestionCommerce lancée.';
 		  }
+		  
+	public function quereur ($id_commerce)
+		{
+		$req = $this->_bdd->prepare('SELECT * FROM commerce WHERE id_commerce = ?');
+ 		$req->execute(array($id_commerce));
+ 		$donnees = $req->fetch();
+ 		return $donnees;
+ 		}
 
 	
 	

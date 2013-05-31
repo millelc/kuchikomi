@@ -5,8 +5,10 @@ session_start();
 
 include_once('../modeles/Abonne.class.php');
 include_once('../modeles/Abonnement.class.php');
+include_once('../modeles/Commerce.class.php');
 include_once('../modeles/GestionAbonne.class.php');
 include_once('../modeles/GestionAbonnement.class.php');
+include_once('../modeles/GestionCommerce.class.php');
 
 
 /*
@@ -85,6 +87,9 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				echo 'Cette page devra renvoyer immédiatement vers la page listant les kuchikomi. Comme on ne sera plus connecté, ce sera le formulaire de connexion qui appraîtra en premier lieu.';
 				break;
 			case 'kk':
+				echo '<a href="index.php?appel=liste&id=';
+				echo $_GET['id'];
+				echo '">Retour à la liste</a><br /><br />';
 				$bdd = Outils_Bd::getInstance()->getConnexion();
 				$req = $bdd->prepare('SELECT texte FROM kuchikomi WHERE id_kuchikomi = ?');
 				$req->execute(array($_GET['id']));
@@ -133,6 +138,63 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 					$desinscription->suppr($abo_a_suppr);
 					}
 				break;
+			
+			
+			case 'contact':
+				echo '<fieldset>';
+				echo '<br />';
+				echo 'Vous voulez voir comment contacter le commerce : ';
+				echo $_GET['id'];
+				echo '<br />Et vous êtes : ';
+				echo $_SESSION['id'];
+				echo '<br />';
+				echo '</fieldset>';
+				echo '<a href="index.php?appel=yaller&id=';
+				echo $_GET['id'];
+				echo '">Y aller !</a><br />';
+				echo '<a href="index.php?appel=liste&id=';
+				echo $_GET['id'];
+				echo '">Retour à la liste</a><br />';
+				$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());
+				$commercant=new commerce (($commercant_req->quereur($_GET['id'])));
+				echo '<p>Nom du comerce : ';
+				echo $commercant->nom();
+				echo '</p><p>Gérant : ';
+				echo $commercant->gerant();
+				echo '</p><p><u>Horaires d\'ouverture :</u> ';
+				echo $commercant->horaires();
+				echo '</p><p>Tel : ';
+				echo $commercant->num_tel();
+				echo '</p><p>Email : ';
+				echo $commercant->email();
+				echo '</p>';
+				break;
+				
+			case 'yaller':
+				echo '<fieldset>';
+				echo '<br />';
+				echo 'Vous voulez voir comment vous rendre à ce commerce : ';
+				echo $_GET['id'];
+				echo '<br />Et vous êtes : ';
+				echo $_SESSION['id'];
+				echo '<br />';
+				echo '</fieldset>';
+				echo '<a href="index.php?appel=contact&id=';
+				echo $_GET['id'];
+				echo '">Y aller !</a><br />';
+				echo '<a href="index.php?appel=liste&id=';
+				echo $_GET['id'];
+				echo '">Retour à la liste</a><br />';
+				$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());
+				$commercant=new commerce (($commercant_req->quereur($_GET['id'])));
+				echo '<p>Adresse : ';
+				echo $commercant->adresse();
+				echo '</p><p>Bus : ligne ';
+				echo $commercant->ligne_bus();
+				echo '</p><p>Arrêt : ';
+				echo $commercant->arret();
+				echo '</p>';
+				break;
 				
 				
 			case 'scan':
@@ -177,6 +239,12 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 						}
 					else
 						{
+						echo '<a href="index.php?appel=contact&id=';
+						echo $_GET['id'];
+						echo '">Contacter le commerçant.</a><br />';
+						echo '<a href="index.php?appel=yaller&id=';
+						echo $_GET['id'];
+						echo '">Y aller !</a><br />';
 						echo '<a href="index.php?appel=desabo&id=';
 						echo $_GET['id'];
 						echo '">Se désabonner</a>';
@@ -271,6 +339,9 @@ else
 	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
 	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan du commerce 4</a></p>
 	      <p><a href=\"index.php?appel=scan&id=5\">Émulation d'un scan du commerce 5</a></p>
+	      <fieldset>
+	      <p><a href=\"index.php?appel=liste&id=none\">Un utilisateur inscrit et connecté qui lance son application atterrira directement sur la liste de ses abonnements.</a></p>
+	      </fieldset>
 	      <fieldset>
 	      <p>Les liens ci-dessous ne seront pas affichés, ils ne servent que pour la maquette et les tests. Commerçants et admins auront une adresse directe à contacter.</p>
 	      <p><a href=\"espmarc.php\">Espace marchand</a></p>

@@ -11,6 +11,7 @@ class Commerce
 	{
 	private $_id_commerce;
 	private $_nom;
+	private $_gerant;
 	private $_logo;
 	private $_image;
 	private $_horaires;
@@ -24,7 +25,7 @@ class Commerce
 	
 	public function __construct(array $donnees)
 		{
-		echo "Appel de la classe Commerce réussi.";
+		echo "<br />Appel de la classe Commerce réussi.";
 		$this->hydrate($donnees);
 		}
 	
@@ -32,16 +33,18 @@ class Commerce
 		{
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setNom($donnees['nom']);
+		$this->setGerant($donnees['gerant']);
 		$this->setLogo($donnees['logo']);
 		$this->setImage($donnees['image']);
 		$this->setHoraires($donnees['horaires']);
 		$this->setNum_tel($donnees['num_tel']);
 		$this->setEmail($donnees['email']);
+		$this->setAdresse($donnees['adresse']);
 		$this->setLigne_bus($donnees['ligne_bus']);
 		$this->setArret($donnees['arret']);
 		$this->setNb_abonnes($donnees['nb_abonnes']);
-		$this->setDonnes_gm($donnees['donnees_gm']);
-		$this->setDonnes_gps($donnees['donnees_gps']);
+		$this->setDonnes_gm($donnees['donnees_google_map']);
+		$this->setDonnes_gps($donnees['donnees_GPS']);
 		}
 	
 	
@@ -66,6 +69,15 @@ class Commerce
 			$this->_nom = $nom;
 			}
 		}
+		
+	private function setGerant($gerant)
+		{
+		if (is_string($gerant))
+			{
+			$this->_gerant = $gerant;
+			}
+		}	
+	
 		
 	private function setLogo($logo)
 		{
@@ -105,6 +117,14 @@ class Commerce
 		if (is_string($email))
 			{
 			$this->_email = $email;
+			}
+		}
+		
+	private function setAdresse($adresse)
+		{
+		if (is_string($adresse))
+			{
+			$this->_adresse = $adresse;
 			}
 		}
 	
@@ -172,6 +192,11 @@ class Commerce
 		return $this->_nom;
 		}
 	
+	public function gerant()
+		{
+		return $this->_gerant;
+		}
+	
 	public function logo()
 		{
 		return $this->_logo;
@@ -195,6 +220,11 @@ class Commerce
 	public function email()
 		{
 		return $this->_email;
+		}
+	
+	public function adresse()
+		{
+		return $this->_adresse;
 		}
 	
 	public function ligne_bus()
