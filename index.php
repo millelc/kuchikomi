@@ -115,9 +115,22 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				header('Location: index.php?appel=liste&id=none');
 				break;
 				
+			case 'desabo':
+				echo '<br />';
+				echo 'Désabonnement à faire : ';
+				echo $_GET['id'];
+				echo $_SESSION['id'];
+				$abo_a_suppr= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
+				$connexion = Outils_Bd::getInstance()->getConnexion();
+				$desinscription= new GestionAbonnement($connexion);
+				$desinscription->suppr($abo_a_suppr);
+				break;
+				
+				
 			case 'scan':
 				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 				break;
+			
 				
 			case 'liste':
 				if ($_GET['id']=='none')
@@ -156,6 +169,9 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 						}
 					else
 						{
+						echo '<a href="index.php?appel=desabo&id=';
+						echo $_GET['id'];
+						echo '">Se désabonner</a>';
 						echo '<p>Voici la liste des kuchikomi de ce commerce :</p>';
 						$bdd = Outils_Bd::getInstance()->getConnexion();
 						$req = $bdd->prepare('SELECT id_kuchikomi, texte_alerte FROM kuchikomi WHERE id_commerce = ?');
@@ -247,7 +263,13 @@ else
 	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
 	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan du commerce 4</a></p>
 	      <p><a href=\"index.php?appel=scan&id=5\">Émulation d'un scan du commerce 5</a></p>
-	      <p><a href=\"org/admin.php\">Espace admin</a></p>";
+	      <fieldset>
+	      <p>Les liens ci-dessous ne seront pas affichés, ils ne servent que pour la maquette et les tests. Commerçants et admins auront une adresse directe à contacter.</p>
+	      <p><a href=\"org/espmarc.php\">Espace marchand</a></p>
+	      <p><a href=\"org/admin.php\">Espace admin</a></p>
+	      </fieldset>
+	      ";
+	      
 	echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
 	}
 

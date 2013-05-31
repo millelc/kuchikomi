@@ -33,7 +33,28 @@ class GestionAbonnement
 			}
 		
 		}
+	
+	
+	public function suppr(Abonnement $abo)
+		{
+		try
+			{
+			echo 'Vous voulez vous désinscrire.';
+			$q = $this->_bdd->prepare('DELETE FROM abonnement WHERE id_abonne = ? AND id_commerce=?');
+			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));
+			$this->decremente($abo);
+			}
+			
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
 		
+		}
+	
+	
+	
+	
 	public function dejaAbonne(Abonnement $abo)
 		{
  		$req = $this->_bdd->prepare('SELECT * FROM abonnement WHERE id_abonne = ?');
@@ -69,6 +90,16 @@ class GestionAbonnement
 		$req = $this->_bdd->prepare('UPDATE commerce SET nb_abonnes = nb_abonnes+1 WHERE id_commerce = ?');
 		$req->execute(array($idcom));
 		echo '<br /<Variable incrémentée.<br />';
+		}
+		
+	private function decremente(Abonnement $abo)
+		{
+		$idcom=$abo->id_commerce();
+		echo '<br />Je décrémente ';
+		echo $idcom;
+		$req = $this->_bdd->prepare('UPDATE commerce SET nb_abonnes = nb_abonnes-1 WHERE id_commerce = ?');
+		$req->execute(array($idcom));
+		echo '<br /<Variable décrémentée.<br />';
 		}
   
 	
