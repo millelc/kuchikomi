@@ -12,13 +12,13 @@ class GestionAbonnement
 	private $_bdd;
 	
 	
-	public function __construct($bdd)
+	public function __construct($bdd)		// Le constructeur récupère l'instance de connexion.
 		  {
 		  $this->setBdd($bdd);
 		  
 		  }
 
-	public function ajout(Abonnement $abo)
+	public function ajout(Abonnement $abo)	// Cette fonction ajoute un abonnement à la table.
 		{
 		try
 			{
@@ -35,11 +35,10 @@ class GestionAbonnement
 		}
 	
 	
-	public function suppr(Abonnement $abo)
+	public function suppr(Abonnement $abo)	// Cette fonction supprime un abonnement de la table.
 		{
 		try
 			{
-			echo 'Vous voulez vous désinscrire.';
 			$q = $this->_bdd->prepare('DELETE FROM abonnement WHERE id_abonne = ? AND id_commerce=?');
 			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));
 			$this->decremente($abo);
@@ -55,8 +54,8 @@ class GestionAbonnement
 	
 	
 	
-	public function dejaAbonne(Abonnement $abo)
-		{
+	public function dejaAbonne(Abonnement $abo)	// Cette fonction vérifie si un abonné est déjà dans la table
+		{					// ATTENTION ! False signifie que l'abonné est l'est déjà et True que l'abonné ne l'est pas.
  		$req = $this->_bdd->prepare('SELECT * FROM abonnement WHERE id_abonne = ?');
  		$req->execute(array($abo->id_abonne()));
  		while ($donnees = $req->fetch())
@@ -70,7 +69,7 @@ class GestionAbonnement
 		}
 		
 		
-	public function commerceExistant(Abonnement $abo)
+	public function commerceExistant(Abonnement $abo)	// Cette fonction vérifie que le commerce existe bien dans la base.
 		{
 		$idcom=$abo->id_commerce();
 		$req = $this->_bdd->prepare('SELECT id_commerce FROM commerce WHERE id_commerce = ?');
@@ -82,7 +81,7 @@ class GestionAbonnement
  		return False; 		
 		}
 		
-	private function incremente(Abonnement $abo)
+	private function incremente(Abonnement $abo)	// Cette fonction incrémete le compteur du nombre d'abonnés d'un commerce de la base.
 		{
 		$idcom=$abo->id_commerce();
 		echo '<br />J\'incrémente ';
@@ -92,7 +91,7 @@ class GestionAbonnement
 		echo '<br /<Variable incrémentée.<br />';
 		}
 		
-	private function decremente(Abonnement $abo)
+	private function decremente(Abonnement $abo)	// Cette fonction décrémete le compteur du nombre d'abonnés d'un commerce de la base.
 		{
 		$idcom=$abo->id_commerce();
 		echo '<br />Je décrémente ';

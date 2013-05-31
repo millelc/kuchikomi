@@ -23,13 +23,13 @@ class Commerce
 	private $_donnees_gm;
 	private $_donnees_gps;
 	
-	public function __construct(array $donnees)
+	public function __construct(array $donnees)	// Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
 		echo "<br />Appel de la classe Commerce réussi.";
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)
+	public function hydrate (array $donnees)		// L'hydrateur récupère les données et les répartit dans l'objet
 		{
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setNom($donnees['nom']);

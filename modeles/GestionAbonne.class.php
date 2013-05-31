@@ -12,13 +12,13 @@ class GestionAbonne
 	private $_bdd;
 	
 	
-	public function __construct($bdd)
+	public function __construct($bdd)		// Le constructeur récupère l'instance de connexion.
 		  {
 		  $this->setBdd($bdd);
 		  
 		  }
 
-	public function ajout(Abonne $perso)
+	public function ajout(Abonne $perso)	// Cette fonction ajoute simplement un abonné à la base.
 		{
 		try
 			{			
@@ -33,7 +33,7 @@ class GestionAbonne
 		
 		}
 		
-	public function dejaInscrit(Abonne $perso)
+	public function dejaInscrit(Abonne $perso)		// Cette fonction vérifie si un abonné est déjà dans la base.
 		{
 		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
 		$req->execute(array($perso->pseudo()));

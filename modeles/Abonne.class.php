@@ -2,11 +2,10 @@
 
 
 include_once('Connexion.class.php');
-//include("includes/configuration.php");
 
 
 
-
+// Tout commenter 
 
 class Abonne
 	{
@@ -14,13 +13,12 @@ class Abonne
 	private $_pseudo;
 	private $_mdp;
 	
-	public function __construct(array $donnees)
+	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
-		echo "Appel de la classe réussi.";
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)
+	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
 		$this->setPseudo($donnees['pseudo']);
 		$this->setMdp($donnees['mdp']);

@@ -11,13 +11,12 @@ class Abonnement
 	private $_id_abonne;
 	private $_ladate;
 	
-	public function __construct(array $donnees)
+	public function __construct(array $donnees)	// Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
-		echo "Appel de la classe d'abonnement réussi.";
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)
+	public function hydrate (array $donnees)		// L'hydrateur récupère les données et les répartit dans l'objet
 		{
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setId_abonne($donnees['id_abonne']);

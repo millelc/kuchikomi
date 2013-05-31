@@ -12,13 +12,12 @@ class GestionCommerce
 	private $_bdd;
 	
 	
-	public function __construct($bdd)
+	public function __construct($bdd)		// Le constructeur récupère l'instance de connexion.
 		  {
 		  $this->setBdd($bdd);
-		  echo 'Classe de GestionCommerce lancée.';
 		  }
 		  
-	public function quereur ($id_commerce)
+	public function quereur ($id_commerce)	// Le quéreur récupère les données d'un commerce et renvoie l'array correspondant.
 		{
 		$req = $this->_bdd->prepare('SELECT * FROM commerce WHERE id_commerce = ?');
  		$req->execute(array($id_commerce));
