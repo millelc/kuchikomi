@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 31 Mai 2013 à 12:21
+-- Généré le: Lun 03 Juin 2013 à 11:11
 -- Version du serveur: 5.5.27
 -- Version de PHP: 5.4.7
 
@@ -30,35 +30,37 @@ CREATE TABLE IF NOT EXISTS `abonne` (
   `id_abonne` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pseudo` varchar(100) NOT NULL,
   `mot_de_passe` varchar(200) NOT NULL,
+  `actif` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_abonne`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Contenu de la table `abonne`
 --
 
-INSERT INTO `abonne` (`id_abonne`, `pseudo`, `mot_de_passe`) VALUES
-(1, 'user1', 'user1'),
-(2, 'user2', 'user2'),
-(3, 'user3', 'user3'),
-(4, 'user4', 'user4'),
-(5, 'user5', 'user5'),
-(6, 'user6', 'user6'),
-(7, 'user7', 'user7'),
-(8, 'user8', 'user8'),
-(9, 'user9', 'user9'),
-(10, 'user10', 'user10'),
-(11, 'user11', 'user11'),
-(12, 'user12', 'user12'),
-(13, 'user13', 'user13'),
-(14, 'user14', 'user14'),
-(15, 'user15', 'user15'),
-(16, 'user16', 'user16'),
-(17, 'user17', 'user17'),
-(18, 'user18', 'user18'),
-(19, 'user19', 'user19'),
-(20, 'user20', 'user20'),
-(22, 'user21', 'user21');
+INSERT INTO `abonne` (`id_abonne`, `pseudo`, `mot_de_passe`, `actif`) VALUES
+(1, 'user1', 'user1', 0),
+(2, 'user2', 'user2', 0),
+(3, 'user3', 'user3', 0),
+(4, 'user4', 'user4', 0),
+(5, 'user5', 'user5', 1),
+(6, 'user6', 'user6', 1),
+(7, 'user7', 'user7', 1),
+(8, 'user8', 'user8', 1),
+(9, 'user9', 'user9', 1),
+(10, 'user10', 'user10', 1),
+(11, 'user11', 'user11', 1),
+(12, 'user12', 'user12', 1),
+(13, 'user13', 'user13', 1),
+(14, 'user14', 'user14', 1),
+(15, 'user15', 'user15', 1),
+(16, 'user16', 'user16', 1),
+(17, 'user17', 'user17', 1),
+(18, 'user18', 'user18', 1),
+(19, 'user19', 'user19', 1),
+(20, 'user20', 'user20', 1),
+(22, 'user21', 'user21', 1),
+(23, 'david', 'david', 1);
 
 -- --------------------------------------------------------
 
@@ -81,9 +83,7 @@ CREATE TABLE IF NOT EXISTS `abonnement` (
 INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
 (10, 4, '2013-05-28 00:00:00'),
 (11, 4, '2013-05-28 00:00:00'),
-(1, 4, '2013-05-28 00:00:00'),
 (2, 2, '2013-05-28 00:00:00'),
-(1, 2, '2013-05-28 00:00:00'),
 (5, 5, '2013-05-28 00:00:00'),
 (7, 1, '2013-05-28 00:00:00'),
 (8, 1, '2013-05-28 16:50:11'),
@@ -97,7 +97,14 @@ INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
 (6, 3, '2013-05-29 16:18:04'),
 (22, 3, '2013-05-29 16:20:02'),
 (4, 1, '2013-05-31 09:04:13'),
-(1, 1, '2013-05-31 11:09:14');
+(23, 1, '2013-05-31 13:18:48'),
+(23, 2, '2013-05-31 13:21:37'),
+(3, 2, '2013-05-31 17:04:32'),
+(3, 1, '2013-05-31 17:34:18'),
+(4, 2, '2013-05-31 17:36:17'),
+(5, 1, '2013-06-03 09:03:41'),
+(5, 4, '2013-06-03 09:31:42'),
+(5, 2, '2013-06-03 09:55:08');
 
 -- --------------------------------------------------------
 
@@ -118,7 +125,6 @@ CREATE TABLE IF NOT EXISTS `commerce` (
   `adresse` varchar(150) NOT NULL,
   `ligne_bus` tinyint(3) unsigned NOT NULL,
   `arret` varchar(100) NOT NULL,
-  `nb_abonnes` mediumint(8) unsigned NOT NULL,
   `donnees_google_map` text NOT NULL,
   `donnees_GPS` text NOT NULL,
   PRIMARY KEY (`id_commerce`),
@@ -129,12 +135,12 @@ CREATE TABLE IF NOT EXISTS `commerce` (
 -- Contenu de la table `commerce`
 --
 
-INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `gerant`, `logo`, `image`, `horaires`, `num_tel`, `email`, `adresse`, `ligne_bus`, `arret`, `nb_abonnes`, `donnees_google_map`, `donnees_GPS`) VALUES
-(1, 1, 'nom-commerce1', 'gerant1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 'adresse1', 1, 'arret-commerce1', 4, 'données google map commerce 1', 'données GPS commerce 1'),
-(2, 2, 'nom_commerce2', 'gerant2', 'logo-commerce2', 'image-commerce2', 'horaires-commerce2', 'num_tél-commerce2', 'email-commerce2', 'adresse2', 2, 'arret 2', 0, 'Données gm c2', 'données gps 2'),
-(3, 3, 'nom commerce3', 'gerant3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 'adresse3', 3, 'arret-commerce3', 2, 'données gm commerce3', 'données gps commerce3'),
-(4, 0, 'nom-commerce4', 'gerant4', 'logo-commerce4', 'image-commerce4', 'horaires-commerce4', 'numtél-commerce4', 'email-commerce4', 'adresse4', 4, 'arret-commerce4', 1, 'données google map du commerce4', 'données gps du commerce4'),
-(5, 5, 'nom_commerce5', 'gerant5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 'adresse5', 5, 'arret5', 2, 'données gm commerce 5', 'données gps commerce5');
+INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `gerant`, `logo`, `image`, `horaires`, `num_tel`, `email`, `adresse`, `ligne_bus`, `arret`, `donnees_google_map`, `donnees_GPS`) VALUES
+(1, 1, 'nom-commerce1', 'gerant1', 'logo-commerce1', 'image-commerce1', 'horaires-commerce1', 'numtel-commerce1', 'email-commerce1', 'adresse1', 1, 'arret-commerce1', 'données google map commerce 1', 'données GPS commerce 1'),
+(2, 2, 'nom_commerce2', 'gerant2', 'logo-commerce2', 'image-commerce2', 'horaires-commerce2', 'num_tél-commerce2', 'email-commerce2', 'adresse2', 2, 'arret 2', 'Données gm c2', 'données gps 2'),
+(3, 3, 'nom commerce3', 'gerant3', 'logo-commerce3', 'image-commerce3', 'horaires-commerce3', 'numtel-commerce3', 'email-commerce3', 'adresse3', 3, 'arret-commerce3', 'données gm commerce3', 'données gps commerce3'),
+(4, 0, 'nom-commerce4', 'gerant4', 'logo-commerce4', 'image-commerce4', 'horaires-commerce4', 'numtél-commerce4', 'email-commerce4', 'adresse4', 4, 'arret-commerce4', 'données google map du commerce4', 'données gps du commerce4'),
+(5, 5, 'nom_commerce5', 'gerant5', 'logo-commerce5', 'image-commerce5', 'horaires-commerce5', 'num_tél-commerce5', 'email-commerce5', 'adresse5', 5, 'arret5', 'données gm commerce 5', 'données gps commerce5');
 
 -- --------------------------------------------------------
 
@@ -143,11 +149,20 @@ INSERT INTO `commerce` (`id_commerce`, `id_statut`, `nom`, `gerant`, `logo`, `im
 --
 
 CREATE TABLE IF NOT EXISTS `gerant` (
-  `id_gerant` mediumint(8) unsigned NOT NULL,
+  `id_gerant` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `pseudo` varchar(50) NOT NULL,
   `mot_de_passe` varchar(50) NOT NULL,
+  `id_commerce` mediumint(9) unsigned NOT NULL,
   PRIMARY KEY (`id_gerant`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `gerant`
+--
+
+INSERT INTO `gerant` (`id_gerant`, `pseudo`, `mot_de_passe`, `id_commerce`) VALUES
+(1, 'gerant1', 'gerant1', 1),
+(2, 'gerant2', 'gerant2', 2);
 
 -- --------------------------------------------------------
 
@@ -162,6 +177,16 @@ CREATE TABLE IF NOT EXISTS `jaime` (
   KEY `id_abonne` (`id_abonne`,`id_kuchikomi`),
   KEY `id_kuchikomi` (`id_kuchikomi`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `jaime`
+--
+
+INSERT INTO `jaime` (`id_abonne`, `id_kuchikomi`, `date`) VALUES
+(5, 1, '2013-06-03 09:51:52'),
+(5, 5, '2013-06-03 09:55:13'),
+(5, 10, '2013-06-03 09:55:37'),
+(5, 2, '2013-06-03 10:00:31');
 
 -- --------------------------------------------------------
 
@@ -243,12 +268,6 @@ CREATE TABLE IF NOT EXISTS `statut` (
 --
 -- Contraintes pour les tables exportées
 --
-
---
--- Contraintes pour la table `gerant`
---
-ALTER TABLE `gerant`
-  ADD CONSTRAINT `gerant_ibfk_1` FOREIGN KEY (`id_gerant`) REFERENCES `quigerequoi` (`id_gerant`);
 
 --
 -- Contraintes pour la table `jaime`
