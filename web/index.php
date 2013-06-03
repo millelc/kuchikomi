@@ -6,10 +6,11 @@ session_start();
 include_once('../modeles/Abonne.class.php');
 include_once('../modeles/Abonnement.class.php');
 include_once('../modeles/Commerce.class.php');
+include_once('../modeles/Jaime.class.php');
 include_once('../modeles/GestionAbonne.class.php');
 include_once('../modeles/GestionAbonnement.class.php');
 include_once('../modeles/GestionCommerce.class.php');
-
+include_once('../modeles/GestionJaime.class.php');
 
 /*
 ####################################### Pseudo-code #################################################
@@ -98,6 +99,9 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 					{
 					echo $donnees['texte'];
 					}
+				echo '<p><a href="index.php?appel=jaime&id=';
+				echo $_GET['id'];
+				echo '">J\'aime !</a></p>';
 				break;
 				
 			case 'abo':						// Dans le cas où on souhaiterait s'abonner à un commerce.
@@ -208,9 +212,24 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				$desabonnements ->supprtotale($_SESSION['id']);						// Suppression de tous les abonnements.
 				session_destroy();
 				header('Location: index.php?appel=liste&id=none');
-				
-				
 				break;
+			
+			case 'jaime':
+				echo '<p>Vous avez aimé ce kuchikomi ';
+				echo $_GET['id'];
+				echo '<br />Et vous êtes ';
+				echo $_SESSION['id'];
+				echo '</p>';
+				$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id'], 'id_kuchikomi' => $_GET['id'] ));	// Création d'un objet « Jaime ».
+				echo '<p>Ce kuchikomi a pour identifiants ';
+				echo $nouveau_jaime->id_abonne();
+				echo $nouveau_jaime->id_kuchikomi();
+				echo '</p>';
+				$jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());	// On ajoute le jaime à la table si il est nouveau.
+				$jaime_ajout->ajout($nouveau_jaime);
+				break;
+			
+			
 			
 				
 			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
