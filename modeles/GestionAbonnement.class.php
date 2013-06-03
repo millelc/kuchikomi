@@ -24,7 +24,6 @@ class GestionAbonnement
 			{
 			$q = $this->_bdd->prepare('INSERT INTO abonnement (id_abonne, id_commerce, date) VALUES(?, ?, NOW())');
 			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));
-			$this->incremente($abo);
 			}
 			
 		catch (Exception $e)
@@ -41,7 +40,22 @@ class GestionAbonnement
 			{
 			$q = $this->_bdd->prepare('DELETE FROM abonnement WHERE id_abonne = ? AND id_commerce=?');
 			$q->execute(array($abo->id_abonne(), $abo->id_commerce()));
-			$this->decremente($abo);
+			}
+			
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
+		
+		}
+		
+	
+	public function supprtotale($id_abonne)	// Cette fonction supprime un abonnement de la table.
+		{
+		try
+			{
+			$q = $this->_bdd->prepare('DELETE FROM abonnement WHERE id_abonne = ?');
+			$q->execute(array($id_abonne));
 			}
 			
 		catch (Exception $e)
@@ -81,26 +95,6 @@ class GestionAbonnement
  		return False; 		
 		}
 		
-	private function incremente(Abonnement $abo)	// Cette fonction incrémete le compteur du nombre d'abonnés d'un commerce de la base.
-		{
-		$idcom=$abo->id_commerce();
-		echo '<br />J\'incrémente ';
-		echo $idcom;
-		$req = $this->_bdd->prepare('UPDATE commerce SET nb_abonnes = nb_abonnes+1 WHERE id_commerce = ?');
-		$req->execute(array($idcom));
-		echo '<br /<Variable incrémentée.<br />';
-		}
-		
-	private function decremente(Abonnement $abo)	// Cette fonction décrémete le compteur du nombre d'abonnés d'un commerce de la base.
-		{
-		$idcom=$abo->id_commerce();
-		echo '<br />Je décrémente ';
-		echo $idcom;
-		$req = $this->_bdd->prepare('UPDATE commerce SET nb_abonnes = nb_abonnes-1 WHERE id_commerce = ?');
-		$req->execute(array($idcom));
-		echo '<br /<Variable décrémentée.<br />';
-		}
-  
 	
 	
 ################## Setters #########################	

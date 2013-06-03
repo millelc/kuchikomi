@@ -202,8 +202,10 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				
 			case 'desinscr':
 				echo 'Vous voulez vous désinscrire.';
-				$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());
-				$desinscription->desinscription($_SESSION['id']);
+				$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());		// Création de l'objet.
+				$desinscription->desinscription($_SESSION['id']);					// Désactivation de l'utilisateur.
+				$desabonnements = new GestionAbonnement(Outils_Bd::getInstance()->getConnexion());	// Création de l'objet.
+				$desabonnements ->supprtotale($_SESSION['id']);						// Suppression de tous les abonnements.
 				session_destroy();
 				header('Location: index.php?appel=liste&id=none');
 				
