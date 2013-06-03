@@ -227,6 +227,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				echo '</p>';
 				$jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());	// On ajoute le jaime à la table si il est nouveau.
 				$jaime_ajout->ajout($nouveau_jaime);
+				header('Location: index.php?appel=kk&id=' . $_GET['id'] . '');
 				break;
 			
 			
