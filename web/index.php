@@ -78,9 +78,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 	if (isset($_SESSION['connexion']) AND $_SESSION['connexion']==1)	//Les variables ont été reçues et on est connecté.
 		{
 		switch ($_GET['appel'])
-			/*
-			Expliciter les case
-			*/
 		
 			{
 			case 'deco':						// Dans le cas où la déconnexion aurait été choisie
@@ -282,7 +279,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 						echo '">Se désabonner</a>';
 						echo '<p>Voici la liste des kuchikomi de ce commerce :</p>';
 						$bdd = Outils_Bd::getInstance()->getConnexion();				// On récupère l'instance de connexion.
-						$req = $bdd->prepare('SELECT id_kuchikomi, texte_alerte FROM kuchikomi WHERE id_commerce = ?');	// On récupère les aperçus 
+						$req = $bdd->prepare('SELECT id_kuchikomi, texte FROM kuchikomi WHERE id_commerce = ?');	// On récupère les aperçus 
 						$req->execute(array($idcom));									// de chaque kuchikomi
 						while ($donnees = $req->fetch())
 							{
@@ -290,7 +287,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 							echo '<a href="index.php?appel=kk&id=';							// et on les affiche.
 							echo $donnees['id_kuchikomi'];
 							echo '">';
-							echo $donnees['texte_alerte'];
+							echo $donnees['texte'];
 							echo '</a>';
 							}
 						}
