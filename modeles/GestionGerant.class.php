@@ -44,6 +44,15 @@ class GestionGerant
 			}
 		
 		}
+		
+		
+	public function quelCommerce($id_gerant)		// Cette fonction récupère l'id du commerce du gérant.
+		{
+		$req = $this->_bdd->prepare('SELECT id_commerce FROM gerant WHERE id_gerant = ?');
+		$req->execute(array($id_gerant));
+		$donnees = $req->fetch();
+		return $donnees['id_commerce'];
+		}
 
   
 	

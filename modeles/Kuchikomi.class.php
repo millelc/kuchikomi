@@ -5,12 +5,15 @@ include_once('Connexion.class.php');
 
 
 
-class Abonne
+class Kuchikomi
 	{
-	private $_id;
-	private $_pseudo;
-	private $_mdp;
-	private $_actif;
+	private $_id_kuchikomi;
+	private $_id_commerce;
+	private $_texte;
+	private $_image;
+	private $_date_debut;
+	private $_date_fin;
+	private $_mentions;
 	
 	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
@@ -19,8 +22,12 @@ class Abonne
 	
 	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
-		$this->setPseudo($donnees['pseudo']);
-		$this->setMdp($donnees['mdp']);
+		$this->setId_commerce($donnees['id_commerce']);
+		$this->setMentions($donnees['mentions']);
+		$this->setTexte($donnees['texte']);
+		$this->setImage($donnees['image']);
+		$this->setDate_debut($donnees['date_debut']);
+		$this->setDate_fin($donnees['date_fin']);
 		
 		}
 	
@@ -29,70 +36,94 @@ class Abonne
 ################## Setters #########################	
 	
 	
-	private function setId($id)
+	private function setId_commerce($id)
 		{
 		$id = (int) $id;
 		if ($id > 0)
 			{
-			$this->_id = $id;
+			$this->_id_commerce = $id;
 			}
 		}
 		
 	
-	private function setPseudo($pseudo)
+	private function setTexte($texte)
 		{
-		if (is_string($pseudo))
+		if (is_string($texte))
 			{
-			$this->_pseudo = $pseudo;
+			$this->_texte = $texte;
 			}
 		}
 		
-	private function setMdp($mdp)
+	private function setImage($image)
 		{
-		if (is_string($mdp))
+		if (is_string($image))
 			{
-			$this->_mdp = $mdp;
+			$this->_image = $image;
 			}
 		}
 	
-	private function setActif($actif)
+	private function setDate_debut($date_debut)
 		{
-		if (is_bool($actif))
+		$this->_date_debut = $date_debut;
+		}
+	
+	private function setDate_fin($date_fin)
+		{
+		$this->_date_fin = $date_fin;
+		}
+	
+	private function setMentions($mentions)
+		{
+		if (is_string($mentions))
 			{
-			$this->_actif = $actif;
+			$this->_mentions = $mentions;
 			}
 		}
+	
+	
 	
 	
 #################### Getters ########################
 
-	public function id()
+	public function id_kuchikomi()
 		{
-		return $this->_id;
+		return $this->_id_kuchikomi;
 		}
 	
-	public function pseudo()
+	public function id_commerce()
 		{
-		return $this->_pseudo;
+		return $this->_id_commerce;
 		}
 	
-	public function mdp()
+	public function texte()
 		{
-		return $this->_mdp;
+		return $this->_texte;
 		}
 	
-	public function actif()
+	public function image()
 		{
-		return $this->_actif;
+		return $this->_image;
+		}
+	
+	public function date_debut()
+		{
+		return $this->_date_debut;
+		}
+	
+	
+	public function date_fin()
+		{
+		return $this->_date_fin;
+		}
+	
+	
+	public function mentions()
+		{
+		return $this->_mentions;
 		}
 #####################################################	
 	
 	
 	}
-
-
-
-
-
 
 ?>

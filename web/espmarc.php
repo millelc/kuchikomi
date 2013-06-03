@@ -3,7 +3,8 @@ session_start();
 
 include_once('../modeles/Gerant.class.php');
 include_once('../modeles/GestionGerant.class.php');
-
+include_once('../modeles/Kuchikomi.class.php');
+include_once('../modeles/GestionKuchikomi.class.php');
 
 /*
 ####################################### Fragment HTML (en-tête) #####################################
@@ -61,12 +62,18 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 								{
 								// On peut valider le fichier et le stocker définitivement
 								$nom_image = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
-								echo $nom_image;
 								move_uploaded_file($_FILES['photokk']['tmp_name'], 'uploads/' . $nom_image);
 								}
 								
 							}
 						}
+					
+					$nouveau_kuchikomi = new Kuchikomi(array('id_commerce' => $_SESSION['id_commerce'], 'mentions' => $_POST['mentions'], 'texte' => $_POST['texte'], 'image' => $nom_image, 'date_debut' => $_POST['date_debut'], 'date_fin' => $_POST['date_fin'] ));	// Création d'un onjet Kuchokomi.
+					$ecriture_kk = new GestionKuchikomi(Outils_Bd::getInstance()->getConnexion());			// Instanciation du gestionnaire.
+					$ecriture_kk->ajout($nouveau_kuchikomi);
+					
+					
+					
 					}
 				else
 					{
@@ -74,11 +81,11 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 						<textarea name="texte" id="texte" rows="5" >Tapez votre alerte shopping ici.</textarea><br />
 						<label for="photokk">Ajouter une photo :</label><br />
 						<input type="file" name="photokk" id="photokk" /><br />
-						<label for="datedebut">Date de début :</label><br />
-						<input type="date" name="datedebut" id="datedebut" /><br />
-						<label for="datefin">Date de fin : :</label><br />
-						<input type="date" name="datefin" id="datefin" /><br />
-						<textarea name ="compl" id="compl" rows="5">Conditions particulières, mentions légales, etc...</textarea><br />
+						<label for="date_debut">Date de début :</label><br />
+						<input type="date" name="date_debut" id="date_debut" /><br />
+						<label for="date_fin">Date de fin : :</label><br />
+						<input type="date" name="date_fin" id="date_fin" /><br />
+						<textarea name ="mentions" id="mentions" rows="5">Conditions particulières, mentions légales, etc...</textarea><br />
 						<input type="submit" value="Envoyer" /><br />
 					
 						';
@@ -129,6 +136,7 @@ else									// On n'est pas connecté
 			else
 				{
 				$_SESSION['id']= $id_du_gerant;		// L'id de la session est égal à celui du gérant dans la base.
+				$_SESSION['id_commerce']= $connecte->quelCommerce($id_du_gerant);
 				$_SESSION['pseudo']= $_POST['pseudo'];
 				$_SESSION['commerçant']=1;
 				header('Location: espmarc.php');

@@ -7,7 +7,7 @@ include_once('Connexion.class.php');
 
 
 
-class GestionAbonne
+class GestionKuchikomi
 	{
 	private $_bdd;
 	
@@ -18,13 +18,24 @@ class GestionAbonne
 		  
 		  }
 
-	public function ajout(Abonne $perso)	// Cette fonction ajoute simplement un abonné à la base.
+	public function ajout(Kuchikomi $kk)	// Cette fonction ajoute simplement un abonné à la base.
 		{
 		try
-			{			
-			$q = $this->_bdd->prepare('INSERT INTO abonne (pseudo, mot_de_passe) VALUES(?, ?)');
-			$q->execute(array($perso->pseudo(), $perso->mdp()));
-			return $this->_bdd->lastInsertId();			
+			{
+			$q = $this->_bdd->prepare('INSERT INTO kuchikomi (id_commerce, mentions, texte, photo, date_debut, date_fin) VALUES(?, ?, ?, ?, ?, ?)');
+			echo '<br />id : ';
+			echo $kk->id_commerce();
+			echo '<br />mentions : ';
+			echo $kk->mentions();
+			echo '<br />texte : ';
+			echo $kk->texte();
+			echo '<br />image : ';
+			echo $kk->image();
+			echo '<br />datedebut : ';
+			echo $kk->date_debut();
+			echo '<br />date_fin : ';
+			echo $kk->date_fin();;
+			$q->execute(array($kk->id_commerce(), $kk->mentions(), $kk->texte(), $kk->image(), $kk->date_debut(), $kk->date_fin() ));
 			}
 		catch (Exception $e)
 			{
