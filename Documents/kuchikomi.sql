@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Lun 03 Juin 2013 à 11:11
+-- Généré le: Lun 03 Juin 2013 à 15:13
 -- Version du serveur: 5.5.27
 -- Version de PHP: 5.4.7
 
@@ -104,7 +104,9 @@ INSERT INTO `abonnement` (`id_abonne`, `id_commerce`, `date`) VALUES
 (4, 2, '2013-05-31 17:36:17'),
 (5, 1, '2013-06-03 09:03:41'),
 (5, 4, '2013-06-03 09:31:42'),
-(5, 2, '2013-06-03 09:55:08');
+(5, 2, '2013-06-03 09:55:08'),
+(15, 5, '2013-06-03 14:02:44'),
+(15, 1, '2013-06-03 14:04:18');
 
 -- --------------------------------------------------------
 
@@ -197,13 +199,11 @@ INSERT INTO `jaime` (`id_abonne`, `id_kuchikomi`, `date`) VALUES
 CREATE TABLE IF NOT EXISTS `kuchikomi` (
   `id_kuchikomi` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `id_commerce` mediumint(9) unsigned NOT NULL,
-  `texte_alerte` varchar(200) NOT NULL,
+  `mentions` varchar(200) NOT NULL,
   `texte` text NOT NULL,
   `photo` varchar(200) NOT NULL,
   `date_debut` date NOT NULL,
   `date_fin` date NOT NULL,
-  `nb_jaime` mediumint(9) NOT NULL,
-  `nb_passe` mediumint(9) NOT NULL,
   PRIMARY KEY (`id_kuchikomi`),
   KEY `id_commerce` (`id_commerce`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
@@ -212,18 +212,18 @@ CREATE TABLE IF NOT EXISTS `kuchikomi` (
 -- Contenu de la table `kuchikomi`
 --
 
-INSERT INTO `kuchikomi` (`id_kuchikomi`, `id_commerce`, `texte_alerte`, `texte`, `photo`, `date_debut`, `date_fin`, `nb_jaime`, `nb_passe`) VALUES
-(1, 1, 'texte-alerte_du_kuchikomi du commerce_1', 'texte du kuchikomi 1 du commerce 1', 'photo du kuchikomi 1 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
-(2, 1, 'texte alerte du kuchikomi 2 du commerce 1', 'texte du kuchikomi 2 du commerce 1', 'photo du kuchikomi 2 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
-(3, 1, 'texte alerte du kuchikomi 3 du commerce 1', 'texte du kuchikomi 3 du commerce 1', 'photo du kuchikomi 3 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
-(4, 1, 'texte alerte du kuchikomi 4 du commerce 1', 'texte du kuchikomi 4 du commerce 1', 'photo du kuchikomi 4 du commerce 1', '0000-00-00', '0000-00-00', 0, 0),
-(5, 2, 'texte alerte du kuchikomi 1 du commerce 2', 'texte du kuchikomi 1 du commerce 2', 'photo du kuchikomi 1 du commerce 2', '0000-00-00', '0000-00-00', 0, 0),
-(6, 2, 'texte alerte du kuchikomi 2 du commerce 2', 'texte du kuchikomi 2 du commerce 2', 'photo du kuchikomi 2 du commerce 2', '0000-00-00', '0000-00-00', 0, 0),
-(7, 3, 'texte alerte du kuchikomi 1 du commerce 3', 'texte du kuchikomi 1 du commerce 3', 'photo du kuchikomi 1 du commerce 3', '0000-00-00', '0000-00-00', 0, 0),
-(8, 3, 'texte alerte du kuchikomi 2 du commerce 3', 'texte du kuchikomi 2 du commerce 3', 'photo du kuchikomi 2 du commerce 3', '0000-00-00', '0000-00-00', 0, 0),
-(9, 3, 'texte alerte du kuchikomi 3 du commerce 3', 'texte du kuchikomi 3 du commerce 3', 'photo du kuchikomi 3 du commerce 3', '0000-00-00', '0000-00-00', 0, 0),
-(10, 4, 'texte alerte du kuchikomi 1 du commerce 4', 'texte du kuchikomi 1 du commerce 4', 'photo du kuchikomi 1 du commerce 4', '0000-00-00', '0000-00-00', 0, 0),
-(11, 5, 'texte alerte du kuchikomi 1 du commerce 5', 'texte du kuchikomi 1 du commerce 5', 'photo du kuchikomi 1 du commerce 5', '0000-00-00', '0000-00-00', 0, 0);
+INSERT INTO `kuchikomi` (`id_kuchikomi`, `id_commerce`, `mentions`, `texte`, `photo`, `date_debut`, `date_fin`) VALUES
+(1, 1, 'texte-alerte_du_kuchikomi du commerce_1', 'texte du kuchikomi 1 du commerce 1', 'photo du kuchikomi 1 du commerce 1', '0000-00-00', '0000-00-00'),
+(2, 1, 'texte alerte du kuchikomi 2 du commerce 1', 'texte du kuchikomi 2 du commerce 1', 'photo du kuchikomi 2 du commerce 1', '0000-00-00', '0000-00-00'),
+(3, 1, 'texte alerte du kuchikomi 3 du commerce 1', 'texte du kuchikomi 3 du commerce 1', 'photo du kuchikomi 3 du commerce 1', '0000-00-00', '0000-00-00'),
+(4, 1, 'texte alerte du kuchikomi 4 du commerce 1', 'texte du kuchikomi 4 du commerce 1', 'photo du kuchikomi 4 du commerce 1', '0000-00-00', '0000-00-00'),
+(5, 2, 'texte alerte du kuchikomi 1 du commerce 2', 'texte du kuchikomi 1 du commerce 2', 'photo du kuchikomi 1 du commerce 2', '0000-00-00', '0000-00-00'),
+(6, 2, 'texte alerte du kuchikomi 2 du commerce 2', 'texte du kuchikomi 2 du commerce 2', 'photo du kuchikomi 2 du commerce 2', '0000-00-00', '0000-00-00'),
+(7, 3, 'texte alerte du kuchikomi 1 du commerce 3', 'texte du kuchikomi 1 du commerce 3', 'photo du kuchikomi 1 du commerce 3', '0000-00-00', '0000-00-00'),
+(8, 3, 'texte alerte du kuchikomi 2 du commerce 3', 'texte du kuchikomi 2 du commerce 3', 'photo du kuchikomi 2 du commerce 3', '0000-00-00', '0000-00-00'),
+(9, 3, 'texte alerte du kuchikomi 3 du commerce 3', 'texte du kuchikomi 3 du commerce 3', 'photo du kuchikomi 3 du commerce 3', '0000-00-00', '0000-00-00'),
+(10, 4, 'texte alerte du kuchikomi 1 du commerce 4', 'texte du kuchikomi 1 du commerce 4', 'photo du kuchikomi 1 du commerce 4', '0000-00-00', '0000-00-00'),
+(11, 5, 'texte alerte du kuchikomi 1 du commerce 5', 'texte du kuchikomi 1 du commerce 5', 'photo du kuchikomi 1 du commerce 5', '0000-00-00', '0000-00-00');
 
 -- --------------------------------------------------------
 
