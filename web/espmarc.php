@@ -34,7 +34,6 @@ echo '<!DOCTYPE html>
 
 if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est connecté.
 	{
-	echo 'Hello world<br />';
 	echo '<a href="espmarc.php?appel=deco">Déconnexion</a>';
 	if (isset($_GET['appel']))
 		{
@@ -48,14 +47,11 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 			case 'interface':
 				if (isset($_POST['texte']))
 					{
-					echo '<br />Le kuchikomi est en cours d\'ajout.';
 					if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)
 						{
-						echo '<br />J\'ai bien reçu un fichier.';
 						// Testons si le fichier n'est pas trop gros
 						if ($_FILES['photokk']['size'] <= 1000000)
 							{
-							echo '<br />Et il est de taille adéquate.';
 							// Testons si l'extension est autorisée
 							$infosfichier = pathinfo($_FILES['photokk']['name']);
 							//var_dump($infosfichier);
@@ -63,15 +59,12 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 							$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
 							if (in_array($extension_recue, $extensions_autorisees))
 								{
-								echo '<br />Et c\'est bien une image.';
 								// On peut valider le fichier et le stocker définitivement
-								move_uploaded_file($_FILES['photokk']['tmp_name'], 'uploads/' . basename($_FILES['photokk']['name']));
-								echo "L'envoi a bien été effectué !";
+								$nom_image = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
+								echo $nom_image;
+								move_uploaded_file($_FILES['photokk']['tmp_name'], 'uploads/' . $nom_image);
 								}
-							else
-								{
-								echo '<br />Extension de fichier non supportée.';
-								}
+								
 							}
 						}
 					}
