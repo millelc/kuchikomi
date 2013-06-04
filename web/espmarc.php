@@ -36,6 +36,7 @@ echo '<!DOCTYPE html>
 if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est connecté.
 	{
 	echo '<a href="espmarc.php?appel=deco">Déconnexion</a>';
+	
 	if (isset($_GET['appel']))
 		{
 		switch ($_GET['appel'])		
@@ -45,7 +46,22 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 				session_destroy();
 				header('Location: espmarc.php');
 				break;
-			case 'interface':
+			case 'stats':						// Dans le cas où le commerçant voudrait lire ses statistiques
+				echo '<br />';
+				echo '<br /><a href="espmarc.php?appel=interface">Poster</a>';
+				echo '<p>Page de statistiques.</p>';
+				$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+				$req = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement WHERE id_commerce = ?');	// On souhaite récupérer le nombre d'abonnés du commerce en variable.
+				$req->execute(array($_SESSION['id_commerce']));
+				$donnees = $req->fetch();
+				//var_dump($donnees);
+				$nb_abonnes = $donnees[0];
+				echo 'Vous avez ' . $nb_abonnes . ' abonnés.<br />';
+					
+					
+					
+				break;
+			case 'interface':					// Le cas de base normalement, il s'agit de l'interface d'ajout.
 				if (isset($_POST['texte']))
 					{
 					if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)
@@ -71,13 +87,14 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 					$nouveau_kuchikomi = new Kuchikomi(array('id_commerce' => $_SESSION['id_commerce'], 'mentions' => $_POST['mentions'], 'texte' => $_POST['texte'], 'image' => $nom_image, 'date_debut' => $_POST['date_debut'], 'date_fin' => $_POST['date_fin'] ));	// Création d'un onjet Kuchokomi.
 					$ecriture_kk = new GestionKuchikomi(Outils_Bd::getInstance()->getConnexion());			// Instanciation du gestionnaire.
 					$ecriture_kk->ajout($nouveau_kuchikomi);
-					
+					header('Location: espmarc.php?appel=interface');
 					
 					
 					}
 				else
 					{
-					echo '<form action="espmarc.php?appel=interface" method="post" enctype="multipart/form-data">
+					echo '<br /><a href="espmarc.php?appel=stats">Vos statistiques</a><br />
+						<form action="espmarc.php?appel=interface" method="post" enctype="multipart/form-data">
 						<textarea name="texte" id="texte" rows="5" >Tapez votre alerte shopping ici.</textarea><br />
 						<label for="photokk">Ajouter une photo :</label><br />
 						<input type="file" name="photokk" id="photokk" /><br />
@@ -92,7 +109,7 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 					}
 				break;
 			default:
-				echo 'Par défaut.';
+				header('Location: espmarc.php?appel=interface');
 				break;
 			}
 		}

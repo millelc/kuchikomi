@@ -23,18 +23,6 @@ class GestionKuchikomi
 		try
 			{
 			$q = $this->_bdd->prepare('INSERT INTO kuchikomi (id_commerce, mentions, texte, photo, date_debut, date_fin) VALUES(?, ?, ?, ?, ?, ?)');
-			echo '<br />id : ';
-			echo $kk->id_commerce();
-			echo '<br />mentions : ';
-			echo $kk->mentions();
-			echo '<br />texte : ';
-			echo $kk->texte();
-			echo '<br />image : ';
-			echo $kk->image();
-			echo '<br />datedebut : ';
-			echo $kk->date_debut();
-			echo '<br />date_fin : ';
-			echo $kk->date_fin();;
 			$q->execute(array($kk->id_commerce(), $kk->mentions(), $kk->texte(), $kk->image(), $kk->date_debut(), $kk->date_fin() ));
 			}
 		catch (Exception $e)
@@ -43,53 +31,7 @@ class GestionKuchikomi
 			}
 		
 		}
-		
-	public function desinscription($id)	// Cette fonction DÉSACTIVE un abonné en mettant le champ « actif » à 0.
-		{
-		try
-			{
-			echo 'Désinscription en cours.';
-			$req = $this->_bdd->prepare('UPDATE abonne SET actif = 0 WHERE id_abonne = ?');
- 			$req->execute(array($id));
-			}
-		catch (Exception $e)
-			{
-			die('Erreur : ' . $e->getMessage());
-			}
-		
-		}
-		
-		
-	public function dejaInscrit(Abonne $perso)		// Cette fonction vérifie si un abonné est déjà dans la base.
-		{
-		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
-		$req->execute(array($perso->pseudo()));
-		$donnees = $req->fetch();
-		echo '<br />';
-		if ($donnees['id_abonne']=='')				// Cet abonné n'existe  pas.
-			{
-			return 0;
-			}
-		else
-			{
-			if ($perso->mdp()==$donnees['mot_de_passe'])						// Cet aboné existe mais est-ce le bon mot de passe ?
-				{
-				if ($donnees['actif']==1)
-					{
-					return $donnees['id_abonne'];								// Oui, c'est le bon mot de passe.
-					}
-				else
-					{
-					echo 'Utilisateur inactif';
-					}
-				}
-			else
-				{
-				return 0;
-				}
-			}
-		}
-
+	
   
 	
 	
