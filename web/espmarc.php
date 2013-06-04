@@ -57,7 +57,20 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 				//var_dump($donnees);
 				$nb_abonnes = $donnees[0];
 				echo 'Vous avez ' . $nb_abonnes . ' abonnés.<br />';
+				$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');	// On commence par récupérer les id du kuchikomi du commerce.
+				$req2->execute(array($_SESSION['id_commerce']));
+				while ($donnees2 = $req2->fetch())
+					{
+					//var_dump($donnees2);
+					echo '' . $donnees2['id_kuchikomi'] . ' ';
+					$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ?');
+					$req3->execute(array($donnees2['id_kuchikomi']));
+					$donnees3 = $req3->fetch();
+					var_dump($donnees3);
+					echo '<br />';
+					//$nb_jaime = $donnees3[0];
 					
+					}
 					
 					
 				break;

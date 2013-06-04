@@ -83,12 +83,10 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			case 'deco':						// Dans le cas où la déconnexion aurait été choisie
 				echo '<br />';
 				session_destroy();
-				echo 'Cette page devra renvoyer immédiatement vers la page listant les kuchikomi. Comme on ne sera plus connecté, ce sera le formulaire de connexion qui appraîtra en premier lieu.';
+				header('Location: index.php?appel=liste&id=none');
 				break;
 			case 'kk':						// Dans le cas où on souhaiterait afficher un kuchikomi.
-				echo '<a href="index.php?appel=liste&id=';
-				echo $_GET['id'];
-				echo '">Retour à la liste</a><br />';
+				echo '<a href="index.php?appel=liste&id=none">Retour à la liste</a><br />';
 				$bdd = Outils_Bd::getInstance()->getConnexion();		// On récupère une instance du singleton de connexion.
 				$req = $bdd->prepare('SELECT texte FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
 				$req->execute(array($_GET['id']));						// l'affichage du kuchilomi.
@@ -261,6 +259,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				else
 					{
 					echo '<br />';
+					echo '<br /><a href="index.php?appel=liste&id=none">Vos abonnements</a><br />';
 					$idcom = $_GET['id'] + 0;		// Pour convertir le string en int.
 					if ($idcom==0)
 						{

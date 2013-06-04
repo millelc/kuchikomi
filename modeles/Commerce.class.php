@@ -42,7 +42,6 @@ class Commerce
 		$this->setAdresse($donnees['adresse']);
 		$this->setLigne_bus($donnees['ligne_bus']);
 		$this->setArret($donnees['arret']);
-		$this->setNb_abonnes($donnees['nb_abonnes']);
 		$this->setDonnes_gm($donnees['donnees_google_map']);
 		$this->setDonnes_gps($donnees['donnees_GPS']);
 		}
@@ -147,16 +146,6 @@ class Commerce
 		}
 	
 	
-	private function setNb_abonnes($nb_abonnes)
-		{
-		$nb_abonnes = (int) $nb_abonnes;
-		if ($nb_abonnes > 0)
-			{
-			$this->_nb_abonnes = $nb_abonnes;
-			}
-		}
-	
-	
 	
 	
 	private function setDonnes_gm($donnees_gm)
@@ -236,11 +225,6 @@ class Commerce
 		{
 		return $this->_arret;
 		}	
-	
-	public function nb_abonnes()
-		{
-		return $this->_nb_abonnes;
-		}
 	
 	public function donnees_gm()
 		{
