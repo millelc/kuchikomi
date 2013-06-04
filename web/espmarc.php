@@ -56,24 +56,54 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 				$donnees = $req->fetch();
 				//var_dump($donnees);
 				$nb_abonnes = $donnees[0];
+				
+				
+				/**************************************************************************************
+				
+				Les opérations ci-dessous permettent de préparer les données pour de futurs calculs
+				de statistiques sur les kuchikomi en fonction de l'identifiant du commerçant.
+				Pour afficher le tableau, décommentez print_r du compteur et les balises l'entourant.
+				Il s'agit d'un array associatif avec l'identifiant du kuchikomi en clef et le nombre de jaime en valeurs.
+				
+				*//////////////////////////////////////////////////////////////////////////////////////
+				
 				echo 'Vous avez ' . $nb_abonnes . ' abonnés.<br />';
 				$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');	// On commence par récupérer les id du kuchikomi du commerce.
 				$req2->execute(array($_SESSION['id_commerce']));
+				$compteur=array();
 				while ($donnees2 = $req2->fetch())
 					{
 					//var_dump($donnees2);
-					echo '' . $donnees2['id_kuchikomi'] . ' ';
-					$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ?');
+					$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ? ');
 					$req3->execute(array($donnees2['id_kuchikomi']));
 					$donnees3 = $req3->fetch();
-					var_dump($donnees3);
-					echo '<br />';
-					//$nb_jaime = $donnees3[0];
-					
+					//var_dump($donnees3);
+					$compteur[$donnees2['id_kuchikomi']] = $donnees3[0];
 					}
-					
-					
+				
+				echo '<pre>';
+				print_r($compteur);
+				echo '</pre>';
+				
+				/**********************************************************************
+				************** Fin de la préparation des données des kuchikomi /////////
+				*//////////////////////////////////////////////////////////////////////
+				
+				
+				/************** Sélection meilleur kuchikomi */////////////////////////
+				
+				$clef_meilleur_kuchikomi = array_search(max($compteur), $compteur);			// L'identifiant du meilleur kuchikomi.
+				
+				$req4 = $bdd->prepare('SELECT date_debut FROM kuchikomi WHERE id_kuchikomi = ?');	// Récupération de la date de début du meilleur kuchikomi.
+				$req4->execute(array($clef_meilleur_kuchikomi));
+				$donnees4 = $req4->fetch();
+				//var_dump($donnees4);
+								
+				echo '<p>Vous avez écrit ' . sizeof($compteur) . ' kuchikomi.</p>';
+				echo '<p>Votre kuchikomi le plus aimé est le n° ' . $clef_meilleur_kuchikomi . ' datant du ' . $donnees4[0] . ' qui l\'a été ' . max($compteur) . ' fois.</p>';
 				break;
+				
+				
 			case 'interface':					// Le cas de base normalement, il s'agit de l'interface d'ajout.
 				if (isset($_POST['texte']))
 					{
