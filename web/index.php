@@ -12,6 +12,9 @@ include_once('../modeles/GestionAbonnement.class.php');
 include_once('../modeles/GestionCommerce.class.php');
 include_once('../modeles/GestionJaime.class.php');
 
+
+include_once('../modeles/fonctions.php');		// Contient toutes les fonctions de PHP.
+
 /*
 ####################################### Pseudo-code #################################################
 
@@ -35,46 +38,10 @@ Variables non reçues
 
 
 
-/*
-####################################### Fragment HTML (en-tête) #####################################
-*/
-
-
-
-echo '<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="../style/proto.css" />
-        <title>KuchiKomi</title>
-    </head>
- 
-    <body>
-    <header>
-      <p><a href="index.php">KuchiKomi</a></p>
-    </header>
-    <body>';
-
-
-
-/*
-#####################################################################################################
-*/
-
-
-
-// Ajout des tests d'acceptance dans les stories.
-
+$bandeau='None';
 
 if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été reçues
 	{
-	echo '<fieldset> <p>Variables de test :</p>';
-	echo "<p>-J'ai reçu cet appel : </p>";
-	echo $_GET['appel'];
-	echo "<p>-J'ai reçu cet identifiant : </p>";
-	echo $_GET['id'];
-	echo '</fieldset>';
-	echo '<br />';
 	if (isset($_SESSION['connexion']) AND $_SESSION['connexion']==1)	//Les variables ont été reçues et on est connecté.
 		{
 		switch ($_GET['appel'])
@@ -129,10 +96,12 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				if ($desinscription->dejaAbonne($abo_a_suppr)==True)				// True signifie que l'abonnement n'existe pas.
 					{
 					echo 'Cet abonnement n\'existe pas.';					// Ceci pour empêcher un désabonnement n'existant pas
+					header('Location: index.php?appel=liste&id=none');
 					}
 				else
 					{
 					$desinscription->suppr($abo_a_suppr);					// L'abonnement existe, on peut alors le supprimer.
+					header('Location: index.php?appel=liste&id=none');
 					}
 				break;
 			
@@ -229,67 +198,16 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			
 				
 			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
-				if ($_GET['id']=='none')				// ou une liste des kuchikomi d'un commerce n particulier      ie :  id = int
+				if ($_GET['id']=='none')
 					{
-					echo '<fieldset>';
-					echo '<br />Votre identifiant : ';
-					echo $_SESSION['id'];
-					echo '</fieldset>';
-					echo '<br />Voici la liste de vos abonnements :<br /> ';
-					$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-					$req = $bdd->prepare('SELECT id_commerce FROM abonnement WHERE id_abonne = ?');	//On récupère la liste des id_commerce dont on
-					$req->execute(array($_SESSION['id']));						// est abonné.
-					while ($donnees = $req->fetch())
-						{
-						$req2 = $bdd->prepare('SELECT id_commerce, nom FROM commerce WHERE id_commerce = ?');	// Pour chaque id_commerce,
-						$req2->execute(array($donnees['id_commerce']));						// on va chercher les noms
-						while ($donnees = $req2->fetch())								// correspondants
-							{										// et en faire une liste
-							echo '<a href="index.php?appel=liste&id=';						// de leurs noms
-							echo $donnees['id_commerce'];
-							echo '">';
-							echo $donnees['nom'];
-							echo '</a>';
-							echo '     ';
-							}
-						}
-					echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
-					echo '<br /><a href="index.php?appel=desinscr&id=none">Désinscription</a>';
+					$listeAbonnements=listeAbo($_SESSION['id']);	// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
+					include_once('listeabonnements.php');		// Cet array ne concerne que des commerces où l'utilisateur est abonné.
 					}
-				else
+				else						// ou une liste des kuchikomi d'un commerce en particulier      ie :  id = int
 					{
-					echo '<br />';
-					echo '<br /><a href="index.php?appel=liste&id=none">Vos abonnements</a><br />';
-					$idcom = $_GET['id'] + 0;		// Pour convertir le string en int.
-					if ($idcom==0)
-						{
-						echo 'La variable reçue n\'est pas du type adéquat.';
-						}
-					else
-						{
-						echo '<a href="index.php?appel=contact&id=';
-						echo $_GET['id'];
-						echo '">Contacter le commerçant.</a><br />';
-						echo '<a href="index.php?appel=yaller&id=';
-						echo $_GET['id'];
-						echo '">Y aller !</a><br />';
-						echo '<a href="index.php?appel=desabo&id=';
-						echo $_GET['id'];
-						echo '">Se désabonner</a>';
-						echo '<p>Voici la liste des kuchikomi de ce commerce :</p>';
-						$bdd = Outils_Bd::getInstance()->getConnexion();				// On récupère l'instance de connexion.
-						$req = $bdd->prepare('SELECT id_kuchikomi, texte FROM kuchikomi WHERE id_commerce = ?');	// On récupère les aperçus 
-						$req->execute(array($idcom));									// de chaque kuchikomi
-						while ($donnees = $req->fetch())
-							{
-							echo '<br />';
-							echo '<a href="index.php?appel=kk&id=';							// et on les affiche.
-							echo $donnees['id_kuchikomi'];
-							echo '">';
-							echo $donnees['texte'];
-							echo '</a>';
-							}
-						}
+					$listeKuchikomi=listekk($_GET['id']);
+					//var_dump($listeKuchikomi);
+					include_once('listekk.php');
 					}
 				break;
 				
@@ -302,6 +220,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				echo '<br />Vous êtes ';
 				echo $_SESSION['pseudo'];
 				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+				header('Location: index.php?appel=liste&id=none'); /********************************* À supprimer en cas de tuile !!!!!!!!!!!!!!*/
 				break;
 				
 			}
@@ -352,8 +271,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			
 		else								//Variables reçues, non connecté mais formulaire non rempli 
 			{
-			echo "<p>Ordre bien reçu mais vous n'êtes pas connecté.</p>";
-			include_once('../includes/formulaire_auth.php');
+			include_once('connexion.php');
 			}
 		}
 	}
@@ -388,24 +306,6 @@ else
 
 
 
-
-
-/*
-####################################### Fragment HTML (pied) ##########################################
-*/
-
-
-
-echo '</body>
-	<footer>
-	</footer>
-	</html>';
-
-
-
-/*
-#####################################################################################################
-*/
 
 
 
