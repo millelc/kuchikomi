@@ -2,7 +2,7 @@
 
 echo 	'<form method="post" action="index.php?appel=';
 echo $_GET['appel'];
-echo '&id=';
+echo '&amp;id=';
 echo $_GET['id'];
 echo '">
 	<p>

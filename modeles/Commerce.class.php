@@ -25,7 +25,6 @@ class Commerce
 	
 	public function __construct(array $donnees)	// Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
-		echo "<br />Appel de la classe Commerce réussi.";
 		$this->hydrate($donnees);
 		}
 	

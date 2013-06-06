@@ -53,18 +53,11 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				header('Location: index.php?appel=liste&id=none');
 				break;
 			case 'kk':						// Dans le cas où on souhaiterait afficher un kuchikomi.
-				echo '<a href="index.php?appel=liste&id=none">Retour à la liste</a><br />';
-				$bdd = Outils_Bd::getInstance()->getConnexion();		// On récupère une instance du singleton de connexion.
-				$req = $bdd->prepare('SELECT texte FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
-				$req->execute(array($_GET['id']));						// l'affichage du kuchilomi.
-				while ($donnees = $req->fetch())
-					{
-					echo $donnees['texte'];
-					}
-				echo '<p><a href="index.php?appel=jaime&id=';
-				echo $_GET['id'];
-				echo '">J\'aime !</a></p>';
+				$kuchikomi=recuperationDonneesKk($_GET['id']);
+				include_once('vue_affichageKk.php');
 				break;
+				
+				
 				
 			case 'abo':						// Dans le cas où on souhaiterait s'abonner à un commerce.
 				$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));	// On créé un nouvel abonnement
@@ -107,60 +100,15 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			
 			
 			case 'contact':						// Dans le cas où on souhaiterait consulter la page de contact d'un commerce.
-				echo '<fieldset>';
-				echo '<br />';
-				echo 'Vous voulez voir comment contacter le commerce : ';
-				echo $_GET['id'];
-				echo '<br />Et vous êtes : ';
-				echo $_SESSION['id'];
-				echo '<br />';
-				echo '</fieldset>';
-				echo '<a href="index.php?appel=yaller&id=';
-				echo $_GET['id'];
-				echo '">Y aller !</a><br />';
-				echo '<a href="index.php?appel=liste&id=';
-				echo $_GET['id'];
-				echo '">Retour à la liste</a><br />';
-				$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());		// On récupère l'instance de connexion
-				$commercant=new commerce (($commercant_req->quereur($_GET['id'])));				// On créé un commerce que l'on hydrate avec les
-															// infos récupérées avec la méthode quéreur.
-				echo '<p>Nom du comerce : ';
-				echo $commercant->nom();
-				echo '</p><p>Gérant : ';
-				echo $commercant->gerant();
-				echo '</p><p><u>Horaires d\'ouverture :</u> ';
-				echo $commercant->horaires();
-				echo '</p><p>Tel : ';
-				echo $commercant->num_tel();
-				echo '</p><p>Email : ';
-				echo $commercant->email();
-				echo '</p>';
+				
+				$infoscontacts= recupInfosCommercant($_GET['id']);
+				//var_dump($infoscontacts);
+				include_once('vue_contacts.php');
 				break;
 				
 			case 'yaller':						// Dans le cas où on souhaiterait consulter comment aller à un commerce.
-				echo '<fieldset>';
-				echo '<br />';
-				echo 'Vous voulez voir comment vous rendre à ce commerce : ';
-				echo $_GET['id'];
-				echo '<br />Et vous êtes : ';
-				echo $_SESSION['id'];
-				echo '<br />';
-				echo '</fieldset>';
-				echo '<a href="index.php?appel=contact&id=';
-				echo $_GET['id'];
-				echo '">Y aller !</a><br />';
-				echo '<a href="index.php?appel=liste&id=';
-				echo $_GET['id'];
-				echo '">Retour à la liste</a><br />';
-				$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());		// On créé une instance de connexion avec la bdd.
-				$commercant=new commerce (($commercant_req->quereur($_GET['id'])));				// Puis on créé un commerce qu'on hydrate grâce
-				echo '<p>Adresse : ';									// à la méthode quéreur.
-				echo $commercant->adresse();
-				echo '</p><p>Bus : ligne ';
-				echo $commercant->ligne_bus();
-				echo '</p><p>Arrêt : ';
-				echo $commercant->arret();
-				echo '</p>';
+				$infoscarto= recupInfosCart($_GET['id']);
+				include_once('vue_carto.php');
 				break;
 				
 				
@@ -201,13 +149,13 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				if ($_GET['id']=='none')
 					{
 					$listeAbonnements=listeAbo($_SESSION['id']);	// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
-					include_once('listeabonnements.php');		// Cet array ne concerne que des commerces où l'utilisateur est abonné.
+					include_once('vue_listeabonnements.php');		// Cet array ne concerne que des commerces où l'utilisateur est abonné.
 					}
 				else						// ou une liste des kuchikomi d'un commerce en particulier      ie :  id = int
 					{
 					$listeKuchikomi=listekk($_GET['id']);
 					//var_dump($listeKuchikomi);
-					include_once('listekk.php');
+					include_once('vue_listekk.php');
 					}
 				break;
 				
@@ -271,7 +219,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			
 		else								//Variables reçues, non connecté mais formulaire non rempli 
 			{
-			include_once('connexion.php');
+			include_once('vue_connexion.php');
 			}
 		}
 	}
