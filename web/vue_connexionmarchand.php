@@ -10,41 +10,38 @@
         <link href="../style/css/correction.css" rel="stylesheet" type="text/css">
         <title>Kuchikomi</title>
     </head>
-    
+ 
     <body>
     
-	
-		<header class="row" > <h1 class="span12"><a href="index.php">KuchiKomi</a></h1> </header>
-		
-		
-		
-		<?php
-		include_once('../includes/formulaire_auth.php');
-		?>
-		
-   
-   
-    
-    
+    <header class="page-header">
+      <h1><a href="espmarc.php">KuchiKomi</a></h1>
+    </header>
 
 
 
 
 
+<?php
 
-    <?php
-	if ($bandeau=='None')
-		{
-		echo '<footer style="background-color: black; color: white; margin-top:25px;">Bandeau d\'information dynamique';
-		}
-	else
-		{
-		echo '<footer><p><img src="../style/NearforgeLogo1eCom-ePub.png" alt="Nearforge" title="Nearforge" /></p>';
-		}
-	echo '</footer>';
 
-    
-    ?>
+echo 'Espace réservé aux commerçants.';
+echo 	'<form method="post" action="espmarc.php?appel=interface">
+	<p>
+	<label for="pseudo">Votre identifiant :</label>
+	<input type="text" name="pseudo" id="pseudo" />
+	<label for="pwd">Votre mot de passe :</label>
+	<input type="password" name="pwd" id="pwd" /><br />
+	<input type="submit" value="Connexion commerçants" name="connexionmarchande" />
+	</p>
+	</form>';
+
+
+?>
+
+
+
+    </footer>
+
 
 
 </body>

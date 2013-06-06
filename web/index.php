@@ -38,7 +38,7 @@ Variables non reçues
 
 
 
-$bandeau='None';
+$bandeau='Nearforge';
 
 if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été reçues
 	{

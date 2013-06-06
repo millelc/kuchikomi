@@ -7,6 +7,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, width=device-width">
         <link href="../style/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="../style/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+        <link href="../style/css/correction.css" rel="stylesheet" type="text/css">
         <title>Kuchikomi</title>
     </head>
  
@@ -50,7 +51,7 @@ echo '<br /><br />  <a href="index.php?appel=desinscr&amp;id=none">Désinscripti
 		}
 	else
 		{
-		echo '<footer >';
+		echo '<footer><p><img src="../style/NearforgeLogo1eCom-ePub.png" alt="Nearforge" title="Nearforge" /></p>';
 		}
 
     

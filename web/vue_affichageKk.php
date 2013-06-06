@@ -7,6 +7,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, width=device-width">
         <link href="../style/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="../style/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+        <link href="../style/css/correction.css" rel="stylesheet" type="text/css">
         <title>Kuchikomi</title>
     </head>
  
@@ -38,7 +39,7 @@ if ($bandeau=='None')
 	}
 else
 	{
-	echo '<footer >';
+	echo '<footer><p><img src="../style/NearforgeLogo1eCom-ePub.png" alt="Nearforge" title="Nearforge" /></p>';
 	}
 ?>
 

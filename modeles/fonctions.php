@@ -81,10 +81,52 @@ function recupInfosCart($idcom)
 	}
 
 
+function tentativeConnexion()
+	{
+	$nouveau_gerant= new Gerant(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));	//On créé un gérant.
+	$connecte= new GestionGerant(Outils_Bd::getInstance()->getConnexion());				// On appelle le gestionnaire des gérants.
+	$id_du_gerant=$connecte->existe($nouveau_gerant);
+	if ($id_du_gerant==0)					// Échec de la vérification d'identité.
+		{
+		header('Location: espmarc.php');
+		}
+	else
+		{
+		$_SESSION['id']= $id_du_gerant;		// L'id de la session est égal à celui du gérant dans la base.
+		$_SESSION['id_commerce']= $connecte->quelCommerce($id_du_gerant);
+		$_SESSION['pseudo']= $_POST['pseudo'];
+		$_SESSION['commerçant']=1;
+		header('Location: espmarc.php');
+		}
+	}
+			
 
 
-
-
+function ajoutkk()
+	{
+	if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+		{
+		// Testons si le fichier n'est pas trop gros
+		if ($_FILES['photokk']['size'] <= 1000000)
+			{
+			// Testons si l'extension est autorisée
+			$infosfichier = pathinfo($_FILES['photokk']['name']);
+			//var_dump($infosfichier);
+			$extension_recue = $infosfichier['extension'];
+			$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+			if (in_array($extension_recue, $extensions_autorisees))
+				{
+				// On peut valider le fichier et le stocker définitivement
+				$nom_image = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
+				move_uploaded_file($_FILES['photokk']['tmp_name'], 'uploads/' . $nom_image);
+				}
+			}
+		}
+	$nouveau_kuchikomi = new Kuchikomi(array('id_commerce' => $_SESSION['id_commerce'], 'mentions' => $_POST['mentions'], 'texte' => $_POST['texte'], 'image' => $nom_image, 'date_debut' => $_POST['date_debut'], 'date_fin' => $_POST['date_fin'] ));	// Création d'un onjet Kuchokomi.
+	$ecriture_kk = new GestionKuchikomi(Outils_Bd::getInstance()->getConnexion());			// Instanciation du gestionnaire.
+	$ecriture_kk->ajout($nouveau_kuchikomi);
+	header('Location: espmarc.php?appel=interface');
+	}
 
 
 
