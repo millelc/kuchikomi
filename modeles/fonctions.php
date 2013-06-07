@@ -129,6 +129,94 @@ function ajoutkk()
 	}
 
 
+function calculStatistiques ()
+	{
+	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+	$req = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement WHERE id_commerce = ?');	// On souhaite récupérer le nombre d'abonnés du commerce en variable.
+	$req->execute(array($_SESSION['id_commerce']));
+	$donnees = $req->fetch();
+	//var_dump($donnees);
+	$nb_abonnes = $donnees[0];
+	/**************************************************************************************
+	
+	Les opérations ci-dessous permettent de préparer les données pour de futurs calculs
+	de statistiques sur les kuchikomi en fonction de l'identifiant du commerçant.
+	Pour afficher le tableau, décommentez print_r du compteur et les balises l'entourant.
+	Il s'agit d'un array associatif avec l'identifiant du kuchikomi en clef et le nombre de jaime en valeurs.
+	
+	*//////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');	// On commence par récupérer les id du kuchikomi du commerce.
+	$req2->execute(array($_SESSION['id_commerce']));
+	$compteur=[];
+	while ($donnees2 = $req2->fetch())
+		{
+		//var_dump($donnees2);
+		$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ? ');
+		$req3->execute(array($donnees2['id_kuchikomi']));
+		$donnees3 = $req3->fetch();
+		//var_dump($donnees3);
+		$compteur[$donnees2['id_kuchikomi']] = $donnees3[0];
+		}
+		/*
+		echo '<pre>';
+		print_r($compteur);
+		echo '</pre>';
+		*/
+		/**********************************************************************
+		************** Fin de la préparation des données des kuchikomi /////////
+		*//////////////////////////////////////////////////////////////////////
+		
+		/************** Sélection meilleur kuchikomi */////////////////////////
+		
+		$clef_meilleur_kuchikomi = array_search(max($compteur), $compteur);			// L'identifiant du meilleur kuchikomi.
+		
+		$req4 = $bdd->prepare('SELECT date_debut FROM kuchikomi WHERE id_kuchikomi = ?');	// Récupération de la date de début du meilleur kuchikomi.
+		$req4->execute(array($clef_meilleur_kuchikomi));
+		$donnees4 = $req4->fetch();
+		$nb_de_kuchikomi = sizeof($compteur);
+		$date_meilleur_kuchikomi = $donnees4[0];
+		$nb_de_jaime_du_meilleur_kuchikomi = max($compteur);
+		//var_dump($donnees4);
+		
+		/**********************************************************************/
+		
+		/***********************************************************************
+		******************** Progression des abonnements ***********************
+		***********************************************************************/
+		
+		$req5 = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement WHERE id_commerce = ? AND TO_DAYS(NOW()) - TO_DAYS(date) <= 30;');	//Le nombre d'abonnés ces 30 derniers jours.
+		$req5->execute(array($_SESSION['id_commerce']));
+		$donnees5 = $req5->fetch();
+		$nb_abonnes_30_jours = $donnees5[0];
+		$nombre_abonnes_de_plus_de_30_jours=$nb_abonnes-$nb_abonnes_30_jours;
+		if ($nombre_abonnes_de_plus_de_30_jours==0)
+			{
+			$augmentation_sur_le_mois=0;
+			}
+		else
+			{
+			$augmentation_sur_le_mois=($nb_abonnes_30_jours/$nombre_abonnes_de_plus_de_30_jours)*100;
+			}
+		$abonnes_des_30_derniers_jours = $donnees5[0];
+		//var_dump($donnees5);
+		/***********************************************************************/
+		
+		/************************************************************************
+		/********************* Nombre total de j'aime **************************/
+		/***********************************************************************/
+		
+		// La requête SQL ci-dessous compte tous les kuchikomi aimés. Utilisation d'une sous-requête.
+		$req7 = $bdd->prepare('SELECT COUNT(*) FROM jaime WHERE id_kuchikomi IN (SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?) ');
+		$req7->execute(array($_SESSION['id_commerce']));
+		$donnees7 = $req7->fetch();
+		$nbre_total_de_jaime = $donnees7[0];
+				
+		
+	return array ($nb_abonnes, $nb_de_kuchikomi, $clef_meilleur_kuchikomi, $date_meilleur_kuchikomi, $nb_de_jaime_du_meilleur_kuchikomi, $abonnes_des_30_derniers_jours, $nombre_abonnes_de_plus_de_30_jours, $augmentation_sur_le_mois, $nbre_total_de_jaime) ;
+	}
+
 
 
 
