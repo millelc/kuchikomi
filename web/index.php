@@ -60,42 +60,12 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				
 				
 			case 'abo':						// Dans le cas où on souhaiterait s'abonner à un commerce.
-				$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));	// On créé un nouvel abonnement
-				$connexion = Outils_Bd::getInstance()->getConnexion();						// Puis on instancie une connexion
-				$inscription= new GestionAbonnement($connexion);						// Dont on se servira pour l'objet inscription
-				$inscription->commerceExistant($nouvel_abo);						// On vérifie que le commerce existe
-				
-				if ($inscription->commerceExistant($nouvel_abo)==True)				// Le commerce existe bel et bien.
-					if ($inscription->dejaAbonne($nouvel_abo)==True)			// NB : Si dejaAbonne renvoie True, c'est qu'on est pas abonné.
-						{
-						$inscription->ajout($nouvel_abo);				// Si pas encore abonné, on le devient.
-						echo '<p>Vous êtes désormais abonné à ce commerce.</p>';
-						}
-					else									// L'abonnement existe déjà.
-						{
-						echo '<p>Vous êtes déjà abonné à ce commerce.</p>';
-						}
-				else
-					{
-					echo 'Ce commerce n\'existe pas';
-					}
+				sAbonner();
 				header('Location: index.php?appel=liste&id=none');
 				break;
 				
 			case 'desabo':						// Dans le cas où on souhaiterait se désabonner d'un commerce
-				$abo_a_suppr= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] )); //On créé un nouvel abonnement
-				$connexion = Outils_Bd::getInstance()->getConnexion();					// On appelle l'instance de connexion
-				$desinscription= new GestionAbonnement($connexion);				// On créé un objet gérant les abonnements
-				if ($desinscription->dejaAbonne($abo_a_suppr)==True)				// True signifie que l'abonnement n'existe pas.
-					{
-					echo 'Cet abonnement n\'existe pas.';					// Ceci pour empêcher un désabonnement n'existant pas
-					header('Location: index.php?appel=liste&id=none');
-					}
-				else
-					{
-					$desinscription->suppr($abo_a_suppr);					// L'abonnement existe, on peut alors le supprimer.
-					header('Location: index.php?appel=liste&id=none');
-					}
+				seDesabonner();
 				break;
 			
 			
@@ -117,13 +87,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				break;
 				
 			case 'desinscr':
-				echo 'Vous voulez vous désinscrire.';
-				$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());		// Création de l'objet.
-				$desinscription->desinscription($_SESSION['id']);					// Désactivation de l'utilisateur.
-				$desabonnements = new GestionAbonnement(Outils_Bd::getInstance()->getConnexion());	// Création de l'objet.
-				$desabonnements ->supprtotale($_SESSION['id']);						// Suppression de tous les abonnements.
-				session_destroy();
-				header('Location: index.php?appel=liste&id=none');
+				desinscription();
 				break;
 			
 			case 'jaime':
@@ -160,14 +124,14 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				break;
 				
 			default:							// Dans les cas non pris en compte.
-				echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
+				/*echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
 				echo 'Vous voulez ';
 				echo $_GET['appel'];
 				echo '<br /> L\'identifiant est ';
 				echo $_GET['id'];
 				echo '<br />Vous êtes ';
 				echo $_SESSION['pseudo'];
-				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';*/
 				header('Location: index.php?appel=liste&id=none'); /********************************* À supprimer en cas de tuile !!!!!!!!!!!!!!*/
 				break;
 				
@@ -186,9 +150,17 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			$connecte= new GestionAbonne($connexion);							// On appelle le gestionnaire des abonnés
 			if ($connecte->dejaInscrit($nouveau_connecte)==0)		// Le pseudo est-il le bon ?
 				{
-				echo 'Pseudo ou mot de passe incorrect';						// Le pseudo n'est pas correct
-				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
+				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// L'abonné n'existe pas.
 				}
+			else if ($connecte->dejaInscrit($nouveau_connecte)==2)
+				{
+				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// L'abonné est inactif
+				}
+			else if ($connecte->dejaInscrit($nouveau_connecte)==3)
+				{
+				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// Mot de passe incorrect.
+				}
+			
 			else
 				{
 				$_SESSION['id']= $connecte->dejaInscrit($nouveau_connecte);		// L'id de la session est égal à celui de l'abonné dans la base.

@@ -59,22 +59,22 @@ class GestionAbonne
 			{
 			return 0;
 			}
-		else
+		else							// Cet aboné existe mais est-ce le bon mot de passe ?
 			{
-			if ($perso->mdp()==$donnees['mot_de_passe'])						// Cet aboné existe mais est-ce le bon mot de passe ?
+			if ($perso->mdp()==$donnees['mot_de_passe'])			// Oui, c'est le bon mot de passe.
 				{
 				if ($donnees['actif']==1)
 					{
-					return $donnees['id_abonne'];								// Oui, c'est le bon mot de passe.
+					return $donnees['id_abonne'];		// Abonné existant et actif
 					}
 				else
 					{
-					echo 'Utilisateur inactif';
+					return 2;				// Abonné existant et inactif
 					}
 				}
 			else
 				{
-				return 0;
+				return 3;					// Pas le bon mot de passe.
 				}
 			}
 		}

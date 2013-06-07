@@ -221,13 +221,48 @@ function calculStatistiques ()
 
 
 
+function sAbonner ()
+	{
+	$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));	// On créé un nouvel abonnement
+	$connexion = Outils_Bd::getInstance()->getConnexion();						// Puis on instancie une connexion
+	$inscription= new GestionAbonnement($connexion);						// Dont on se servira pour l'objet inscription
+	$inscription->commerceExistant($nouvel_abo);						// On vérifie que le commerce existe
+				
+	if ($inscription->commerceExistant($nouvel_abo)==True)				// Le commerce existe bel et bien.
+		{
+		if ($inscription->dejaAbonne($nouvel_abo)==True)			// NB : Si dejaAbonne renvoie True, c'est qu'on est pas abonné.
+			{
+			$inscription->ajout($nouvel_abo);				// Si pas encore abonné, on le devient.
+			}
+		}
+	}
 
 
+function seDesabonner ()
+	{
+	$abo_a_suppr= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] )); //On créé un nouvel abonnement
+	$connexion = Outils_Bd::getInstance()->getConnexion();					// On appelle l'instance de connexion
+	$desinscription= new GestionAbonnement($connexion);				// On créé un objet gérant les abonnements
+	if ($desinscription->dejaAbonne($abo_a_suppr)==True)				// True signifie que l'abonnement n'existe pas.
+		{
+		echo 'Cet abonnement n\'existe pas.';					// Ceci pour empêcher un désabonnement n'existant pas
+		}
+	else
+		{
+		$desinscription->suppr($abo_a_suppr);					// L'abonnement existe, on peut alors le supprimer.
+		}
+	header('Location: index.php?appel=liste&id=none');
+	}
 
-
-
-
-
+function desinscription ()
+	{
+	$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());		// Création de l'objet.
+	$desinscription->desinscription($_SESSION['id']);					// Désactivation de l'utilisateur.
+	$desabonnements = new GestionAbonnement(Outils_Bd::getInstance()->getConnexion());	// Création de l'objet.
+	$desabonnements ->supprtotale($_SESSION['id']);						// Suppression de tous les abonnements.
+	session_destroy();
+	header('Location: index.php?appel=liste&id=none');
+	}
 
 
 
