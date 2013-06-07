@@ -91,18 +91,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				break;
 			
 			case 'jaime':
-				echo '<p>Vous avez aimé ce kuchikomi ';
-				echo $_GET['id'];
-				echo '<br />Et vous êtes ';
-				echo $_SESSION['id'];
-				echo '</p>';
-				$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id'], 'id_kuchikomi' => $_GET['id'] ));	// Création d'un objet « Jaime ».
-				echo '<p>Ce kuchikomi a pour identifiants ';
-				echo $nouveau_jaime->id_abonne();
-				echo $nouveau_jaime->id_kuchikomi();
-				echo '</p>';
-				$jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());	// On ajoute le jaime à la table si il est nouveau.
-				$jaime_ajout->ajout($nouveau_jaime);
+				aimer ();
 				header('Location: index.php?appel=kk&id=' . $_GET['id'] . '');
 				break;
 			
@@ -123,7 +112,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 					}
 				break;
 				
-			default:							// Dans les cas non pris en compte.
+			default:							// Dans les cas non pris en compte ou lors d'une modif d'url.
 				/*echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
 				echo 'Vous voulez ';
 				echo $_GET['appel'];
@@ -144,48 +133,13 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 		
 		if (isset($_POST['connexion']))					//Variables reçues, non connecté mais formulaire de connexion rempli.
 			{
-			echo "<br />Vous avez choisi de vous connecter.";
-			$nouveau_connecte= new Abonne(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));	//On créé un abonné.
-			$connexion = Outils_Bd::getInstance()->getConnexion();					// On prépare l'accès à la bdd.
-			$connecte= new GestionAbonne($connexion);							// On appelle le gestionnaire des abonnés
-			if ($connecte->dejaInscrit($nouveau_connecte)==0)		// Le pseudo est-il le bon ?
-				{
-				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// L'abonné n'existe pas.
-				}
-			else if ($connecte->dejaInscrit($nouveau_connecte)==2)
-				{
-				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// L'abonné est inactif
-				}
-			else if ($connecte->dejaInscrit($nouveau_connecte)==3)
-				{
-				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// Mot de passe incorrect.
-				}
-			
-			else
-				{
-				$_SESSION['id']= $connecte->dejaInscrit($nouveau_connecte);		// L'id de la session est égal à celui de l'abonné dans la base.
-				$_SESSION['pseudo']= $_POST['pseudo'];
-				$_SESSION['connexion']=1;
-				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
-				}
-			
+			connexion ();
 			}
 			
 			
 		else if (isset($_POST['inscription']))				//Variables reçues, non connecté mais formulaire d'inscription rempli.
 			{
-			$nouvel_inscrit= new Abonne(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));	// On créé un nouvel abonné avec ce pseudo et ce mdp.
-			$connexion = Outils_Bd::getInstance()->getConnexion();					// On appelle une instance de la connexion
-			$inscription= new GestionAbonne($connexion);						// On prépare le gestionnaire d'abonnés
-			if ($inscription->dejaInscrit($nouvel_inscrit)==0)		// On vérifie que ce pseudo n'est pas déjà utilisé. Si il l'est déjà, rien ne se passe.
-				{
-				$_SESSION['id']= $inscription->ajout($nouvel_inscrit);		// Le pseudo est libre, le gestionnaire l'ajoute à la table.
-				$_SESSION['connexion']=1;
-				$_SESSION['pseudo']= $_POST['pseudo'];
-				}
-			
-			
-			header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
+			inscription ();
 			}
 		
 			
