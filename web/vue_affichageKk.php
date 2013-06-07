@@ -24,7 +24,7 @@
 <?php
 
 
-echo '<br /><a style="margin-top: 15px;" class="btn btn-medium btn-info" href="index.php?appel=liste&amp;id=none"><i class="icon-white icon-chevron-left"></i> Retour à la liste</a><br />';
+echo '<br /><a style="margin-top: 15px;" class="btn btn-medium btn-info" href="index.php?appel=liste&amp;id=' . $_SESSION['commerce_consulte'] . '"><i class="icon-white icon-chevron-left"></i> Retour à la liste</a><br />';
 
 //var_dump($kuchikomi);
 

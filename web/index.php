@@ -107,6 +107,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				else						// ou une liste des kuchikomi d'un commerce en particulier      ie :  id = int
 					{
 					$listeKuchikomi=listekk($_GET['id']);
+					$_SESSION['commerce_consulte']=$_GET['id'];
 					//var_dump($listeKuchikomi);
 					include_once('vue_listekk.php');
 					}
