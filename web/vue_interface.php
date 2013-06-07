@@ -24,7 +24,8 @@
 <?php
 
 
-echo '<p><br /><a class="btn btn-medium btn-info margin:auto;" href="espmarc.php?appel=stats">Vos statistiques</a></p>
+echo '<section>
+	<p><br /><a class="btn btn-medium btn-info margin:auto;" href="espmarc.php?appel=stats">Vos statistiques</a></p>
       <form action="espmarc.php?appel=interface" method="post" enctype="multipart/form-data">
       <textarea name="texte" id="texte" rows="5" >Tapez votre alerte shopping ici.</textarea>
       <p><label for="photokk">Ajouter une photo :<br /> <input type="file" name="photokk" id="photokk" /></label></p>
@@ -36,9 +37,10 @@ echo '<p><br /><a class="btn btn-medium btn-info margin:auto;" href="espmarc.php
       
       <textarea name ="mentions" id="mentions" rows="5">Conditions particulières, mentions légales, etc...</textarea>
       <br />
-      <input class="btn btn-medium btn-success" type="submit" style="margin-right: 50px;" value="Envoyer" />';
+      <input class="btn btn-medium btn-success" type="submit" style="margin-right: 50px;" value="Envoyer" />
+      </form>';
 
-echo '<a class="btn btn-medium btn-warning" href="espmarc.php?appel=deco&amp;id=none">Déconnexion</a>';
+echo '<a class="btn btn-medium btn-warning" href="espmarc.php?appel=deco&amp;id=none">Déconnexion</a></section>';
 
 
 
