@@ -20,7 +20,10 @@ class Gerant
 		{
 		$this->setPseudo($donnees['pseudo']);
 		$this->setMdp($donnees['mdp']);
-		
+		if (isset($donnees['idcom']))
+			{
+			$this->setId_commerce($donnees['idcom']);
+			}
 		}
 	
 	
