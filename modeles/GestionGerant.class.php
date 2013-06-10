@@ -66,6 +66,14 @@ class GestionGerant
 			die('Erreur : ' . $e->getMessage());
 			}
 		}
+	
+	public function quereur ($id_commerce)	// Le quéreur récupère les données d'un commerce et renvoie l'array correspondant.
+		{
+		$req = $this->_bdd->prepare('SELECT * FROM gerant WHERE id_commerce = ?');
+ 		$req->execute(array($id_commerce));
+ 		$donnees = $req->fetch();
+ 		return $donnees;
+ 		}
 
   
 	

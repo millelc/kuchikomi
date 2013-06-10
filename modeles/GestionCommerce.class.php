@@ -38,8 +38,22 @@ class GestionCommerce
 			die('Erreur : ' . $e->getMessage());
 			}
 		}
-
 	
+	public function modif (Commerce $commerce)
+		{
+		try
+			{
+			var_dump($commerce);
+			$req = $this->_bdd->prepare('UPDATE commerce SET nom = ?, gerant = ? WHERE id_commerce = ?');
+			$req->execute(array($commerce->nom(), $commerce->gerant(), $commerce->id_commerce()));
+			
+			}
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
+		}
+		
 	
 ################## Setters #########################	
 	

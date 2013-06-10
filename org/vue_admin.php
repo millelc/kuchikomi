@@ -8,13 +8,13 @@ echo '<p>Ici seront mises des statistiques générales.</p>
       </form>
       
       <form method="post" action="admin.php">
-      <input type="submit" value="Modifier un commerce ?" name="modifier" />
-      <input type="number" name="idcom" />
+      <input type="submit" value="Modifier un commerce ?" name="choix_modifier" />
+      <input type="number" name="idcom" required placeholder="Identifiant du commerce" />
       </form>
       
       <form method="post" action="admin.php">
-      <input type="submit" value="Supprimer un commerce ?" name="supprimer" />
-      <input type="number" name="idcom" />
+      <input type="submit" value="Supprimer un commerce ?" name="choix_supprimer" />
+      <input type="number" name="idcom" required placeholder="Identifiant du commerce" />
       </form>
       
       <form method="post" action="admin.php">

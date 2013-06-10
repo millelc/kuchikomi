@@ -415,7 +415,93 @@ function ajouterCommerce()
 	
 	
 	
+function modifierCommerce()
+	{
+	if (isset($_FILES['photo']) AND $_FILES['photo']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+		{
+		// Testons si le fichier n'est pas trop gros
+		if ($_FILES['photo']['size'] <= 1000000)
+			{
+			// Testons si l'extension est autorisée
+			$infosfichier = pathinfo($_FILES['photo']['name']);
+			//var_dump($infosfichier);
+			$extension_recue = $infosfichier['extension'];
+			$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+			if (in_array($extension_recue, $extensions_autorisees))
+				{
+				// On peut valider le fichier et le stocker définitivement
+				$nom_photo = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
+				move_uploaded_file($_FILES['photo']['tmp_name'], 'images_com/' . $nom_photo);
+				}
+			}
+		}
+	else
+		{
+		$nom_photo = $_GET['p'];
+		}
 	
+	
+	if (isset($_FILES['logo']) AND $_FILES['logo']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+		{
+		// Testons si le fichier n'est pas trop gros
+		if ($_FILES['logo']['size'] <= 1000000)
+			{
+			// Testons si l'extension est autorisée
+			$infosfichier = pathinfo($_FILES['logo']['name']);
+			//var_dump($infosfichier);
+			$extension_recue = $infosfichier['extension'];
+			$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+			if (in_array($extension_recue, $extensions_autorisees))
+				{
+				// On peut valider le fichier et le stocker définitivement
+				$nom_logo = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
+				move_uploaded_file($_FILES['logo']['tmp_name'], 'images_com/' . $nom_logo);
+				}
+			}
+		}
+	else
+		{
+		$nom_logo = $_GET['l'];
+		}
+	echo $nom_logo;
+	echo '<br />';
+	echo $nom_photo;
+	echo '<br />';
+	$donnees=[];
+	$donnees['nom']= $_POST['nom_com'];
+	$donnees['gerant']= $_POST['nom_gerant'];
+	$donnees['logo']= $nom_logo;
+	$donnees['image']= $nom_photo;
+	$donnees['horaires']= $_POST['horaires'];
+	$donnees['num_tel']= $_POST['num_tel'];
+	$donnees['email']= $_POST['email'];
+	$donnees['adresse']= $_POST['adresse'];
+	$donnees['ligne_bus']= $_POST['ligne_bus'];
+	$donnees['arret']= $_POST['arret'];
+	//var_dump($donnees);
+	
+	// Le plus dur est fait, les deux images, si elles existent, ont été envoyées, stockées et leurs noms normalisés.
+	// À présent, on se retrouve avec un tableau de données contenant des données suffisantes pour créer des objets Commerce et Gérant et les ajouter à la bdd.
+	
+	// Création du commerce
+	$nouveau_commerce= new Commerce ($donnees);
+	$modif_commerce= new GestionCommerce(Outils_Bd::getInstance()->getConnexion());
+	var_dump($nouveau_commerce);
+	$id_du_dernier_commerce_modifie = $modif_commerce -> modif($nouveau_commerce);
+	
+	// Et création de son gérant
+	
+	$donnees2=[];
+	$donnees2['pseudo']= $_POST['nom_gerant'];
+	$donnees2['mdp']= $_POST['mdp'];
+	//$donnees2['idcom']= $id_du_dernier_commerce_modifie;
+	
+	$nouveau_gerant= new Gerant ($donnees2);
+	$ajout_gerant= new GestionGerant(Outils_Bd::getInstance()->getConnexion());
+	//$ajout_gerant -> ajout($nouveau_gerant);
+	
+	
+	}
 	
 	
 	
