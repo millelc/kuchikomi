@@ -1,28 +1,5 @@
-
-
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="user-scalable=no, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, width=device-width">
-        <link href="../style/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="../style/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
-        <link href="../style/css/correction.css" rel="stylesheet" type="text/css">
-        <title>Kuchikomi</title>
-    </head>
- 
-    <body>
-    
-    <header class="page-header">
-      <h1><a href="espmarc.php">KuchiKomi</a></h1>
-    </header>
-
-
-
-
-
 <?php
-
+include_once('../includes/entete_marc.php');
 
 /*
 
@@ -58,28 +35,5 @@ echo 'Vos kuchikomi ont été aimé ' . $statistiques[8] . ' fois.';
 echo '<p><a class="btn btn-medium btn-warning" style="margin-top:15px;" href="espmarc.php?appel=deco&amp;id=none">Déconnexion</a></p>';
 
 
-
-if ($bandeau=='None')
-	{
-	echo '<footer style="background-color: black; color: white;">Pas de bandeau choisi';
-	}
-else
-	{
-	echo '<footer><p><img src="../style/NearforgeLogo1eCom-ePub.png" alt="Nearforge" title="Nearforge" /></p>';
-	}
-	
-
+include_once('../includes/pied.php');
 ?>
-
-
-
-    </footer>
-
-
-
-</body>
-
-
-</html>
-
-

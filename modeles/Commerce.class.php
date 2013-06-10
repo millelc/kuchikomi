@@ -30,7 +30,11 @@ class Commerce
 	
 	public function hydrate (array $donnees)		// L'hydrateur récupère les données et les répartit dans l'objet
 		{
-		$this->setId_commerce($donnees['id_commerce']);
+		if (isset($donnees['id_commerce']))
+			{
+			$this->setId_commerce($donnees['id_commerce']);
+			}
+		
 		$this->setNom($donnees['nom']);
 		$this->setGerant($donnees['gerant']);
 		$this->setLogo($donnees['logo']);
@@ -41,8 +45,22 @@ class Commerce
 		$this->setAdresse($donnees['adresse']);
 		$this->setLigne_bus($donnees['ligne_bus']);
 		$this->setArret($donnees['arret']);
-		$this->setDonnes_gm($donnees['donnees_google_map']);
-		$this->setDonnes_gps($donnees['donnees_GPS']);
+		if (isset($donnees['donnees_google_map']))
+			{
+			$this->setDonnes_gm($donnees['donnees_google_map']);
+			}
+		else
+			{
+			$this->setDonnes_gm('Non renseigné');
+			}
+		if (isset($donnees['donnees_GPS']))
+			{
+			$this->setDonnes_gps($donnees['donnees_GPS']);
+			}
+		else
+			{
+			$this->setDonnes_gps('Non renseigné');
+			}
 		}
 	
 	

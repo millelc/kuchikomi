@@ -24,6 +24,20 @@ class GestionCommerce
  		$donnees = $req->fetch();
  		return $donnees;
  		}
+ 		
+ 	public function ajout (Commerce $commerce)
+		{
+		try
+			{			
+			$req = $this->_bdd->prepare('INSERT INTO commerce (nom, gerant, logo, image, horaires, num_tel, email, adresse, ligne_bus, arret, donnees_google_map, donnees_GPS) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			$req->execute(array($commerce->nom(), $commerce->gerant(), $commerce->logo(), $commerce->image(), $commerce->horaires(), $commerce->num_tel(), $commerce->email(), $commerce->adresse(), $commerce->ligne_bus(), $commerce->arret(), $commerce->donnees_gm(), $commerce->donnees_gps()));
+			return $this->_bdd->lastInsertId();
+			}
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
+		}
 
 	
 	

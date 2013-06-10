@@ -24,7 +24,7 @@ class GestionAbonne
 			{			
 			$q = $this->_bdd->prepare('INSERT INTO abonne (pseudo, mot_de_passe) VALUES(?, ?)');
 			$q->execute(array($perso->pseudo(), $perso->mdp()));
-			return $this->_bdd->lastInsertId();			
+			return $this->_bdd->lastInsertId();
 			}
 		catch (Exception $e)
 			{

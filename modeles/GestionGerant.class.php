@@ -53,6 +53,19 @@ class GestionGerant
 		$donnees = $req->fetch();
 		return $donnees['id_commerce'];
 		}
+		
+	public function ajout (Gerant $gerant)
+		{
+		try
+			{			
+			$req = $this->_bdd->prepare('INSERT INTO gerant (pseudo, mot_de_passe, id_commerce) VALUES(?, ?, ?)');
+			$req->execute(array($gerant->pseudo(), $gerant->mdp(), $gerant->id_commerce()));
+			}
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
+		}
 
   
 	
