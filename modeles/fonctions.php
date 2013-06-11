@@ -502,15 +502,29 @@ function modifierCommerce()
 	$nouveau_gerant= new Gerant ($donnees2);
 	var_dump($donnees2);
 	echo '<br />';
-	var_dump($nouveau_gerant);
+	//var_dump($nouveau_gerant);
+	
+	// Que l'on modifie également.
 	$modif_gerant= new GestionGerant(Outils_Bd::getInstance()->getConnexion());
 	$modif_gerant -> modif($nouveau_gerant);
 	
-	
+	header('Location: admin.php');
 	}
 	
 	
+function supprimerCommerce($idcom)
+	{
+	$bdd=Outils_Bd::getInstance()->getConnexion();
+	// On supprime le gérant ainsi que le commerce correspondants
 	
+	$req = $bdd->prepare('DELETE FROM gerant WHERE id_commerce= ?');
+	$req->execute(array($idcom));
+	
+	$req2 = $bdd->prepare('DELETE FROM commerce WHERE id_commerce= ?');
+	$req2->execute(array($idcom));
+	
+	header('Location: admin.php');
+	}
 	
 	
 	

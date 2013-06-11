@@ -62,10 +62,9 @@ else if (isset($_POST['modifier']))
 	}
 
 
-else if (isset($_POST['supprimer']))
+else if (isset($_POST['choix_supprimer']))
 	{
-	include_once('vue_supprimer.php');
-	echo $_POST['idcom'];;
+	supprimerCommerce($_POST['idcom']);
 	}
 
 
