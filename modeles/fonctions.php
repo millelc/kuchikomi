@@ -463,11 +463,14 @@ function modifierCommerce()
 		{
 		$nom_logo = $_GET['l'];
 		}
+	/*
 	echo $nom_logo;
 	echo '<br />';
 	echo $nom_photo;
 	echo '<br />';
+	*/
 	$donnees=[];
+	$donnees['id_commerce']= $_POST['idcom'];
 	$donnees['nom']= $_POST['nom_com'];
 	$donnees['gerant']= $_POST['nom_gerant'];
 	$donnees['logo']= $nom_logo;
@@ -486,7 +489,7 @@ function modifierCommerce()
 	// Création du commerce
 	$nouveau_commerce= new Commerce ($donnees);
 	$modif_commerce= new GestionCommerce(Outils_Bd::getInstance()->getConnexion());
-	var_dump($nouveau_commerce);
+	//var_dump($nouveau_commerce);
 	$id_du_dernier_commerce_modifie = $modif_commerce -> modif($nouveau_commerce);
 	
 	// Et création de son gérant
@@ -494,11 +497,14 @@ function modifierCommerce()
 	$donnees2=[];
 	$donnees2['pseudo']= $_POST['nom_gerant'];
 	$donnees2['mdp']= $_POST['mdp'];
-	//$donnees2['idcom']= $id_du_dernier_commerce_modifie;
+	$donnees2['idcom']= $_POST['idcom'];
 	
 	$nouveau_gerant= new Gerant ($donnees2);
-	$ajout_gerant= new GestionGerant(Outils_Bd::getInstance()->getConnexion());
-	//$ajout_gerant -> ajout($nouveau_gerant);
+	var_dump($donnees2);
+	echo '<br />';
+	var_dump($nouveau_gerant);
+	$modif_gerant= new GestionGerant(Outils_Bd::getInstance()->getConnexion());
+	$modif_gerant -> modif($nouveau_gerant);
 	
 	
 	}

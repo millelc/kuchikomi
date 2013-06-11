@@ -1,8 +1,11 @@
 <?php
 
+//var_dump($commerce);
 
 echo '
       <form action="admin.php?p=' . $commerce['image'] . '&amp;l=' . $commerce['logo'] . '" method="post" enctype="multipart/form-data">
+      
+      <p><input type="hidden" name="idcom" value="' . $commerce['id_commerce'] . '" ></p>
       
       <p><label for="nom_com">Nom du commerce : <input type="text" name="nom_com" id="nom_com" autofocus required placeholder="Obligatoire" value="' . $commerce['nom'] . '" /></label></p>
       

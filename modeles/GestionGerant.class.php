@@ -74,8 +74,22 @@ class GestionGerant
  		$donnees = $req->fetch();
  		return $donnees;
  		}
+ 		
+ 	public function modif (Gerant $gerant)
+		{
+		echo 'test';
+		try
+			{
+			//var_dump($gerant);
+			$req = $this->_bdd->prepare('UPDATE gerant SET pseudo = ?, mot_de_passe = ? WHERE id_commerce = ?');
+			$req->execute(array($gerant->pseudo(), $gerant->mdp(), $gerant->id_commerce()));
+			}
+		catch (Exception $e)
+			{
+			die('Erreur : ' . $e->getMessage());
+			}
+		}
 
-  
 	
 	
 ################## Setters #########################	

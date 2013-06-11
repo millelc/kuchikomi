@@ -43,9 +43,9 @@ class GestionCommerce
 		{
 		try
 			{
-			var_dump($commerce);
-			$req = $this->_bdd->prepare('UPDATE commerce SET nom = ?, gerant = ? WHERE id_commerce = ?');
-			$req->execute(array($commerce->nom(), $commerce->gerant(), $commerce->id_commerce()));
+			//var_dump($commerce);
+			$req = $this->_bdd->prepare('UPDATE commerce SET nom = ?, gerant = ?, logo = ?, image = ?, horaires = ?, num_tel = ?, email = ?, adresse = ?, ligne_bus = ?, arret = ?, donnees_google_map = ?, donnees_GPS = ? WHERE id_commerce = ?');
+			$req->execute(array($commerce->nom(), $commerce->gerant(), $commerce->logo(), $commerce->image(),  $commerce->horaires(), $commerce->num_tel(), $commerce->email(),  $commerce->adresse(), $commerce->ligne_bus(), $commerce->arret(), $commerce->donnees_gm(), $commerce->donnees_gps(), $commerce->id_commerce()));
 			
 			}
 		catch (Exception $e)

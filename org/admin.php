@@ -50,7 +50,7 @@ else if (isset($_POST['choix_modifier']))
 	// On récupère les données du commerce et du gérant correspondants
 	$nouveau_commerce= new GestionCommerce (Outils_Bd::getInstance()->getConnexion());
 	$commerce = $nouveau_commerce-> quereur ($_POST['idcom']); 	// $commerce est un array contenant toutes les données relatives à ce sujet.
-	var_dump($commerce);
+	//var_dump($commerce);
 	$nouveau_gerant = new GestionGerant (Outils_Bd::getInstance()->getConnexion());
 	$gerant = $nouveau_gerant-> quereur ($_POST['idcom']);		// De même $gerant est un array contenant toutes les données du gérant du commerce correspondant.
 	include_once('vue_modifier.php');
