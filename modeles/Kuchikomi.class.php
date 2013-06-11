@@ -22,13 +22,17 @@ class Kuchikomi
 	
 	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
+		var_dump($donnees);
 		$this->setId_commerce($donnees['id_commerce']);
 		$this->setMentions($donnees['mentions']);
 		$this->setTexte($donnees['texte']);
 		$this->setImage($donnees['image']);
 		$this->setDate_debut($donnees['date_debut']);
 		$this->setDate_fin($donnees['date_fin']);
-		
+		if (isset($donnees['image']))
+			{
+			$this->setImage($donnees['image']);
+			}
 		}
 	
 	

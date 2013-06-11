@@ -9,7 +9,7 @@ echo '<section>
       
       <textarea name="texte" id="texte" rows="5" >Tapez votre alerte shopping ici.</textarea>
       
-      <p><label for="photokk">Ajouter une photo :<br /> <input type="file" name="photokk" id="photokk" /></label></p>
+      <p><label for="photokk">Ajouter une photo (2Mo maximum) :<br /> <input type="file" name="photokk" id="photokk" /></label></p>
       
       <p><label for="date_debut">Date de début :<br /> <input type="date" name="date_debut" id="date_debut" class="input-medium" /></label></p>
       
