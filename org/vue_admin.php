@@ -1,7 +1,7 @@
 <?php
 
 
-echo '<p>Ici seront mises des statistiques générales.</p>
+echo '
       <p>Que voulez-vous faire ?</p>
       
       <form method="post" action="admin.php">
@@ -26,6 +26,6 @@ echo '<p>Ici seront mises des statistiques générales.</p>
       </form>
       ';
 
-      
+recupererStats();      
       
 ?>

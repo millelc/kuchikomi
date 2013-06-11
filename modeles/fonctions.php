@@ -526,9 +526,69 @@ function supprimerCommerce($idcom)
 	header('Location: admin.php');
 	}
 	
+function modifierBandeau()
+	{
+	if (isset($_FILES['bandeau']) AND $_FILES['bandeau']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+		{
+		// Testons si le fichier n'est pas trop gros
+		if ($_FILES['bandeau']['size'] <= 1000000)
+			{
+			// Testons si l'extension est autorisée
+			$infosfichier = pathinfo($_FILES['bandeau']['name']);
+			//var_dump($infosfichier);
+			$extension_recue = $infosfichier['extension'];
+			$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+			if (in_array($extension_recue, $extensions_autorisees))
+				{
+				// On peut valider le fichier et le stocker définitivement
+				$nom_bandeau = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
+				move_uploaded_file($_FILES['bandeau']['tmp_name'], '../web/uploads/' . $nom_bandeau);
+				}
+			}
+		}
+	$ofic = fopen('../includes/bandeau', 'r+');
+	fseek($ofic, 0); // On remet le curseur au début du fichier
+	fputs($ofic, $nom_bandeau); // On écrit le nom de la nouvelle image
+	fclose($ofic);
+	echo '<p>L\'image de bandeau est désormais ' . $nom_bandeau . '.</p>';
+	}
+
 	
+function recupBandeau()
+	{
+	$ofic = fopen('../includes/bandeau', 'r');
+	$nom_image = fgets($ofic); // On lit la première ligne.
+	fclose($ofic);
+	return $nom_image;
+	}
 	
+function recupererStats()
+	{
+	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+	$req = $bdd->prepare('SELECT COUNT(*) FROM commerce');	// On souhaite récupérer le nombre de commerçants.
+	$req->execute(array());
+	$donnees = $req->fetch();
+	echo '<p>Il y a ' . $donnees[0] . ' commerçants inscrits.</p>';
 	
+	$req2 = $bdd->prepare('SELECT COUNT(*) FROM abonne');	// On souhaite récupérer le nombre de commerçants.
+	$req2->execute(array());
+	$donnees2 = $req2->fetch();
+	echo '<p>Il y a ' . $donnees2[0] . ' utilisateurs inscrits.</p>';
 	
+	$req3 = $bdd->prepare('SELECT COUNT(*) FROM abonnement');	// On souhaite récupérer le nombre de commerçants.
+	$req3->execute(array());
+	$donnees3 = $req3->fetch();
+	echo '<p>Il y a ' . $donnees3[0] . ' abonnements.</p>';
+	
+	$req4 = $bdd->prepare('SELECT COUNT(*) FROM jaime');	// On souhaite récupérer le nombre de commerçants.
+	$req4->execute(array());
+	$donnees4 = $req4->fetch();
+	echo '<p>Il y a ' . $donnees4[0] . ' « J\'aime ! ».</p>';
+		
+	$req5 = $bdd->prepare('SELECT COUNT(*) FROM kuchikomi');	// On souhaite récupérer le nombre de commerçants.
+	$req5->execute(array());
+	$donnees5 = $req5->fetch();
+	echo '<p>Il y a ' . $donnees5[0] . ' kuchikomi écrits..</p>';
+	}
 
 ?>
