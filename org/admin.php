@@ -6,6 +6,8 @@ include_once('../modeles/Commerce.class.php');
 include_once('../modeles/GestionCommerce.class.php');
 include_once('../modeles/Gerant.class.php');
 include_once('../modeles/GestionGerant.class.php');
+
+$bandeau='None';
 /*
 ####################################### Fragment HTML (En-tête) ##########################################
 */
@@ -73,23 +75,31 @@ else if (isset($_POST['bandeau']))
 	include_once('vue_bandeau.php');
 	}
 
+else if (isset($_POST['modifier_bandeau']))
+	{
+	$bandeau = modifierBandeau();
+	header('Location: admin.php');
+	echo $bandeau;
+	}
+
 
 else
 	{
 	include_once('vue_admin.php');
 	}
 
+echo '<footer><p><img src="../web/uploads/' . recupBandeau() . '" alt="Nearforge" title="Nearforge" /></p>';
+	
 
-
-
-/*
-####################################### Fragment HTML (pied) ##########################################
-*/
-echo '</body>
-	<footer>
-	</footer>
-	</html>';
-/*
-#####################################################################################################
-*/
 ?>
+
+
+
+    </footer>
+
+
+
+</body>
+
+
+</html>

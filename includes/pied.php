@@ -1,12 +1,5 @@
-<?
-if ($bandeau=='None')
-	{
-	echo '<footer style="background-color: black; color: white;">Pas de bandeau choisi';
-	}
-else
-	{
-	echo '<footer><p><img src="../style/NearforgeLogo1eCom-ePub.png" alt="Nearforge" title="Nearforge" /></p>';
-	}
+<?php
+	echo '<footer><p><img src="../web/uploads/' . recupBandeau() . '" alt="Nearforge" title="Nearforge" style="width: 10%;" /></p>';
 	
 
 ?>

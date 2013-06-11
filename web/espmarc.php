@@ -84,5 +84,7 @@ else									// On n'est pas connecté
 		}
 
 	}
+	
+include_once('../includes/pied.php');
 
 ?>
