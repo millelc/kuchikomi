@@ -2,7 +2,7 @@
 include_once('../includes/entete_marc.php');
 
 echo '<section>
-	<p><br /><a class="btn btn-medium btn-info margin:auto;" href="espmarc.php?appel=stats">Vos statistiques</a></p>
+	<p><br /><a class="btn btn-medium btn-info margin:auto;" href="espmarc.php"><i class="icon-white icon-chevron-left"></i> Retour</a></p>
       <form action="espmarc.php?appel=interface" method="post" enctype="multipart/form-data">
       
       

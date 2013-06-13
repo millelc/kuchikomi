@@ -108,7 +108,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 					{
 					$listeKuchikomi=listekk($_GET['id']);
 					$_SESSION['commerce_consulte']=$_GET['id'];
-					//var_dump($listeKuchikomi);
 					include_once('vue_listekk.php');
 					}
 				break;
@@ -160,6 +159,12 @@ else
 	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
 	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan du commerce 4</a></p>
 	      <p><a href=\"index.php?appel=scan&id=5\">Émulation d'un scan du commerce 5</a></p>
+	      <p><a href=\"index.php?appel=scan&id=6\">Émulation d'un scan du commerce 6</a></p>
+	      <p><a href=\"index.php?appel=scan&id=7\">Émulation d'un scan du commerce 7</a></p>
+	      <p><a href=\"index.php?appel=scan&id=8\">Émulation d'un scan du commerce 8</a></p>
+	      <p><a href=\"index.php?appel=scan&id=9\">Émulation d'un scan du commerce 9</a></p>
+	      <p><a href=\"index.php?appel=scan&id=10\">Émulation d'un scan du commerce 10</a></p>
+	      <p><a href=\"index.php?appel=scan&id=11\">Émulation d'un scan du commerce 11</a></p>
 	      <fieldset>
 	      <p><a href=\"index.php?appel=liste&id=none\">Un utilisateur inscrit et connecté qui lance son application atterrira directement sur la liste de ses abonnements.</a></p>
 	      </fieldset>

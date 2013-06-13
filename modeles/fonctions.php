@@ -6,12 +6,12 @@
 function listeAbo($id_abonne)
 	{
 	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT id_commerce, nom FROM commerce WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?)');//On récupère la liste des id_commerce dont on
+	$req = $bdd->prepare('SELECT id_commerce, logo FROM commerce WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?)');//On récupère la liste des id_commerce dont on
 	$req->execute(array($id_abonne));														// est abonné.
 	$listeAbonnements=[];
 	while ($donnees = $req->fetch())
 		{
-		$listeAbonnements[$donnees['id_commerce']] = $donnees['nom'];
+		$listeAbonnements[$donnees['id_commerce']] = $donnees['logo'];
 		}
 	return $listeAbonnements;
 	}
@@ -30,15 +30,15 @@ function listekk($idcommerce)
 	else
 		{
 		$bdd = Outils_Bd::getInstance()->getConnexion();				// On récupère l'instance de connexion.
-		$req = $bdd->prepare('SELECT id_kuchikomi, texte FROM kuchikomi WHERE id_commerce = ?');	// On récupère les aperçus 
+		$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce = ? ORDER BY date_fin DESC LIMIT 0,10');	// On récupère les aperçus 
 		$req->execute(array($idcommerce));									// de chaque kuchikomi
-		$listeKuchikomi=[];
-		while ($donnees = $req->fetch())
-			{
-			$listeKuchikomi[$donnees['id_kuchikomi']] = $donnees['texte'];
-			}
-		return $listeKuchikomi;
-		
+		return $req;
+// 		$listeKuchikomi=[];
+// 		while ($donnees = $req->fetch())
+// 			{
+// 			$listeKuchikomi[$donnees['id_kuchikomi']] = $donnees['texte'];
+// 			}
+		//return $listeKuchikomi;
 		}
 	
 	}
@@ -106,8 +106,9 @@ function ajoutkk()
 	{
 	if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
 		{
+		echo 'reçu une photo';
 		// Testons si le fichier n'est pas trop gros
-		if ($_FILES['photokk']['size'] <= 1000000)
+		if ($_FILES['photokk']['size'] <= 2000000)
 			{
 			// Testons si l'extension est autorisée
 			$infosfichier = pathinfo($_FILES['photokk']['name']);
@@ -120,11 +121,26 @@ function ajoutkk()
 				$nom_image = md5(uniqid(rand(), true)) . '.' . $infosfichier['extension'];
 				move_uploaded_file($_FILES['photokk']['tmp_name'], 'uploads/' . $nom_image);
 				}
+			else
+				{
+				echo 'Format de photo non valide.';
+				$nom_image = 'logo_defaut.png';
+				}
 			}
+		else
+			{
+			echo 'La taille de la photo est trop grande.';
+			$nom_image = 'logo_defaut.png';
+			}
+		}
+	else
+		{
+		$nom_image = 'logo_defaut.png';
 		}
 	$nouveau_kuchikomi = new Kuchikomi(array('id_commerce' => $_SESSION['id_commerce'], 'mentions' => $_POST['mentions'], 'texte' => $_POST['texte'], 'image' => $nom_image, 'date_debut' => $_POST['date_debut'], 'date_fin' => $_POST['date_fin'] ));	// Création d'un onjet Kuchokomi.
 	$ecriture_kk = new GestionKuchikomi(Outils_Bd::getInstance()->getConnexion());			// Instanciation du gestionnaire.
 	$ecriture_kk->ajout($nouveau_kuchikomi);
+	
 	header('Location: espmarc.php?appel=interface');
 	}
 
@@ -147,20 +163,23 @@ function calculStatistiques ()
 	*//////////////////////////////////////////////////////////////////////////////////////
 	
 	
-	$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');	// On commence par récupérer les id du kuchikomi du commerce.
+	$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');	// On commence par récupérer les id des kuchikomi du commerce.
 	$req2->execute(array($_SESSION['id_commerce']));
 	$compteur=[];
 	while ($donnees2 = $req2->fetch())
 		{
 		//var_dump($donnees2);
-		$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ? ');
+		$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ? ');	// Pour chaque kuchikomi de ce commerce, on en compte le nombre dejaime.
 		$req3->execute(array($donnees2['id_kuchikomi']));
 		$donnees3 = $req3->fetch();
 		//var_dump($donnees3);
 		$compteur[$donnees2['id_kuchikomi']] = $donnees3[0];
 		}
-		/*
-		echo '<pre>';
+		if (empty($compteur))
+			{
+			$compteur=array(0,0);
+			}
+		/*echo '<pre>';
 		print_r($compteur);
 		echo '</pre>';
 		*/
@@ -175,7 +194,14 @@ function calculStatistiques ()
 		$req4 = $bdd->prepare('SELECT date_debut FROM kuchikomi WHERE id_kuchikomi = ?');	// Récupération de la date de début du meilleur kuchikomi.
 		$req4->execute(array($clef_meilleur_kuchikomi));
 		$donnees4 = $req4->fetch();
-		$nb_de_kuchikomi = sizeof($compteur);
+		if ($compteur==array(0,0))
+			{
+			$nb_de_kuchikomi = 0;
+			}
+		else
+			{
+			$nb_de_kuchikomi = sizeof($compteur);
+			}
 		$date_meilleur_kuchikomi = $donnees4[0];
 		$nb_de_jaime_du_meilleur_kuchikomi = max($compteur);
 		//var_dump($donnees4);
@@ -589,6 +615,20 @@ function recupererStats()
 	$req5->execute(array());
 	$donnees5 = $req5->fetch();
 	echo '<p>Il y a ' . $donnees5[0] . ' kuchikomi écrits..</p>';
+	}
+	
+	
+function listeKuchikomi($idcom)
+	{
+	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+	$req = $bdd->prepare('SELECT COUNT(*) FROM kuchikomi WHERE id_commerce=?');	// D'abord, on souhaite récupérer le nombre de kuchikomi écrits.
+	$req->execute(array($idcom));
+	$donnees = $req->fetch();
+	echo '<p>Vous avez écrit ' . $donnees[0] . ' kuchikomi.</p>';
+	
+	$req2 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce=?');	// À présent, on veut afficher la liste des kuchikomi.
+	$req2->execute(array($idcom));
+	return $donnees2 = $req2->fetch();
 	}
 
 ?>

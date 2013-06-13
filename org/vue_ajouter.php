@@ -1,6 +1,8 @@
 <?php
 
-
+try
+	{
+		
 echo '
       <form action="admin.php" method="post" enctype="multipart/form-data">
       
@@ -10,9 +12,9 @@ echo '
       
       <p><label for="mdp">Mot de passe : <input type="text" name="mdp" id="mdp" required placeholder="Obligatoire" /></label></p>
       
-      <p><label for="logo">Logo du magasin :<br /> <input type="file" name="logo" id="logo" /></label></p>
+      <p><label for="logo">Logo du magasin : (INFÉRIEUR À 1 Mo !)<br /> <input type="file" name="logo" id="logo" /></label></p>
       
-      <p><label for="photo">Photo du magasin :<br /> <input type="file" name="photo" id="photo" /></label></p>
+      <p><label for="photo">Photo du magasin : (INFÉRIEUR À 1 Mo !)<br /> <input type="file" name="photo" id="photo" /></label></p>
       
       <p><label for="horaires">Horaires : <input type="text" name="horaires" id="horaires" required placeholder="Obligatoire" /></label></p>
             
@@ -28,5 +30,13 @@ echo '
       
       <input class="btn btn-medium btn-success" type="submit" style="margin-right: 50px;" value="Ajouter" name="ajouter" />
       </form>';
+
+	}
+	
+	
+catch (Exception $e)
+	{
+	echo 'Exception reçue : ',  $e->getMessage(), "\n";
+	}
 
 ?>

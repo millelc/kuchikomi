@@ -39,12 +39,27 @@ $bandeau='None';
 
 if (isset($_POST['choix_ajouter']))
 	{
-	include_once('vue_ajouter.php');
+	try
+		{
+		include_once('vue_ajouter.php');
+		}  
+	catch (Exception $e)
+		{
+		throw new Exception( 'Le script plante.', 0, $e);
+		}  
+	
 	}
 
 else if (isset($_POST['ajouter']))
 	{
-	ajouterCommerce();
+	try
+		{
+		ajouterCommerce();
+		}  
+	catch (Exception $e)
+		{
+		echo 'Exception reçue : ',  $e->getMessage(), "\n";
+		}
 	}
 
 else if (isset($_POST['choix_modifier']))
