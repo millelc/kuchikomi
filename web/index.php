@@ -94,14 +94,12 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				aimer ();
 				header('Location: index.php?appel=kk&id=' . $_GET['id'] . '');
 				break;
-			
-			
-			
 				
 			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
 				if ($_GET['id']=='none')
 					{
 					$listeAbonnements=listeAbo($_SESSION['id']);	// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
+					$derniersKKConfondus=listeDesDerniersKkConfondus($_SESSION['id']);
 					include_once('vue_listeabonnements.php');		// Cet array ne concerne que des commerces où l'utilisateur est abonné.
 					}
 				else						// ou une liste des kuchikomi d'un commerce en particulier      ie :  id = int
