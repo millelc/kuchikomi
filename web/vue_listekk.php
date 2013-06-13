@@ -36,15 +36,6 @@ while ($donnees = $listeKuchikomi->fetch())
 
 
 
-/*
-foreach($listeKuchikomi as $cle => $valeur)
-	{
-	echo '<a href="index.php?appel=kk&amp;id=' . $cle . '">' . $valeur . '</a><br />';
-	}
-	
-echo '<br /><br />';*/
-
-
 echo '<a class="btn btn-medium btn-info" style="margin-right: 15px;" href="index.php?&amp;appel=desabo&amp;id=' . $_GET['id'] . '">Se désabonner</a>';
 echo '<a class="btn btn-medium btn-danger" href="index.php?&amp;appel=deco&amp;id=none">Déconnexion</a>';
 	

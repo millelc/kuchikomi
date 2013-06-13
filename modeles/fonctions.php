@@ -48,10 +48,10 @@ function listekk($idcommerce)
 function recuperationDonneesKk($idkk)
 	{
 	$bdd = Outils_Bd::getInstance()->getConnexion();		// On récupère une instance du singleton de connexion.
-	$req = $bdd->prepare('SELECT texte FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
+	$req = $bdd->prepare('SELECT texte, id_commerce FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
 	$req->execute(array($idkk));						// l'affichage du kuchilomi.
 	$donnees = $req->fetch();
-	return $donnees['texte'];
+	return array($donnees['texte'], $donnees['id_commerce']);
 	}
 
 
@@ -191,9 +191,9 @@ function calculStatistiques ()
 		
 		$clef_meilleur_kuchikomi = array_search(max($compteur), $compteur);			// L'identifiant du meilleur kuchikomi.
 		
-		$req4 = $bdd->prepare('SELECT date_debut FROM kuchikomi WHERE id_kuchikomi = ?');	// Récupération de la date de début du meilleur kuchikomi.
+		$req4 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?');	// Récupération des donnes de ce meilleur kuchikomi
 		$req4->execute(array($clef_meilleur_kuchikomi));
-		$donnees4 = $req4->fetch();
+		$donnees_meilleur_kk = $req4->fetch();
 		if ($compteur==array(0,0))
 			{
 			$nb_de_kuchikomi = 0;
@@ -202,9 +202,9 @@ function calculStatistiques ()
 			{
 			$nb_de_kuchikomi = sizeof($compteur);
 			}
-		$date_meilleur_kuchikomi = $donnees4[0];
+		$date_meilleur_kuchikomi = $donnees_meilleur_kk[0];
 		$nb_de_jaime_du_meilleur_kuchikomi = max($compteur);
-		//var_dump($donnees4);
+		
 		
 		/**********************************************************************/
 		
@@ -240,7 +240,7 @@ function calculStatistiques ()
 		$nbre_total_de_jaime = $donnees7[0];
 				
 		
-	return array ($nb_abonnes, $nb_de_kuchikomi, $clef_meilleur_kuchikomi, $date_meilleur_kuchikomi, $nb_de_jaime_du_meilleur_kuchikomi, $abonnes_des_30_derniers_jours, $nombre_abonnes_de_plus_de_30_jours, $augmentation_sur_le_mois, $nbre_total_de_jaime) ;
+	return array ($nb_abonnes, $nb_de_kuchikomi, $clef_meilleur_kuchikomi, $date_meilleur_kuchikomi, $nb_de_jaime_du_meilleur_kuchikomi, $abonnes_des_30_derniers_jours, $nombre_abonnes_de_plus_de_30_jours, $augmentation_sur_le_mois, $nbre_total_de_jaime, $donnees_meilleur_kk) ;
 	}
 
 
@@ -621,14 +621,11 @@ function recupererStats()
 function listeKuchikomi($idcom)
 	{
 	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT COUNT(*) FROM kuchikomi WHERE id_commerce=?');	// D'abord, on souhaite récupérer le nombre de kuchikomi écrits.
-	$req->execute(array($idcom));
-	$donnees = $req->fetch();
-	echo '<p>Vous avez écrit ' . $donnees[0] . ' kuchikomi.</p>';
+	
 	
 	$req2 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce=?');	// À présent, on veut afficher la liste des kuchikomi.
 	$req2->execute(array($idcom));
-	return $donnees2 = $req2->fetch();
+	return $req2;
 	}
 
 function listeDesDerniersKkConfondus($idabo)		//Cette fonction renvoie les 10 derniers kuchikomi d'un abonné (tous ses abonnements confondus)
@@ -638,6 +635,18 @@ function listeDesDerniersKkConfondus($idabo)		//Cette fonction renvoie les 10 de
 	$req->execute(array($idabo));
 	return $req;
 	}
+	
+
+function recuplogo($idcom)
+	{
+	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+	$req = $bdd->prepare('SELECT logo FROM commerce WHERE id_commerce = ?');
+	$req->execute(array($idcom));
+	$donnees = $req->fetch();
+	echo '<img src="../org/images_com/' . $donnees['logo'] . '" alt="Logo commerce" title="Logo commerce" style="width: 75px; margin-left: 20px; margin-top:10px; border: 1px black outset;" />';
+	}
+	
+	
 	
 	
 ?>

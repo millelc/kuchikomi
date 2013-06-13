@@ -27,7 +27,6 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 				break;
 			case 'liste':						// Dans le cas où le commerçant voudrait voir la liste des kuchikomi qu'il aura écrit.
 				$listekk=listeKuchikomi($_SESSION['id_commerce']);
-				var_dump($listekk);
 				include_once('vue_liste.php');
 				break;
 				
