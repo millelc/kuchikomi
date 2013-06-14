@@ -9,11 +9,22 @@ function listeAbo($id_abonne)
 	$req = $bdd->prepare('SELECT id_commerce, logo FROM commerce WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?)');//On récupère la liste des id_commerce dont on
 	$req->execute(array($id_abonne));														// est abonné.
 	$listeAbonnements=[];
+	$listeNbreKkValides=[];
+	$now = date("Y-m-d");
 	while ($donnees = $req->fetch())
 		{
 		$listeAbonnements[$donnees['id_commerce']] = $donnees['logo'];
 		}
-	return $listeAbonnements;
+	foreach($listeAbonnements as $cle => $valeur)
+		{
+		$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+		$req = $bdd->prepare("SELECT count(id_kuchikomi) FROM kuchikomi WHERE id_commerce = ? AND date_fin > ?");
+		$req->execute(array($cle, $now));
+		$donnees2 = $req->fetch();
+		//var_dump($donnees2);
+		$listeNbreKkValides[$cle] = $donnees2[0];
+		}
+	return array($listeAbonnements, $listeNbreKkValides);
 	}
 	
 	
@@ -33,12 +44,6 @@ function listekk($idcommerce)
 		$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce = ? ORDER BY date_fin DESC LIMIT 0,10');	// On récupère les aperçus 
 		$req->execute(array($idcommerce));									// de chaque kuchikomi
 		return $req;
-// 		$listeKuchikomi=[];
-// 		while ($donnees = $req->fetch())
-// 			{
-// 			$listeKuchikomi[$donnees['id_kuchikomi']] = $donnees['texte'];
-// 			}
-		//return $listeKuchikomi;
 		}
 	
 	}
@@ -48,10 +53,10 @@ function listekk($idcommerce)
 function recuperationDonneesKk($idkk)
 	{
 	$bdd = Outils_Bd::getInstance()->getConnexion();		// On récupère une instance du singleton de connexion.
-	$req = $bdd->prepare('SELECT texte, id_commerce FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
-	$req->execute(array($idkk));						// l'affichage du kuchilomi.
+	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
+	$req->execute(array($idkk));						// l'affichage du kuchikomi.
 	$donnees = $req->fetch();
-	return array($donnees['texte'], $donnees['id_commerce']);
+	return array($donnees['texte'], $donnees['id_commerce'], $donnees['mentions'], $donnees['date_debut'], $donnees['date_fin'], $donnees['photo']);
 	}
 
 
@@ -106,7 +111,6 @@ function ajoutkk()
 	{
 	if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
 		{
-		echo 'reçu une photo';
 		// Testons si le fichier n'est pas trop gros
 		if ($_FILES['photokk']['size'] <= 2000000)
 			{
@@ -123,13 +127,11 @@ function ajoutkk()
 				}
 			else
 				{
-				echo 'Format de photo non valide.';
 				$nom_image = 'logo_defaut.png';
 				}
 			}
 		else
 			{
-			echo 'La taille de la photo est trop grande.';
 			$nom_image = 'logo_defaut.png';
 			}
 		}
@@ -293,16 +295,7 @@ function desinscription ()
 
 function aimer ()
 	{
-	echo '<p>Vous avez aimé ce kuchikomi ';
-	echo $_GET['id'];
-	echo '<br />Et vous êtes ';
-	echo $_SESSION['id'];
-	echo '</p>';
 	$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id'], 'id_kuchikomi' => $_GET['id'] ));	// Création d'un objet « Jaime ».
-	echo '<p>Ce kuchikomi a pour identifiants ';
-	echo $nouveau_jaime->id_abonne();
-	echo $nouveau_jaime->id_kuchikomi();
-	echo '</p>';
 	$jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());	// On ajoute le jaime à la table si il est nouveau.
 	$jaime_ajout->ajout($nouveau_jaime);
 	}

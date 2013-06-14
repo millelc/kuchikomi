@@ -98,7 +98,8 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
 				if ($_GET['id']=='none')
 					{
-					$listeAbonnements=listeAbo($_SESSION['id']);	// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
+					$listeAbonnements=listeAbo($_SESSION['id'])[0];	// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
+					$nbreKkValides=listeAbo($_SESSION['id'])[1];
 					$derniersKKConfondus=listeDesDerniersKkConfondus($_SESSION['id']);
 					include_once('vue_listeabonnements.php');		// Cet array ne concerne que des commerces où l'utilisateur est abonné.
 					}
