@@ -331,14 +331,13 @@ function connexion ()
 	
 function inscription ()
 	{
-	$nouvel_inscrit= new Abonne(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));	// On créé un nouvel abonné avec ce pseudo et ce mdp.
-	$connexion = Outils_Bd::getInstance()->getConnexion();					// On appelle une instance de la connexion
-	$inscription= new GestionAbonne($connexion);						// On prépare le gestionnaire d'abonnés
+	$nouvel_inscrit= new Abonne(array('pseudo' => $_POST['id']));	// On créé un nouvel abonné avec ce pseudo et ce mdp.
+	$inscription= new GestionAbonne(Outils_Bd::getInstance()->getConnexion());						// On prépare le gestionnaire d'abonnés
 	if ($inscription->dejaInscrit($nouvel_inscrit)==0)		// On vérifie que ce pseudo n'est pas déjà utilisé. Si il l'est déjà, rien ne se passe.
 		{
 		$_SESSION['id']= $inscription->ajout($nouvel_inscrit);		// Le pseudo est libre, le gestionnaire l'ajoute à la table.
 		$_SESSION['connexion']=1;
-		$_SESSION['pseudo']= $_POST['pseudo'];
+		$_SESSION['pseudo']= $_POST['id'];
 		}
 	header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 	}
@@ -639,7 +638,14 @@ function recuplogo($idcom)
 	echo '<img src="../org/images_com/' . $donnees['logo'] . '" alt="Logo commerce" title="Logo commerce" style="width: 75px; margin-left: 20px; margin-top:10px; border: 1px black outset;" />';
 	}
 	
-	
+function scan($id_ab)
+	{
+	$nouvel_arrive= new Abonne(array('pseudo' => $id_ab));
+	echo $nouvel_arrive->pseudo();
+	echo $_GET['id'];
+	$gestionAbo= new GestionAbonne(Outils_Bd::getInstance()->getConnexion());
+	$gestionAbo->connexion($nouvel_arrive);
+	}
 	
 	
 ?>

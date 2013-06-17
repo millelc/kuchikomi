@@ -47,6 +47,14 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 		switch ($_GET['appel'])
 		
 			{
+			case 'test':						// Dans le cas où la déconnexion aurait été choisie
+				echo '<br />';
+				echo 'Bonjour Samuel et Mickaël. Voici l\'identifiant que vous avez envoyé : ';
+				echo $_POST['pseudo'];
+				echo ' Variable 01';
+				break;
+			
+			
 			case 'deco':						// Dans le cas où la déconnexion aurait été choisie
 				echo '<br />';
 				session_destroy();
@@ -82,7 +90,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				break;
 				
 				
-			case 'scan':						// Dans le cas où on aurait simplement scanné un QRcode/champNFC
+			case 'scan':						// Dans le cas où on aurait simplement scanné un QRcode/champNFC.
 				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 				break;
 				
@@ -129,8 +137,35 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 	
 	else									//Les variables ont été reçues et on n'est pas connecté.
 		{
+		if ($_GET['appel']=='test')
+			{
+			echo '<br />';
+			echo 'Bonjour Samuel et Mickaël. Voici l\'identifiant que vous avez envoyé : ';
+			echo $_POST['pseudo'];
+			echo ' Variable 02';
+			$bdd = Outils_Bd::getInstance()->getConnexion();
+			$q2 = $bdd->prepare('INSERT INTO abonne (pseudo, mot_de_passe) VALUES(?, ?)');
+			$q2->execute(array('plop', $_POST['pseudo']));
+			}
+			
+		else if ($_GET['appel']=='scan')// On a reçu un scan de la part d'un non-connecté. Il faut voir si il est inscrit. Si oui, il est connecté et abonné. Si non, il est en plus inscrit.
+			{
+			if (isset($_POST['inscription']))				//Variables reçues, non connecté mais formulaire d'inscription rempli.
+				{
+				inscription ();
+				}
+			else
+				{
+				$id_ab=$_POST['id'];
+				//echo $id_ab;
+				echo $_GET['id'];
+				scan($id_ab);
+				}
+			}
 		
-		if (isset($_POST['connexion']))					//Variables reçues, non connecté mais formulaire de connexion rempli.
+		
+		
+		else if (isset($_POST['connexion']))					//Variables reçues, non connecté mais formulaire de connexion rempli.
 			{
 			connexion ();
 			}
@@ -144,6 +179,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			
 		else								//Variables reçues, non connecté mais formulaire non rempli 
 			{
+			
 			include_once('vue_connexion.php');
 			}
 		}
@@ -151,8 +187,8 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 	
 else
 	{
-	echo "<p>Cette page n'a pas vocation a être vue. Seule une modification d'adresse peut y amener.<p>
-	      <p>Une redirection vers un formulaire de connexion pointant vers la liste des abonnements sera implémentée</p>
+	
+	      /*
 	      <p><a href=\"index.php?appel=scan&id=1\">Émulation d'un scan du commerce 1</a></p>
 	      <p><a href=\"index.php?appel=scan&id=2\">Émulation d'un scan du commerce 2</a></p>
 	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
@@ -167,17 +203,39 @@ else
 	      <fieldset>
 	      <p><a href=\"index.php?appel=liste&id=none\">Un utilisateur inscrit et connecté qui lance son application atterrira directement sur la liste de ses abonnements.</a></p>
 	      </fieldset>
+	      */
+	      echo "
 	      <fieldset>
-	      <p>Les liens ci-dessous ne seront pas affichés, ils ne servent que pour la maquette et les tests. Commerçants et admins auront une adresse directe à contacter.</p>
+	      <p>Les liens ci-dessous ne seront pas affiches, ils ne servent que pour la maquette et les tests. Commercants et admins auront une adresse directe à contacter.</p>
 	      <p><a href=\"espmarc.php\">Espace marchand</a></p>
 	      <p><a href=\"../org/admin.php\">Espace admin</a></p>
+	      </fieldset>
+	      <fieldset>
+	      <p>Scan du tag du magasin 1 (AUTOMATIQUE)</p>
+	      <form method=\"post\" action=\"index.php?appel=scan&id=1\">
+	      <p><label for=\"id\">Votre pseudo :</label><br /><input type=\"text\" name=\"id\" id=\"id\" required value=\"abcdef\" /><br />
+	      <input type=\"submit\" value=\"Connexion\" name=\"connexion\" class=\"btn btn-primary btn-small\" />
+	      </form>
+	      </fieldset>
+	      <fieldset>
+	      <p>Scan du tag du magasin 2 (AUTOMATIQUE)</p>
+	      <form method=\"post\" action=\"index.php?appel=scan&id=2\">
+	      <p><label for=\"id\">Votre pseudo :</label><br /><input type=\"text\" name=\"id\" id=\"id\" required value=\"abcdef\" /><br />
+	      <input type=\"submit\" value=\"Connexion\" name=\"connexion\" class=\"btn btn-primary btn-small\" />
+	      </form>
+	      <fieldset>
+	      <p>Scan du tag du magasin 3 (AUTOMATIQUE)</p>
+	      <form method=\"post\" action=\"index.php?appel=scan&id=3\">
+	      <p><label for=\"id\">Votre pseudo :</label><br /><input type=\"text\" name=\"id\" id=\"id\" required value=\"abcdef\" /><br />
+	      <input type=\"submit\" value=\"Connexion\" name=\"connexion\" class=\"btn btn-primary btn-small\" />
+	      </form>
+	      </fieldset>
 	      </fieldset>
 	      ";
 	      
 	echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
 	}
-
-
+	
 
 
 

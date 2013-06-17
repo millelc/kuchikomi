@@ -20,8 +20,10 @@ class Abonne
 	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
 		$this->setPseudo($donnees['pseudo']);
-		$this->setMdp($donnees['mdp']);
-		
+		if (isset($donnees['mdp']))
+			{
+			$this->setMdp($donnees['mdp']);
+			}
 		}
 	
 	
