@@ -137,18 +137,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 	
 	else									//Les variables ont été reçues et on n'est pas connecté.
 		{
-		if ($_GET['appel']=='test')
-			{
-			echo '<br />';
-			echo 'Bonjour Samuel et Mickaël. Voici l\'identifiant que vous avez envoyé : ';
-			echo $_POST['pseudo'];
-			echo ' Variable 02';
-			$bdd = Outils_Bd::getInstance()->getConnexion();
-			$q2 = $bdd->prepare('INSERT INTO abonne (pseudo, mot_de_passe) VALUES(?, ?)');
-			$q2->execute(array('plop', $_POST['pseudo']));
-			}
-			
-		else if ($_GET['appel']=='scan')// On a reçu un scan de la part d'un non-connecté. Il faut voir si il est inscrit. Si oui, il est connecté et abonné. Si non, il est en plus inscrit.
+		if ($_GET['appel']=='scan')// On a reçu un scan de la part d'un non-connecté. Il faut voir si il est inscrit. Si oui, il est connecté et abonné. Si non, il est en plus inscrit.
 			{
 			if (isset($_POST['inscription']))				//Variables reçues, non connecté mais formulaire d'inscription rempli.
 				{
