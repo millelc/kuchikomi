@@ -50,7 +50,7 @@ class GestionAbonnement
 		}
 		
 	
-	public function supprtotale($id_abonne)	// Cette fonction supprime un abonnement de la table.
+	public function supprtotale($id_abonne)	// Cette fonction supprime tous les abonnements d'un utilisateur.
 		{
 		try
 			{

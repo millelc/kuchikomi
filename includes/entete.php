@@ -14,7 +14,7 @@
     <body>
     
     <header class="page-header">
-      <h1><a href="index.php">KuchiKomi</a></h1>
+      <h1><a href="index.php" style="text-align:center;">KuchiKomi</a></h1>
     </header>
 
 

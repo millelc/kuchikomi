@@ -1,6 +1,6 @@
 <?php
 
-echo 	'<form method="post" action="index.php?appel=scan&id=' . $_GET['id'] . '">
+echo 	'<form method="post" action="index.php?appel=liste&id=none">
 	<p>
 	<label for="id">Votre identifiant :</label><br />
 	<input type="text" name="id" id="id" required /><br />

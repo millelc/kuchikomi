@@ -42,19 +42,17 @@ $bandeau='Nearforge';
 
 if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été reçues
 	{
+	if ($_GET['appel']=='notif')
+		{
+		echo 'notif';
+		}
+	
+	
 	if (isset($_SESSION['connexion']) AND $_SESSION['connexion']==1)	//Les variables ont été reçues et on est connecté.
 		{
 		switch ($_GET['appel'])
 		
 			{
-			case 'test':						// Dans le cas où la déconnexion aurait été choisie
-				echo '<br />';
-				echo 'Bonjour Samuel et Mickaël. Voici l\'identifiant que vous avez envoyé : ';
-				echo $_POST['pseudo'];
-				echo ' Variable 01';
-				break;
-			
-			
 			case 'deco':						// Dans le cas où la déconnexion aurait été choisie
 				echo '<br />';
 				session_destroy();
@@ -64,8 +62,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				$kuchikomi=recuperationDonneesKk($_GET['id']);
 				include_once('vue_affichageKk.php');
 				break;
-				
-				
 				
 			case 'abo':						// Dans le cas où on souhaiterait s'abonner à un commerce.
 				sAbonner();
@@ -87,11 +83,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			case 'yaller':						// Dans le cas où on souhaiterait consulter comment aller à un commerce.
 				$infoscarto= recupInfosCart($_GET['id']);
 				include_once('vue_carto.php');
-				break;
-				
-				
-			case 'scan':						// Dans le cas où on aurait simplement scanné un QRcode/champNFC.
-				header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 				break;
 				
 			case 'desinscr':
@@ -135,23 +126,28 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 		}
 			
 	
-	else									//Les variables ont été reçues et on n'est pas connecté.
+	else									// On n'est pas connecté.
 		{
 		if ($_GET['appel']=='scan')// On a reçu un scan de la part d'un non-connecté. Il faut voir si il est inscrit. Si oui, il est connecté et abonné. Si non, il est en plus inscrit.
 			{
 			if (isset($_POST['inscription']))				//Variables reçues, non connecté mais formulaire d'inscription rempli.
 				{
-				inscription ();
+				
+				//inscription ();
 				}
 			else
 				{
 				$id_ab=$_POST['id'];
-				//echo $id_ab;
-				echo $_GET['id'];
-				scan($id_ab);
+				scan($id_ab, $_SERVER['REMOTE_ADDR']);
 				}
 			}
-		
+			
+		else if ($_GET['appel']=='list')
+			{
+			/*  On arrive ici par l'application. On compare si l'adresse ip est bien présente et on connecte l'utilisateur. Sinon, on ne fait rien */
+			connexionscan($_SERVER['REMOTE_ADDR']);
+			
+			}
 		
 		
 		else if (isset($_POST['connexion']))					//Variables reçues, non connecté mais formulaire de connexion rempli.
@@ -168,7 +164,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 			
 		else								//Variables reçues, non connecté mais formulaire non rempli 
 			{
-			
 			include_once('vue_connexion.php');
 			}
 		}
@@ -177,22 +172,22 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 else
 	{
 	
-	      /*
-	      <p><a href=\"index.php?appel=scan&id=1\">Émulation d'un scan du commerce 1</a></p>
-	      <p><a href=\"index.php?appel=scan&id=2\">Émulation d'un scan du commerce 2</a></p>
-	      <p><a href=\"index.php?appel=scan&id=3\">Émulation d'un scan du commerce 3</a></p>
-	      <p><a href=\"index.php?appel=scan&id=4\">Émulation d'un scan du commerce 4</a></p>
-	      <p><a href=\"index.php?appel=scan&id=5\">Émulation d'un scan du commerce 5</a></p>
-	      <p><a href=\"index.php?appel=scan&id=6\">Émulation d'un scan du commerce 6</a></p>
-	      <p><a href=\"index.php?appel=scan&id=7\">Émulation d'un scan du commerce 7</a></p>
-	      <p><a href=\"index.php?appel=scan&id=8\">Émulation d'un scan du commerce 8</a></p>
-	      <p><a href=\"index.php?appel=scan&id=9\">Émulation d'un scan du commerce 9</a></p>
-	      <p><a href=\"index.php?appel=scan&id=10\">Émulation d'un scan du commerce 10</a></p>
-	      <p><a href=\"index.php?appel=scan&id=11\">Émulation d'un scan du commerce 11</a></p>
+	      echo "
+	      <p><a href=\"index.php?appel=abo&id=1\">Émulation d'un scan du commerce 1</a></p>
+	      <p><a href=\"index.php?appel=abo&id=2\">Émulation d'un scan du commerce 2</a></p>
+	      <p><a href=\"index.php?appel=abo&id=3\">Émulation d'un scan du commerce 3</a></p>
+	      <p><a href=\"index.php?appel=abo&id=4\">Émulation d'un scan du commerce 4</a></p>
+	      <p><a href=\"index.php?appel=abo&id=5\">Émulation d'un scan du commerce 5</a></p>
+	      <p><a href=\"index.php?appel=abo&id=6\">Émulation d'un scan du commerce 6</a></p>
+	      <p><a href=\"index.php?appel=abo&id=7\">Émulation d'un scan du commerce 7</a></p>
+	      <p><a href=\"index.php?appel=abo&id=8\">Émulation d'un scan du commerce 8</a></p>
+	      <p><a href=\"index.php?appel=abo&id=9\">Émulation d'un scan du commerce 9</a></p>
+	      <p><a href=\"index.php?appel=abo&id=10\">Émulation d'un scan du commerce 10</a></p>
+	      <p><a href=\"index.php?appel=abo&id=11\">Émulation d'un scan du commerce 11</a></p>
 	      <fieldset>
 	      <p><a href=\"index.php?appel=liste&id=none\">Un utilisateur inscrit et connecté qui lance son application atterrira directement sur la liste de ses abonnements.</a></p>
-	      </fieldset>
-	      */
+	      </fieldset>";
+	      
 	      echo "
 	      <fieldset>
 	      <p>Les liens ci-dessous ne seront pas affiches, ils ne servent que pour la maquette et les tests. Commercants et admins auront une adresse directe à contacter.</p>

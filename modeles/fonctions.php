@@ -251,6 +251,7 @@ function calculStatistiques ()
 
 function sAbonner ()
 	{
+	echo 'test';
 	$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));	// On créé un nouvel abonnement
 	$connexion = Outils_Bd::getInstance()->getConnexion();						// Puis on instancie une connexion
 	$inscription= new GestionAbonnement($connexion);						// Dont on se servira pour l'objet inscription
@@ -303,27 +304,25 @@ function aimer ()
 function connexion ()
 	{
 	echo "<br />Vous avez choisi de vous connecter.";
-	$nouveau_connecte= new Abonne(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));	//On créé un abonné.
+	$nouveau_connecte= new Abonne(array('pseudo' => $_POST['id']));	//On créé un abonné.
 	$connexion = Outils_Bd::getInstance()->getConnexion();					// On prépare l'accès à la bdd.
 	$connecte= new GestionAbonne($connexion);							// On appelle le gestionnaire des abonnés
-	if ($connecte->dejaInscrit($nouveau_connecte)==0)		// Le pseudo est-il le bon ?
+	if ($connecte->dejaInscrit($nouveau_connecte)==0 OR $connecte->dejaInscrit($nouveau_connecte)==2)		// Le pseudo est-il le bon ?
 		{
-		header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// L'abonné n'existe pas.
-		}
-	else if ($connecte->dejaInscrit($nouveau_connecte)==2)
-		{
-		header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// L'abonné est inactif
-		}
-	else if ($connecte->dejaInscrit($nouveau_connecte)==3)
-		{
-		header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');		// Mot de passe incorrect.
+		// Le pseudo n'existe pas. On renvoie.
+		header('Location: index.php?appel=liste&id=none');
 		}
 	else
 		{
-		$_SESSION['id']= $connecte->dejaInscrit($nouveau_connecte);		// L'id de la session est égal à celui de l'abonné dans la base.
-		$_SESSION['pseudo']= $_POST['pseudo'];
+		$req = $connexion->prepare('SELECT * FROM abonne WHERE id_abonne = ?');
+		$req->execute(array($connecte->dejaInscrit($nouveau_connecte)));
+		$donnees = $req->fetch();
 		$_SESSION['connexion']=1;
-		header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
+		$_SESSION['pseudo']=$donnees['pseudo'];
+		$_SESSION['id']= $donnees['id_abonne'];
+		$_SESSION['adresse_ip']= $donnees['adresse_ip'];
+		header('Location: index.php?appel=liste&id=none');
+		
 		}
 			
 	}
@@ -333,7 +332,7 @@ function inscription ()
 	{
 	$nouvel_inscrit= new Abonne(array('pseudo' => $_POST['id']));	// On créé un nouvel abonné avec ce pseudo et ce mdp.
 	$inscription= new GestionAbonne(Outils_Bd::getInstance()->getConnexion());						// On prépare le gestionnaire d'abonnés
-	if ($inscription->dejaInscrit($nouvel_inscrit)==0)		// On vérifie que ce pseudo n'est pas déjà utilisé. Si il l'est déjà, rien ne se passe.
+	if ($inscription->dejaInscrit($nouvel_inscrit)==0 OR $inscription->dejaInscrit($nouvel_inscrit)==2 )// On vérifie que ce pseudo n'est pas déjà utilisé. Si il l'est déjà, rien ne se passe.
 		{
 		$_SESSION['id']= $inscription->ajout($nouvel_inscrit);		// Le pseudo est libre, le gestionnaire l'ajoute à la table.
 		$_SESSION['connexion']=1;
@@ -638,14 +637,88 @@ function recuplogo($idcom)
 	echo '<img src="../org/images_com/' . $donnees['logo'] . '" alt="Logo commerce" title="Logo commerce" style="width: 75px; margin-left: 20px; margin-top:10px; border: 1px black outset;" />';
 	}
 	
-function scan($id_ab)
+function scan($id_ab, $adresse_ip)
 	{
-	$nouvel_arrive= new Abonne(array('pseudo' => $id_ab));
-	echo $nouvel_arrive->pseudo();
-	echo $_GET['id'];
-	$gestionAbo= new GestionAbonne(Outils_Bd::getInstance()->getConnexion());
-	$gestionAbo->connexion($nouvel_arrive);
+	// Un tag NFC a été lu, il faut :
+	// 1° Vérifier si l'utilisateur existe.
+	// 2° Si l'utilisateur n'existe pas, on le créé et on l'abonne (si il ne l'est pas déjà).
+	// 3° Si l'utilisateur existe, on l'abonne (si il ne l'est pas déjà).
+	
+	/*     /!\/!\/!\/!\/!\ L'utilisation d'objets semble ralentir TRÈS FORTEMENT l'application côté smartphone lors du POST à part... /!\/!\/!\/!\/!\/!\   */
+	
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	//////////////////   1°  /////////////////////////////
+	$req = $bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
+	$req->execute(array($id_ab));
+	$donnees = $req->fetch();
+	if ($donnees['id_abonne']=='')				// Cet abonné n'existe  pas.
+		{
+	//////////////////   2° //////////////////////////////
+		/*   Création de l'utilisateur     */
+		$req2 = $bdd->prepare('INSERT INTO abonne (pseudo, adresse_ip) VALUES(?, ?)');
+		$req2->execute(array($id_ab, $adresse_ip));
+		$id_abonne = $bdd->lastInsertId();
+		/* Abonnement de cet utilisateur si il ne l'est pas déjà    */
+		abonnementApresScan($id_abonne, $_GET['id']);
+		}
+	else
+		{
+	//////////////////   3°   ////////////////////////////
+		$id_abonne = $donnees['id_abonne'];
+		// Comme l'utilisateur existe, on met à jour sobn adresse ip car elle aura sans doute changé d'ici là.
+		$req3 = $bdd->prepare('UPDATE abonne SET adresse_ip = ? WHERE pseudo = ?');
+		$req3->execute(array($donnees['adresse_ip'], $donnees['pseudo']));
+		/* Abonnement de cet utilisateur si il ne l'est pas déjà.   */
+		abonnementApresScan($id_abonne, $_GET['id']);
+		}
 	}
 	
+	
+	
+	
+function abonnementApresScan($id_abonne, $id_commerce)
+	{
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	$req2 = $bdd->prepare('SELECT * FROM abonnement WHERE id_abonne = ? AND id_commerce = ?');
+	$req2->execute(array($id_abonne, $id_commerce));
+	$donnees2 = $req2->fetch();
+	if ($donnees2['id_abonne']=='')
+		{
+		$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $id_abonne));
+		$inscription= new GestionAbonnement($bdd);
+		$inscription->ajout($nouvel_abo);
+		}
+	}
+	
+
+	
+	
+function connexionscan($adresse_ip)
+	{
+	// 1° On vérifie si l'adresse_ip reçue est bien présente dans la base de données.
+	// 2° Si tel est le cas, on en récupère les données
+	// 3° Ces données seront retransmises en session
+	// 4° Et on en profite pour considérer l'utilisateur comme connecté.
+	
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	
+	//////////////////   1°  /////////////////////////////
+	
+	$req = $bdd->prepare('SELECT * FROM abonne WHERE adresse_ip = ?');
+	$req->execute(array($adresse_ip));
+	$donnees = $req->fetch();
+	if ($donnees['id_abonne']=='')
+		{
+		return 0;
+		}
+	else
+		{
+		$_SESSION['connexion']=1;
+		$_SESSION['pseudo']=$donnees['pseudo'];
+		$_SESSION['id']= $donnees['id_abonne'];
+		$_SESSION['adresse_ip']= $donnees['adresse_ip'];
+		header('Location: index.php?appel=liste&id=none');
+		}
+	}
 	
 ?>

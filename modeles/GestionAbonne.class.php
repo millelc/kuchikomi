@@ -22,8 +22,8 @@ class GestionAbonne
 		{
 		try
 			{			
-			$q = $this->_bdd->prepare('INSERT INTO abonne (pseudo) VALUES(?)');
-			$q->execute(array($perso->pseudo()));
+			$q = $this->_bdd->prepare('INSERT INTO abonne (pseudo, adresse_ip) VALUES(?, ?)');
+			$q->execute(array($perso->pseudo(), $_SERVER['REMOTE_ADDR']));
 			return $this->_bdd->lastInsertId();
 			}
 		catch (Exception $e)
@@ -82,10 +82,10 @@ class GestionAbonne
 		$donnees = $req->fetch();
 		if ($donnees['id_abonne']=='')				// L'abonné n'existe pas.donc, on le créé, on le connecte et on le redirige cers sa liste d'abonnements.
 			{
-			$this->ajout($perso);
+			$nouvel_id = $this->ajout($perso);
 			$_SESSION['connexion']=1;
 			$_SESSION['pseudo']=$perso->pseudo();
-			$_SESSION['id']= $donnees['id_abonne'];
+			$_SESSION['id']= $nouvel_id;
 			header('Location: index.php?appel=liste&id=none');
 			}
 		else							// L'abonné existe donc on le connecte, on l'abonne et on le redirige vers sa liste d'abonnements si il est actif.
@@ -104,9 +104,6 @@ class GestionAbonne
 				}
 			}
 		}
-
-  
-	
 	
 ################## Setters #########################	
 	

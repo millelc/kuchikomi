@@ -9,7 +9,7 @@ class Abonne
 	{
 	private $_id;
 	private $_pseudo;
-	private $_mdp;
+	private $_adresse_ip;
 	private $_actif;
 	
 	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
@@ -19,11 +19,20 @@ class Abonne
 	
 	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
-		$this->setPseudo($donnees['pseudo']);
+		if (isset($donnees['pseudo']))
+			{
+			$this->setPseudo($donnees['pseudo']);
+			}		
 		if (isset($donnees['mdp']))
 			{
 			$this->setMdp($donnees['mdp']);
 			}
+		if (isset($donnees['adresse_ip']))
+			{
+			$this->setAdresse_ip($donnees['adresse_ip']);
+			}
+		
+		
 		}
 	
 	
@@ -56,6 +65,11 @@ class Abonne
 			$this->_mdp = $mdp;
 			}
 		}
+		
+	private function setAdresse_ip($adresse_ip)
+		{
+		$this->_adresse_ip = $adresse_ip;
+		}
 	
 	private function setActif($actif)
 		{
@@ -87,6 +101,14 @@ class Abonne
 		{
 		return $this->_actif;
 		}
+	
+	public function adresse_ip()
+		{
+		return $this->_adresse_ip;
+		}
+		
+		
+	
 #####################################################	
 	
 	
