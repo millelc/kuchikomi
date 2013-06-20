@@ -10,8 +10,8 @@ $now = date("Y-m-d");
 
 while ($donnees = $listeKuchikomi->fetch())
 	{
-	//var_dump($donnees);
 	
+	recuplogo($_SESSION['commerce_consulte']);
 	
 	echo '<section style="border: 1px grey double; padding:10px; margin:10px;">';
 	if ($now>$donnees[6])
