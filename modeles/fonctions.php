@@ -622,7 +622,7 @@ function listeKuchikomi($idcom)
 function listeDesDerniersKkConfondus($idabo)		//Cette fonction renvoie les 10 derniers kuchikomi d'un abonné (tous ses abonnements confondus)
 	{
 	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?) ORDER BY date_fin DESC LIMIT 0,10');
+	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?) ORDER BY heure DESC LIMIT 0,10');
 	$req->execute(array($idabo));
 	return $req;
 	}
