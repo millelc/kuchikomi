@@ -721,4 +721,42 @@ function connexionscan($adresse_ip)
 		}
 	}
 	
+function scancom($id_telephone_commercant, $adresse_ip)
+	{
+	// Un tag NFC de commerçant a été lu, il faut :
+	// 1° On reçoit l'identifiant du téléphone et une adresse ip que l'on met à jour.
+	
+	/*     /!\/!\/!\/!\/!\ L'utilisation d'objets semble ralentir TRÈS FORTEMENT l'application côté smartphone lors du POST à part... /!\/!\/!\/!\/!\/!\   */
+	
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	//////////////////   1°  /////////////////////////////
+	
+	$req = $bdd->prepare('UPDATE gerant SET adresse_ip = ? WHERE id_telephone_commercant = ?');
+	$req->execute(array($adresse_ip, $id_telephone_commercant));
+	$donnees = $req->fetch();
+	}
+	
+function connexionTag($adresse_ip)
+	{
+	// L'adresse ip du marchand a été modifiée il y a moins d'une seconde.
+	// On veut donc savoir qui nous contacte.
+	// Il faut donc :
+	// 1° Récupérer les données du gérant correspondant à cette adresse ip.
+	// 2° Modifier les données de session avec ce qu'on aura récupéré.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	$req = $bdd->prepare('SELECT * FROM gerant WHERE adresse_ip = ?');
+	$req->execute(array($adresse_ip));
+	$donnees = $req->fetch();
+	
+	$_SESSION['id']= $donnees['id_gerant'];
+	$_SESSION['id_commerce']= $donnees['id_commerce'];
+	$_SESSION['pseudo']= $donnees['pseudo'];
+	$_SESSION['commerçant']=1;
+	header('Location: espmarc.php');
+	
+	
+	}
+	
+	
+	
 ?>

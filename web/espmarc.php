@@ -14,8 +14,6 @@ $bandeau='Nearforge';
 
 if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est connecté.
 	{
-	
-	
 	if (isset($_GET['appel']))
 		{
 		switch ($_GET['appel'])		
@@ -46,44 +44,28 @@ if (isset($_SESSION['commerçant']) AND $_SESSION['commerçant']==1)			// On est
 				break;
 			}
 		}
-	
-	
-	
-	
-	
-	
-	
 	else									// En manipulant l'url, on peut arriver sur la page sans variables, auquel cas, on doit être ramené
 		{								// sur l'interface
 		include_once('vue_menumarc.php');
 		}
-	
-	
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-else									// On n'est pas connecté
+else if (isset($_POST['connexionmarchande']))					// Non connecté et formulaire rempli. Vérification de l'identité.
 	{
-	if (isset($_POST['connexionmarchande']))					// Non connecté et formulaire rempli. Vérification de l'identité.
-			{
-			$essaiConnexion=tentativeConnexion();				// Cette fonction vérifie si on les identifiants sont corrects. 
-			}								// Auquel cas, les variables de session sont modifiées/créees et on est redirigé vers la page actuelle.
-	else
+	$essaiConnexion=tentativeConnexion();				// Cette fonction vérifie si on les identifiants sont corrects. 
+	}								// Auquel cas, les variables de session sont modifiées/créees et on est redirigé vers la page actuelle.
+	
+else if (isset($_GET['connexionmarc']))					// Après l'envoi d'un POST par un commerçant, l'url de la webview doit contenir cette variable en GET.
 		{
-		include_once('vue_connexionmarchand.php');
-		}
-
+		$connexionTag=connexionTag($_SERVER['REMOTE_ADDR']);				
+		}	
+		
+else
+	{
+	include_once('vue_connexionmarchand.php');
 	}
+
+	
 	
 include_once('../includes/pied.php');
 

@@ -73,8 +73,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				break;
 			
 			
-			case 'contact':						// Dans le cas où on souhaiterait consulter la page de contact d'un commerce.
-				
+			case 'contact':						// Dans le cas où on souhaiterait consulter la page de contact d'un commerce.				
 				$infoscontacts= recupInfosCommercant($_GET['id']);
 				//var_dump($infoscontacts);
 				include_once('vue_contacts.php');
@@ -93,6 +92,13 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				aimer ();
 				header('Location: index.php?appel=kk&id=' . $_GET['id'] . '');
 				break;
+				
+			/*case 'list':
+				{
+				connexionscan($_SERVER['REMOTE_ADDR']);
+				}*/
+			
+				
 				
 			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
 				if ($_GET['id']=='none')
@@ -135,11 +141,19 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				
 				//inscription ();
 				}
-			else
+			else if (isset($_POST['id']))
 				{
 				$id_ab=$_POST['id'];
 				scan($id_ab, $_SERVER['REMOTE_ADDR']);
 				}
+			
+			else if (isset($_POST['trader']))
+				{
+				$id_telephone_commercant=$_POST['trader'];
+				scancom($id_telephone_commercant, $_SERVER['REMOTE_ADDR']);
+				}
+				
+				
 			}
 			
 		else if ($_GET['appel']=='list')

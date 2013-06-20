@@ -8,7 +8,7 @@ $now = date("Y-m-d");
 
 
 echo '<section style="border: 1px grey double; padding:10px; margin:10px;">';
-recuplogo($_SESSION['commerce_consulte']);
+recuplogo($kuchikomi['1']);
 if ($now>$kuchikomi[4])
 	{
 	echo '<p>Cette offre n\'est plus disponible.</p>';
