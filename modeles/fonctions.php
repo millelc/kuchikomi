@@ -303,7 +303,7 @@ function aimer ()
 
 function connexion ()
 	{
-	echo "<br />Vous avez choisi de vous connecter.";
+	//echo "<br />Vous avez choisi de vous connecter.";
 	$nouveau_connecte= new Abonne(array('pseudo' => $_POST['id']));	//On créé un abonné.
 	$connexion = Outils_Bd::getInstance()->getConnexion();					// On prépare l'accès à la bdd.
 	$connecte= new GestionAbonne($connexion);							// On appelle le gestionnaire des abonnés
@@ -321,8 +321,7 @@ function connexion ()
 		$_SESSION['pseudo']=$donnees['pseudo'];
 		$_SESSION['id']= $donnees['id_abonne'];
 		$_SESSION['adresse_ip']= $donnees['adresse_ip'];
-		header('Location: index.php?appel=liste&id=none');
-		
+            header('Location: index.php?appel=liste&id=1');
 		}
 			
 	}
@@ -518,7 +517,7 @@ function modifierCommerce()
 	
 	$nouveau_gerant= new Gerant ($donnees2);
 	var_dump($donnees2);
-	echo '<br />';
+	//echo '<br />';
 	//var_dump($nouveau_gerant);
 	
 	// Que l'on modifie également.

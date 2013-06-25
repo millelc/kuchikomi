@@ -1,6 +1,4 @@
- 
 <?php
-
 session_start();
 
 include_once('../modeles/Abonne.class.php');
@@ -54,7 +52,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 		
 			{
 			case 'deco':						// Dans le cas où la déconnexion aurait été choisie
-				echo '<br />';
 				session_destroy();
 				header('Location: index.php?appel=liste&id=none');
 				break;
@@ -231,7 +228,7 @@ else
 	      </fieldset>
 	      ";
 	      
-	echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
+	echo '<br />    <a href="index.php?appel=deco&id=none">Déconnexion</a>';
 	}
 	
 
