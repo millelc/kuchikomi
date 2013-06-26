@@ -60,6 +60,20 @@ else if (isset($_GET['connexionmarc']))					// Après l'envoi d'un POST par un c
 		$connexionTag=connexionTag($_SERVER['REMOTE_ADDR']);				
 		}	
 		
+else if (isset($_GET['id']))					// Après l'envoi d'un POST par un commerçant, l'url de la webview doit contenir cette variable en GET.
+		{
+		echo 'plop';
+		$bdd=Outils_Bd::getInstance()->getConnexion();
+		$req = $bdd->prepare('SELECT * FROM commerce WHERE id_commerce = ?');
+		$req->execute(array($_GET['id']));
+		$donnees = $req->fetch();
+		var_dump($donnees);
+		$_SESSION['commerçant']=1;
+		$_SESSION['id_commerce']= $donnees['id_commerce'];
+		$_SESSION['pseudo']=$donnees['gerant'];
+		header('Location: espmarc.php');
+		}	
+		
 else
 	{
 	include_once('vue_connexionmarchand.php');

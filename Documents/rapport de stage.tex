@@ -90,13 +90,472 @@ Tuteur universitaire : Terrier Véronique, BACQUEY Nicolas
 
 \title{Rapport de stage : Kuchikomi}
 \author{RACINE Pierre-Alexandre}
-\date{Mai-Juillet 2013}
+\date{02 Juillet 2013}
 
 \maketitle
 
 \newpage
 
-\section*{Introduction}
+\chapter*{Remerciements}
 
+Je tiens à remercier Mr Maréchal pour m'avoir accepté en stage et m'avoir offert la possibilité de mettre mes connaissances en pratique sur un projet important.
+
+\paragraph{}
+Je remercie également tous les membres de \emph{Nearforge} pour m'avoir permis de tant apprendre et m'avoir transmis une part de leur savoir-faire et de leurs connaissances.
+
+
+\tableofcontents
+
+\newpage
+
+\chapter*{Introduction}
+
+\section{Présentation de l'entreprise}
+
+\includegraphics[scale=0.6]{logonearforge.png}
+
+\emph{Nearforge} est une jeune start-up créée le 31 Janvier 2013. Ses 6 fondateurs sont issus de NXP.
+\paragraph{}
+En créant cette entreprise, leur idée était que le NFC était une technologie porteuse. Elle est intégrée dans un nombre croissant de tablettes et de téléphones mais les seuls usages qui en sont fait sont les paiements et les transports. Il pourrait pourtant y avoir beaucoup plus de cas d'usages dans un nombre de domaines très important.
+
+\newpage
+
+\section{Présentation du projet}
+
+
+Le projet qui m'a été confié est de créer un émulateur de \emph{Twitter } dont les \emph{tweets} seront écrits par des commerçants et lus par leurs clients. Les clients s'inscriront et s'abonneront par un simple contact de leur téléphone à un champ NFC ou par le scan d'un QRcode.
+\paragraph{}
+De même, tout commerçant bénéficiera d'une carte avec puce NFC qui, par simple contact avec son téléphone, lui permettra de se connecter directement à son compte et à son interface lui permettant d'écrire ses \og kuchikomi \fg{}  (nom des tweets).
+\paragraph{}
+Un administrateur, quant à lui, aura accès à une interface lui permettant de modifier aisément une partie de la base de données.
+\paragraph{}
+Toute l'application étant utilisable via un navigateur web (de préférence sur mobile) Le tout sera géré par un serveur web grâce à des scripts PHP. Une grande attention est requise pour la consultation des pages accessibles aux commerçants et aux utilisateurs car la mise en forme du site doit être adaptative (\emph{responsive design}).
+
+\newpage
+
+\section{Ma mission dans ce projet}
+
+Dans ce projet, mon rôle fut de créer un serveur et d'y placer des scripts PHP capables d'exécuter des requêtes envoyées par des téléphones portables. Je dus également créer et normaliser une base de données répondant aux besoins de l'application.
+Une partie de l'application est installée sur les téléphones. Un protocole d'échange de données fut normalisé en concertation avec le développeur chargé de cet aspect.
+
+
+\includegraphics[scale=0.8]{schemasimple.png}
+
+
+\chapter{Vue d'ensemble}
+
+\section{Attendus et objectifs}
+
+À mon arrivée, l'application était à l'état d'idée. Tout fut donc à faire. Le cahier des charges requérant les points suivants :
+
+\begin{itemize}
+
+\item Un utilisateur doit pouvoir s'abonner/s'inscrire/se connecter facilement depuis un téléphone soit grâce à un tag NFC soit grâce à un QRcode.
+\item Un utilisateur peut consulter ses abonnements et leurs fils de \og kuchikomi \fg{} .
+\item Un utilisateur peut également voir des infos détaillées d'un commerce pour s'y rendre ou les contacter.
+\item Un commerçant doit pouvoir se connecter depuis un téléphone et y écrire des textes qui pourront être lus par les clients qui se seraient abonnés chez lui.
+\item Un commerçant peut également accéder à des statistiques plus ou moins précises sur ses clients.
+\item Un administrateur doit pouvoir inscrire des commerçants et modifier leurs données publiques. Il aura également accès à des statistiques générales sur les utilisateurs.
+Ma part du travail consista et consiste encore dans la partie web de l'application. C'est sur cette application web que fut/sera implantée une sur-couche logicielle permettant de simplifier l'utilisation (en particulier la connexion automatique)
+\item Le site doit être programmé en orienté objet et le code HTML généré doit être valide W3C. 
+
+\end{itemize}
+
+\includegraphics[scale=0.4]{schema_interactions.png}
+
+
+
+\section{Outils}
+
+Les logiciels utilisés sont :
+
+\begin{itemize}
+
+\item \emph{Debian} (à venir)
+\item MySQL 
+\item PHP
+\item HTML5/CSS3
+\item \emph{Inkscape}
+\item \emph{icescrum}
+\item Git et son interface \emph{smartgithd}
+\item \emph{Bootstrap Twitter}
+\item XML
+
+\end{itemize}
+
+\newpage
+
+Le système d'exploitation \emph{Debian} a été choisi pour sa stabilité et sa sécurité. Le serveur qu'il accueillera devant héberger des données de travail qui devront être disponibles à tout moment, ses qualités sont indispensables dans le cas qui nous concerne.
+\paragraph*{}
+PHP et MySQL ont été choisis pour leur licence libre et leurs documentations conséquentes. De plus, la richesse de leurs API rend le développement plus facile avec ces outils.
+\paragraph*{}
+Le couple HTML5/CSS3 est choisi car l'application devra envoyer des pages HTML devant être lues sur un grand nombre de terminaux de types très variés. Leur grande compatibilité sur la plupart des appareils les rend tout désignés pour cette utilisation.
+\paragraph*{}
+\emph{Inkscape} est un logiciel de dessin vectoriel. Les schémas ainsi créés ne perdent pas de détails lors d'un agrandissement ou d'une réduction. De plus, le très grand nombre de formats d'export rendent ce logiciel très intéressant.
+\paragraph*{}
+Le logiciel gérant les étapes de développement agile de type SCRUM est \emph{icescrum}. Son interface permet de créer, gérer et planifier aisément chaque étape du développement.
+\paragraph*{}
+Afin de sauvegarder régulièrement le travail, le superviser et de travailler à plusieurs, le logiciel utilisé est Git avec son interface graphique \emph{smartgithd}.
+\paragraph*{}
+L'application ayant vocation à être présente sur de très nombreux terminaux, les vues générées doivent s'y adapter au mieux. Pour faciliter le travail, le framework libre \emph{Bootstrap Twitter} a été intégré. Celui-ci propose des classes CSS déjà écrites.
+\paragraph*{}
+Enfin, le langage XML est un langage de structuration de données. Il permet de structurer des données sous la forme d'une arborescence que sera envoyée aux applications présentes sur les téléphones.
+
+\newpage
+
+\section{Présentation de la technologie NFC}
+
+La technologie NFC (\og Near Field Communication \fg{}  ou \og communication en champ proche \fg{}) est une technologie permettant des communications sans-fil à haute-fréquence et à courte portée (pas plus d'une dizaine de centimètres) Le NFC en champ proche hérite une bonne part de ses spécifications de la RFID (\og Radio Frequency Identification \fg{}  ou \og radio-identification \fg{} ), il peut donc communiquer avec d'autres appareils NFC ou d'autres appareils sans-contact (les validateurs du tramway de Caen l'utilisent)
+\paragraph*{}
+
+Le NFC dispose d'avantages indéniables. Facile d'utilisation (un seul geste suffit) et sécurisation des données échangées. Comme la distance de transmission est faible, il est difficile de tenter de s'interposer pour capter le signal.
+
+\paragraph*{}
+
+Un téléphone équipé de cette technologie se comportera comme un lecteur et émettra un champ électromagnétique servant à alimenter le tag NFC pour lire ou modifier des données dans la puce.
+
+\paragraph*{}
+
+Il y a plusieurs types d'utilisation possible. Quelques exemples :
+
+\begin{itemize}
+\item En lecture seule, ce qui permettra de récupérer des informations en ouvrant le navigateur internet (par exemple, les dates d'un spectacle en scannant une afficha)
+\item Écriture de données puis lecture de ces données avant une nouvelle écriture (par exemple, une chaîne de montage d'objets où seront stockées les informations de ces objets au fur et à mesure de leur création)
+\item Installer et configurer une application. (par exemple, un gestionnaire de contacts dont les contacts seraient justement inscrits à chaque nouveau tag)
+\end{itemize}
+
+\newpage
+
+\paragraph*{}
+\includegraphics[scale=0.4]{nfc.jpg}
+
+
+\paragraph*{}
+Un nombre de plus en plus important d'appareils mobiles sont équipés de matériel pouvant communiquer en NFC. On peut citer, parmi beaucoup d'autres, les smartphones \emph{Samsung Galaxy S II} ou encore le \emph{Nexus S}. Au total, on estime à 300 millions le nombre de terminaux équipés de cette technologie.
+\paragraph*{}
+Aujourd'hui, l'accroissement du nombre d'objets NFC permet la communication et les interactions entre utilisateurs et objets mais aussi entre objets créant ainsi un internet des objets.
+
+
+
+
+\newpage
+
+\section{Présentation des QRcodes}
+
+Les QR-codes (\og Quick-Response-code \fg{} ) sont des codes pouvant être lus et interprétés par un téléphone, une webcam ou tout objet équipé d'un objectif avec un logiciel de reconnaissance.
+\paragraph*{}
+Apparu en 1999 au Japon, il s'agit d'un format de données ouvert.
+\paragraph*{}
+Ce code est un fond blanc sur le quel se posent des carrés noirs. Ceux du centre codent le message tandis que les grands carrés situés dans les coins renseignent le sens de lecture.
+\paragraph*{}
+Techniquement parlant, le QRcode n'a pas de limites d'effets tant qu'une application en comprendra le sens (ouvrir une url dans le navigateur, envoyer un mail ou un SMS, effectuer un paiement, etc...)
+\paragraph*{}
+\includegraphics[scale=1]{qrcode.png}
+
+\newpage
+
+\section{Présentation de Bootstrap Twitter}
+
+\emph{Bootstrap Twitter} est un framework, un kit de composants et d'outils sous licence libre. De fait, il intègre des fichiers CSS et optionnellement javascript (dans le cas d'une utilisation avec jQuery)
+\paragraph*{}
+Ces fichiers permettent d'utiliser des classes prédéfinies qui seront présentes par défaut et/ou que l'on pourra appeler à volonté. Il intègre également des images d'icônes pour une meilleure convivialité.
+\paragraph*{}
+La quasi-totalité des balises HTML sont modifiées par les fichiers CSS de ce framework. Le style général de la page web devient alors sobre et élégant.
+\paragraph*{}
+Ainsi, une page contenant de simples liens peut, grâce à l'ajout de classes dans les balises, devenir ceci :
+
+\includegraphics[scale=1]{exemplebt.png}
+
+\newpage
+
+\section{Présentation de Git}
+
+Afin de sauvegarder et de travailler à plusieurs sur un même projet, le logiciel Git est utilisé. Il s'agit d'un gestionnaire de versions décentralisé. À la base, ce logiciel a été développé par Linus Torvalds.
+\paragraph*{}
+Concrètement, après avoir modifié son code, on le \og commit \fg{}  (pour créer une nouvelle version) et on le \og push \fg{} (pour l'envoyer au serveur Git)
+
+Git vérifie alors si il y a incompatibilité avec une ou plusieurs modifications faites par un autre développeur qui aurait fait un \emph{push} entre-temps (par exemple on modifie une ligne alors qu'un collègue l'aurait supprimée)
+
+Si il n'y a pas d'incompatibilités, le fichier est \og versionné \fg{} . On peut ainsi travailler à plusieurs sur un même projet en gérant les possibles incompatibilités.
+
+
+
+\chapter{Étapes de réalisation}
+
+\section{Analyse}
+
+Après étude du cahier des charges, je fis une maquette en HTML de toutes les pages de l'application. Je pus ainsi mieux appréhender les besoins de la base de données pour la modéliser peu après.
+
+Ainsi le premier jet de la base de données fut modélisé pour être peu à peu normalisé jusqu'à la troisième forme normale.
+\paragraph*{}
+Pourquoi normaliser une base de données ?
+
+Normaliser ou pas une base de données se fait selon un critère simple : la proportion de l'écriture par rapport à la lecture.
+
+Une base normalisée est éclatée en unités atomiques dépendantes les unes des autres.
+Par conséquent, une base normalisée évite la redondance d'informations.
+
+Et plus elle sera normalisée, plus elle sera efficace en écriture et inefficace en lecture (jointures plus fréquentes)
+
+\paragraph*{}
+Il a été décidé de normaliser la base de données afin de la rendre plus logique et éviter la redondance d'informations. Toutefois, l'application nécessitera de nombreuses opérations en lecture et relativement peu en écriture. La troisième forme normale devrait parfaitement correspondre à ce qui est et sera attendu.
+
+\paragraph*{}
+\textbf{En annexe : processus de normalisation d'une base de données.}
+
+\newpage
+
+\paragraph*{}
+Normaliser une base de données présente avantages et inconvénients.
+
+
+Parmi les avantages, la base est plus logique, elle offre moins de redondances d'informations donc consomme moins d'espace disque et présentera moins d'incohérences lors de mises à jour qui seront alors simplifiées. Comme une donnée est écrite moins souvent (en théorie une fois), les requêtes d'écriture sont plus rapides.
+
+Les inconvénients d'une normalisation ne sont pas anodins. Comme les informations sont présentes moins souvent, les jointures sont beaucoup plus fréquentes. Ce qui signifie des temps de lecture beaucoup plus longs. De plus, moins de redondances d'informations signifie également moins de sauvegardes. Enfin, la structure de la base est beaucoup plus statique.
+
+\paragraph*{}
+Le diagramme de classes fut alors pensé en fonction de la base normalisée pour s'y greffer de manière la plus naturelle.
+
+
+
+\section{Préparation}
+
+Les premiers temps servirent à la préparation : étude du cahier des charges, maquette HTML, modélisation bdd, modélisation des classes, préparation de l'environnement de travail (formatage PC + installation XAMPP)
+
+\newpage
+
+\section{Codage}
+
+Puis vint le codage des premiers scripts.
+
+Le modèle MVC fut choisi pour l'organisation du code. De cette manière, la maintenance de l'application est simplifiée.
+
+D'abord les classes et l'interface de l'utilisateur furent implémentées jusqu'à permettre toutes les actions demandées par le cahier des charges. Puis le même protocole fut appliqué sur l'interface des commerçants. Finalement, un panneau d'administration fut lui aussi créé.
+
+Ces deux dernières parties demandèrent des opérations sql fréquentes et variées (comptage, statistiques simples sur un laps de temps donné, sous-requêtes, etc...)
+
+\paragraph*{}
+
+Une fois tout ceci fait, des discussions sur le protocole d'échange entre l'application côté serveur et l'application côté terminaux.
+
+
+\section{Communication serveur/téléphone}
+
+\subsection{Authentification automatique}
+
+\paragraph*{}
+Le problème d'origine est qu'un utilisateur doit être automatiquement inscrit, connectée et abonné lors de son premier scan de magasin et \textbf{sans toucher à aucun bouton ni valider}.
+
+Pour cela, il fallut trouver un biais pour envoyer l'identifiant au serveur tout en ouvrant une page web vers l'application serveur.
+
+Plusieurs méthodes existent :
+\begin{itemize}
+\item les cookies
+\item les sessions
+\item la super-globale GET
+\item la super-globale POST
+\end{itemize}
+
+L'utilisation de cookies rend la sauvegarde des abonnements à la merci d'une suppression. De plus, les vols de sessions cookies rendent la sécurisation des données peu fiables.
+
+Les sessions sont la solution idéale. Malheureusement, elles ne peuvent être implémentées car l'envoi d'un POST par l'application cliente sera considérée comme différente de l'ouverture d'une page web par cette même application. La même application envoyant deux requêtes en moins d'une seconde sera donc perçue par le serveur comme deux utilisateurs distincts rendant ainsi inutile l'utilisation des sessions.
+
+La variable super-globale GET transmet les données dans l'URL. Il n'est donc pas possible de l'utiliser car il suffirait de connaître l'URL pour que quiconque puisse s'identifier comme tel ou tel utilisateur.
+
+Il ne reste donc que la super-globale POST. Malheureusement, comme dit plus haut, l'envoi d'un POST suivi d'une ouverture de page web par l'application ne sera pas perçue par le serveur comme une seule entité.
+\paragraph*{}
+Le temps manquant, le moins mauvais biais que j'ai pu trouver est d'utiliser l'adresse IP de l'utilisateur tentant de se connecter.
+
+\paragraph*{}
+Tout d'abord l'application envoie le POST contenant un identifiant. Le serveur récupère alors la valeur de cet identifiant ainsi que l'adresse IP de l'origine de ce POST.
+
+Si cet identifiant est déjà connu, on met à jour son adresse IP avec celle trouvée.
+
+Si cet identifiant est nouveau, on insère dans la base ce nouvel utilisateur avec l'adresse IP récupérée.
+
+\paragraph*{}
+
+Puis l'application cliente ouvre une \emph{webview} vers l'URL du serveur avec en paramètres les identifiants du commerce qui étaient contenus dans la puce NFC.
+
+Le serveur récupère alors l'adresse IP de l'application appelant la page. Si elle se trouve dans la base, on en déduit alors l'identifiant de l'utilisateur que l'on connectera et abonnera alors avant de le rediriger vers sa liste d'abonnements.
+
+Si l'adresse IP n'est pas dans la base, c'est que le POST émis un instant auparavant s'est mal produit. Rien ne se passe alors.
+
+\newpage
+
+\subsection{Notifications automatiques}
+
+On souhaite que dès qu'un commerçant aura publié un \emph{kuchikomi}, une notification soit envoyée à tous les abonnés.
+\paragraph*{}
+La solution à utiliser est le système des notifications PUSH. Malheureusement, le temps pour développer cela dans l'application (téléphone et serveur) manque. Aussi, là encore, un biais fut utilisé pour la version de démonstration.
+\paragraph*{}
+Ce biais consiste en un appel de l'application (téléphone) au serveur se répétant toutes les 3 secondes. Le fichier appelé par l'application est un script générant du XML. Les données concernées sont la liste des derniers \emph{kuchikomi} écrits par les commerçants où l'utilisateur est abonné.
+\paragraph*{}
+L'application (téléphone) compare les \emph{kuchikomi} qu'elle a reçu correspond  avec ceux qu'elle a en mémoire. En cas de différence(s), l'application émet une notification à l'utilisateur au sujet des nouveaux kuchikomi.
+
+Bien sûr, si il n'y a pas de différence, l'application ne fait rien.
+
+
+\chapter{Difficultés rencontrées}
+
+Mis à part les bugs habituels à corriger, aucune difficulté réelle ne s'est présentée. Les différents outils utilisés possèdent tous des documentations de qualité, ce qui facilite grandement le travail.
+
+Le seule véritable difficulté aura été et est toujours d'implémenter l'authentification automatique des utilisateurs et commerçants. Comme expliqué ci-dessus, le problème fut temporairement contourné grâce aux adresses IP pour la version démonstrative.
+
+
+
+\chapter{Ce que j'ai appris}
+
+Grâce à ce stage, j'ai pu apprendre des méthodes, des outils, des langages que je ne connaissais pas ou pas suffisamment et m'améliorer dans leur utilisation.
+
+\paragraph*{}
+\emph{Bootstrap Twitter}, le framework CSS, en est le meilleur exemple. J'ai pu avoir l'occasion d'installer et utiliser ce logiciel. Cela m'a sensibilisé à la question du \emph{responsive design} (mise en page adaptative).
+
+\paragraph*{}
+J'ai également pu apprendre de façon assez superficielle le langage XML. L'utilisation que j'en ai faite est bien en-deçà de ses possibilités.
+
+\paragraph*{}
+Bien entendu, j'ai pu améliorer mes connaissances (dont l'importance variait de l'anecdotique au suffisant) dans d'autres domaines comme le SQL (utilisation massive de sous-requêtes/requêtes imbriquées, de statistiques simples), la programmation orientée objet et le génie logiciel (mise en pratique des cours de cette année).
+
+\paragraph*{}
+Avant la fin de ce stage, j'aurai sans doute à faire l'installation, la configuration et la sécurisation d'un serveur LAMPP sur une Debian (en m'aidant de la vaste documentation à ce sujet)
+\paragraph*{}
+Par la suite, j'aurai à me connecter en SSH à ce serveur ce qui, là encore, constituera un excellent entraînement et une mise en pratique des cours de cette année.
+
+
+
+\chapter{Conclusion}
+
+\section{Réalisations}
+
+Les demandes telles que formulées dans le cahier des charges originel ont toutes été remplies. En revanche, de nombreuses demandes supplémentaires ont été émises par le client entre-temps
+
+\paragraph*{}
+Aujourd'hui, le travail côté serveur est bien avancé, le modèle MVC permettra de modifier aisément le code et et de rajouter des pages supplémentaires.
+
+\paragraph*{}
+Un commerçant peut :
+\begin{itemize}
+\item Accéder de façon sécurisée à son compte
+\item Écrire des \emph{kuchikomi} qui seront immédiatement publiés
+\item Lire des statistiques inhérentes à son compte (nbre d'abonnés, et le pourcentage d'augmentation sur les 30 derniers jours, nbr de jaime, etc...)
+\item À la publication d'un kuchikomi, tous les abonnés de ce commerce recevront une notification.
+\end{itemize}
+
+\paragraph*{}
+Un utilisateur peut :
+\begin{itemize}
+\item S'inscrire automatiquement en un geste de son téléphone
+\item Se connecter de façon totalement automatique et invisible et se déconnecter en une touche
+\item S'abonner à un commerce d'un seul geste et se désabonner en une touche
+\item Consulter la liste de ses abonnements
+\item Consulter le fil des \emph{kuchikomi} d'un commerce dont il est abonné
+\item Consulter un \emph{kuchikomi} en particulier
+\item Dire si il apprécie un \emph{kuchikomi}
+\item Consulter des données à propos d'un commerçant (données cartographiques ou de contact)
+\end{itemize}
+
+\newpage
+\paragraph*{}
+L'administrateur peut :
+
+\begin{itemize}
+\item Lire des statistiques générales sur l'utilisation du service
+\item Ajouter un commerce
+\item Modifier les données d'un commerce (auquel cas, les champs seront pré-remplis)
+\item Modifier le bandeau publicitaire
+\end{itemize}
+
+
+\section{Travail à faire}
+
+Il manque encore certaines choses comme :
+\begin{itemize}
+\item Un utilisateur peut \og faire passer \fg{}  un \emph{kuchikomi} à quelqu'un d'une manière ou d'une autre (SMS, mail, ?)
+\item Implémenter une authentification automatique propre et sécurisée.
+\item Refaire de façon adéquate le principe des notifications.
+\end{itemize}
+
+\section{Évolution possible}
+
+Les améliorations possibles sont potentiellement infinies. Des pistes ont déjà été trouvées :
+
+\begin{itemize}
+\item Refaire entièrement la charte graphique
+\item À terme, l'application ne doit plus se faire par navigateur mais uniquement par l'application du téléphone qui offrira une \emph{webview}.
+\item Avant de publier un \emph{kuchikomi}, les commerçants pourraient prévisualiser leur annonce avant de la valider pour publication.
+\item Les commerçants pourraient modifier ou supprimer leurs \emph{kuchikomi}.
+\item Les dates des \emph{kuchikomi} pourraient être plus flexibles (période de validité au lieu de dates fixes)
+\item Les commerçants devraient pouvoir pré-écrire des \emph{kuchikomi} et choisir une date de publication. Une fois cette date atteinte, le \emph{kuchikomi} en question sera automatiquement publié.
+\item Utilisateurs et commerçants sont connectés automatiquement. Peut-être préféreront-ils s'identifier grâce à un identifiant et un mot de passe.
+\end{itemize}
+
+\newpage
+
+\section{Avis personnel}
+
+
+Cette expérience professionnelle m'a permis de mettre en œuvre les connaissances acquises à l'université et d'en apprendre un grand nombre d'autres. Ce projet sur lequel j'ai travaillé et travaille encore est suffisamment imposant pour me permettre d'utiliser des connaissances variées et les connecter ensemble.
+\paragraph*{}
+J'ai également pu mettre en pratique des méthodes de développement agiles vues en cours.
+
+
+\chapter{Annexes}
+
+
+\section{Normalisation d'une base de données}
+
+Pour normaliser une base de données, il y a un algorithme bien spécifique à suivre pour chaque forme.
+\paragraph*{}
+Pour normaliser une base de données vers sa première forme normale, il faut effectuer les tâches suivantes :
+
+\begin{itemize}
+\item Chaque champ ne peut contenir qu'une seule donnée.
+\item Une clef primaire par table.
+\end{itemize}
+
+\paragraph*{}
+
+\includegraphics[scale=0.6]{FN1.png}
+
+\newpage
+
+\paragraph*{}
+Pour passer à la seconde forme normale, il faut :
+\begin{itemize}
+\item Être de première forme normale.
+\item Tout attribut non-clef n'est pas une partie de clef.
+\end{itemize}
+
+\paragraph*{}
+
+\includegraphics[scale=0.6]{FN2a.png}
+
+\paragraph*{}
+
+\includegraphics[scale=0.6]{FN2b.png}
+
+\newpage
+
+\paragraph*{}
+
+Enfin, pour passer à la troisième forme normale, il faut :
+\begin{itemize}
+\item Être de seconde forme normale.
+\item Tout attribut non-clé ne peut dépendre d'un autre attribut non-clef.
+\end{itemize}
+
+\paragraph*{}
+
+\includegraphics[scale=0.6]{FN3a.png}
+
+\paragraph*{}
+
+\includegraphics[scale=0.6]{FN3b.png}
+
+
+\section{Captures d'écran des interfaces}
+
+L'interface de l'utilisateur se
 
 \end{document}

@@ -1,6 +1,8 @@
 <?php
 include_once('../includes/entete.php');
 echo '<br />Voici la liste de vos abonnements :<br /> ';
+$bdd = Outils_Bd::getInstance()->getConnexion();
+var_dump($bdd);
 
 foreach($listeAbonnements as $cle => $valeur)
 	{
@@ -33,7 +35,7 @@ while ($donnees = $derniersKKConfondus->fetch())
 	
 	echo '<a href="index.php?appel=kk&amp;id=' . $donnees['id_kuchikomi'] .    '" style="text-decoration: none;" >';
 	
-	echo $donnees['texte'] . '<br />';
+	echo '<br />   ' . $donnees['texte'] . '<br />';
 	echo '<img src="uploads/' . $donnees['photo'] . '" style="width: 50%; margin:25px;" />';
 	
 	echo '<table><tr><td><a class="btn btn-medium btn-success" href="index.php?appel=jaime&amp;id=' . $donnees['id_kuchikomi'] . '"><i class="icon-white icon-thumbs-up"></i>J\'aime !</a></td>';
