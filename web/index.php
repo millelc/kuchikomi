@@ -1,5 +1,7 @@
- 
 <?php
+// Cette page est la page d'accueuil des abonnés.
+// Elle affiche les vues correspondantes
+// aux options recues en GET.
 
 session_start();
 
@@ -11,9 +13,8 @@ include_once('../modeles/GestionAbonne.class.php');
 include_once('../modeles/GestionAbonnement.class.php');
 include_once('../modeles/GestionCommerce.class.php');
 include_once('../modeles/GestionJaime.class.php');
-
-
-include_once('../modeles/fonctions.php');		// Contient toutes les fonctions de PHP.
+// Contient toutes les fonctions de PHP.
+include_once('../modeles/fonctions.php');
 
 /*
 ####################################### Pseudo-code #################################################
@@ -36,79 +37,65 @@ Variables non reçues
 #####################################################################################################
 */
 
-
-
 $bandeau='Nearforge';
 
-if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été reçues
+//Les variables ont été reçues
+if (isset($_GET['appel']) AND isset($_GET['id']))
 	{
-	if ($_GET['appel']=='notif')
-		{
-		echo 'notif';
-		}
-	
-	
-	if (isset($_SESSION['connexion']) AND $_SESSION['connexion']==1)	//Les variables ont été reçues et on est connecté.
+	//Les variables ont été reçues et on est connecté.
+	if (isset($_SESSION['connexion']) AND $_SESSION['connexion']==1)
 		{
 		switch ($_GET['appel'])
-		
 			{
-			case 'deco':						// Dans le cas où la déconnexion aurait été choisie
-				echo '<br />';
+			// Dans le cas où la déconnexion aurait été choisie
+			case 'deco':
 				session_destroy();
 				header('Location: index.php?appel=liste&id=none');
 				break;
-			case 'kk':						// Dans le cas où on souhaiterait afficher un kuchikomi.
+			// Dans le cas où on souhaiterait afficher un kuchikomi.
+			case 'kk':
 				$kuchikomi=recuperationDonneesKk($_GET['id']);
 				include_once('vue_affichageKk.php');
 				break;
-				
-			case 'abo':						// Dans le cas où on souhaiterait s'abonner à un commerce.
+			// Dans le cas où on souhaiterait s'abonner à un commerce.
+			case 'abo':
 				sAbonner();
 				header('Location: index.php?appel=liste&id=none');
 				break;
-				
-			case 'desabo':						// Dans le cas où on souhaiterait se désabonner d'un commerce
+			// Dans le cas où on souhaiterait se désabonner d'un commerce
+			case 'desabo':
 				seDesabonner();
 				break;
-			
-			
-			case 'contact':						// Dans le cas où on souhaiterait consulter la page de contact d'un commerce.				
+			// Dans le cas où on souhaiterait consulter la page de contact d'un commerce.				
+			case 'contact':
 				$infoscontacts= recupInfosCommercant($_GET['id']);
-				//var_dump($infoscontacts);
 				include_once('vue_contacts.php');
 				break;
-				
-			case 'yaller':						// Dans le cas où on souhaiterait consulter comment aller à un commerce.
+			// Dans le cas où on souhaiterait consulter comment aller à un commerce.
+			case 'yaller':
 				$infoscarto= recupInfosCart($_GET['id']);
 				include_once('vue_carto.php');
 				break;
-				
 			case 'desinscr':
 				desinscription();
 				break;
-			
 			case 'jaime':
 				aimer ();
 				header('Location: index.php?appel=kk&id=' . $_GET['id'] . '');
 				break;
-				
-			/*case 'list':
-				{
-				connexionscan($_SERVER['REMOTE_ADDR']);
-				}*/
-			
-				
-				
-			case 'liste':						// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
+			// Dans le cas où on souhaiterait une liste de ses abonnements ie :  id = none
+			case 'liste':
 				if ($_GET['id']=='none')
 					{
-					$listeAbonnements=listeAbo($_SESSION['id'])[0];	// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
+					// Cette fonction renvoie un array associatif (id_commerce=>nom_du_commerce)
+					$listeAbonnements=listeAbo($_SESSION['id'])[0];
 					$nbreKkValides=listeAbo($_SESSION['id'])[1];
 					$derniersKKConfondus=listeDesDerniersKkConfondus($_SESSION['id']);
-					include_once('vue_listeabonnements.php');		// Cet array ne concerne que des commerces où l'utilisateur est abonné.
+					// Cet array ne concerne que des commerces où l'utilisateur est abonné.
+					include_once('vue_listeabonnements.php');		
 					}
-				else						// ou une liste des kuchikomi d'un commerce en particulier      ie :  id = int
+				else
+				// ou une liste des kuchikomi d'un commerce en particulier      ie :  id = int
 					{
 					$listeKuchikomi=listekk($_GET['id']);
 					$_SESSION['commerce_consulte']=$_GET['id'];
@@ -116,29 +103,23 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 					}
 				break;
 				
-			default:							// Dans les cas non pris en compte ou lors d'une modif d'url.
-				/*echo "<p>Vous êtes connecté et vous avez envoyé un appel.</p>";
-				echo 'Vous voulez ';
-				echo $_GET['appel'];
-				echo '<br /> L\'identifiant est ';
-				echo $_GET['id'];
-				echo '<br />Vous êtes ';
-				echo $_SESSION['pseudo'];
-				echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';*/
-				header('Location: index.php?appel=liste&id=none'); /********************************* À supprimer en cas de tuile !!!!!!!!!!!!!!*/
+			default:header('Location: index.php?appel=liste&id=none');
 				break;
-				
 			}
 		}
 			
-	
-	else									// On n'est pas connecté.
+	// On n'est pas connecté :
+	else
 		{
-		if ($_GET['appel']=='scan')// On a reçu un scan de la part d'un non-connecté. Il faut voir si il est inscrit. Si oui, il est connecté et abonné. Si non, il est en plus inscrit.
+		// On a reçu un scan de la part d'un non-connecté.
+		// Il faut voir si il est inscrit.
+			// Si oui, il est connecté et abonné.
+			// Si non, il est en plus inscrit.
+		if ($_GET['appel']=='scan')
 			{
-			if (isset($_POST['inscription']))				//Variables reçues, non connecté mais formulaire d'inscription rempli.
+			if (isset($_POST['inscription']))
+			//Variables reçues, non connecté mais formulaire d'inscription rempli.
 				{
-				
 				//inscription ();
 				}
 			else if (isset($_POST['id']))
@@ -146,37 +127,35 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 				$id_ab=$_POST['id'];
 				scan($id_ab, $_SERVER['REMOTE_ADDR']);
 				}
-			
 			else if (isset($_POST['trader']))
 				{
 				$id_telephone_commercant=$_POST['trader'];
 				scancom($id_telephone_commercant, $_SERVER['REMOTE_ADDR']);
 				}
-				
-				
 			}
 			
 		else if ($_GET['appel']=='list')
 			{
 			/*  On arrive ici par l'application. On compare si l'adresse ip est bien présente et on connecte l'utilisateur. Sinon, on ne fait rien */
 			connexionscan($_SERVER['REMOTE_ADDR']);
-			
 			}
-		
-		
-		else if (isset($_POST['connexion']))					//Variables reçues, non connecté mais formulaire de connexion rempli.
+				
+		else if (isset($_POST['connexion']))
+		//Variables reçues, non connecté mais formulaire de connexion rempli.
 			{
 			connexion ();
 			}
 			
 			
-		else if (isset($_POST['inscription']))				//Variables reçues, non connecté mais formulaire d'inscription rempli.
+		else if (isset($_POST['inscription']))
+		//Variables reçues, non connecté mais formulaire d'inscription rempli.
 			{
 			inscription ();
 			}
 		
 			
-		else								//Variables reçues, non connecté mais formulaire non rempli 
+		else
+		//Variables reçues, non connecté mais formulaire non rempli 
 			{
 			include_once('vue_connexion.php');
 			}
@@ -185,8 +164,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))				//Les variables ont été r
 	
 else
 	{
-	
-	      echo "
+	echo "
 	      <p><a href=\"index.php?appel=abo&id=1\">Émulation d'un scan du commerce 1</a></p>
 	      <p><a href=\"index.php?appel=abo&id=2\">Émulation d'un scan du commerce 2</a></p>
 	      <p><a href=\"index.php?appel=abo&id=3\">Émulation d'un scan du commerce 3</a></p>
@@ -202,7 +180,7 @@ else
 	      <p><a href=\"index.php?appel=liste&id=none\">Un utilisateur inscrit et connecté qui lance son application atterrira directement sur la liste de ses abonnements.</a></p>
 	      </fieldset>";
 	      
-	      echo "
+	echo "
 	      <fieldset>
 	      <p>Les liens ci-dessous ne seront pas affiches, ils ne servent que pour la maquette et les tests. Commercants et admins auront une adresse directe à contacter.</p>
 	      <p><a href=\"espmarc.php\">Espace marchand</a></p>
@@ -233,17 +211,4 @@ else
 	      
 	echo '<br /><a href="index.php?appel=deco&id=none">Déconnexion</a>';
 	}
-	
-
-
-
-
-
-
-
-
-
-
-
-
 ?>

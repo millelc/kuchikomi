@@ -1,9 +1,8 @@
 <?php
-
+// Cette classe gère UNIQUEMENT
+// les données des « J'aime ».
 
 include_once('Connexion.class.php');
-
-
 
 class Jaime
 	{
@@ -11,22 +10,20 @@ class Jaime
 	private $_id_kuchikomi;
 	private $_ladate;
 	
-	
-	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
+	public function __construct(array $donnees)
+	//Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
+	public function hydrate (array $donnees)
+	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
 		$this->setId_abonne($donnees['id_abonne']);
 		$this->setId_kuchikomi($donnees['id_kuchikomi']);
 		}
 	
-	
-	
 ################## Setters #########################	
-	
 	
 	private function setId_abonne($id_abonne)
 		{
@@ -46,7 +43,6 @@ class Jaime
 			}
 		}
 	
-	
 	private function setLadate($ladate)
 		{
 		if (is_string($ladate))
@@ -54,8 +50,6 @@ class Jaime
 			$this->_ladate = $ladate;
 			}
 		}
-		
-	
 	
 #################### Getters ########################
 
@@ -75,13 +69,5 @@ class Jaime
 		}
 	
 #####################################################	
-	
-	
 	}
-
-
-
-
-
-
 ?>

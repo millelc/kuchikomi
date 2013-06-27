@@ -1,13 +1,17 @@
 <?php
-
-
+// Ce fichier est un fourre-tout.
+// Il contient toutes les fonctions
+// nécessaires à l'application
 
 
 function listeAbo($id_abonne)
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT id_commerce, logo FROM commerce WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?)');//On récupère la liste des id_commerce dont on
-	$req->execute(array($id_abonne));														// est abonné.
+	// On récupère une instance de connexion.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	//On récupère la liste des id_commerce dont on est abonné.
+	$req = $bdd->prepare('SELECT id_commerce, logo FROM commerce 
+	WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?)');
+	$req->execute(array($id_abonne));
 	$listeAbonnements=[];
 	$listeNbreKkValides=[];
 	$now = date("Y-m-d");
@@ -17,55 +21,60 @@ function listeAbo($id_abonne)
 		}
 	foreach($listeAbonnements as $cle => $valeur)
 		{
-		$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-		$req = $bdd->prepare("SELECT count(id_kuchikomi) FROM kuchikomi WHERE id_commerce = ? AND date_fin > ?");
+		// On récupère une instance de connexion.
+		$bdd = Outils_Bd::getInstance()->getConnexion();			
+		$req = $bdd->prepare("SELECT count(id_kuchikomi) FROM kuchikomi
+		WHERE id_commerce = ? AND date_fin > ?");
 		$req->execute(array($cle, $now));
 		$donnees2 = $req->fetch();
-		//var_dump($donnees2);
 		$listeNbreKkValides[$cle] = $donnees2[0];
 		}
 	return array($listeAbonnements, $listeNbreKkValides);
 	}
 	
-	
-	
-	
-
 function listekk($idcommerce)
 	{
-	$idcommerce = $idcommerce + 0;		// Pour convertir le string en int.
+	// Pour convertir le string en int.
+	$idcommerce = $idcommerce + 0;
 	if ($idcommerce==0)
 		{
-		return 'None';			// En cas de manipulation de l'url, ce qui n'est pas un entier sera ainsi désactivé.
+		// En cas de manipulation de l'url,
+		// ce qui n'est pas un entier sera ainsi désactivé.
+		return 'None';
 		}
 	else
 		{
-		$bdd = Outils_Bd::getInstance()->getConnexion();				// On récupère l'instance de connexion.
-		$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce = ? ORDER BY date_fin DESC LIMIT 0,10');	// On récupère les aperçus 
-		$req->execute(array($idcommerce));									// de chaque kuchikomi
+		// On récupère l'instance de connexion.
+		$bdd = Outils_Bd::getInstance()->getConnexion();				
+		// On récupère les aperçus 
+		$req = $bdd->prepare('SELECT * FROM kuchikomi 
+		WHERE id_commerce = ? ORDER BY date_fin DESC LIMIT 0,10');
+		// de chaque kuchikomi
+		$req->execute(array($idcommerce));
 		return $req;
-		}
-	
+		}	
 	}
-	
-	
 	
 function recuperationDonneesKk($idkk)
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();		// On récupère une instance du singleton de connexion.
-	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?');		// On récupère les données nécessaires à 
-	$req->execute(array($idkk));						// l'affichage du kuchikomi.
+	// On récupère une instance du singleton de connexion.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	// On récupère les données nécessaires à l'affichage du kuchikomi.
+	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?'); 
+	$req->execute(array($idkk));
 	$donnees = $req->fetch();
-	return array($donnees['texte'], $donnees['id_commerce'], $donnees['mentions'], $donnees['date_debut'], $donnees['date_fin'], $donnees['photo']);
+	return array($donnees['texte'], $donnees['id_commerce'],
+	$donnees['mentions'], $donnees['date_debut'], $donnees['date_fin'], $donnees['photo']);
 	}
 
 
 function recupInfosCommercant($idcom)
 	{
-	$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());	// On récupère l'instance de connexion
-	$commercant=new commerce (($commercant_req->quereur($_GET['id'])));		// On créé un commerce que l'on hydrate avec les infos récupérées avec la méthode quéreur.
+	// On récupère l'instance de connexion
+	$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());
+	// On créé un commerce que l'on hydrate avec les infos récupérées avec la méthode quéreur.
+	$commercant=new commerce (($commercant_req->quereur($_GET['id'])));
 	$infosCommercant=[];
-	
 	$infosCommercant['nom'] = $commercant->nom();
 	$infosCommercant['gerant'] = $commercant->gerant();
 	$infosCommercant['horaires'] = $commercant->horaires();
@@ -76,8 +85,10 @@ function recupInfosCommercant($idcom)
 
 function recupInfosCart($idcom)
 	{
-	$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());		// On créé une instance de connexion avec la bdd.
-	$commercant=new commerce (($commercant_req->quereur($_GET['id'])));				// Puis on créé un commerce qu'on hydrate grâce à la méthode quéreur.
+	// On créé une instance de connexion avec la bdd.
+	$commercant_req=new GestionCommerce(Outils_Bd::getInstance()->getConnexion());
+	// Puis on créé un commerce qu'on hydrate grâce à la méthode quéreur.
+	$commercant=new commerce (($commercant_req->quereur($_GET['id'])));
 	$infosCarto=[];
 	$infosCarto['adresse'] = $commercant->adresse();
 	$infosCarto['bus'] = $commercant->ligne_bus();
@@ -85,31 +96,33 @@ function recupInfosCart($idcom)
 	return $infosCarto;
 	}
 
-
 function tentativeConnexion()
 	{
-	$nouveau_gerant= new Gerant(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));	//On créé un gérant.
-	$connecte= new GestionGerant(Outils_Bd::getInstance()->getConnexion());				// On appelle le gestionnaire des gérants.
+	//On créé un gérant.
+	$nouveau_gerant= new Gerant(array('pseudo' => $_POST['pseudo'], 'mdp' => $_POST['pwd'] ));
+	// On appelle le gestionnaire des gérants.
+	$connecte= new GestionGerant(Outils_Bd::getInstance()->getConnexion());
 	$id_du_gerant=$connecte->existe($nouveau_gerant);
-	if ($id_du_gerant==0)					// Échec de la vérification d'identité.
+	if ($id_du_gerant==0)	
 		{
+		// Échec de la vérification d'identité.
 		header('Location: espmarc.php');
 		}
 	else
 		{
-		$_SESSION['id']= $id_du_gerant;		// L'id de la session est égal à celui du gérant dans la base.
+		// L'id de la session est égal à celui du gérant dans la base.
+		$_SESSION['id']= $id_du_gerant;
 		$_SESSION['id_commerce']= $connecte->quelCommerce($id_du_gerant);
 		$_SESSION['pseudo']= $_POST['pseudo'];
 		$_SESSION['commerçant']=1;
 		header('Location: espmarc.php');
 		}
 	}
-			
-
-
+	
 function ajoutkk()
 	{
-	if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+	if (isset($_FILES['photokk']) AND $_FILES['photokk']['error'] == 0)
+	// Si on reçoit un fichier, il faut s'en occuper.
 		{
 		// Testons si le fichier n'est pas trop gros
 		if ($_FILES['photokk']['size'] <= 2000000)
@@ -139,21 +152,25 @@ function ajoutkk()
 		{
 		$nom_image = 'logo_defaut.png';
 		}
-	$nouveau_kuchikomi = new Kuchikomi(array('id_commerce' => $_SESSION['id_commerce'], 'mentions' => $_POST['mentions'], 'texte' => $_POST['texte'], 'image' => $nom_image, 'date_debut' => $_POST['date_debut'], 'date_fin' => $_POST['date_fin'] ));	// Création d'un onjet Kuchokomi.
-	$ecriture_kk = new GestionKuchikomi(Outils_Bd::getInstance()->getConnexion());			// Instanciation du gestionnaire.
+	// Création d'un onjet Kuchokomi.
+	$nouveau_kuchikomi = new Kuchikomi(array('id_commerce' => $_SESSION['id_commerce'],
+	'mentions' => $_POST['mentions'], 'texte' => $_POST['texte'], 'image' => $nom_image,
+	'date_debut' => $_POST['date_debut'], 'date_fin' => $_POST['date_fin'] ));
+	// Instanciation du gestionnaire.
+	$ecriture_kk = new GestionKuchikomi(Outils_Bd::getInstance()->getConnexion());
 	$ecriture_kk->ajout($nouveau_kuchikomi);
-	
 	header('Location: espmarc.php?appel=interface');
 	}
 
 
 function calculStatistiques ()
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement WHERE id_commerce = ?');	// On souhaite récupérer le nombre d'abonnés du commerce en variable.
+	// On récupère une instance de connexion.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	// On souhaite récupérer le nombre d'abonnés du commerce en variable.
+	$req = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement WHERE id_commerce = ?');
 	$req->execute(array($_SESSION['id_commerce']));
 	$donnees = $req->fetch();
-	//var_dump($donnees);
 	$nb_abonnes = $donnees[0];
 	/**************************************************************************************
 	
@@ -164,36 +181,34 @@ function calculStatistiques ()
 	
 	*//////////////////////////////////////////////////////////////////////////////////////
 	
-	
-	$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');	// On commence par récupérer les id des kuchikomi du commerce.
+	// On commence par récupérer les id des kuchikomi du commerce.
+	$req2 = $bdd->prepare('SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?');
 	$req2->execute(array($_SESSION['id_commerce']));
 	$compteur=[];
 	while ($donnees2 = $req2->fetch())
 		{
-		//var_dump($donnees2);
-		$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ? ');	// Pour chaque kuchikomi de ce commerce, on en compte le nombre dejaime.
+		// Pour chaque kuchikomi de ce commerce, on en compte le nombre dejaime.
+		$req3 = $bdd->prepare('SELECT COUNT(id_abonne) FROM jaime WHERE id_kuchikomi= ? ');
 		$req3->execute(array($donnees2['id_kuchikomi']));
 		$donnees3 = $req3->fetch();
-		//var_dump($donnees3);
 		$compteur[$donnees2['id_kuchikomi']] = $donnees3[0];
 		}
 		if (empty($compteur))
 			{
 			$compteur=array(0,0);
 			}
-		/*echo '<pre>';
-		print_r($compteur);
-		echo '</pre>';
-		*/
 		/**********************************************************************
 		************** Fin de la préparation des données des kuchikomi /////////
 		*//////////////////////////////////////////////////////////////////////
 		
+		
 		/************** Sélection meilleur kuchikomi */////////////////////////
 		
-		$clef_meilleur_kuchikomi = array_search(max($compteur), $compteur);			// L'identifiant du meilleur kuchikomi.
+		// L'identifiant du meilleur kuchikomi.
+		$clef_meilleur_kuchikomi = array_search(max($compteur), $compteur);
 		
-		$req4 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?');	// Récupération des donnes de ce meilleur kuchikomi
+		// Récupération des donnes de ce meilleur kuchikomi
+		$req4 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?');
 		$req4->execute(array($clef_meilleur_kuchikomi));
 		$donnees_meilleur_kk = $req4->fetch();
 		if ($compteur==array(0,0))
@@ -214,7 +229,9 @@ function calculStatistiques ()
 		******************** Progression des abonnements ***********************
 		***********************************************************************/
 		
-		$req5 = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement WHERE id_commerce = ? AND TO_DAYS(NOW()) - TO_DAYS(date) <= 30;');	//Le nombre d'abonnés ces 30 derniers jours.
+		//Le nombre d'abonnés ces 30 derniers jours.
+		$req5 = $bdd->prepare('SELECT COUNT(id_abonne) FROM abonnement
+		WHERE id_commerce = ? AND TO_DAYS(NOW()) - TO_DAYS(date) <= 30;');
 		$req5->execute(array($_SESSION['id_commerce']));
 		$donnees5 = $req5->fetch();
 		$nb_abonnes_30_jours = $donnees5[0];
@@ -235,14 +252,19 @@ function calculStatistiques ()
 		/********************* Nombre total de j'aime **************************/
 		/***********************************************************************/
 		
-		// La requête SQL ci-dessous compte tous les kuchikomi aimés. Utilisation d'une sous-requête.
-		$req7 = $bdd->prepare('SELECT COUNT(*) FROM jaime WHERE id_kuchikomi IN (SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?) ');
+		// La requête SQL ci-dessous compte tous les kuchikomi aimés.
+		//Utilisation d'une sous-requête.
+		$req7 = $bdd->prepare('SELECT COUNT(*) FROM jaime WHERE id_kuchikomi IN
+		(SELECT id_kuchikomi FROM kuchikomi WHERE id_commerce = ?) ');
 		$req7->execute(array($_SESSION['id_commerce']));
 		$donnees7 = $req7->fetch();
 		$nbre_total_de_jaime = $donnees7[0];
 				
 		
-	return array ($nb_abonnes, $nb_de_kuchikomi, $clef_meilleur_kuchikomi, $date_meilleur_kuchikomi, $nb_de_jaime_du_meilleur_kuchikomi, $abonnes_des_30_derniers_jours, $nombre_abonnes_de_plus_de_30_jours, $augmentation_sur_le_mois, $nbre_total_de_jaime, $donnees_meilleur_kk) ;
+	return array ($nb_abonnes, $nb_de_kuchikomi, $clef_meilleur_kuchikomi,
+	$date_meilleur_kuchikomi, $nb_de_jaime_du_meilleur_kuchikomi, $abonnes_des_30_derniers_jours,
+	$nombre_abonnes_de_plus_de_30_jours, $augmentation_sur_le_mois, $nbre_total_de_jaime,
+	$donnees_meilleur_kk) ;
 	}
 
 
@@ -251,44 +273,59 @@ function calculStatistiques ()
 
 function sAbonner ()
 	{
-	echo 'test';
-	$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));	// On créé un nouvel abonnement
-	$connexion = Outils_Bd::getInstance()->getConnexion();						// Puis on instancie une connexion
-	$inscription= new GestionAbonnement($connexion);						// Dont on se servira pour l'objet inscription
-	$inscription->commerceExistant($nouvel_abo);						// On vérifie que le commerce existe
+	// On créé un nouvel abonnement
+	$nouvel_abo= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
+	// Puis on instancie une connexion
+	$connexion = Outils_Bd::getInstance()->getConnexion();
+	// Dont on se servira pour l'objet inscription
+	$inscription= new GestionAbonnement($connexion);
+	// On vérifie que le commerce existe
+	$inscription->commerceExistant($nouvel_abo);
 				
-	if ($inscription->commerceExistant($nouvel_abo)==True)				// Le commerce existe bel et bien.
+	// Le commerce existe bel et bien.
+	if ($inscription->commerceExistant($nouvel_abo)==True)
 		{
-		if ($inscription->dejaAbonne($nouvel_abo)==True)			// NB : Si dejaAbonne renvoie True, c'est qu'on est pas abonné.
-			{
-			$inscription->ajout($nouvel_abo);				// Si pas encore abonné, on le devient.
+		if ($inscription->dejaAbonne($nouvel_abo)==True)
+		// NB : Si dejaAbonne renvoie True, c'est qu'on est pas abonné.
+			{// Si pas encore abonné, on le devient.
+			$inscription->ajout($nouvel_abo);
+			
 			}
 		}
 	}
 
-
 function seDesabonner ()
 	{
-	$abo_a_suppr= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] )); //On créé un nouvel abonnement
-	$connexion = Outils_Bd::getInstance()->getConnexion();					// On appelle l'instance de connexion
-	$desinscription= new GestionAbonnement($connexion);				// On créé un objet gérant les abonnements
-	if ($desinscription->dejaAbonne($abo_a_suppr)==True)				// True signifie que l'abonnement n'existe pas.
+	//On créé un nouvel abonnement
+	$abo_a_suppr= new Abonnement(array('id_commerce' => $_GET['id'], 'id_abonne' => $_SESSION['id'] ));
+	// On appelle l'instance de connexion
+	$connexion = Outils_Bd::getInstance()->getConnexion();
+	// On créé un objet gérant les abonnements
+	$desinscription= new GestionAbonnement($connexion);
+	// True signifie que l'abonnement n'existe pas.
+	if ($desinscription->dejaAbonne($abo_a_suppr)==True)
 		{
-		echo 'Cet abonnement n\'existe pas.';					// Ceci pour empêcher un désabonnement n'existant pas
+		// Ceci pour empêcher un désabonnement n'existant pas
+		echo 'Cet abonnement n\'existe pas.';
 		}
 	else
 		{
-		$desinscription->suppr($abo_a_suppr);					// L'abonnement existe, on peut alors le supprimer.
+		// L'abonnement existe, on peut alors le supprimer.
+		$desinscription->suppr($abo_a_suppr);
 		}
 	header('Location: index.php?appel=liste&id=none');
 	}
 
 function desinscription ()
 	{
-	$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());		// Création de l'objet.
-	$desinscription->desinscription($_SESSION['id']);					// Désactivation de l'utilisateur.
-	$desabonnements = new GestionAbonnement(Outils_Bd::getInstance()->getConnexion());	// Création de l'objet.
-	$desabonnements ->supprtotale($_SESSION['id']);						// Suppression de tous les abonnements.
+	// Création de l'objet.
+	$desinscription = new GestionAbonne(Outils_Bd::getInstance()->getConnexion());
+	// Désactivation de l'utilisateur.
+	$desinscription->desinscription($_SESSION['id']);
+	// Création de l'objet.
+	$desabonnements = new GestionAbonnement(Outils_Bd::getInstance()->getConnexion());
+	// Suppression de tous les abonnements.
+	$desabonnements ->supprtotale($_SESSION['id']);
 	session_destroy();
 	header('Location: index.php?appel=liste&id=none');
 	}
@@ -296,18 +333,23 @@ function desinscription ()
 
 function aimer ()
 	{
-	$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id'], 'id_kuchikomi' => $_GET['id'] ));	// Création d'un objet « Jaime ».
-	$jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());	// On ajoute le jaime à la table si il est nouveau.
+	// Création d'un objet « Jaime ».
+	$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id'], 'id_kuchikomi' => $_GET['id'] ));
+	// On ajoute le jaime à la table si il est nouveau.
+	$jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());
 	$jaime_ajout->ajout($nouveau_jaime);
 	}
 
 function connexion ()
 	{
-	echo "<br />Vous avez choisi de vous connecter.";
-	$nouveau_connecte= new Abonne(array('pseudo' => $_POST['id']));	//On créé un abonné.
-	$connexion = Outils_Bd::getInstance()->getConnexion();					// On prépare l'accès à la bdd.
-	$connecte= new GestionAbonne($connexion);							// On appelle le gestionnaire des abonnés
-	if ($connecte->dejaInscrit($nouveau_connecte)==0 OR $connecte->dejaInscrit($nouveau_connecte)==2)		// Le pseudo est-il le bon ?
+	//On créé un abonné.
+	$nouveau_connecte= new Abonne(array('pseudo' => $_POST['id']));
+	// On prépare l'accès à la bdd.
+	$connexion = Outils_Bd::getInstance()->getConnexion();
+	// On appelle le gestionnaire des abonnés
+	$connecte= new GestionAbonne($connexion);
+	// Le pseudo est-il le bon ?
+	if ($connecte->dejaInscrit($nouveau_connecte)==0 OR $connecte->dejaInscrit($nouveau_connecte)==2)
 		{
 		// Le pseudo n'existe pas. On renvoie.
 		header('Location: index.php?appel=liste&id=none');
@@ -322,33 +364,32 @@ function connexion ()
 		$_SESSION['id']= $donnees['id_abonne'];
 		$_SESSION['adresse_ip']= $donnees['adresse_ip'];
 		header('Location: index.php?appel=liste&id=none');
-		
 		}
-			
 	}
-	
-	
+		
 function inscription ()
 	{
-	$nouvel_inscrit= new Abonne(array('pseudo' => $_POST['id']));	// On créé un nouvel abonné avec ce pseudo et ce mdp.
-	$inscription= new GestionAbonne(Outils_Bd::getInstance()->getConnexion());						// On prépare le gestionnaire d'abonnés
-	if ($inscription->dejaInscrit($nouvel_inscrit)==0 OR $inscription->dejaInscrit($nouvel_inscrit)==2 )// On vérifie que ce pseudo n'est pas déjà utilisé. Si il l'est déjà, rien ne se passe.
+	// On créé un nouvel abonné avec ce pseudo et ce mdp.
+	$nouvel_inscrit= new Abonne(array('pseudo' => $_POST['id']));
+	// On prépare le gestionnaire d'abonnés
+	$inscription= new GestionAbonne(Outils_Bd::getInstance()->getConnexion());
+	// On vérifie que ce pseudo n'est pas déjà utilisé. Si il l'est déjà, rien ne se passe.
+	if ($inscription->dejaInscrit($nouvel_inscrit)==0 OR $inscription->dejaInscrit($nouvel_inscrit)==2 )
 		{
-		$_SESSION['id']= $inscription->ajout($nouvel_inscrit);		// Le pseudo est libre, le gestionnaire l'ajoute à la table.
+		// Le pseudo est libre, le gestionnaire l'ajoute à la table.
+		$_SESSION['id']= $inscription->ajout($nouvel_inscrit);
 		$_SESSION['connexion']=1;
 		$_SESSION['pseudo']= $_POST['id'];
 		}
 	header('Location: index.php?appel=abo&id=' . $_GET['id'] . '');
 	}
 	
-	
-	
 ################################# Interface admin ##########################################################
-
 
 function ajouterCommerce()
 	{
-	if (isset($_FILES['photo']) AND $_FILES['photo']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+	// Si on reçoit un fichier, il faut s'en occuper.
+	if (isset($_FILES['photo']) AND $_FILES['photo']['error'] == 0)
 		{
 		// Testons si le fichier n'est pas trop gros
 		if ($_FILES['photo']['size'] <= 1000000)
@@ -370,8 +411,7 @@ function ajouterCommerce()
 		{
 		$nom_photo = "image_defaut.png";
 		}
-	
-	
+		
 	if (isset($_FILES['logo']) AND $_FILES['logo']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
 		{
 		// Testons si le fichier n'est pas trop gros
@@ -405,7 +445,6 @@ function ajouterCommerce()
 	$donnees['adresse']= $_POST['adresse'];
 	$donnees['ligne_bus']= $_POST['ligne_bus'];
 	$donnees['arret']= $_POST['arret'];
-	//var_dump($donnees);
 	
 	// Le plus dur est fait, les deux images, si elles existent, ont été envoyées, stockées et leurs noms normalisés.
 	// À présent, on se retrouve avec un tableau de données contenant des données suffisantes pour créer des objets Commerce et Gérant et les ajouter à la bdd.
@@ -480,12 +519,7 @@ function modifierCommerce()
 		{
 		$nom_logo = $_GET['l'];
 		}
-	/*
-	echo $nom_logo;
-	echo '<br />';
-	echo $nom_photo;
-	echo '<br />';
-	*/
+		
 	$donnees=[];
 	$donnees['id_commerce']= $_POST['idcom'];
 	$donnees['nom']= $_POST['nom_com'];
@@ -498,10 +532,11 @@ function modifierCommerce()
 	$donnees['adresse']= $_POST['adresse'];
 	$donnees['ligne_bus']= $_POST['ligne_bus'];
 	$donnees['arret']= $_POST['arret'];
-	//var_dump($donnees);
 	
-	// Le plus dur est fait, les deux images, si elles existent, ont été envoyées, stockées et leurs noms normalisés.
-	// À présent, on se retrouve avec un tableau de données contenant des données suffisantes pour créer des objets Commerce et Gérant et les ajouter à la bdd.
+	// Le plus dur est fait, les deux images, si elles existent, ont été envoyées,
+	// stockées et leurs noms normalisés.
+	// À présent, on se retrouve avec un tableau de données contenant des données
+	// suffisantes pour créer des objets Commerce et Gérant et les ajouter à la bdd.
 	
 	// Création du commerce
 	$nouveau_commerce= new Commerce ($donnees);
@@ -517,14 +552,10 @@ function modifierCommerce()
 	$donnees2['idcom']= $_POST['idcom'];
 	
 	$nouveau_gerant= new Gerant ($donnees2);
-	var_dump($donnees2);
-	echo '<br />';
-	//var_dump($nouveau_gerant);
 	
 	// Que l'on modifie également.
 	$modif_gerant= new GestionGerant(Outils_Bd::getInstance()->getConnexion());
 	$modif_gerant -> modif($nouveau_gerant);
-	
 	header('Location: admin.php');
 	}
 	
@@ -545,7 +576,8 @@ function supprimerCommerce($idcom)
 	
 function modifierBandeau()
 	{
-	if (isset($_FILES['bandeau']) AND $_FILES['bandeau']['error'] == 0)	// Si on reçoit un fichier, il faut s'en occuper.
+	// Si on reçoit un fichier, il faut s'en occuper.
+	if (isset($_FILES['bandeau']) AND $_FILES['bandeau']['error'] == 0)
 		{
 		// Testons si le fichier n'est pas trop gros
 		if ($_FILES['bandeau']['size'] <= 1000000)
@@ -564,45 +596,53 @@ function modifierBandeau()
 			}
 		}
 	$ofic = fopen('../includes/bandeau', 'r+');
-	fseek($ofic, 0); // On remet le curseur au début du fichier
-	fputs($ofic, $nom_bandeau); // On écrit le nom de la nouvelle image
+	// On remet le curseur au début du fichier.
+	fseek($ofic, 0);
+	// On écrit le nom de la nouvelle image.
+	fputs($ofic, $nom_bandeau);
 	fclose($ofic);
-	echo '<p>L\'image de bandeau est désormais ' . $nom_bandeau . '.</p>';
 	}
 
 	
 function recupBandeau()
 	{
 	$ofic = fopen('../includes/bandeau', 'r');
-	$nom_image = fgets($ofic); // On lit la première ligne.
+	// On lit la première ligne.
+	$nom_image = fgets($ofic);
 	fclose($ofic);
 	return $nom_image;
 	}
 	
 function recupererStats()
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT COUNT(*) FROM commerce');	// On souhaite récupérer le nombre de commerçants.
+	// On récupère une instance de connexion.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	// On souhaite récupérer le nombre de commerçants.
+	$req = $bdd->prepare('SELECT COUNT(*) FROM commerce');
 	$req->execute(array());
 	$donnees = $req->fetch();
 	echo '<p>Il y a ' . $donnees[0] . ' commerçants inscrits.</p>';
 	
-	$req2 = $bdd->prepare('SELECT COUNT(*) FROM abonne');	// On souhaite récupérer le nombre de commerçants.
+	// On souhaite récupérer le nombre de commerçants.
+	$req2 = $bdd->prepare('SELECT COUNT(*) FROM abonne');	
 	$req2->execute(array());
 	$donnees2 = $req2->fetch();
 	echo '<p>Il y a ' . $donnees2[0] . ' utilisateurs inscrits.</p>';
 	
-	$req3 = $bdd->prepare('SELECT COUNT(*) FROM abonnement');	// On souhaite récupérer le nombre de commerçants.
+	// On souhaite récupérer le nombre de commerçants.
+	$req3 = $bdd->prepare('SELECT COUNT(*) FROM abonnement');
 	$req3->execute(array());
 	$donnees3 = $req3->fetch();
 	echo '<p>Il y a ' . $donnees3[0] . ' abonnements.</p>';
 	
-	$req4 = $bdd->prepare('SELECT COUNT(*) FROM jaime');	// On souhaite récupérer le nombre de commerçants.
+	// On souhaite récupérer le nombre de commerçants.
+	$req4 = $bdd->prepare('SELECT COUNT(*) FROM jaime');
 	$req4->execute(array());
 	$donnees4 = $req4->fetch();
 	echo '<p>Il y a ' . $donnees4[0] . ' « J\'aime ! ».</p>';
 		
-	$req5 = $bdd->prepare('SELECT COUNT(*) FROM kuchikomi');	// On souhaite récupérer le nombre de commerçants.
+	// On souhaite récupérer le nombre de commerçants.
+	$req5 = $bdd->prepare('SELECT COUNT(*) FROM kuchikomi');
 	$req5->execute(array());
 	$donnees5 = $req5->fetch();
 	echo '<p>Il y a ' . $donnees5[0] . ' kuchikomi écrits..</p>';
@@ -611,18 +651,20 @@ function recupererStats()
 	
 function listeKuchikomi($idcom)
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	
-	
-	$req2 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce=?');	// À présent, on veut afficher la liste des kuchikomi.
+	// On récupère une instance de connexion.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	// À présent, on veut afficher la liste des kuchikomi.
+	$req2 = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce=?');
 	$req2->execute(array($idcom));
 	return $req2;
 	}
 
-function listeDesDerniersKkConfondus($idabo)		//Cette fonction renvoie les 10 derniers kuchikomi d'un abonné (tous ses abonnements confondus)
+function listeDesDerniersKkConfondus($idabo)
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
-	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?) ORDER BY heure DESC LIMIT 0,10');
+	//Cette fonction renvoie les 10 derniers kuchikomi d'un abonné (tous ses abonnements confondus)
+	$bdd = Outils_Bd::getInstance()->getConnexion();
+	$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce IN
+	(SELECT id_commerce FROM abonnement WHERE id_abonne = ?) ORDER BY heure DESC LIMIT 0,10');
 	$req->execute(array($idabo));
 	return $req;
 	}
@@ -630,11 +672,12 @@ function listeDesDerniersKkConfondus($idabo)		//Cette fonction renvoie les 10 de
 
 function recuplogo($idcom)
 	{
-	$bdd = Outils_Bd::getInstance()->getConnexion();			// On récupère une instance de connexion.
+	$bdd = Outils_Bd::getInstance()->getConnexion();
 	$req = $bdd->prepare('SELECT logo FROM commerce WHERE id_commerce = ?');
 	$req->execute(array($idcom));
 	$donnees = $req->fetch();
-	echo '<img src="../org/images_com/' . $donnees['logo'] . '" alt="Logo commerce" title="Logo commerce" style="width: 75px; margin-left: 20px; margin-top:10px; border: 1px black outset;" />';
+	echo '<img src="../org/images_com/' . $donnees['logo'] . '"
+	alt="Logo commerce" title="Logo commerce" style="width: 75px; margin-left: 20px; margin-top:10px; border: 1px black outset;" />';
 	}
 	
 function scan($id_ab, $adresse_ip)
@@ -644,14 +687,16 @@ function scan($id_ab, $adresse_ip)
 	// 2° Si l'utilisateur n'existe pas, on le créé et on l'abonne (si il ne l'est pas déjà).
 	// 3° Si l'utilisateur existe, on l'abonne (si il ne l'est pas déjà).
 	
-	/*     /!\/!\/!\/!\/!\ L'utilisation d'objets semble ralentir TRÈS FORTEMENT l'application côté smartphone lors du POST à part... /!\/!\/!\/!\/!\/!\   */
+	/*     /!\/!\/!\/!\/!\ L'utilisation d'objets semble ralentir TRÈS FORTEMENT
+	l'application côté smartphone lors du POST à part... /!\/!\/!\/!\/!\/!\   */
 	
 	$bdd = Outils_Bd::getInstance()->getConnexion();
 	//////////////////   1°  /////////////////////////////
 	$req = $bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
 	$req->execute(array($id_ab));
 	$donnees = $req->fetch();
-	if ($donnees['id_abonne']=='')				// Cet abonné n'existe  pas.
+	// Cet abonné n'existe  pas.
+	if ($donnees['id_abonne']=='')
 		{
 	//////////////////   2° //////////////////////////////
 		/*   Création de l'utilisateur     */
@@ -665,7 +710,8 @@ function scan($id_ab, $adresse_ip)
 		{
 	//////////////////   3°   ////////////////////////////
 		$id_abonne = $donnees['id_abonne'];
-		// Comme l'utilisateur existe, on met à jour sobn adresse ip car elle aura sans doute changé d'ici là.
+		// Comme l'utilisateur existe, on met à jour son adresse ip
+		// car elle peut avoir changé d'ici là.
 		$req3 = $bdd->prepare('UPDATE abonne SET adresse_ip = ? WHERE pseudo = ?');
 		$req3->execute(array($donnees['adresse_ip'], $donnees['pseudo']));
 		/* Abonnement de cet utilisateur si il ne l'est pas déjà.   */
@@ -726,7 +772,8 @@ function scancom($id_telephone_commercant, $adresse_ip)
 	// Un tag NFC de commerçant a été lu, il faut :
 	// 1° On reçoit l'identifiant du téléphone et une adresse ip que l'on met à jour.
 	
-	/*     /!\/!\/!\/!\/!\ L'utilisation d'objets semble ralentir TRÈS FORTEMENT l'application côté smartphone lors du POST à part... /!\/!\/!\/!\/!\/!\   */
+	/*     /!\/!\/!\/!\/!\ L'utilisation d'objets semble ralentir
+	TRÈS FORTEMENT l'application côté smartphone lors du POST à part... /!\/!\/!\/!\/!\/!\   */
 	
 	$bdd = Outils_Bd::getInstance()->getConnexion();
 	//////////////////   1°  /////////////////////////////
@@ -753,10 +800,5 @@ function connexionTag($adresse_ip)
 	$_SESSION['pseudo']= $donnees['pseudo'];
 	$_SESSION['commerçant']=1;
 	header('Location: espmarc.php');
-	
-	
-	}
-	
-	
-	
+	}	
 ?>

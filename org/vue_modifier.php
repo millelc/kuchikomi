@@ -1,7 +1,7 @@
 <?php
-
-//var_dump($commerce);
-
+// Cette vue affiche un formulaire pour
+// modifier un commerce.
+// Leurs champs ont été pré-remplis.
 echo '
       <form action="admin.php?p=' . $commerce['image'] . '&amp;l=' . $commerce['logo'] . '" method="post" enctype="multipart/form-data">
       
@@ -31,5 +31,4 @@ echo '
       
       <input class="btn btn-medium btn-success" type="submit" style="margin-right: 50px;" value="Modifier" name="modifier" />
       </form>';
-
 ?>

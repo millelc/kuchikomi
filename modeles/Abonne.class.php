@@ -1,9 +1,8 @@
 <?php
-
+// La classe abonné gère UNIQUEMENT les
+// données propres aux abonnés.
 
 include_once('Connexion.class.php');
-
-
 
 class Abonne
 	{
@@ -12,12 +11,14 @@ class Abonne
 	private $_adresse_ip;
 	private $_actif;
 	
-	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
+	public function __construct(array $donnees)
+	//Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
+	public function hydrate (array $donnees)
+	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
 		if (isset($donnees['pseudo']))
 			{
@@ -31,15 +32,9 @@ class Abonne
 			{
 			$this->setAdresse_ip($donnees['adresse_ip']);
 			}
-		
-		
 		}
 	
-	
-	
 ################## Setters #########################	
-	
-	
 	private function setId($id)
 		{
 		$id = (int) $id;
@@ -48,7 +43,6 @@ class Abonne
 			$this->_id = $id;
 			}
 		}
-		
 	
 	private function setPseudo($pseudo)
 		{
@@ -78,10 +72,7 @@ class Abonne
 			$this->_actif = $actif;
 			}
 		}
-	
-	
 #################### Getters ########################
-
 	public function id()
 		{
 		return $this->_id;
@@ -106,17 +97,6 @@ class Abonne
 		{
 		return $this->_adresse_ip;
 		}
-		
-		
-	
 #####################################################	
-	
-	
 	}
-
-
-
-
-
-
 ?>

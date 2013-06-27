@@ -1,9 +1,8 @@
 <?php
-
+// Cette classe gère UNIQUEMENT
+// les données concernant les abonnements
 
 include_once('Connexion.class.php');
-
-
 
 class Abonnement
 	{
@@ -22,10 +21,7 @@ class Abonnement
 		$this->setId_abonne($donnees['id_abonne']);
 		}
 	
-	
 ################## Setters #########################	
-	
-	
 	private function setId_commerce($id)
 		{
 		$id = (int) $id;
@@ -34,8 +30,6 @@ class Abonnement
 			$this->_id_commerce = $id;
 			}
 		}
-		
-	
 	
 	private function setId_abonne($id)
 		{
@@ -70,18 +64,8 @@ class Abonnement
 		return $this->_ladate;
 		}
 #####################################################	
-	
 	}
 
-
-
-	
-	
-	
-	
-	
-	
-	
 ?>
 
 

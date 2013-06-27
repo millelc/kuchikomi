@@ -1,24 +1,23 @@
 <?php
+// Cette classe s'occupe de toutes les actions possibles
+// et souhaitées sur les abonnés.
 
 include_once('../includes/configuration.php');
 include_once('Connexion.class.php');
-
-
-
-
 
 class GestionAbonne
 	{
 	private $_bdd;
 	
-	
-	public function __construct($bdd)		// Le constructeur récupère l'instance de connexion.
+	public function __construct($bdd)
+	// Le constructeur récupère l'instance de connexion.
 		  {
 		  $this->setBdd($bdd);
 		  
 		  }
 
-	public function ajout(Abonne $perso)	// Cette fonction ajoute simplement un abonné à la base.
+	public function ajout(Abonne $perso)
+	// Cette fonction ajoute simplement un abonné à la base.
 		{
 		try
 			{			
@@ -33,7 +32,8 @@ class GestionAbonne
 		
 		}
 		
-	public function desinscription($id)	// Cette fonction DÉSACTIVE un abonné en mettant le champ « actif » à 0.
+	public function desinscription($id)
+	// Cette fonction DÉSACTIVE un abonné en mettant le champ « actif » à 0.
 		{
 		try
 			{
@@ -49,12 +49,14 @@ class GestionAbonne
 		}
 		
 		
-	public function dejaInscrit(Abonne $perso)		// Cette fonction vérifie si un abonné est déjà dans la base.
+	public function dejaInscrit(Abonne $perso)
+	// Cette fonction vérifie si un abonné est déjà dans la base.
 		{
 		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
 		$req->execute(array($perso->pseudo()));
 		$donnees = $req->fetch();
-		if ($donnees['id_abonne']=='')				// Cet abonné n'existe  pas.
+		if ($donnees['id_abonne']=='')
+		// Cet abonné n'existe  pas.
 			{
 			return 0;
 			}
@@ -62,11 +64,13 @@ class GestionAbonne
 			{
 			if ($donnees['actif']==1)
 					{
-					return $donnees['id_abonne'];		// Abonné existant et actif
+					// Abonné existant et actif
+					return $donnees['id_abonne'];
 					}
 			else
 				{
-				return 2;				// Abonné existant et inactif
+				// Abonné existant et inactif
+				return 2;
 				}
 			}
 		}
@@ -74,13 +78,15 @@ class GestionAbonne
 	public function connexion(Abonne $perso)
 		{
 		// Cette fonction prend en entrée un abonné qui aurait scanné un tag.
-		// On commence par vérifier si l'utilisateur existe déjà. Si oui, on le connecte et on met son identifiant en session.
-		// 							  Si non, on l'inscrit, on le connecte et on met son identifiant en session.
+		// On commence par vérifier si l'utilisateur existe déjà.
+			// Si oui, on le connecte et on met son identifiant en session.
+			// Si non, on l'inscrit, on le connecte et on met son identifiant en session.
 		echo 'je te connecte';
 		$req = $this->_bdd->prepare('SELECT * FROM abonne WHERE pseudo = ?');
 		$req->execute(array($perso->pseudo()));
 		$donnees = $req->fetch();
-		if ($donnees['id_abonne']=='')				// L'abonné n'existe pas.donc, on le créé, on le connecte et on le redirige cers sa liste d'abonnements.
+		if ($donnees['id_abonne']=='')
+		// L'abonné n'existe pas.donc, on le créé, on le connecte et on le redirige cers sa liste d'abonnements.
 			{
 			$nouvel_id = $this->ajout($perso);
 			$_SESSION['connexion']=1;
@@ -88,7 +94,8 @@ class GestionAbonne
 			$_SESSION['id']= $nouvel_id;
 			header('Location: index.php?appel=liste&id=none');
 			}
-		else							// L'abonné existe donc on le connecte, on l'abonne et on le redirige vers sa liste d'abonnements si il est actif.
+		else
+		// L'abonné existe donc on le connecte, on l'abonne et on le redirige vers sa liste d'abonnements si il est actif.
 			{
 			if ($donnees['actif']=='1')
 				{
@@ -123,8 +130,5 @@ class GestionAbonne
 		}
 		
 #####################################################	
-		
 	}
-
-
 ?>

@@ -1,4 +1,8 @@
 <?php
+// Cette vue est réservée aux marchands.
+// Elle leur permet de s'authentifier en cas
+// de perte de leur carte
+
 include_once('../includes/entete.php');
 
 echo 'Espace réservé aux commerçants.';
@@ -11,7 +15,6 @@ echo 	'<form method="post" action="espmarc.php?appel=interface">
 	<input type="submit" value="Connexion commerçants" name="connexionmarchande" />
 	</p>
 	</form>';
-
 
 include_once('../includes/pied.php');
 ?>

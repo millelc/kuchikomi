@@ -1,5 +1,8 @@
 <?php
-
+// Cette vue affiche en fait la page d'accueil
+// de la page d'admin.
+// Elle contient un choix d'action et présente
+// des statistiques générales.
 
 echo '
       <p>Que voulez-vous faire ?</p>
@@ -25,7 +28,5 @@ echo '
       <input class="btn btn-medium btn-success" type="submit" style="margin-right: 50px;" value="Modifier le bandeau" name="modifier_bandeau" />
       </form>
       ';
-
 recupererStats();      
-      
 ?>

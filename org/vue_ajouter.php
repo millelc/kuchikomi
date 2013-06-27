@@ -1,8 +1,9 @@
 <?php
+// Cette vue affiche le formulaire d'ajout
+// d'un commerce.
 
 try
-	{
-		
+	{		
 echo '
       <form action="admin.php" method="post" enctype="multipart/form-data">
       
@@ -30,13 +31,9 @@ echo '
       
       <input class="btn btn-medium btn-success" type="submit" style="margin-right: 50px;" value="Ajouter" name="ajouter" />
       </form>';
-
 	}
-	
-	
 catch (Exception $e)
 	{
 	echo 'Exception reçue : ',  $e->getMessage(), "\n";
 	}
-
 ?>

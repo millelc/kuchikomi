@@ -1,4 +1,12 @@
 <?php
+// Cette page est tout simplement la page d'administartion
+// de l'application. Elle appelle les vues en fonction des données qu'elle reçoit.
+// Elle offre plusieurs possibilités.
+// - Ajouter un commerce
+// - En modifier un
+// - En supprimer un
+// - Modifier le bandeau publicitaire
+// - Afficher des statistiques générales sur l'utilisation de l'application
 
 session_start();
 include_once('../modeles/fonctions.php');
@@ -46,8 +54,7 @@ if (isset($_POST['choix_ajouter']))
 	catch (Exception $e)
 		{
 		throw new Exception( 'Le script plante.', 0, $e);
-		}  
-	
+		}
 	}
 
 else if (isset($_POST['ajouter']))
@@ -66,10 +73,12 @@ else if (isset($_POST['choix_modifier']))
 	{
 	// On récupère les données du commerce et du gérant correspondants
 	$nouveau_commerce= new GestionCommerce (Outils_Bd::getInstance()->getConnexion());
-	$commerce = $nouveau_commerce-> quereur ($_POST['idcom']); 	// $commerce est un array contenant toutes les données relatives à ce sujet.
+	// $commerce est un array contenant toutes les données relatives à ce sujet.
+	$commerce = $nouveau_commerce-> quereur ($_POST['idcom']);
 	//var_dump($commerce);
 	$nouveau_gerant = new GestionGerant (Outils_Bd::getInstance()->getConnexion());
-	$gerant = $nouveau_gerant-> quereur ($_POST['idcom']);		// De même $gerant est un array contenant toutes les données du gérant du commerce correspondant.
+	// De même $gerant est un array contenant toutes les données du gérant du commerce correspondant.
+	$gerant = $nouveau_gerant-> quereur ($_POST['idcom']);
 	include_once('vue_modifier.php');
 	}
 
@@ -77,7 +86,6 @@ else if (isset($_POST['modifier']))
 	{
 	modifierCommerce();
 	}
-
 
 else if (isset($_POST['choix_supprimer']))
 	{
@@ -97,24 +105,13 @@ else if (isset($_POST['modifier_bandeau']))
 	echo $bandeau;
 	}
 
-
 else
 	{
 	include_once('vue_admin.php');
 	}
 
 echo '<footer><p><img src="../web/uploads/' . recupBandeau() . '" alt="Nearforge" title="Nearforge" /></p>';
-	
-
 ?>
-
-
-
-    </footer>
-
-
-
+</footer>
 </body>
-
-
 </html>

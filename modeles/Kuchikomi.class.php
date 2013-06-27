@@ -1,9 +1,8 @@
 <?php
-
+// Cette classe gère UNIQUEMENT
+// les données des Kuchikomi.
 
 include_once('Connexion.class.php');
-
-
 
 class Kuchikomi
 	{
@@ -15,12 +14,14 @@ class Kuchikomi
 	private $_date_fin;
 	private $_mentions;
 	
-	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
+	public function __construct(array $donnees)
+	//Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
+	public function hydrate (array $donnees)
+	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
 		var_dump($donnees);
 		$this->setId_commerce($donnees['id_commerce']);
@@ -35,10 +36,7 @@ class Kuchikomi
 			}
 		}
 	
-	
-	
 ################## Setters #########################	
-	
 	
 	private function setId_commerce($id)
 		{
@@ -48,7 +46,6 @@ class Kuchikomi
 			$this->_id_commerce = $id;
 			}
 		}
-		
 	
 	private function setTexte($texte)
 		{
@@ -84,9 +81,6 @@ class Kuchikomi
 			}
 		}
 	
-	
-	
-	
 #################### Getters ########################
 
 	public function id_kuchikomi()
@@ -114,20 +108,15 @@ class Kuchikomi
 		return $this->_date_debut;
 		}
 	
-	
 	public function date_fin()
 		{
 		return $this->_date_fin;
 		}
-	
 	
 	public function mentions()
 		{
 		return $this->_mentions;
 		}
 #####################################################	
-	
-	
 	}
-
 ?>

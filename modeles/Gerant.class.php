@@ -1,8 +1,8 @@
 <?php
+// Cette classe s'occupe UNIQUEMENT
+// des données des gérants
 
 include_once('Connexion.class.php');
-
-
 
 class Gerant
 	{
@@ -11,12 +11,14 @@ class Gerant
 	private $_mdp;
 	private $_id_commerce;
 	
-	public function __construct(array $donnees) //Le constructeur reçoit les données et passe la main à l'hydrateur
+	public function __construct(array $donnees)
+	//Le constructeur reçoit les données et passe la main à l'hydrateur
 		{
 		$this->hydrate($donnees);
 		}
 	
-	public function hydrate (array $donnees)	// L'hydrateur récupère l'array et en répartit les données dans l'objet
+	public function hydrate (array $donnees)
+	// L'hydrateur récupère l'array et en répartit les données dans l'objet
 		{
 		$this->setPseudo($donnees['pseudo']);
 		$this->setMdp($donnees['mdp']);
@@ -25,10 +27,7 @@ class Gerant
 			$this->setId_commerce($donnees['idcom']);
 			}
 		}
-	
-	
 ################## Setters #########################	
-	
 	
 	private function setId($id)
 		{
@@ -47,7 +46,6 @@ class Gerant
 			$this->_id_commerce = $id;
 			}
 		}
-		
 	
 	private function setPseudo($pseudo)
 		{
@@ -64,7 +62,6 @@ class Gerant
 			$this->_mdp = $mdp;
 			}
 		}
-	
 	
 #################### Getters ########################
 
@@ -88,15 +85,6 @@ class Gerant
 		return $this->_mdp;
 		}
 	
-	
 #####################################################	
-	
-	
 	}
-
-
-
-
-
-
 ?>

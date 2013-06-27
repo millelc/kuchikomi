@@ -1,11 +1,8 @@
 <?php
-
+// Cette classe gère UNIQUEMENT
+// les données concernant les commerces.
 
 include_once('Connexion.class.php');
-
-
-
-
 
 class Commerce
 	{
@@ -34,7 +31,6 @@ class Commerce
 			{
 			$this->setId_commerce($donnees['id_commerce']);
 			}
-		
 		$this->setNom($donnees['nom']);
 		$this->setGerant($donnees['gerant']);
 		$this->setLogo($donnees['logo']);
@@ -62,12 +58,7 @@ class Commerce
 			$this->setDonnes_gps('Non renseigné');
 			}
 		}
-	
-	
-	
 ################## Setters #########################	
-	
-	
 	private function setId_commerce($id)
 		{
 		$id = (int) $id;
@@ -76,7 +67,6 @@ class Commerce
 			$this->_id_commerce = $id;
 			}
 		}
-		
 	
 	private function setNom($nom)
 		{
@@ -93,7 +83,6 @@ class Commerce
 			$this->_gerant = $gerant;
 			}
 		}	
-	
 		
 	private function setLogo($logo)
 		{
@@ -118,7 +107,6 @@ class Commerce
 			}
 		}
 	
-	
 	private function setNum_tel($num_tel)
 		{
 		if (is_string($num_tel))
@@ -126,7 +114,6 @@ class Commerce
 			$this->_num_tel = $num_tel;
 			}
 		}
-	
 	
 	private function setEmail($email)
 		{
@@ -143,7 +130,6 @@ class Commerce
 			$this->_adresse = $adresse;
 			}
 		}
-	
 	
 	private function setLigne_bus($ligne)
 		{
@@ -162,9 +148,6 @@ class Commerce
 			}
 		}
 	
-	
-	
-	
 	private function setDonnes_gm($donnees_gm)
 		{
 		if (is_string($donnees_gm))
@@ -173,21 +156,14 @@ class Commerce
 			}
 		}
 	
-	
 	private function setDonnes_gps($donnees_gps)
 		{
 		if (is_string($donnees_gps))
 			{
 			$this->_donnees_gps = $donnees_gps;
 			}
-		}
-	
-	
-	
-	
-	
+		}	
 #################### Getters ########################
-
 	public function id_commerce()
 		{
 		return $this->_id_commerce;
@@ -253,13 +229,5 @@ class Commerce
 		return $this->_donnees_gps;
 		}
 #####################################################	
-	
-	
 	}
-
-
-
-
-
-
 ?>
