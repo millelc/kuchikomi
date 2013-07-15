@@ -5,12 +5,13 @@
 // - on récupère le dernier kuchikomi écrit par les commerçants où l'utilisateur est abonné.
 // - on renvoie en xml les données de ce kuchikomi
 
-include_once('../../includes/configuration.php');
-include_once('../../modeles/Connexion.class.php');
+echo '<?xml version="1.0" encoding="UTF-8"?><liste>';
+
+include_once('../../classes/Connexion.class.php');
 
 $bdd = Outils_Bd::getInstance()->getConnexion();
 
-echo '<?xml version="1.0" encoding="UTF-8"?><liste>';
+
 
 // Il faut récupérer les données des commerces où est abonné celui dont on obtient l'adresse ip.
 
