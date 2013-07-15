@@ -1,21 +1,23 @@
 <?php
+// Le système de notifications fonctionne comme suit :
+// - toutes les 3 secondes, un service sur le téléphone appelle cette page
+// - en fonction de l'adresse ip du téléphone, on identifie l'abonné
+// - on récupère le dernier kuchikomi écrit par les commerçants où l'utilisateur est abonné.
+// - on renvoie en xml les données de ce kuchikomi
 
-include_once('../../includes/configuration.php');
-include_once('../../modeles/Connexion.class.php');
+echo '<?xml version="1.0" encoding="UTF-8"?><liste>';
 
+include_once('../../classes/Connexion.class.php');
 
 $bdd = Outils_Bd::getInstance()->getConnexion();
 
 
-echo '<?xml version="1.0" encoding="UTF-8"?><liste>';
 
+// Il faut récupérer les données des commerces où est abonné celui dont on obtient l'adresse ip.
 
-
-
-// Il faut récupérer les kuchikomi des commerces où est abonné celui dont j'obtiens l'adresse ip.
-
-
-$req = $bdd->prepare('SELECT * FROM commerce WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne IN (SELECT id_abonne FROM abonne WHERE adresse_ip = ?))');
+$req = $bdd->prepare('SELECT * FROM commerce WHERE id_commerce IN
+(SELECT id_commerce FROM abonnement WHERE id_abonne IN
+(SELECT id_abonne FROM abonne WHERE adresse_ip = ?))');
 $req->execute(array($_SERVER['REMOTE_ADDR']));
 while($donnees = $req->fetch())
 	{
@@ -31,14 +33,6 @@ while($donnees = $req->fetch())
 		}
 	echo '</commerces>';
 	}
-
-
 echo '</liste>';
- 
-
 header ("Content-Type:text/xml"); 
- 
-
-
 ?>
- 
