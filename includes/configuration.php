@@ -6,7 +6,7 @@
 // lors d'un changement de serveur.
 
 define('log',"root");
-define('mot_de_passe',"");
+define('mot_de_passe',"root");
 define('ma_base',"mysql:host=localhost;dbname=kuchikomi");
 
 ?>

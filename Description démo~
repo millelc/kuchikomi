@@ -1,0 +1,71 @@
+###########################################################
+                  Démonstration Kuchikomi
+###########################################################
+
+Objectif :
+
+On désire montrer la posibilité de :
+
+- s'abonner automatiquement à un commerce QRcode (utilisateur)
+- s'abonner automatiquement à un commerce (NFC) (utilisateur)
+
+
+- voir la liste de ses abonnements 	(utilisateur)
+- voir la liste des kuchikomi d'un magasin(utilisateur)
+- consulter un kuchikomi en particulier	(utilisateur)
+- voir les données carto d'un magasin	(utilisateur) idem - voir comment contacter un commerçant	(utilisateur)
+
+
+- se connecter automatiquement via NFC	(commerçant)
+- avoir des statistiques de son compte	(commerçant)
+- écrire un kuchikomi			(commerçant)
+- prévisualiser un kuchikomi		(commerçant)
+- écrire un kuchikomi différé		(commerçant)
+- voir la liste de ses kuchikomi		(commerçant)
+
+- ajouter un commerce			(admin)
+- modifier un commerce			(admin)
+- supprimer un commerce			(admin)
+- modifier le bandeau			(admin)
+
+
+On peut insister sur le côté sécurité : chiffrage SSL/TLS, injections SQL bloquées, pas de failles XSS.
+La seule faille (incomblable) est le vol de sessions (très difficile grâce au SSL mais néanmoins possible)
+Pas d'attaques par déni de service (DDoS) ou très difficile.
+
+
+
+Matériel :
+
+- un serveur
+-Deux téléphones clients (sans l'application)
+- Un téléphone commerçant (sans l'application)
+- une carte d'authentification (NFC) d'un commerçant ci-dessous
+- deux « affiches » de magasin montrant leurs QRcodes et puces respectifs
+
+
+
+1° On approche l'un des téléphones d'une des affiches pour tagguer la puce. L'utilisateur se retrouve avec
+l'application installée. Il est inscrit, connecté, abonné à ce commerce et est redirigé vers la page
+listant ses abonnements (un seul abonnement donc)
+
+2° On s'abonne ensuite au commerce suivant en scannant son QRcode. Le navigateur s'ouvre et l'utilisateur
+se retrouve alors abonné et redirigé vers la page listant ses abonnements (deux abonnements donc)
+=>Le serveur se servira de l'adresse IP pour être certain de l'origine de la demande du navigateur et lui rajoutera un cookie.
+
+3° On peut ensuite naviguer sur chacune des vues, vue de la liste des abonnements (avec kuchikomi récents en-dessous),
+vue d'un magasin, vue d'un kuchikomi, vue des contacts du commerçant, vue des données carto du commerce.
+
+4° On s'occupe ensuite du côté « commerçant », on taggue la carte commerçante avec son téléphone et
+on se retrouve dirigé vers une page offrant un choix (envoyer un kuchikomi, envoyer un kuchikomi différé,
+voir ses statistiques, voir ses kuchikomi)
+=>La carte commerçante contient l'identifiant du commerçant et son mot de passe. Au tag, l'application ouvre
+une page web en local qui est en fait un formulaire caché qui sera posté peu importe le choix effectué.
+
+5° On choisit l'option « Écrire un kuchikomi » par exemple ou n'importe quelle autre. On peut ensuite naviguer
+dans toutes les options posibles au gré du démonstrateur.
+=> Si l'option « Écrire un kuchikomi » est choisie, il est important de montrer que la réception d'une
+notification se fera sur les utilisateurs abonnés.
+
+6° On se connecte sur la page d'admin sur le serveur et on peut faire des démonstrations d'ajouts, modifications
+et suppressions de commerces. On pourra également modifier le bandeau.
