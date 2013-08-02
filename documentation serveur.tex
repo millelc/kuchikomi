@@ -1,0 +1,169 @@
+\documentclass[a4paper,12pt,titlepage]{article} 
+\usepackage[francais]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{layout}
+\usepackage[final]{pdfpages}
+\usepackage{datatool}
+
+
+\begin{document}
+
+\title{Kuchikomi : Documentation}
+\author{RACINE Pierre-Alexandre}
+\date{01 Août 2013}
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+\section{Utilisation ordinaire du serveur}
+
+\subsection{Les différents codes d'accès}
+
+\begin{tabular}{|l|r|}
+  \hline \multicolumn{2}{c|}{Debian} \\
+  \hline Nom de machine & cetautomatix \\
+  \hline Domaine & nearforge \\
+  \hline Nom de machine & cetautomatix \\
+  \hline Mot de passe root & aHaquie6 \\
+  \hline Utilisateur sudo : nearforge & Mot de passe : CahSh7il \\
+  \hline \multicolumn{2}{c|}{MySQL} \\
+  \hline Mot de passe root & Vuwa2tha \\
+  \hline Mot de passe user & Vuwa2thabdd \\
+  \hline \multicolumn{2}{c|}{phpMyAdmin} \\
+  \hline Utilisateur & debian-sys-maint \\
+  \hline Mot de passe & kK2v86pBieH3ZFgp \\
+  \hline \multicolumn{2}{c|}{Apache} \\
+  \hline Utilisateur & nforge \\
+  \hline Mot de passe & PixeeRa7 \\
+  \hline
+\end{tabular}
+
+\newpage
+
+\subsection{Modder Apache}
+Le dossier \emph{/etc/apache2} se présente sous la forme suivante :
+
+\begin{verbatim}
+
+/etc/apache2/
+       |-- apache2.conf
+       |       `--  ports.conf
+       |-- mods-available
+       |       |-- Liste des mods téléchargés et installés
+       |-- mods-enabled
+       |       |-- Liste des mods activés
+       |       |-- *.load
+       |       `-- *.conf
+       |-- conf.d
+       |       `-- *
+       |-- sites-available
+       |       |-- Liste des sites téléchargés et installés
+
+       `-- sites-enabled
+               `-- *Liste des sites activés
+
+\end{verbatim}
+
+Une fois installé un mod n'est que rarement activé par défaut. Il faut alors l'activer manuellement grâce à la commande suivante :
+\emph{a2enmod nomDuMod}
+
+Un lien symbolique de ce mod apparaîtra alors dans le dossier \emph{mods-enabled}
+
+Pour le désactiver, la commande est
+\emph{a2dismod nomDuMod}
+
+\subsection{Ajouter un site}
+
+Pour qu'Apache prenne en compte un nouveau site, il faut suivre les points suivants :
+\begin{itemize}
+\item Mettre le dossier contenant le site dans le répertoire \emph{/var/www/}. Si PhpMyAdmin a été installé, un répertoire à ce nom s'y trouvera.
+\item Le nom du dossier correspond à l'adresse du site. (\emph{/var/www/kuchikomi/} permettra un site nommé \emph{localhost/kuchikomi/index.php}
+\item Ainsi installé, le site doit ensuite être activé par Apache grâce à la commande \emph{a2ensite nomDuSite}
+\item À l'opposé, pour désactiver un site, il faudra utiliser la commande \emph{a2dismod nomDuSite}
+\end{itemize}
+
+
+\section{Dans le cas d'une réinstallation totale}
+
+\subsection{Matériel requis}
+
+\emph{Kuchikomi} est une application web recevant des données de la part de terminaux mobiles et d'ordinateur et leur renvoyant des données HTML et XML.
+
+Le seul matériel nécessaire est donc un serveur.
+
+\paragraph{}
+
+Le système d'exploitation choisi est \emph{Debian}. L'image CD se trouve sur l'unité centrale. En cas de panne gravissime, il peut être éventuellement nécessaire de re-formater le serveur à l'aide de cette image CD.
+
+Pour le reformatage, les paramètres par défaut de l'installateur sont amplement suffisants.
+
+
+
+\subsection{Optionnel : créer un utilisateur sudo}
+
+Debian ne créé pas automatiquement d'utilisateur sudo après l'installation. Pour permettre l'utilisation plus facile des outils de la machine, il peut être judicieux de créer un utilisateur appartenant au groupe des \emph{sudoers}.
+
+\paragraph{}
+
+\emph{adduser username sudo}
+
+\subsection{Installation des outils web}
+
+L'installation des différents outils se fait en une seule ligne de commande.
+
+\emph{sudo apt-get install apache2 apache2.2-common libapache2-mod-php5 mysql-server-5.5 php5-mysql phpmyadmin}
+\paragraph{}
+Une fois les paquets installés, pourra trouver leurs fichiers aux endroits suivants :
+\begin{itemize}
+\item /etc/apache2
+\item /etc/mysql
+\item /etc/phpmyadmin
+\item /etc/php5
+\end{itemize}
+\newpage
+
+\subsection{Optionnel : Ajout de mods}
+
+\subsubsection{Evasive mod (anti-DOS)}
+
+Pour l'installer :
+
+\emph{sudo apt-get install libapache2-mod-evasive}
+
+Pour l'activer : 
+
+\emph{a2enmod mod-evasive}
+
+Pour le configurer, ouvrez le fichier \emph{/etc/apache2/apache2.conf} et ajoutez le texte suivant (à modifier en fonction des besoins) à la fin du fichier :
+
+\emph{DOSHashTableSize 3097
+ DOSPageCount 10
+ DOSSiteCount 100
+ DOSPageInterval 10
+ DOSSiteInterval 10
+ DOSBlockingPeriod 300}
+ 
+Explications :
+\begin{itemize}
+\item DOSHashTableSize (Taille de la table hash) Plus elle est grande, plus le traitement est rapide, mais plus ça consomme de ressources.
+\item DOSPageCount définit le nombre de fois ou une page peut être appelée par la même adresse IP avant que celle-ci ne soit bloquée.
+\item DOSSiteCount définit le nombre de fois ou un site peut être demandé par la même adresse IP avant que celle-ci ne soit bloquée.
+\item DOSPageInterval détermine un intervalle en secondes qui autorise l’affichage de la même page avant un blocage.
+\item DOSSiteInterval détermine un intervalle en secondes qui autorise l’affichage d’un même site avant un blocage.
+\item DOSBlockingPeriod détermine la durée de blocage (en secondes).
+\end{itemize} 
+
+Les données choisies sont assez élevées car elles correspondent aux besoins des tests (appels fréquents aux mêmes pages) Il sera nécessaire de baisser ces valeurs lors d'une mise en production.
+\paragraph{}
+Il existe d'autres options possibles mais elles n'ont pas de réel intérêt dans le cas présent.
+
+\end{document}
