@@ -22,8 +22,9 @@ function calculStatistiques ()
 	$req->execute(array($_SESSION['id_commerce']));
 	$donnees = $req->fetch();
 	$nb_abonnes = $donnees[0];
+
 	/**************************************************************************************
-	
+
 	Les opérations ci-dessous permettent de préparer les données pour de futurs calculs
 	de statistiques sur les kuchikomi en fonction de l'identifiant du commerçant.
 	Pour afficher le tableau, décommentez print_r du compteur et les balises l'entourant.
@@ -69,7 +70,7 @@ function calculStatistiques ()
 			{
 			$nb_de_kuchikomi = sizeof($compteur);
 			}
-		$date_meilleur_kuchikomi = $donnees_meilleur_kk[0];
+                $date_meilleur_kuchikomi = $donnees_meilleur_kk['heure_publication'];
 		$nb_de_jaime_du_meilleur_kuchikomi = max($compteur);
 		
 		

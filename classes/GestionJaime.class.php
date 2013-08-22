@@ -1,6 +1,6 @@
 <?php
 // Cette classe s'occupe de toutes les actions possibles
-// et souhaitées sur les commerces.
+// et souhaitées sur les appéciations de commerce.
 
 include_once('../includes/configuration.php');
 include_once('Connexion.class.php');
@@ -13,16 +13,16 @@ class GestionJaime
 	
 		  {
 		  $this->setBdd($bdd);
-		  
 		  }
 
 	public function ajout(Jaime $jaime)	// Cette fonction ajoute un abonnement à la table.
 		{
 		if ($this->Aimedeja($jaime)==True)
 			{
+                        echo 'déjà trouvé';
 			return False;
 			}
-			
+
 		else
 			{
 			try

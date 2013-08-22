@@ -33,6 +33,13 @@ if (isset ($_GET['list']) AND isset ($_GET['aid']))
                     if ($compteur % 2==0)
                     {
                         echo '<' . $key . '>' . $value . '</' . $key . '>';
+                        if ($key=='photo')
+                        {
+                            $req3= $bdd->prepare('SELECT logo FROM commerce WHERE id_commerce = ?');
+                            $req3->execute(array($donnees["id_commerce"]));
+                            $data3 = $req3->fetch()['logo'];
+                            echo "<photo_trader>" . $data3 . "</photo_trader>";
+                        }
                     }
                     $compteur=$compteur+1;
 		}
@@ -58,6 +65,13 @@ if (isset ($_GET['list']) AND isset ($_GET['aid']))
                     if ($compteur % 2==0)
                     {
                         echo '<' . $key . '>' . $value . '</' . $key . '>';
+                        if ($key=='photo')
+                        {
+                            $req3= $bdd->prepare('SELECT logo FROM commerce WHERE id_commerce = ?');
+                            $req3->execute(array($donnees["id_commerce"]));
+                            $data3 = $req3->fetch()['logo'];
+                            echo "<photo_trader>" . $data3 . "</photo_trader>";
+                        }
                     }
                     $compteur=$compteur+1;
                 }

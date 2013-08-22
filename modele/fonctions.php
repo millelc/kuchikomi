@@ -52,7 +52,7 @@ include_once('../classes/GestionAbonnement.class.php');
 // On récupère une instance de connexion.
 $bdd = Outils_Bd::getInstance()->getConnexion();
 //On récupère la liste des id_commerce dont on est abonné.
-$req = $bdd->prepare('SELECT id_commerce, logo FROM commerce 
+$req = $bdd->prepare('SELECT id_commerce, logo FROM commerce
 WHERE id_commerce IN (SELECT id_commerce FROM abonnement WHERE id_abonne = ?)');
 $req->execute(array($id_abo));
 $listeAbonnements=[];
@@ -65,7 +65,7 @@ while ($donnees = $req->fetch())
 foreach($listeAbonnements as $cle => $valeur)
   {
   // On récupère une instance de connexion.
-  $bdd = Outils_Bd::getInstance()->getConnexion();			
+  $bdd = Outils_Bd::getInstance()->getConnexion();
   $req = $bdd->prepare("SELECT count(id_kuchikomi) FROM kuchikomi
   WHERE id_commerce = ? AND date_fin > ?");
   $req->execute(array($cle, $now));
@@ -85,7 +85,7 @@ $req = $bdd->prepare('SELECT * FROM kuchikomi WHERE heure_publication<NOW() AND 
 $req->execute(array($idabo));
 return $req;
 }
-	
+
 function recuplogo($idcom)
 {
 $bdd = Outils_Bd::getInstance()->getConnexion();
@@ -110,22 +110,22 @@ if ($idcommerce==0)
 else
 {
   // On récupère l'instance de connexion.
-  $bdd = Outils_Bd::getInstance()->getConnexion();				
-  // On récupère les aperçus 
-  $req = $bdd->prepare('SELECT * FROM kuchikomi 
+  $bdd = Outils_Bd::getInstance()->getConnexion();
+  // On récupère les aperçus
+  $req = $bdd->prepare('SELECT * FROM kuchikomi
   WHERE id_commerce = ? ORDER BY date_fin DESC LIMIT 0,10');
   // de chaque kuchikomi
   $req->execute(array($idcommerce));
   return $req;
   }
 }
-	
+
 function recuperationDonneesKk($idkk)
 {
 // On récupère une instance du singleton de connexion.
 $bdd = Outils_Bd::getInstance()->getConnexion();
 // On récupère les données nécessaires à l'affichage du kuchikomi.
-$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?'); 
+$req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_kuchikomi = ?');
 $req->execute(array($idkk));
 $donnees = $req->fetch();
 return array($donnees['texte'], $donnees['id_commerce'],
@@ -172,11 +172,30 @@ function aimer ()
 {
 include_once('../classes/Jaime.class.php');
 include_once('../classes/GestionJaime.class.php');
+// On récupère d'abord l'id du kuchikomi aimé
+// ainsi que la page sur laquelle on était.
+
+$donnees = explode("|", $_GET['id']);
+
 // Création d'un objet « Jaime ».
-$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id_abonne'], 'id_kuchikomi' => $_GET['id'] ));
+$nouveau_jaime= new Jaime (array('id_abonne' => $_SESSION['id_abonne'], 'id_kuchikomi' => $donnees[0] ));
+//var_dump($_SESSION['id_abonne']);
+//var_dump($donnees[0]);
 // On ajoute le jaime à la table si il est nouveau.
 $jaime_ajout = new GestionJaime (Outils_Bd::getInstance()->getConnexion());
 $jaime_ajout->ajout($nouveau_jaime);
+if ($donnees[1]=='listemag')
+{
+    header('Location: index.php?appel=liste&id=' . $_SESSION['commerce_consulte'] . '#' . $donnees[0] . '');
+}
+else if($donnees[1]=='listeconf')
+{
+    header('Location: index.php?appel=liste&id=none#' . $donnees[0] . '');
+}
+else
+{
+    header('Location: index.php?appel=kk&id=' . $donnees[0] . '');
+}
 }
 
 
