@@ -13,7 +13,7 @@ class Outils_Bd {
   // Constructeur privé qui initialise la connexion.
   private function __construct() {
     // Création d'un objet PDO avec les constantes définies dans la configuration.
-    $this->connexion = new PDO('mysql:host=localhost;dbname=kuchikomi', 'root', '');
+    $this->connexion = new PDO('mysql:host=localhost;dbname=kuchikomi', 'root', 'Vuwa2tha');
     // Mettre Exception comme mode d'erreur.
       $this->connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
@@ -28,11 +28,10 @@ class Outils_Bd {
     }
     return self::$instance;
   }
-  
+
   // Accesseur de la connexion.
   public function getConnexion() {
     return $this->connexion;
   }
 }
 ?>
- 

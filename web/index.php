@@ -20,6 +20,7 @@ if (isset($_GET['appel']) AND isset($_GET['id']))
     {
     $_SESSION['pseudo']= $_COOKIE['pseudo'];
     $_SESSION['id_abonne']= recupId($_SESSION['pseudo']);
+
     switch ($_GET['appel'])
         {
         // Dans le cas où la déconnexion aurait été choisie
@@ -58,7 +59,6 @@ if (isset($_GET['appel']) AND isset($_GET['id']))
             break;
         case 'jaime':
             aimer ();
-            header('Location: index.php?appel=kk&id=' . $_GET['id'] . '');
             break;
         default :
             header('Location: index.php?appel=liste&id=none');

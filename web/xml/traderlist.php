@@ -61,7 +61,7 @@ else
     include_once('../../classes/Connexion.class.php');
     $bdd = Outils_Bd::getInstance()->getConnexion();
 
-    $req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce = ?');
+    $req = $bdd->prepare('SELECT * FROM kuchikomi WHERE id_commerce = ? ORDER BY id_kuchikomi DESC');
     $req->execute(array($_GET['id']));
 
     header ("Content-Type:text/xml");
