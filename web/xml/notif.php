@@ -4,7 +4,7 @@
 // - en fonction de l'adresse ip du téléphone, on identifie l'abonné
 // - on récupère le dernier kuchikomi écrit par les commerçants où l'utilisateur est abonné.
 // - on renvoie en xml les données de ce kuchikomi
-
+header ("Content-Type:text/xml");
 echo '<?xml version="1.0" encoding="UTF-8"?><liste>';
 
 include_once('../../classes/Connexion.class.php');
@@ -37,6 +37,5 @@ while($donnees = $req->fetch())
 	echo '</kuchikomi>';
 	}
 echo '</liste>';
-header ("Content-Type:text/xml");
 }
 ?>

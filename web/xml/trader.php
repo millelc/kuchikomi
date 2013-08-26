@@ -62,24 +62,6 @@ else// if (isset($_GET['modif']) AND isset ($_GET['id']))
     // Il reste à récupérer les deux images envoyées en même temps que le POST.
 
     include_once('../../modele/fonctionsAdmin.php');
-/*
-//    $photo = $_REQUEST['photo'];
-    $logo = $_REQUEST['logo']; // On recupère le logo
-    $binaryenc = base64_encode($logo);  // On le décode
-    $binarydec = base64_decode($logo);
-    header('Content-Type: image/jpeg; charset=utf-8');
-*/
-/*
-    $data = $_REQUEST['logo'];
-    $data = base64_decode($data);
-
-    file_put_contents('../images/newImage.JPG',$data);
-
-//    $im = imagecreatefromstring($data);
-    imagejpeg($im);
-*/
-
-
 
 $data = $_POST['logo'];
 $bdd = Outils_Bd::getInstance()->getConnexion();
@@ -96,47 +78,9 @@ $data = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl'
 $data = base64_decode($data);
 
 
-
-
-
-
 $monfichier = fopen('../images/image.png', 'cb');
 fputs($monfichier, $data);
 fclose($monfichier);
 
-/*
-$donnees = file_get_contents('../images/compteur.txt');
-$data = base64_decode($donnees);
-$im = imagecreatefromstring($data);
-imagejpeg($im, "../images/imageplop.png");
-*/
-
-
-/*
-    $data = base64_decode($data);
-    $im = imagecreatefromstring($data);
-    if ($im !== false)
-    {
-        imagejpeg($im, "../images/image001.jpg");
-    }
-    else
-    {
-        imagejpeg($im, "../images/imageechec.jpg");
-    }
-
-*/
-
-
-
-
-/*
-    $file = fopen('../images/test.jpg', 'cb'); // On créé un fichier qu'on remplira avec l'image décodée.
-    fwrite($file, $binarydec);
-    fclose($file);  // Ne pas oublier de refermer le fichier pour fermer convenablement l'image.
-
-    $bdd = Outils_Bd::getInstance()->getConnexion();
-    $q = $bdd->prepare('INSERT INTO testimage (base, encode, decode) VALUES (?, ?, ?)');
-    $q->execute(array($logo, $binaryenc, $binarydec));
-*/
 }
 ?>

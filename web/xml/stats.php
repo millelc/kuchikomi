@@ -54,7 +54,5 @@ if (isset($_GET['id']))
         $i = $i + 1;
     }
     echo '</stats>';
-
 }
-
 ?>

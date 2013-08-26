@@ -2,7 +2,7 @@
 include_once('../../classes/Connexion.class.php');
 $bdd = Outils_Bd::getInstance()->getConnexion();
 
-
+/*
 function autoRotateImage($image)
 {
     $orientation = $image->getImageOrientation();
@@ -22,7 +22,7 @@ function autoRotateImage($image)
     // Now that it's auto-rotated, make sure the EXIF data is correct in case the EXIF gets saved with the image!
     $image->setImageOrientation(imagick::ORIENTATION_TOPLEFT);
 }
-
+*/
 if (isset($_GET['action']))
 {
     if ($_GET['action']=='create')
@@ -41,18 +41,13 @@ if (isset($_GET['action']))
 
         // 1° Bonne réception des données ?
 
-        if (isset($_POST['id_commerce']) AND isset($_POST['heure_publication']) AND isset($_POST['mentions']) AND isset($_POST['texte']) AND isset($_POST['date_debut']) AND isset($_POST['date_fin']) AND isset($_POST['photo']))
+        if (isset($_POST['id_commerce']) AND isset($_POST['heure_publication']) AND isset($_POST['mentions']) AND isset($_POST['texte']) AND isset($_POST['date_debut']) AND isset($_POST['date_fin']) AND isset($_POST['photo']) AND isset ($_POST['photo_orientation']))
         {
         // 1°b Sont-elles valides ?
             $req = $bdd->prepare('SELECT id_commerce FROM commerce WHERE id_commerce = ?');
             $req->execute(array($_POST['id_commerce']));
             if ($req->fetch()==True)
             {
-/*
-
-        $req = $bdd->prepare('INSERT INTO kuchikomi (id_commerce, mentions, texte, heure_publication, photo) VALUES(?, ?, ?, NOW(), ?)');
-        $req->execute(array($_POST['id_commerce'],$_POST['mentions'],$_POST['texte'],$nom_image ));
-*/
         // 2° Formatage des dates ? À faire !
 //            if (1==1)
   //          {
@@ -73,27 +68,20 @@ if (isset($_GET['action']))
                     $fp = fopen($chemin_image, 'wb');
                     fwrite($fp, $image_decodee);
                     fclose($fp);
-/*
-$imagick = new Imagick();
-$imagick->readImage($chemin_image);
-$imagick->rotateImage(new ImagickPixel(), 90);
-$imagick->writeImage('../images/my_rotated.jpeg');
-*/
 
-/*
-                    // On s'occupe de la rotation de l'image.
-                    $image = new Imagick($chemin_image);
-                    autoRotateImage($image);
-                    // - Do other stuff to the image here -
-                    $image->writeImage('../images/test2.jpeg');
+                    $orien = $_POST['photo_orientation'];
+                    $imagick = new Imagick();
+                    $imagick->readImage($chemin_image);
+                    $imagick->rotateImage(new ImagickPixel(), $orien);
+                    $imagick->writeImage();
 
-*/
+//                    $_POST['photo_orientation']
+
+
                     // 2° Ajout du kuchikomi dans la BDD.
                     $q = $bdd->prepare('INSERT INTO kuchikomi (id_commerce, mentions, texte, heure_publication, photo) VALUES(?, ?, ?, NOW(), ?)');
-                    $q->execute(array($_POST['id_commerce'],$_POST['mentions'],$_POST['texte'],$nom_image ));
-    //            }
-    //        }
-              }
+                    $q->execute(array($_POST['id_commerce'], $_POST['mentions'], $_POST['texte'], $nom_image ));
+            }
 
         }
     }
@@ -113,7 +101,4 @@ $imagick->writeImage('../images/my_rotated.jpeg');
         $q->execute(array($_GET['id']));
     }
 }
-
-
-
 ?>

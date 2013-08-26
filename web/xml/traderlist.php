@@ -45,16 +45,6 @@ if (isset($_GET['aid']))
 }
 
 
-
-
-
-
-
-
-
-
-
-
 else
 // On veut les kuchikomi d'un commerce.
 {
