@@ -43,6 +43,13 @@ if (isset ($_GET['list']) AND isset ($_GET['aid']))
                     }
                     $compteur=$compteur+1;
 		}
+                echo "<nb_jaime>";
+                $req4 = $bdd->prepare("SELECT count(id_kuchikomi) FROM jaime WHERE id_kuchikomi = ?");
+                $req4->execute(array($donnees["id_kuchikomi"]));
+                $data4 = $req4->fetch();
+//                var_dump($data4);
+                echo $data4["count(id_kuchikomi)"];
+                echo "</nb_jaime>";
                 echo '</kuchikomi>';
             }
             echo '</liste>';
@@ -75,6 +82,13 @@ if (isset ($_GET['list']) AND isset ($_GET['aid']))
                     }
                     $compteur=$compteur+1;
                 }
+                echo "<nb_jaime>";
+                $req4 = $bdd->prepare("SELECT count(id_kuchikomi) FROM jaime WHERE id_kuchikomi = ?");
+                $req4->execute(array($donnees["id_commerce"]));
+                $data4 = $req4->fetch();
+//                var_dump($data4);
+                echo $data4["count(id_kuchikomi)"];
+                echo "</nb_jaime>";
                 echo '</kuchikomi>';
             }
             echo '</liste>';
