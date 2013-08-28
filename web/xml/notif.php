@@ -34,6 +34,12 @@ while($donnees = $req->fetch())
 			}
 		$compteur=$compteur+1;
 		}
+        echo "<nb_jaime>";
+        $req4 = $bdd->prepare("SELECT count(id_kuchikomi) FROM jaime WHERE id_kuchikomi = ?");
+        $req4->execute(array($donnees["id_kuchikomi"]));
+        $data4 = $req4->fetch();
+        echo $data4["count(id_kuchikomi)"];
+        echo "</nb_jaime>";
 	echo '</kuchikomi>';
 	}
 echo '</liste>';

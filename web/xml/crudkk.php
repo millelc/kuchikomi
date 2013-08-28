@@ -54,12 +54,13 @@ if (isset($_GET['action']))
         // 3° Date de fin postérieure à date_début ?
         // 4° Date_publication antérieure à date_fin ?
         // 5° Date_publication antérieure à date_début ?
-//                if ($_POST['date_fin'] > $_POST['date_debut'] AND $_POST['heure_publication'] < $_POST['date_debut'])
-  //              {
+                if ($_POST['date_fin'] >= $_POST['date_debut'] AND $_POST['heure_publication'] <= $_POST['date_debut'])
+                {
                 // Si on arrive ici, c'est que toutes les données sont valides.
                 // 1 ° On commence par s'occuper de l'image, on la récupère, on tire un nom au hasard,
                 //     on décode l'image et on écrit le résultat dans une image au nom tiré au sort avant.
-                // 2° On ajoute toutes ces données dans la table kuchikomi.
+                // 2° Formatqge de la date
+                // 3° On ajoute toutes ces données dans la table kuchikomi.
 
                     // 1° Traitement de l'image.
                     $nom_image = md5(uniqid(rand(), true)) . '.jpeg';  // L'image sera toujours un jpeg.
@@ -75,12 +76,11 @@ if (isset($_GET['action']))
                     $imagick->rotateImage(new ImagickPixel(), $orien);
                     $imagick->writeImage();
 
-//                    $_POST['photo_orientation']
 
-
-                    // 2° Ajout du kuchikomi dans la BDD.
-                    $q = $bdd->prepare('INSERT INTO kuchikomi (id_commerce, mentions, texte, heure_publication, photo) VALUES(?, ?, ?, NOW(), ?)');
-                    $q->execute(array($_POST['id_commerce'], $_POST['mentions'], $_POST['texte'], $nom_image ));
+                    // 3° Ajout du kuchikomi dans la BDD.
+                    $q = $bdd->prepare('INSERT INTO kuchikomi (id_commerce, mentions, texte, heure_publication, photo, date_debut, date_fin) VALUES(?, ?, ?, ?, ?, ?, ?)');
+                    $q->execute(array($_POST['id_commerce'], $_POST['mentions'], $_POST['texte'], $_POST['heure_publication'], $nom_image, $_POST['date_debut'], $_POST['date_fin'] ));
+                }
             }
 
         }
