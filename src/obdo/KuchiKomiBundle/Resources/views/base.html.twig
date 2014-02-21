@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}
+  {{ parent() }}
+{% endblock %}
+
+        
+{% block kk_body %}
+
+  {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
+  {% block kk_body_KuchiKomiBundle %}
+  {% endblock %}
+
+{% endblock %}

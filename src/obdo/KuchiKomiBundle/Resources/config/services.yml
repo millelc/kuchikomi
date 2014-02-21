@@ -1,0 +1,7 @@
+parameters:
+#    obdo_kuchi_komi.example.class: obdo\KuchiKomiBundle\Example
+
+services:
+#    obdo_kuchi_komi.example:
+#        class: %obdo_kuchi_komi.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
