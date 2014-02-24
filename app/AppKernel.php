@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new obdo\KuchiKomiUserBundle\obdoKuchiKomiUserBundle(),
             new obdo\KuchiKomiMenuBundle\obdoKuchiKomiMenuBundle(),
             new obdo\KuchiKomiRESTBundle\obdoKuchiKomiRESTBundle(),
+            new obdo\ServicesBundle\obdoServicesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

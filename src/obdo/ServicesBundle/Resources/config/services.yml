@@ -1,0 +1,6 @@
+parameters:
+#    obdo_services.example.class: obdo\ServicesBundle\Example
+
+services:
+    obdo_services.AES:
+        class: obdo\ServicesBundle\Services\AES
