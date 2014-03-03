@@ -4,3 +4,7 @@ parameters:
 services:
     obdo_services.AES:
         class: obdo\ServicesBundle\Services\AES
+
+    obdo_services.Logger:
+        class: obdo\ServicesBundle\Services\Logger
+        arguments: [ @doctrine.orm.entity_manager ]

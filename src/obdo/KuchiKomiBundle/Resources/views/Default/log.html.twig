@@ -1,0 +1,75 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<a class="btn btn-default" href="{{ path('obdo_kuchi_komi_logs', {'page': 0, 'sort': 'date_up'}) }}"><span class="glyphicon glyphicon-trash"></span> Tout effacer</a>
+
+<br>
+<br>
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_logs', {'page': page, 'sort': 'date_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                timestamp
+                <a href="{{ path('obdo_kuchi_komi_logs', {'page': page, 'sort': 'date_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_logs', {'page': page, 'sort': 'level_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Level
+                <a href="{{ path('obdo_kuchi_komi_logs', {'page': page, 'sort': 'level_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_logs', {'page': page, 'sort': 'message_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Message
+                <a href="{{ path('obdo_kuchi_komi_logs', {'page': page, 'sort': 'message_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{log.timestamp|date('Y-m-d H:i:s')}}</td>
+            
+            {% if log.level == 0 %}
+                <td><p class="text-info">Info</p></td>
+            {% elseif log.level == 1 %}
+                <td><p class="text-warning">Warning</p></td>
+            {% else %}
+                <td><p class="text-danger">Error</p></td>
+            {% endif %}
+
+            <td>{{log.message}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+
+{% if logs|length > 0 %}
+    <div>
+        <ul class="pagination">
+            {% for p in range(1, nombrePage) %}
+                <li{% if p == page %} class="active"{% endif %}>
+                    <a href="{{ path('obdo_kuchi_komi_logs', {'page': p, 'sort': 'date_up'}) }}">{{ p }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% endblock %}

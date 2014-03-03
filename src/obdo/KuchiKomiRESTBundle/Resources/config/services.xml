@@ -9,12 +9,11 @@
         <parameter key="obdo_kuchi_komi_rest.example.class">obdo\KuchiKomiRESTBundle\Example</parameter>
     </parameters>
 
+    -->
+    
     <services>
-        <service id="obdo_kuchi_komi_rest.example" class="%obdo_kuchi_komi_rest.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="obdoKuchiKomiRestBundle.idCheck" class="obdo\KuchiKomiRESTBundle\Services\idCheck">
         </service>
     </services>
-    -->
+
 </container>

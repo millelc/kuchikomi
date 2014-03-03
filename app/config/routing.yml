@@ -9,7 +9,11 @@ obdo_kuchi_komi:
     
 Komi:
     type:       rest
-    resource:   obdo\KuchiKomiRESTBundle\Controller\KomiController    
+    resource:   obdo\KuchiKomiRESTBundle\Controller\KomiController
+    
+rest_authenticate:
+    type:       rest
+    resource:   obdo\KuchiKomiRESTBundle\Controller\AuthenticateController
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

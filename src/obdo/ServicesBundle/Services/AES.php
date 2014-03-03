@@ -2,7 +2,7 @@
 
 namespace obdo\ServicesBundle\Services;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 
 /**
 Aes encryption
@@ -155,7 +155,7 @@ class AES {
         }
         else
         {
-            throw new Exception('Invlid params!');
+            throw new InvalidArgumentException('Invlid params!');
         }
     }
     
@@ -168,13 +168,13 @@ class AES {
     {
         if ($this->validateParams())
         {
-            return trim(mcrypt_decrypt(
-              $this->cipher, $this->key, base64_decode($this->data), $this->mode, $this->getIV()));
+            return rtrim(trim(mcrypt_decrypt(
+              $this->cipher, $this->key, base64_decode($this->data), $this->mode, $this->getIV())), "\x02");
         }
         else
         {
-            throw new Exception('Invlid params!');
+            throw new InvalidArgumentException('Invlid params!');
         }
     }
-  
+
 }

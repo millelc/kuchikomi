@@ -12,3 +12,7 @@ parameters:
     mailer_password: null
     locale: fr
     secret: ThisTokenIsNotSoSecretChangeIt
+    
+    aes_key: 5CCA8DAB847F457C918D439459D3730B
+    aes_key_size: 128
+    token_size: 13

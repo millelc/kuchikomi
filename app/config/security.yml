@@ -22,8 +22,8 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
             
-        rest_komi:
-            pattern:        ^/komi
+        rest_api:
+            pattern:        ^/rest
             anonymous:      true
         
         main_login:

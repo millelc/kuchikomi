@@ -1,3 +1,9 @@
 obdo_kuchi_komi_homepage:
     pattern:  /
     defaults: { _controller: obdoKuchiKomiBundle:Default:index }
+
+obdo_kuchi_komi_logs:
+    pattern:  /logs/{page}/{sort}
+    defaults: { _controller: obdoKuchiKomiBundle:Log:Log }
+    requirements:
+        sort: date_up|date_down|level_up|level_down|message_up|message_down

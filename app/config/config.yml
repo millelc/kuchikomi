@@ -100,5 +100,4 @@ fos_rest:
         default_format: html
         include_format: true
         
-
     
