@@ -1,0 +1,63 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h3>{{ KuchiGroup.name }}</h3></div>
+  <div class="panel-body">
+    <p>...</p>
+  </div>
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Identifiant : {{ KuchiGroup.id }}</li>
+    <li class="list-group-item">Date de création : {{ KuchiGroup.timestampCreation|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Date de suppression : {{ KuchiGroup.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Actif : {{ KuchiGroup.active }}</li>
+  </ul>
+</div>
+
+<br>
+<a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+<br>
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>Actif</th>
+            <th>Nom</th>
+            <th>Création</th>
+            <th>Suppression</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for kuchi in KuchiGroup.kuchis %}
+        <tr>
+            {% if kuchi.active %}
+                <td><p class="text-info">Actif</p></td>
+            {% else %}
+                <td><p class="text-danger">Inactif</p></td>
+            {% endif %}
+
+            <td>{{kuchi.name}}</td>
+
+            <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+
+            {% if kuchi.active %}
+                <td>-</td>
+            {% else %}
+                <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+            {% endif %}
+            
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+
+{% endblock %}

@@ -5,7 +5,6 @@ namespace obdo\KuchiKomiRESTBundle\Controller;
 use obdo\KuchiKomiRESTBundle\Entity\Komi;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -47,15 +46,12 @@ class AuthenticateController extends Controller
             {
                 // Komi unknown !
                 $response->setStatusCode(501);
-                $Logger->Info("[POST rest/authenticate] 501 - Komi id=".$randomId." unkonwn");
+                $Logger->Error("[POST rest/authenticate] 501 - Komi id=".$randomId." unkonwn");
             }
             else
-            {
-                $generator = new SecureRandom();
-                
+            {   
                 // Token génération
-                $token = bin2hex($generator->nextBytes( $this->container->getParameter('token_size') ));
-                $komi->setToken( $token );
+                $komi->generateToken();
                 
                 $em->persist($komi);
                 $em->flush();

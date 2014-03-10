@@ -1,0 +1,103 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<br>
+<br>
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'active_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Actif
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'active_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'name_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Nom
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'name_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'group_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Groupe
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'group_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'creation_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Création
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'creation_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'suppression_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Suppression
+                <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'suppression_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for kuchi in kuchis %}
+        <tr>
+            {% if kuchi.active %}
+                <td><p class="text-info">Actif</p></td>
+            {% else %}
+                <td><p class="text-danger">Inactif</p></td>
+            {% endif %}
+
+            <td>{{kuchi.name}}</td>
+            
+            <td>{{kuchi.kuchiGroup.name}}</td>
+
+            <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+
+            {% if kuchi.active %}
+                <td>-</td>
+            {% else %}
+                <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+            {% endif %}
+            
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+
+{% if kuchis|length > 0 %}
+    <div>
+        <ul class="pagination">
+            {% for p in range(1, nombrePage) %}
+                <li{% if p == page %} class="active"{% endif %}>
+                    <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': p, 'sort': sort}) }}">{{ p }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+
+{% endblock %}

@@ -3,22 +3,15 @@
 namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 
 /**
- * Komi
+ * KuchiGroup
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\KomiRepository")
- *
- * @ExclusionPolicy("all")
+ * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\KuchiGroupRepository")
  */
-class Komi
+class KuchiGroup
 {
-    const TOKEN_SIZE = 13;
-    
     /**
      * @var integer
      *
@@ -31,10 +24,9 @@ class Komi
     /**
      * @var string
      *
-     * @ORM\Column(name="randomId", type="string", length=255)
-     * @Expose
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $randomId;
+    private $name;
 
     /**
      * @var \DateTime
@@ -51,44 +43,24 @@ class Komi
     private $timestampSuppression;
 
     /**
-     * @var \Integer
-     *
-     * @ORM\Column(name="osType", type="integer")
-     */
-    private $osType;
-    
-    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
-    
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="token", type="string", length=26)
-     * @Expose
-     */
-    private $token;
-    
-    /**
-    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Subscription", mappedBy="komi")
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="kuchiGroup")
     */
-    private $subscriptions;
-    
-    private $tokenSize;
-
-
+    private $kuchis;
 
     public function __construct()
     {
         $this->active = true;
         $this->timestampCreation = new \DateTime();
         $this->timestampSuppression = new \DateTime();
-        $this->generateToken();
     }
-
+    
     /**
      * Get id
      *
@@ -100,33 +72,33 @@ class Komi
     }
 
     /**
-     * Set randomId
+     * Set name
      *
-     * @param string $randomId
-     * @return Komi
+     * @param string $name
+     * @return KuchiGroup
      */
-    public function setRandomId($randomId)
+    public function setName($name)
     {
-        $this->randomId = $randomId;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get randomId
+     * Get name
      *
      * @return string 
      */
-    public function getRandomId()
+    public function getName()
     {
-        return $this->randomId;
+        return $this->name;
     }
 
     /**
      * Set timestampCreation
      *
      * @param \DateTime $timestampCreation
-     * @return Komi
+     * @return KuchiGroup
      */
     public function setTimestampCreation($timestampCreation)
     {
@@ -149,7 +121,7 @@ class Komi
      * Set timestampSuppression
      *
      * @param \DateTime $timestampSuppression
-     * @return Komi
+     * @return KuchiGroup
      */
     public function setTimestampSuppression($timestampSuppression)
     {
@@ -172,7 +144,7 @@ class Komi
      * Set active
      *
      * @param boolean $active
-     * @return Komi
+     * @return KuchiGroup
      */
     public function setActive($active)
     {
@@ -192,82 +164,35 @@ class Komi
     }
 
     /**
-     * Set osType
+     * Add kuchis
      *
-     * @param integer $osType
-     * @return Komi
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis
+     * @return KuchiGroup
      */
-    public function setOsType($osType)
+    public function addKuchi(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis)
     {
-        $this->osType = $osType;
+        $this->kuchis[] = $kuchis;
 
         return $this;
     }
 
     /**
-     * Get osType
+     * Remove kuchis
      *
-     * @return integer 
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis
      */
-    public function getOsType()
+    public function removeKuchi(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis)
     {
-        return $this->osType;
+        $this->kuchis->removeElement($kuchis);
     }
 
     /**
-     * Set token
-     *
-     * @param string $token
-     * @return Komi
-     */
-    public function generateToken()
-    {
-        $generator = new SecureRandom();
-        $this->token = bin2hex($generator->nextBytes( self::TOKEN_SIZE ));
-
-        return $this;
-    }
-
-    /**
-     * Get token
-     *
-     * @return string 
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * Add subscriptions
-     *
-     * @param \obdo\KuchiKomiRESTBundle\Entity\Subscription $subscriptions
-     * @return Komi
-     */
-    public function addSubscription(\obdo\KuchiKomiRESTBundle\Entity\Subscription $subscriptions)
-    {
-        $this->subscriptions[] = $subscriptions;
-
-        return $this;
-    }
-
-    /**
-     * Remove subscriptions
-     *
-     * @param \obdo\KuchiKomiRESTBundle\Entity\Subscription $subscriptions
-     */
-    public function removeSubscription(\obdo\KuchiKomiRESTBundle\Entity\Subscription $subscriptions)
-    {
-        $this->subscriptions->removeElement($subscriptions);
-    }
-
-    /**
-     * Get subscriptions
+     * Get kuchis
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSubscriptions()
+    public function getKuchis()
     {
-        return $this->subscriptions;
+        return $this->kuchis;
     }
 }

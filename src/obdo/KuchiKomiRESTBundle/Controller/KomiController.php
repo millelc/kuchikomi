@@ -37,7 +37,6 @@ class KomiController extends Controller
         $AES->setData($this->getRequest()->get('KK_id'));
         
         $clearId = $AES->decrypt();
-        $Logger->Info("[POST rest/komi] clearId=".$clearId);
                     
         if( $idCheck->isPostKomiValid( $clearId) )
         {
@@ -86,6 +85,8 @@ class KomiController extends Controller
     public function deleteKomiAction($id, $hash)
     {
         $response = new Response();
+        
+        $Logger = $this->container->get('obdo_services.Logger');
                 
         $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
         
@@ -102,12 +103,11 @@ class KomiController extends Controller
         }
         else
         {
-            if( $hash == sha1("DELETE /rest/komi/{id}/{hash}" . $komi->getToken() ) )
+            if( $hash == sha1("DELETE /rest/komi" . $komi->getToken() ) )
             {
                 if( $komi->getActive() )
                 {
                     $komi->setTimestampSuppression(new \DateTime());
-                    $komi->setToken("");
                     $komi->setActive(false);
         
                     $em->flush();
@@ -128,6 +128,9 @@ class KomiController extends Controller
                 $response->setStatusCode(500);
                 $Logger->Error("[DELETE rest/komi/{id}/{hash}] 500 - Invalid Komi id");
             }
+            
+            // disable current token
+            $komi->generateToken();
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -145,6 +148,8 @@ class KomiController extends Controller
     public function putKomiAction($id, $hash)
     {
         $response = new Response();
+        
+        $Logger = $this->container->get('obdo_services.Logger');
                 
         $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
         
@@ -188,6 +193,9 @@ class KomiController extends Controller
                 $response->setStatusCode(500);
                 $Logger->Error("[PUT rest/komi/{id}/{hash}] 500 - Invalid Komi id");
             }
+            
+            // disable current token
+            $komi->generateToken();
         }
 
         $response->headers->set('Content-Type', 'text/html');

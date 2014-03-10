@@ -1,0 +1,15 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="row">
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbGroup")) }} </div>
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKuchi")) }} </div>
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKomi")) }} </div>
+</div>
+<div class="row">
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbSubscription")) }} </div>
+</div>
+
+{% endblock %}

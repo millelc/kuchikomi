@@ -1,0 +1,24 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h3>{{ Kuchi.name }}</h3></div>
+  <div class="panel-body">
+    <p>...</p>
+  </div>
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Identifiant : {{ Kuchi.id }}</li>
+    <li class="list-group-item">Date de création : {{ Kuchi.timestampCreation|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Date de suppression : {{ Kuchi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Actif : {{ Kuchi.active }}</li>
+    <li class="list-group-item">Groupe : {{ Kuchi.kuchiGroup.name }}</li>
+  </ul>
+</div>
+
+
+{% endblock %}

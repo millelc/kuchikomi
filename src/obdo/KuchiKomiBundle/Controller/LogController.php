@@ -31,7 +31,8 @@ class LogController extends Controller
         return $this->render('obdoKuchiKomiBundle:Default:log.html.twig', array(
                                                                                 'logs'   => $logs,
                                                                                 'page'   => $page,
-                                                                                'nombrePage' => ceil(count($logs)/25)
+                                                                                'nombrePage' => ceil(count($logs)/25),
+                                                                                'sort'   => $sort
                                                                                 ));
     }
     

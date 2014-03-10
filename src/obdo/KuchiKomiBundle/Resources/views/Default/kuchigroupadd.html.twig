@@ -1,0 +1,16 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<h3>Ajouter un groupe de Kuchi</h3>
+<div class="well">
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <br>
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+
+{% endblock %}
