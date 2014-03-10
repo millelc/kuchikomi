@@ -68,6 +68,11 @@ class Kuchi
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Subscription", mappedBy="kuchi")
     */
     private $subscriptions;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi", mappedBy="kuchi")
+    */
+    private $kuchikomis;
 
     public function __construct()
     {
@@ -265,5 +270,38 @@ class Kuchi
     public function updateDate()
     {
         $this->timestampLastUpdate = new \Datetime();
+    }
+
+    /**
+     * Add kuchikomis
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomis
+     * @return Kuchi
+     */
+    public function addKuchikomi(\obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomis)
+    {
+        $this->kuchikomis[] = $kuchikomis;
+
+        return $this;
+    }
+
+    /**
+     * Remove kuchikomis
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomis
+     */
+    public function removeKuchikomi(\obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomis)
+    {
+        $this->kuchikomis->removeElement($kuchikomis);
+    }
+
+    /**
+     * Get kuchikomis
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKuchikomis()
+    {
+        return $this->kuchikomis;
     }
 }
