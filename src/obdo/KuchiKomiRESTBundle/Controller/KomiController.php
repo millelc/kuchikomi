@@ -50,6 +50,7 @@ class KomiController extends Controller
                 $komi = new Komi();
                 $komi->setRandomId($randomId);
                 $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
+                $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
         
                 $em->persist($komi);
                 $em->flush();
@@ -172,12 +173,12 @@ class KomiController extends Controller
                 if( !$komi->getActive() )
                 {
                     $komi->setOsType($this->getRequest()->get('os_id'));
-                    $komi->setToken("");
+                    $komi->setApplicationVersion($this->getRequest()->get('version'));
                     $komi->setActive(true);
         
                     $em->flush();
                     $response->setStatusCode(200);
-                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated");
+                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - ".$komi->getApplicationVersion());
                 }
                 else
                 {

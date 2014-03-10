@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Util\SecureRandom;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\KomiRepository")
+ * @ORM\HasLifecycleCallbacks()
  *
  * @ExclusionPolicy("all")
  */
@@ -51,6 +52,20 @@ class Komi
     private $timestampSuppression;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestampLastUpdate", type="datetime")
+     */
+    private $timestampLastUpdate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestampLastSynchro", type="datetime")
+     */
+    private $timestampLastSynchro;
+
+    /**
      * @var \Integer
      *
      * @ORM\Column(name="osType", type="integer")
@@ -77,16 +92,23 @@ class Komi
     */
     private $subscriptions;
     
-    private $tokenSize;
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="applicationVersion", type="string", length=10)
+     */
+    private $applicationVersion;
 
 
     public function __construct()
     {
         $this->active = true;
         $this->timestampCreation = new \DateTime();
+        $this->timestampLastUpdate = new \DateTime();
         $this->timestampSuppression = new \DateTime();
+        $this->timestampLastSynchro = new \DateTime();
         $this->generateToken();
+        $this->applicationVersion = "0.0.0";
     }
 
     /**
@@ -269,5 +291,95 @@ class Komi
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    /**
+     * Set timestampLastUpdate
+     *
+     * @param \DateTime $timestampLastUpdate
+     * @return Komi
+     */
+    public function setTimestampLastUpdate($timestampLastUpdate)
+    {
+        $this->timestampLastUpdate = $timestampLastUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get timestampLastUpdate
+     *
+     * @return \DateTime 
+     */
+    public function getTimestampLastUpdate()
+    {
+        return $this->timestampLastUpdate;
+    }
+
+    /**
+     * Set timestampLastSynchro
+     *
+     * @param \DateTime $timestampLastSynchro
+     * @return Komi
+     */
+    public function setTimestampLastSynchro($timestampLastSynchro)
+    {
+        $this->timestampLastSynchro = $timestampLastSynchro;
+
+        return $this;
+    }
+
+    /**
+     * Get timestampLastSynchro
+     *
+     * @return \DateTime 
+     */
+    public function getTimestampLastSynchro()
+    {
+        return $this->timestampLastSynchro;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return Komi
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Set applicationVersion
+     *
+     * @param string $applicationVersion
+     * @return Komi
+     */
+    public function setApplicationVersion($applicationVersion)
+    {
+        $this->applicationVersion = $applicationVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationVersion
+     *
+     * @return string 
+     */
+    public function getApplicationVersion()
+    {
+        return $this->applicationVersion;
+    }
+    
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+        $this->timestampLastUpdate = new \Datetime();
     }
 }

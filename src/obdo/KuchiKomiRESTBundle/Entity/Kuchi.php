@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\KuchiRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * 
  */
 class Kuchi
 {
@@ -34,6 +36,13 @@ class Kuchi
      */
     private $timestampCreation;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestampLastUpdate", type="datetime")
+     */
+    private $timestampLastUpdate;
+    
     /**
      * @var \DateTime
      *
@@ -64,6 +73,7 @@ class Kuchi
     {
         $this->active = true;
         $this->timestampCreation = new \DateTime();
+        $this->timestampLastUpdate  = new \DateTime();
         $this->timestampSuppression = new \DateTime();
     }
 
@@ -224,5 +234,36 @@ class Kuchi
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    /**
+     * Set timestampLastUpdate
+     *
+     * @param \DateTime $timestampLastUpdate
+     * @return Kuchi
+     */
+    public function setTimestampLastUpdate($timestampLastUpdate)
+    {
+        $this->timestampLastUpdate = $timestampLastUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get timestampLastUpdate
+     *
+     * @return \DateTime 
+     */
+    public function getTimestampLastUpdate()
+    {
+        return $this->timestampLastUpdate;
+    }
+    
+    /**
+    * @ORM\PreUpdate
+    */
+    public function updateDate()
+    {
+        $this->timestampLastUpdate = new \Datetime();
     }
 }

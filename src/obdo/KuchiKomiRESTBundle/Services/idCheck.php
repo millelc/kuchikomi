@@ -51,5 +51,19 @@ class idCheck
         
         return $randomId[1];
     }
+    
+    public function getVersion( $id )
+    {
+        if( preg_match("#^%%OB-DO-2-0-0%%#", $id) )
+        {
+            $version = "2.0.0";
+        }
+        else
+        {
+            $version = "0.0.0";
+        }
+        
+        return $version;
+    }
 
 }
