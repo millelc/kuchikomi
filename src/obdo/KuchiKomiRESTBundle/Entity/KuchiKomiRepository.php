@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class KuchiKomiRepository extends EntityRepository
 {
+    public function getNbKuchiKomi()
+    {
+        return $this->createQueryBuilder('kuchikomi')
+                    ->select('COUNT(kuchikomi)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }

@@ -62,6 +62,11 @@ class KuchiGroup
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="kuchiGroup")
     */
     private $kuchis;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup", mappedBy="kuchiGroup")
+    */
+    private $subscriptions;
 
     public function __construct()
     {
@@ -235,5 +240,38 @@ class KuchiGroup
     public function updateDate()
     {
         $this->timestampLastUpdate = new \Datetime();
+    }
+
+    /**
+     * Add subscriptions
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptions
+     * @return KuchiGroup
+     */
+    public function addSubscription(\obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptions)
+    {
+        $this->subscriptions[] = $subscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscriptions
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptions
+     */
+    public function removeSubscription(\obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptions)
+    {
+        $this->subscriptions->removeElement($subscriptions);
+    }
+
+    /**
+     * Get subscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 }

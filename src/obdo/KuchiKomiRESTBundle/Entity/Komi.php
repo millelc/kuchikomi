@@ -93,6 +93,11 @@ class Komi
     private $subscriptions;
     
     /**
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup", mappedBy="komi")
+    */
+    private $subscriptionsGroup;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="applicationVersion", type="string", length=10)
@@ -381,5 +386,38 @@ class Komi
     public function updateDate()
     {
         $this->timestampLastUpdate = new \Datetime();
+    }
+
+    /**
+     * Add subscriptionsGroup
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptionsGroup
+     * @return Komi
+     */
+    public function addSubscriptionsGroup(\obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptionsGroup)
+    {
+        $this->subscriptionsGroup[] = $subscriptionsGroup;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscriptionsGroup
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptionsGroup
+     */
+    public function removeSubscriptionsGroup(\obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup $subscriptionsGroup)
+    {
+        $this->subscriptionsGroup->removeElement($subscriptionsGroup);
+    }
+
+    /**
+     * Get subscriptionsGroup
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscriptionsGroup()
+    {
+        return $this->subscriptionsGroup;
     }
 }

@@ -29,6 +29,12 @@ class DashboardController extends Controller
         return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomi.html.twig', array('nbKomi'=>$nbKomi));
     }
 
+    public function nbKuchiKomiAction()
+    {
+        $nbKuchiKomi = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi')->getNbKuchiKomi();
+        return $this->render('obdoKuchiKomiBundle:Dashboard:nbkuchikomi.html.twig', array('nbKuchiKomi'=>$nbKuchiKomi));
+    }
+
     public function nbSubscriptionAction()
     {
         $nbSubscription = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Subscription')->getNbSubscription();

@@ -15,6 +15,14 @@ rest_authenticate:
     type:       rest
     resource:   obdo\KuchiKomiRESTBundle\Controller\AuthenticateController
 
+rest_subscription:
+    type:       rest
+    resource:   obdo\KuchiKomiRESTBundle\Controller\SubscriptionController
+    
+rest_subscription_group:
+    type:       rest
+    resource:   obdo\KuchiKomiRESTBundle\Controller\SubscriptionGroupController
+    
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
