@@ -58,10 +58,49 @@ class LanguageNegotiatorTest extends TestCase
         }
     }
 
+    /**
+     * Given a accept header containing a generic language (here 'en')
+     *  And priorities containing a localized version of that language
+     * Then the best language is mapped to 'en'
+     */
+    public function testGenericLanguageAreMappedToSpecific()
+    {
+        $acceptLanguageHeader = 'fr-FR, en;q=0.8';
+        $priorities           = array('en-US', 'de-DE');
+
+        $acceptHeader = $this->negotiator->getBest($acceptLanguageHeader, $priorities);
+
+        $this->assertInstanceOf('Negotiation\AcceptHeader', $acceptHeader);
+        $this->assertEquals('en-US', $acceptHeader->getValue());
+    }
+
+    public function testGetBestWithWildcard()
+    {
+        $acceptLanguageHeader = 'en, *;q=0.9';
+        $priorities           = array('fr');
+
+        $acceptHeader = $this->negotiator->getBest($acceptLanguageHeader, $priorities);
+
+        $this->assertInstanceOf('Negotiation\AcceptHeader', $acceptHeader);
+        $this->assertEquals('fr', $acceptHeader->getValue());
+    }
+
+    public function testGetBestDoesNotMatchPriorities()
+    {
+        $acceptLanguageHeader = 'en, de';
+        $priorities           = array('fr');
+
+        $acceptHeader = $this->negotiator->getBest($acceptLanguageHeader, $priorities);
+
+        $this->assertInstanceOf('Negotiation\AcceptHeader', $acceptHeader);
+        $this->assertEquals('en', $acceptHeader->getValue());
+    }
+
     public static function dataProviderForGetBest()
     {
         return array(
             array('da, en-gb;q=0.8, en;q=0.7', 'da'),
+            array('da, en-gb;q=0.8, en;q=0.7, *', 'da'),
             array('es-ES;q=0.7, es; q=0.6 ,fr; q=1.0, en; q=0.5,dk , fr-CH', 'fr-CH'),
             array('fr-FR,fr;q=0.1,en-US;q=0.6,en;q=0.4', 'fr-FR'),
             array('', null),

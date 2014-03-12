@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Put;
+use RMS\PushNotificationsBundle\Message\AndroidMessage;
 
 class KomiController extends Controller
 {
@@ -51,12 +52,25 @@ class KomiController extends Controller
                 $komi->setRandomId($randomId);
                 $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
                 $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
+                $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
         
                 $em->persist($komi);
                 $em->flush();
                 $response->setStatusCode(200);
                 
                 $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
+                
+                // Post message
+                if( $komi->getOsType() == 0 )
+                {
+                    $message = new AndroidMessage();
+                    $message->setGCM(true);
+                    $message->setMessage('Bienvenue !');
+                    $message->setData(array("type" => "1"));
+                    $message->setDeviceIdentifier($komi->getGcmRegId());
+                }
+
+                $this->container->get('rms_push_notifications')->send($message);
             }
             else
             {

@@ -100,4 +100,9 @@ fos_rest:
         default_format: html
         include_format: true
         
+# Notification configuration        
+rms_push_notifications:
+  android:
+      gcm:
+          api_key: AIzaSyAiOFq9kw-ArTNy1h-eQ1UBdwhILB2scpE
     

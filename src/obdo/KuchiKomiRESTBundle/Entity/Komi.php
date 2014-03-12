@@ -36,6 +36,13 @@ class Komi
      * @Expose
      */
     private $randomId;
+    
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="gcmRegId", type="text")
+     */
+    private $gcmRegId;    
 
     /**
      * @var \DateTime
@@ -419,5 +426,28 @@ class Komi
     public function getSubscriptionsGroup()
     {
         return $this->subscriptionsGroup;
+    }
+
+    /**
+     * Set gcmRegId
+     *
+     * @param string $gcmRegId
+     * @return Komi
+     */
+    public function setGcmRegId($gcmRegId)
+    {
+        $this->gcmRegId = $gcmRegId;
+
+        return $this;
+    }
+
+    /**
+     * Get gcmRegId
+     *
+     * @return string 
+     */
+    public function getGcmRegId()
+    {
+        return $this->gcmRegId;
     }
 }
