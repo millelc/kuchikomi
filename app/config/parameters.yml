@@ -15,3 +15,8 @@ parameters:
 
     aes_key: 5CCA8DAB847F457C918D439459D3730B
     aes_key_size: 128
+    
+    sha256_salt1 : gdg(!cedhsf(327
+    sha256_salt2 : m58$zed24)BVgRR
+
+    path_kuchikomi_photo: /../web/images/kuchikomi

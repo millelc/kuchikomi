@@ -29,6 +29,13 @@ class KuchiGroup
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="logo", type="string", length=255)
+     */
+    private $logo;
 
     /**
      * @var \DateTime
@@ -59,6 +66,13 @@ class KuchiGroup
     private $active;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbMaxKuchi", type="integer")
+     */
+    private $nbMaxKuchi;
+    
+    /**
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="kuchiGroup")
     */
     private $kuchis;
@@ -74,6 +88,7 @@ class KuchiGroup
         $this->timestampCreation = new \DateTime();
         $this->timestampLastUpdate = new \DateTime();
         $this->timestampSuppression = new \DateTime();
+        $this->nbMaxKuchi = 10;
     }
     
     /**
@@ -273,5 +288,51 @@ class KuchiGroup
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    /**
+     * Set logo
+     *
+     * @param string $logo
+     * @return KuchiGroup
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * Get logo
+     *
+     * @return string 
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * Set nbMaxKuchi
+     *
+     * @param integer $nbMaxKuchi
+     * @return KuchiGroup
+     */
+    public function setNbMaxKuchi($nbMaxKuchi)
+    {
+        $this->nbMaxKuchi = $nbMaxKuchi;
+
+        return $this;
+    }
+
+    /**
+     * Get nbMaxKuchi
+     *
+     * @return integer 
+     */
+    public function getNbMaxKuchi()
+    {
+        return $this->nbMaxKuchi;
     }
 }

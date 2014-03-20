@@ -5,11 +5,21 @@
 
 <h3>Ajouter un groupe de Kuchi</h3>
 <div class="well">
+    
     <form method="post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
+        {# Les erreurs générales du formulaire. #}
+        {{ form_errors(form) }}
+        
+        <div>
+            {{ form_label(form.name, "Nom") }}<br>
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+        
         <br>
         <input type="submit" class="btn btn-primary" />
     </form>
+    
 </div>
 
 

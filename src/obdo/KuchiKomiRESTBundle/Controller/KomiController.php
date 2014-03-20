@@ -192,7 +192,7 @@ class KomiController extends Controller
         
                     $em->flush();
                     $response->setStatusCode(200);
-                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - ".$komi->getApplicationVersion());
+                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
                 }
                 else
                 {

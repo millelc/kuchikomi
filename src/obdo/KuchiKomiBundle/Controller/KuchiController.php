@@ -4,6 +4,7 @@ namespace obdo\KuchiKomiBundle\Controller;
 
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
+use obdo\KuchiKomiRESTBundle\Form\KuchiType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class KuchiController extends Controller
@@ -24,16 +25,12 @@ class KuchiController extends Controller
     
     public function addAction($groupId)
     {
+    	$Logger = $this->container->get('obdo_services.Logger');
+    	
         $kuchi = new Kuchi();
         $kuchi->setKuchiGroup($this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')->find($groupId));
 
-        $formBuilder = $this->createFormBuilder($kuchi);
-        $Logger = $this->container->get('obdo_services.Logger');
-
-        $formBuilder
-            ->add('name',        'text');
-            
-        $form = $formBuilder->getForm();
+        $form = $this->createForm(new KuchiType, $kuchi);
         
         // On récupère la requête
         $request = $this->get('request');
@@ -44,6 +41,10 @@ class KuchiController extends Controller
 
             if ($form->isValid())
             {
+            	// Update password
+            	$passwordToHash = $kuchi->getPassword();
+            	$kuchi->setPassword(hash("sha256", $this->container->getParameter('sha256_salt2').hash("sha256", hash("sha256", $passwordToHash) . $this->container->getParameter('sha256_salt1'))));
+            	
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($kuchi);
                 $em->flush();

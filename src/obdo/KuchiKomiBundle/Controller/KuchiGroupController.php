@@ -3,6 +3,7 @@
 namespace obdo\KuchiKomiBundle\Controller;
 
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
+use obdo\KuchiKomiRESTBundle\Form\KuchiGroupType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class KuchiGroupController extends Controller
@@ -34,15 +35,11 @@ class KuchiGroupController extends Controller
     
     public function addAction()
     {
+    	$Logger = $this->container->get('obdo_services.Logger');
+    	
         $kuchiGroup = new KuchiGroup();
 
-        $formBuilder = $this->createFormBuilder($kuchiGroup);
-        $Logger = $this->container->get('obdo_services.Logger');
-
-        $formBuilder
-            ->add('name',        'text');
-            
-        $form = $formBuilder->getForm();
+        $form = $this->createForm(new KuchiGroupType, $kuchiGroup);
         
         // On récupère la requête
         $request = $this->get('request');

@@ -3,6 +3,11 @@
 namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use Symfony\Component\Security\Core\Util\SecureRandom;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
+use obdo\KuchiKomiRESTBundle\Entity\Subscription;
 
 /**
  * Kuchi
@@ -10,16 +15,21 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\KuchiRepository")
  * @ORM\HasLifecycleCallbacks()
+ *
+ * @ExclusionPolicy("all")
  * 
  */
 class Kuchi
 {
+    const TOKEN_SIZE = 13;
+        
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
@@ -56,13 +66,48 @@ class Kuchi
      * @ORM\Column(name="active", type="boolean")
      */
     private $active;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=26)
+     * @Expose
+     */
+    private $token;
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="password", type="text")
+     */
+    private $password;
+    
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="logo_link", type="string", length=255)
+     */
+    private $logo_link;
+    
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="photo_link", type="string", length=255)
+     */
+    private $photo_link;
+    
+    
+    /**
+    * @ORM\OneToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Address", cascade={"persist"})
+    */
+    private $address;
     
     /**
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Subscription", mappedBy="kuchi")
@@ -80,6 +125,9 @@ class Kuchi
         $this->timestampCreation = new \DateTime();
         $this->timestampLastUpdate  = new \DateTime();
         $this->timestampSuppression = new \DateTime();
+        $this->generateToken();
+        $this->logo_link = "";
+        $this->photo_link = "";
     }
 
 
@@ -163,6 +211,30 @@ class Kuchi
     }
 
     /**
+     * Set token
+     *
+     * @param string $token
+     * @return Komi
+     */
+    public function generateToken()
+    {
+        $generator = new SecureRandom();
+        $this->token = bin2hex($generator->nextBytes( self::TOKEN_SIZE ));
+
+        return $this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return string 
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+    
+    /**
      * Set name
      *
      * @param string $name
@@ -184,7 +256,7 @@ class Kuchi
     {
         return $this->name;
     }
-
+  
     /**
      * Set kuchiGroup
      *
@@ -303,5 +375,112 @@ class Kuchi
     public function getKuchikomis()
     {
         return $this->kuchikomis;
+    }
+
+    /**
+     * Set address
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Address $address
+     * @return Kuchi
+     */
+    public function setAddress(\obdo\KuchiKomiRESTBundle\Entity\Address $address = null)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+    
+
+    /**
+     * Get address
+     *
+     * @return \obdo\KuchiKomiRESTBundle\Entity\Address 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return Kuchi
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Set logo_link
+     *
+     * @param string $logoLink
+     * @return Kuchi
+     */
+    public function setLogoLink($logoLink)
+    {
+        $this->logo_link = $logoLink;
+
+        return $this;
+    }
+
+    /**
+     * Get logo_link
+     *
+     * @return string 
+     */
+    public function getLogoLink()
+    {
+        return $this->logo_link;
+    }
+
+    /**
+     * Set photo_link
+     *
+     * @param string $photoLink
+     * @return Kuchi
+     */
+    public function setPhotoLink($photoLink)
+    {
+        $this->photo_link = $photoLink;
+
+        return $this;
+    }
+
+    /**
+     * Get photo_link
+     *
+     * @return string 
+     */
+    public function getPhotoLink()
+    {
+        return $this->photo_link;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return Kuchi
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string 
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 }
