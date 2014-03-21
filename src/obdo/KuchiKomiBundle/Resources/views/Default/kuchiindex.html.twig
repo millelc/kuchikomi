@@ -53,6 +53,8 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
+            <th>Nb Abonnement</th>
+            <th>Nb KuchiKomi</th>
             <th></th>
         </tr>
     </thead>
@@ -67,7 +69,7 @@
 
             <td>{{kuchi.name}}</td>
             
-            <td>{{kuchi.kuchiGroup.name}}</td>
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchi.kuchiGroup.id}) }}">{{kuchi.kuchiGroup.name}}</a></td>
 
             <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
 
@@ -76,6 +78,10 @@
             {% else %}
                 <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
             {% endif %}
+            
+            <td>{{kuchi.subscriptions|length}}</td>
+            
+            <td>{{kuchi.kuchikomis|length}}</td>
             
             <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
 

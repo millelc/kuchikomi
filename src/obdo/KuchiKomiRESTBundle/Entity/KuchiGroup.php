@@ -89,6 +89,7 @@ class KuchiGroup
         $this->timestampLastUpdate = new \DateTime();
         $this->timestampSuppression = new \DateTime();
         $this->nbMaxKuchi = 10;
+        $this->logo = "";
     }
     
     /**

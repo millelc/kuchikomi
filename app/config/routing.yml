@@ -11,6 +11,10 @@ Komi:
     type:       rest
     resource:   obdo\KuchiKomiRESTBundle\Controller\KomiController
     
+Kuchi:
+    type:       rest
+    resource:   obdo\KuchiKomiRESTBundle\Controller\KuchiController
+    
 rest_authenticate:
     type:       rest
     resource:   obdo\KuchiKomiRESTBundle\Controller\AuthenticateController

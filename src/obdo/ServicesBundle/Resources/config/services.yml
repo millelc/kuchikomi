@@ -8,3 +8,7 @@ services:
     obdo_services.Logger:
         class: obdo\ServicesBundle\Services\Logger
         arguments: [ @doctrine.orm.entity_manager ]
+        
+    obdo_services.Password:
+        class: obdo\ServicesBundle\Services\Password
+        arguments: [ @kernel ]

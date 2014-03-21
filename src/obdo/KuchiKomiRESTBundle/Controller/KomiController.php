@@ -155,7 +155,7 @@ class KomiController extends Controller
         return $response;
     }
 
-         /**
+    /**
      * @Put("/rest/komi/{id}/{hash}")
      * @return array
      * @View()
@@ -198,7 +198,7 @@ class KomiController extends Controller
                 {
                     // komi already active
                     $response->setStatusCode(502);
-                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$komi->getRandomId()." already active");
+                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already active");
                 }
                 
             }

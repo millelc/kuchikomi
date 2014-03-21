@@ -26,6 +26,7 @@ class KuchiController extends Controller
     public function addAction($groupId)
     {
     	$Logger = $this->container->get('obdo_services.Logger');
+    	$Password = $this->container->get('obdo_services.Password');
     	
         $kuchi = new Kuchi();
         $kuchi->setKuchiGroup($this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')->find($groupId));
@@ -43,8 +44,7 @@ class KuchiController extends Controller
             {
             	// Update password
             	$passwordToHash = $kuchi->getPassword();
-            	$kuchi->setPassword(hash("sha256", $this->container->getParameter('sha256_salt2').hash("sha256", hash("sha256", $passwordToHash) . $this->container->getParameter('sha256_salt1'))));
-            	
+            	$kuchi->setPassword($Password->generateHash($passwordToHash));
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($kuchi);
                 $em->flush();

@@ -16,6 +16,14 @@
             {{ form_widget(form.name) }}
         </div>
         
+        <div>
+            {{ form_label(form.nbMaxKuchi, "Nombre MAX de Kuchi") }}<br>
+            {{ form_errors(form.nbMaxKuchi) }}
+            {{ form_widget(form.nbMaxKuchi) }}
+        </div>
+        
+        {{ form_rest(form) }}
+
         <br>
         <input type="submit" class="btn btn-primary" />
     </form>
