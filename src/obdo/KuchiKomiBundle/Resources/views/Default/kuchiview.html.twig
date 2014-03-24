@@ -16,7 +16,7 @@
     <li class="list-group-item">Date de création : {{ Kuchi.timestampCreation|date('Y-m-d H:i:s') }}</li>
     <li class="list-group-item">Date de suppression : {{ Kuchi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
     <li class="list-group-item">Actif : {{ Kuchi.active }}</li>
-    <li class="list-group-item">Groupe : {{ Kuchi.kuchiGroup.name }}</li>
+    <li class="list-group-item">Groupe : <a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': Kuchi.kuchiGroup.id}) }}">{{Kuchi.kuchiGroup.name}}</a></li>
   </ul>
 </div>
 

@@ -1,0 +1,84 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<br>
+<br>
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'active_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Actif
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'active_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>randomId</th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'creation_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Création
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'creation_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'suppression_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Suppression
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'suppression_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for komi in komis %}
+        <tr>
+            {% if komi.active %}
+                <td><p class="text-info">Actif</p></td>
+            {% else %}
+                <td><p class="text-danger">Inactif</p></td>
+            {% endif %}
+
+            <td>{{komi.randomId}}</td>
+            
+            <td>{{komi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+
+            {% if komi.active %}
+                <td>-</td>
+            {% else %}
+                <td>{{komi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+            {% endif %}
+                        
+            <td><a href="{{ path('obdo_kuchi_komi_komi_notification', {'id': komi.id, 'page': page, 'sort': sort}) }}"><span class="glyphicon glyphicon-comment"></span></a></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+
+{% if komis|length > 0 %}
+    <div>
+        <ul class="pagination">
+            {% for p in range(1, nombrePage) %}
+                <li{% if p == page %} class="active"{% endif %}>
+                    <a href="{{ path('obdo_kuchi_komi_komi', {'page': p, 'sort': sort}) }}">{{ p }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+
+{% endblock %}

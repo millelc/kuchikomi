@@ -122,9 +122,9 @@ class Kuchi
     public function __construct()
     {
         $this->active = true;
-        $this->timestampCreation = new \DateTime();
-        $this->timestampLastUpdate  = new \DateTime();
-        $this->timestampSuppression = new \DateTime();
+        $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->timestampLastUpdate  = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->generateToken();
         $this->logo_link = "";
         $this->photo_link = "";

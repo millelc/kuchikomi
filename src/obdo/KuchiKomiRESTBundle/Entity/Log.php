@@ -49,7 +49,7 @@ class Log
 
     public function __construct()
     {
-        $this->timestamp = new \DateTime();
+        $this->timestamp = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->level = self::LEVEL_INFO;
         $this->message = "";
     }
