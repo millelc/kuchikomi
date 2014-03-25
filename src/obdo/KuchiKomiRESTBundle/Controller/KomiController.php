@@ -68,9 +68,8 @@ class KomiController extends Controller
                     $message->setMessage('Bienvenue !');
                     $message->setData(array("type" => "1"));
                     $message->setDeviceIdentifier($komi->getGcmRegId());
-                }
-
-                $this->container->get('rms_push_notifications')->send($message);
+                    $this->container->get('rms_push_notifications')->send($message);
+                }               
             }
             else
             {

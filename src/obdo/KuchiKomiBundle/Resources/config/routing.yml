@@ -2,6 +2,12 @@ obdo_kuchi_komi_homepage:
     pattern:  /
     defaults: { _controller: obdoKuchiKomiBundle:Dashboard:index }
 
+obdo_kuchi_komi_user:
+    pattern:  /user/{page}/{sort}
+    defaults: { _controller: obdoKuchiKomiUserBundle:User:index }
+    requirements:
+        sort: name_up|name_down|role_up|role_down
+        
 obdo_kuchi_komi_logs:
     pattern:  /logs/{page}/{sort}
     defaults: { _controller: obdoKuchiKomiBundle:Log:Log }
