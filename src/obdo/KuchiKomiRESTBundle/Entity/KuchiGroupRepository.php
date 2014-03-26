@@ -73,5 +73,50 @@ class KuchiGroupRepository extends EntityRepository
 
         return new Paginator($query);
     }
-
+    
+    public function getAddedGroups( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchigroup')
+    	->leftJoin('kuchigroup.kuchis', 'kuchis')
+    	->addSelect('kuchis')
+    	->join('kuchis.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->addSelect('subscriptions')
+    	->setParameter('komi', $komi)
+    	->andWhere('kuchigroup.active =true')
+    	->andWhere('kuchigroup.timestampCreation >= :fromDate')
+    	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
+    
+    	return $qb->getQuery()->getResult();
+    }
+    
+    public function getUpdatedGroups( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchigroup')
+    	->leftJoin('kuchigroup.kuchis', 'kuchis')
+    	->addSelect('kuchis')
+    	->join('kuchis.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->addSelect('subscriptions')
+    	->setParameter('komi', $komi)
+    	->andWhere('kuchigroup.active =true')
+    	->andWhere('kuchigroup.timestampCreation < :fromDate')
+    	->andWhere('kuchigroup.timestampLastUpdate >= :fromDate')
+    	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
+    
+    	return $qb->getQuery()->getResult();
+    }
+    
+    public function getDeletedGroups( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchigroup')
+    	->leftJoin('kuchigroup.kuchis', 'kuchis')
+    	->addSelect('kuchis')
+    	->join('kuchis.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->addSelect('subscriptions')
+    	->setParameter('komi', $komi)
+    	->andWhere('kuchigroup.active = false')
+    	->andWhere('kuchigroup.timestampSuppression >= :fromDate')
+    	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
+    
+    	return $qb->getQuery()->getResult();
+    }
 }

@@ -5,6 +5,7 @@ namespace obdo\KuchiKomiRESTBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 
 /**
@@ -34,6 +35,7 @@ class Komi
      *
      * @ORM\Column(name="randomId", type="string", length=255)
      * @Expose
+     * @Groups({"Authenticate"})
      */
     private $randomId;
     
@@ -76,7 +78,7 @@ class Komi
      * @var \Integer
      *
      * @ORM\Column(name="osType", type="integer")
-     */
+     * */
     private $osType;
     
     /**
@@ -91,6 +93,7 @@ class Komi
      *
      * @ORM\Column(name="token", type="string", length=26)
      * @Expose
+     * @Groups({"Authenticate"})
      */
     private $token;
     
@@ -118,7 +121,7 @@ class Komi
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampLastUpdate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
         $this->generateToken();
         $this->applicationVersion = "0.0.0";
     }
@@ -340,6 +343,19 @@ class Komi
 
         return $this;
     }
+    
+    /**
+     * Set timestampLastSynchro to current
+     *
+     * @return Komi
+     */
+    public function setCurrentTimestampLastSynchro()
+    {
+    	$this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+    
+    	return $this;
+    }
+    
 
     /**
      * Get timestampLastSynchro

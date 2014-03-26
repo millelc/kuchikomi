@@ -16,7 +16,7 @@ class AuthenticateController extends Controller
     /**
      * @Post("/rest/authenticate")
      * @return array
-     * @View()
+     * @View(serializerGroups={"Authenticate"})
      */
     public function postAuthenticateAction()
     {
@@ -77,7 +77,7 @@ class AuthenticateController extends Controller
         /**
      * @Post("/rest/authenticatekuchi")
      * @return array
-     * @View()
+     * @View(serializerGroups={"Authenticate"})
      */
     public function postAuthenticateKuchiAction()
     {

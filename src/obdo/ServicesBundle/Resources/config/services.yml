@@ -12,3 +12,7 @@ services:
     obdo_services.Password:
         class: obdo\ServicesBundle\Services\Password
         arguments: [ @kernel ]
+        
+    obdo_services.Notifier:
+        class: obdo\ServicesBundle\Services\Notifier
+        arguments: [ @kernel ]

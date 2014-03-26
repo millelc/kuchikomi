@@ -19,5 +19,4 @@ class SubscriptionRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult();
     }
-
 }

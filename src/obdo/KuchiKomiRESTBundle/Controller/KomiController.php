@@ -3,6 +3,10 @@
 namespace obdo\KuchiKomiRESTBundle\Controller;
 
 use obdo\KuchiKomiRESTBundle\Entity\Komi;
+use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
+use obdo\KuchiKomiRESTBundle\Entity\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,7 +15,8 @@ use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Put;
-use RMS\PushNotificationsBundle\Message\AndroidMessage;
+use FOS\RestBundle\Controller\Annotations\Get;
+
 
 class KomiController extends Controller
 {
@@ -27,6 +32,7 @@ class KomiController extends Controller
         $AES = $this->container->get('obdo_services.AES');
         $Logger = $this->container->get('obdo_services.Logger');
         $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
+        $Notifier = $this->container->get('obdo_services.Notifier');
         
         $em = $this->getDoctrine()->getManager();
         
@@ -61,15 +67,7 @@ class KomiController extends Controller
                 $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
                 
                 // Post message
-                if( $komi->getOsType() == 0 )
-                {
-                    $message = new AndroidMessage();
-                    $message->setGCM(true);
-                    $message->setMessage('Bienvenue !');
-                    $message->setData(array("type" => "1"));
-                    $message->setDeviceIdentifier($komi->getGcmRegId());
-                    $this->container->get('rms_push_notifications')->send($message);
-                }               
+                $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "1"));               
             }
             else
             {
@@ -101,9 +99,6 @@ class KomiController extends Controller
         $response = new Response();
         
         $Logger = $this->container->get('obdo_services.Logger');
-                
-        $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
-        
         $em = $this->getDoctrine()->getManager();
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
@@ -164,8 +159,6 @@ class KomiController extends Controller
         $response = new Response();
         
         $Logger = $this->container->get('obdo_services.Logger');
-                
-        $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
         
         $em = $this->getDoctrine()->getManager();
         
@@ -219,4 +212,89 @@ class KomiController extends Controller
         return $response;
     }
 
+    /**
+     * @Get("/rest/komi/sync/{id}/{hash}")
+     * @return array
+     * @View(serializerGroups={"Synchro"})
+     */
+    public function getKomiSyncAction($id, $hash)
+    {
+    	$response = new Response();
+    
+    	$Logger = $this->container->get('obdo_services.Logger');
+    
+    	$idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
+    	$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+    	$repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
+    	$repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
+    
+    	$komi = $repositoryKomi->findOneByRandomId($id);
+    
+    	if( !$komi )
+    	{
+    		// Komi unknown !
+    		$response->setStatusCode(501);
+    		$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+    	}
+    	else
+    	{
+    		if( $hash == sha1("GET /rest/sync/komi" . $komi->getToken() ) )
+    		{
+    			if( $komi->getActive() )
+    			{
+    				$addedKuchis = $repositoryKuchi->getAddedKuchis( $komi );
+    				$updatedKuchis = $repositoryKuchi->getUpdatedKuchis( $komi );
+    				$deletedKuchis = $repositoryKuchi->getDeletedKuchis( $komi );
+    				
+    				$addedKuchiGroup = $repositoryKuchiGroup->getAddedGroups( $komi );
+    				$updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
+    				$deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
+    				
+    				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
+    				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
+    				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
+    				
+    				$komi->setCurrentTimestampLastSynchro();
+    				$em->flush();
+    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
+    				
+    				return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
+    							 'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
+    							 'DELETED_KUCHIS_GROUP' => $deletedKuchiGroup,
+    							 'ADDED_KUCHIS' => $addedKuchis,
+    				             'UPDATED_KUCHIS' => $updatedKuchis,
+    							 'DELETED_KUCHIS' => $deletedKuchis,
+    							 'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
+    							 'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
+    							 'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
+    			}
+    			else
+    			{
+    				// komi inactive
+    				$response->setStatusCode(502);
+    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." inactive");
+    			}
+    		}
+    		else
+    		{
+    			// hash invalid
+    			$response->setStatusCode(500);
+    			$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 500 - Invalid hash");
+    		}
+    
+    		// disable current token
+    		$komi->generateToken();
+    	}
+    
+    	$response->headers->set('Content-Type', 'text/html');
+    	// affiche les entêtes HTTP suivies du contenu
+    	$response->send();
+    
+    	return $response;
+    }
+    
 }

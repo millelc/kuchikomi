@@ -6,12 +6,16 @@ obdo_kuchi_komi_rest:
 obdo_kuchi_komi:
     resource: "@obdoKuchiKomiBundle/Resources/config/routing.yml"
     prefix:   /
+ 
+rest_Thanks:
+    type:       rest
+    resource:   obdo\KuchiKomiRESTBundle\Controller\ThanksController
     
-Komi:
+rest_Komi:
     type:       rest
     resource:   obdo\KuchiKomiRESTBundle\Controller\KomiController
     
-Kuchi:
+rest_Kuchi:
     type:       rest
     resource:   obdo\KuchiKomiRESTBundle\Controller\KuchiController
     

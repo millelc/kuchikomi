@@ -70,15 +70,6 @@ class Subscription
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
     }
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set timestampCreation

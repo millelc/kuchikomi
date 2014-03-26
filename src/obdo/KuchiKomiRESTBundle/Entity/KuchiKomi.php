@@ -3,6 +3,10 @@
 namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * KuchiKomi
@@ -10,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRepository")
  * @ORM\HasLifecycleCallbacks()
+ * 
+ * @ExclusionPolicy("all")
  * 
  */
 class KuchiKomi
@@ -20,6 +26,8 @@ class KuchiKomi
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $id;
     
@@ -62,6 +70,8 @@ class KuchiKomi
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $title;
     
@@ -70,6 +80,8 @@ class KuchiKomi
      * @var \DateTime
      *
      * @ORM\Column(name="timestampBegin", type="datetime")
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $timestampBegin;
 
@@ -77,6 +89,8 @@ class KuchiKomi
      * @var \DateTime
      *
      * @ORM\Column(name="timestampEnd", type="datetime")
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $timestampEnd;
     
@@ -85,6 +99,8 @@ class KuchiKomi
      * @var text
      *
      * @ORM\Column(name="details", type="text")
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $details;
     
@@ -95,6 +111,11 @@ class KuchiKomi
      * @ORM\Column(name="photo_link", type="string", length=255)
      */
     private $photo_link;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Thanks", mappedBy="kuchikomi")
+     */
+    private $thanks;
     
     
     public function __construct()
@@ -244,6 +265,18 @@ class KuchiKomi
     }
 
     /**
+     * Get kuchiId
+     *
+     * @return Id of the kuchi
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getKuchiId()
+    {
+    	return $this->kuchi->getId();
+    }
+    
+    /**
      * Set title
      *
      * @param string $title
@@ -356,5 +389,17 @@ class KuchiKomi
     public function getPhotoLink()
     {
         return $this->photo_link;
+    }
+    
+    /**
+     * Get Nb thanks
+     *
+     * @return number of thanks
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getNbThanks()
+    {
+    	return count($this->thanks);
     }
 }

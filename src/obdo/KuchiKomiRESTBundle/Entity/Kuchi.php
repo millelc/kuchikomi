@@ -5,6 +5,8 @@ namespace obdo\KuchiKomiRESTBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 use obdo\KuchiKomiRESTBundle\Entity\Subscription;
@@ -30,6 +32,7 @@ class Kuchi
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Expose
+     * @Groups({"Authenticate","Synchro"})
      */
     private $id;
 
@@ -72,6 +75,7 @@ class Kuchi
      *
      * @ORM\Column(name="token", type="string", length=26)
      * @Expose
+     * @Groups({"Authenticate"})
      */
     private $token;
 
@@ -86,6 +90,8 @@ class Kuchi
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $name;
     
@@ -118,6 +124,7 @@ class Kuchi
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi", mappedBy="kuchi")
     */
     private $kuchikomis;
+    
 
     public function __construct()
     {
@@ -278,6 +285,18 @@ class Kuchi
     public function getKuchiGroup()
     {
         return $this->kuchiGroup;
+    }
+
+    /**
+     * Get kuchiGroupId
+     *
+     * @return Id of the kuchi group 
+     * @VirtualProperty 
+     * @Groups({"Synchro"})
+     */
+    public function getKuchiGroupId()
+    {
+        return $this->kuchiGroup->getId();
     }
 
     /**

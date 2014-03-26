@@ -19,4 +19,50 @@ class KuchiKomiRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult();
     }
+    
+    public function getAddedKuchiKomis( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchikomi')
+    	->leftJoin('kuchikomi.kuchi', 'kuchi')
+    	->addSelect('kuchi')
+       	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->addSelect('subscriptions')
+    	->setParameter('komi', $komi)
+    	->andWhere('kuchikomi.active =true')
+    	->andWhere('kuchikomi.timestampCreation >= :fromDate')
+    	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
+    
+    	return $qb->getQuery()->getResult();
+    }
+
+    public function getUpdatedKuchiKomis( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchikomi')
+    	->leftJoin('kuchikomi.kuchi', 'kuchi')
+    	->addSelect('kuchi')
+    	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->addSelect('subscriptions')
+    	->setParameter('komi', $komi)
+    	->andWhere('kuchikomi.active =true')
+    	->andWhere('kuchikomi.timestampCreation < :fromDate')
+    	->andWhere('kuchikomi.timestampLastUpdate >= :fromDate')
+    	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
+    
+    	return $qb->getQuery()->getResult();
+    }
+    
+    public function getDeletedKuchiKomis( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchikomi')
+    	->leftJoin('kuchikomi.kuchi', 'kuchi')
+    	->addSelect('kuchi')
+    	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->addSelect('subscriptions')
+    	->setParameter('komi', $komi)
+    	->andWhere('kuchikomi.active = false')
+    	->andWhere('kuchikomi.timestampSuppression >= :fromDate')
+    	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
+    
+    	return $qb->getQuery()->getResult();
+    }
 }

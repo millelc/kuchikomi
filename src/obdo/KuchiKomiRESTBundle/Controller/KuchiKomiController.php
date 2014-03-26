@@ -15,7 +15,6 @@ use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Put;
-use RMS\PushNotificationsBundle\Message\AndroidMessage;
 
 class KuchiKomiController extends Controller
 {
@@ -108,24 +107,16 @@ class KuchiKomiController extends Controller
      */
     private function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi)
     {	
+    	$Notifier = $this->container->get('obdo_services.Notifier');
+    	
     	foreach ($kuchi->subscriptions as $subscription)
     	{
     		if( $subscription->getActive() )
     		{
     			$komi = $subscription->getKomi();
     			
-    			// Post message
-    			if( $komi->getOsType() == 0 )
-    			{
-    				$message = new AndroidMessage();
-    				$message->setGCM(true);
-    				$message->setMessage( $kuchikomi->getTitle() );
-    				$message->setData(array("type" => "2"));
-    				$message->setDeviceIdentifier($komi->getGcmRegId());
-    			}
+    			$Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => "2"));
     			
-    			$this->container->get('rms_push_notifications')->send($message);
-    			 
     		}
     	}
     }

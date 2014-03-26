@@ -9,7 +9,11 @@ use obdo\KuchiKomiRESTBundle\Entity\Log;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
 use obdo\KuchiKomiUserBundle\Entity\User;
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
+use obdo\KuchiKomiRESTBundle\Entity\Komi;
 use obdo\KuchiKomiRESTBundle\Entity\Address;
+use obdo\KuchiKomiRESTBundle\Entity\Subscription;
+use obdo\KuchiKomiRESTBundle\Entity\Thanks;
 
 class cleanBDD implements FixtureInterface
 {
@@ -53,6 +57,14 @@ class cleanBDD implements FixtureInterface
 		$address2->setCity('Feuguerolles-Bully');
 		$manager->persist($address2);
 		
+// 		$address3 = new Address();
+// 		$address3->setAddress1('Rue de Maltot');
+// 		$address3->setAddress2('');
+// 		$address3->setAddress3('');
+// 		$address3->setPostalCode('14320');
+// 		$address3->setCity('Feuguerolles-Bully');
+// 		$manager->persist($address3);
+		
 		// Kuchi Group
 		$kuchiGroup1 = new KuchiGroup();
 		$kuchiGroup1->setName('Feuguerolles-Bully');
@@ -73,6 +85,55 @@ class cleanBDD implements FixtureInterface
 		$kuchi1_2->setPassword('essai');
 		$kuchi1_2->setAddress($address2);
 		$manager->persist($kuchi1_2);
+		
+// 		$kuchi1_3 = new Kuchi();
+// 		$kuchi1_3->setName('Kuchi supprimé');
+// 		$kuchi1_3->setKuchiGroup($kuchiGroup1);
+// 		$kuchi1_3->setPassword('essai');
+// 		$kuchi1_3->setAddress($address3);
+// 		$kuchi1_3->setActive(false);
+// 		$manager->persist($kuchi1_3);
+
+		// new Komi
+		$komi1 = new Komi();
+		$komi1->setRandomId('Nicolas');
+		$komi1->setOsType(0);
+		$komi1->setApplicationVersion( '2.0.0' );
+		$komi1->setGcmRegId('sdfsdgrstyhrffsdggh');
+		$manager->persist($komi1);
+		
+		$manager->flush();
+		
+		// subscription
+		$subscription1 = new Subscription();
+		$subscription1->setKomi($komi1);
+		$subscription1->setKuchi($kuchi1_1);
+		$subscription1->setType(0);
+		$manager->persist($subscription1);
+		
+// 		$subscription2 = new Subscription();
+// 		$subscription2->setKomi($komi1);
+// 		$subscription2->setKuchi($kuchi1_3);
+// 		$subscription2->setType(0);
+// 		$manager->persist($subscription2);
+		
+		// KuchiKomi
+		$kuchikomi1 = new KuchiKomi();
+		$kuchikomi1->setKuchi($kuchi1_1);
+		$kuchikomi1->setTitle('Nouveau kuchikomi 1');
+		$kuchikomi1->setDetails('from clean BDD');
+		//$endDate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+		//$endDate->add('P2D');
+		$kuchikomi1->setTimestampEnd($kuchikomi1->getTimestampEnd()->add(new \DateInterval('P2D')));
+		$manager->persist($kuchikomi1);
+		$manager->flush();
+		
+		// Thanks
+// 		$thanks1 = new Thanks();
+// 		$thanks1->setKomi($komi1);
+// 		$thanks1->setKuchiKomi($kuchikomi1);
+// 		$manager->persist($thanks1);
+// 		$manager->flush();
 		
 		// Log
 		$newLog = new Log();
