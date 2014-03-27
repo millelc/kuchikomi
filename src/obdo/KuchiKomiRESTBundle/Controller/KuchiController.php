@@ -89,4 +89,87 @@ class KuchiController extends Controller
         return $response;
     }
 
+    /**
+     * @Get("/rest/kuchi/sync/{id}/{hash}")
+     * @return array
+     * @View(serializerGroups={"Synchro"})
+     */
+    public function getKuchiSyncAction($id, $hash)
+    {
+    	$response = new Response();
+    
+    	$Logger = $this->container->get('obdo_services.Logger');
+    
+    	$idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+    	$repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
+    
+    	$kuchi = $repositoryKuchi->findOneById($id);
+    
+    	if( !$kuchi )
+    	{
+    		// Kuchi unknown !
+    		$response->setStatusCode(501);
+    		$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+    	}
+    	else
+    	{
+    		if( $hash == sha1("GET /rest/sync/kuchi" . $kuchi->getToken() ) )
+    		{
+    			if( $kuchi->getActive() )
+    			{
+//     				$addedKuchis = $repositoryKuchi->getAddedKuchis( $komi );
+//     				$updatedKuchis = $repositoryKuchi->getUpdatedKuchis( $komi );
+//     				$deletedKuchis = $repositoryKuchi->getDeletedKuchis( $komi );
+    
+//     				$addedKuchiGroup = $repositoryKuchiGroup->getAddedGroups( $komi );
+//     				$updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
+//     				$deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
+    
+//     				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
+//     				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
+//     				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
+    
+//     				$komi->setCurrentTimestampLastSynchro();
+//     				$em->flush();
+//     				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
+    
+//     				return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
+//     						'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
+//     						'DELETED_KUCHIS_GROUP' => $deletedKuchiGroup,
+//     						'ADDED_KUCHIS' => $addedKuchis,
+//     						'UPDATED_KUCHIS' => $updatedKuchis,
+//     						'DELETED_KUCHIS' => $deletedKuchis,
+//     						'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
+//     						'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
+//     						'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
+    			}
+    			else
+    			{
+    				// kuchi inactive
+    				$response->setStatusCode(502);
+    				$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
+    			}
+    		}
+    		else
+    		{
+    			// hash invalid
+    			$response->setStatusCode(500);
+    			$Logger->Error("[GET rest/kuchi/sync/{id}/{hash}] 500 - Invalid hash");
+    		}
+    
+    		// disable current token
+    		$kuchi->generateToken();
+    	}
+    
+    	$response->headers->set('Content-Type', 'text/html');
+    	// affiche les entêtes HTTP suivies du contenu
+    	$response->send();
+    
+    	return $response;
+    }
+    
 }

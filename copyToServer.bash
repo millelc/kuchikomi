@@ -8,4 +8,4 @@ rm -r prod
 cd ..
 cd logs
 rm *
-scp -r /Applications/MAMP/htdocs/kuchikomi nearforge@192.168.1.32:/var/www/
+scp -r /Applications/MAMP/htdocs/kuchikomi nearforge@192.168.1.253:/var/www/
