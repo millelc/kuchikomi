@@ -62,14 +62,17 @@ class KuchiKomiController extends Controller
                 $kuchikomi->setTimestampBegin($timestampBegin);
                 $kuchikomi->setTimestampEnd($timestampEnd);
                 
-                $photoName = md5(uniqid(rand(), true)) . '.jpeg';
-                $photoPath = $this->get('kernel')->getRootDir() . $this->container->getParameter('path_kuchikomi_photo');
-                $kuchikomi->setPhotoLink( $photoPath . "/" . $photoName );
+                if( $kuchikomiArray['kuchikomi']['photo'] != "" )
+                {
+                	$photoName = md5(uniqid(rand(), true)) . '.jpg';
+                	$kuchikomi->setPhotoLink( $kuchi->getPhotoKuchiKomiLink() . $photoName );
                 
-                $photoByteStream = base64_decode( $kuchikomiArray['kuchikomi']['photo'] );
-                $fp = fopen($kuchikomi->getPhotoLink(), 'wb');
-                fwrite($fp, $photoByteStream);
-                fclose($fp);
+                	$photoByteStream = base64_decode( $kuchikomiArray['kuchikomi']['photo'] );
+                	$fp = fopen($kuchikomi->getPhotoLink(), 'wb');
+                	fwrite($fp, $photoByteStream);
+                	fclose($fp);
+                }
+                
                 
                 $em->persist($kuchikomi);
                 $em->flush();
@@ -109,7 +112,8 @@ class KuchiKomiController extends Controller
     {	
     	$Notifier = $this->container->get('obdo_services.Notifier');
     	
-    	foreach ($kuchi->subscriptions as $subscription)
+    	$subscriptions = $kuchi->getSubscriptions();
+    	foreach ($subscriptions as $subscription)
     	{
     		if( $subscription->getActive() )
     		{
@@ -120,5 +124,69 @@ class KuchiKomiController extends Controller
     		}
     	}
     }
+    
+    /**
+     * @Delete("/rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}")
+     * @return array
+     * @View()
+     */
+    public function deleteKuchiKomiAction($id_kuchi, $id_kuchikomi, $hash)
+    {
+    	$response = new Response();
+    
+    	$Logger = $this->container->get('obdo_services.Logger');
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+    	$repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
+    
+    	$kuchi = $repositoryKuchi->findOneById($id_kuchi);
+    
+    	if( !$kuchi )
+    	{
+    		// kuchi unknown !
+    		$Logger->Info("[DELETE rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}] 501 - Kuchi id=".$id_kuchi." unknown...");
+    		$response->setStatusCode(501);
+    	}
+    	else
+    	{
+    		if( true ) //$hash == sha1("DELETE /rest/kuchikomi" . $kuchi->getToken() ) )
+    		{
+    			$kuchikomi = $repositoryKuchiKomi->findOneById($id_kuchikomi);
+    			
+    			if( !$kuchikomi )
+    			{
+    				// kuchikomi unknown
+    				$response->setStatusCode(502);
+    				$Logger->Info("[DELETE rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}] 502 - KuchiKomi id=".$id_kuchikomi." unknown...");
+    			}
+    			else 
+    			{
+    				$kuchikomi->setTimestampSuppression( new \DateTime('now', new \DateTimeZone('Europe/Paris')) );
+    				$kuchikomi->setActive(false);
+    
+    				$em->flush();
+    				$response->setStatusCode(200);
+    				$Logger->Info("[DELETE rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}] 200 - KuchiKomi id=".$kuchikomi->getId()." deleted");
+    			}
+    		}
+    		else
+    		{
+    			// hash invalid
+    			$response->setStatusCode(500);
+    			$Logger->Error("[DELETE rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}] 500 - Invalid hash");
+    		}
+    
+    		// disable current token
+    		$kuchi->generateToken();
+    	}
+    
+    	$response->headers->set('Content-Type', 'text/html');
+    	// affiche les entêtes HTTP suivies du contenu
+    	$response->send();
+    
+    	return $response;
+    }
+    
 
 }

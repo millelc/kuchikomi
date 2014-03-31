@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * KuchiGroup
@@ -264,7 +265,7 @@ class KuchiGroup
     */
     public function updateDate()
     {
-        $this->timestampLastUpdate = new \Datetime();
+        $this->timestampLastUpdate = new \Datetime('now', new \DateTimeZone('Europe/Paris'));
     }
 
     /**
@@ -316,11 +317,11 @@ class KuchiGroup
     /**
      * Get logo
      *
-     * @return string 
+     * @return KuchiGroup logo
      */
     public function getLogo()
     {
-        return $this->logo;
+    	return $this->logo;
     }
 
     /**
@@ -344,5 +345,25 @@ class KuchiGroup
     public function getNbMaxKuchi()
     {
         return $this->nbMaxKuchi;
+    }
+    
+    /**
+     * Get Logo byte array
+     *
+     * @return byte array of the logo
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getLogos()
+    {
+    	$logoByteStream = "";
+    	if( $this->logo != "")
+    	{
+    		$handle = fopen($this->logo, "r");
+    		$contents = fread($handle, filesize($this->logo));
+    		fclose($handle);
+    		$logoByteStream = base64_encode( $contents );
+    	}
+    	return $logoByteStream;
     }
 }

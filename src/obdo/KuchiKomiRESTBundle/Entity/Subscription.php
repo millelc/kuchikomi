@@ -237,6 +237,6 @@ class Subscription
     */
     public function updateDate()
     {
-        $this->timestampLastUpdate = new \Datetime();
+        $this->timestampLastUpdate = new \Datetime('now', new \DateTimeZone('Europe/Paris'));
     }
 }

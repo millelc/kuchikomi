@@ -49,6 +49,25 @@ class KuchiController extends Controller
                 $em->persist($kuchi);
                 $em->flush();
                 
+                // Création du répertoire pour stocker les images des KuchiKomis
+                $folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi->getId();
+                if(!is_dir($folder))
+                {
+                	mkdir($folder);
+                }
+                $kuchi->setPhotoKuchiKomiLink($folder . "/");
+                
+                // Création du répertoire pour stocker le logo et l'image d'un kuchi
+                $folder = $this->container->getParameter('path_kuchi_photo') . $kuchi->getId();
+                if(!is_dir($folder))
+                {
+                	mkdir($folder);
+                }
+                $kuchi->setLogoLink( $folder . "/logo.png");
+                
+                $em->persist($kuchi);
+                $em->flush();
+                
                 $Logger->Info("[Kuchi] [user : ".$this->get('security.context')->getToken()->getUser()->getUserName()."] ".$kuchi->getName()." added");
 
                 return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(

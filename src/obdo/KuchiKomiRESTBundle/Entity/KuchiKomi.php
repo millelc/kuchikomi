@@ -80,8 +80,6 @@ class KuchiKomi
      * @var \DateTime
      *
      * @ORM\Column(name="timestampBegin", type="datetime")
-     * @Expose
-     * @Groups({"Synchro"})
      */
     private $timestampBegin;
 
@@ -89,8 +87,6 @@ class KuchiKomi
      * @var \DateTime
      *
      * @ORM\Column(name="timestampEnd", type="datetime")
-     * @Expose
-     * @Groups({"Synchro"})
      */
     private $timestampEnd;
     
@@ -108,9 +104,9 @@ class KuchiKomi
     /**
      * @var string
      *
-     * @ORM\Column(name="photo_link", type="string", length=255)
+     * @ORM\Column(name="photoLink", type="string", length=255)
      */
-    private $photo_link;
+    private $photoLink;
     
     /**
      * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Thanks", mappedBy="kuchikomi")
@@ -128,7 +124,7 @@ class KuchiKomi
         $this->timestampBegin = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampEnd = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->details = "";
-        $this->photo_link = "";
+        $this->photoLink = "";
     }
 
     /**
@@ -238,7 +234,7 @@ class KuchiKomi
     */
     public function updateDate()
     {
-        $this->timestampLastUpdate = new \Datetime();
+        $this->timestampLastUpdate = new \Datetime('now', new \DateTimeZone('Europe/Paris'));
     }
 
     /**
@@ -313,6 +309,18 @@ class KuchiKomi
     }
 
     /**
+     * Get timestampBegin in ms
+     *
+     * @return \DateTime in millisecond
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getTimestampBeginMs()
+    {
+    	return $this->timestampBegin->getTimestamp();
+    }
+    
+    /**
      * Get timestampBegin
      *
      * @return \DateTime 
@@ -346,6 +354,18 @@ class KuchiKomi
     }
 
     /**
+     * Get timestampEnd in ms
+     *
+     * @return \DateTime in millisecond
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getTimestampEndMs()
+    {
+    	return $this->timestampEnd->getTimestamp();
+    }
+    
+    /**
      * Set details
      *
      * @param string $details
@@ -376,7 +396,7 @@ class KuchiKomi
      */
     public function setPhotoLink($photoLink)
     {
-        $this->photo_link = $photoLink;
+        $this->photoLink = $photoLink;
 
         return $this;
     }
@@ -388,7 +408,28 @@ class KuchiKomi
      */
     public function getPhotoLink()
     {
-        return $this->photo_link;
+        return $this->photoLink;
+    }
+    
+
+    /**
+     * Get Photo byte array
+     *
+     * @return byte array of the photo
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getPhoto()
+    {
+    	$photoByteStream = "";
+		if( $this->photoLink != "")
+		{
+			$handle = fopen($this->photoLink, "r");
+     		$contents = fread($handle, filesize($this->photoLink));
+     		fclose($handle);
+     		$photoByteStream = base64_encode( $contents );
+		}
+     	return $photoByteStream;
     }
     
     /**

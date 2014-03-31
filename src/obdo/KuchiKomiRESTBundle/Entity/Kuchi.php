@@ -98,17 +98,23 @@ class Kuchi
     /**
      * @var string
      *
-     * @ORM\Column(name="logo_link", type="string", length=255)
+     * @ORM\Column(name="logoLink", type="string", length=255)
      */
-    private $logo_link;
+    private $logoLink;
     
-        /**
+     /**
      * @var string
      *
-     * @ORM\Column(name="photo_link", type="string", length=255)
+     * @ORM\Column(name="photoLink", type="string", length=255)
      */
-    private $photo_link;
-    
+    private $photoLink;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="photoKuchiKomiFolder", type="string", length=255)
+     */
+    private $photoKuchiKomiFolder;
     
     /**
     * @ORM\OneToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Address", cascade={"persist"})
@@ -125,6 +131,8 @@ class Kuchi
     */
     private $kuchikomis;
     
+    
+    
 
     public function __construct()
     {
@@ -133,8 +141,9 @@ class Kuchi
         $this->timestampLastUpdate  = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->generateToken();
-        $this->logo_link = "";
-        $this->photo_link = "";
+        $this->logoLink = "";
+        $this->photoLink = "";
+        $this->photoKuchiKomiFolder = "";
     }
 
 
@@ -360,7 +369,7 @@ class Kuchi
     */
     public function updateDate()
     {
-        $this->timestampLastUpdate = new \Datetime();
+        $this->timestampLastUpdate = new \Datetime('now', new \DateTimeZone('Europe/Paris'));
     }
 
     /**
@@ -442,7 +451,7 @@ class Kuchi
      */
     public function setLogoLink($logoLink)
     {
-        $this->logo_link = $logoLink;
+        $this->logoLink = $logoLink;
 
         return $this;
     }
@@ -454,7 +463,7 @@ class Kuchi
      */
     public function getLogoLink()
     {
-        return $this->logo_link;
+        return $this->logoLink;
     }
 
     /**
@@ -465,7 +474,7 @@ class Kuchi
      */
     public function setPhotoLink($photoLink)
     {
-        $this->photo_link = $photoLink;
+        $this->photoLink = $photoLink;
 
         return $this;
     }
@@ -477,7 +486,30 @@ class Kuchi
      */
     public function getPhotoLink()
     {
-        return $this->photo_link;
+        return $this->photoLink;
+    }
+
+    /**
+     * Set photoKuchiKomiLink
+     *
+     * @param string $photoKuchiKomiLink
+     * @return Kuchi
+     */
+    public function setPhotoKuchiKomiLink($photoKuchiKomiLink)
+    {
+        $this->photoKuchiKomiFolder = $photoKuchiKomiLink;
+
+        return $this;
+    }
+
+    /**
+     * Get photoKuchiKomiLink
+     *
+     * @return string 
+     */
+    public function getPhotoKuchiKomiLink()
+    {
+        return $this->photoKuchiKomiFolder;
     }
 
     /**
@@ -501,5 +533,45 @@ class Kuchi
     public function getPassword()
     {
         return $this->password;
+    }
+    
+    /**
+     * Get Logo byte array
+     *
+     * @return byte array of the logo
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getLogo()
+    {
+    	$logoByteStream = "";
+    	if( $this->logoLink != "")
+    	{
+    		$handle = fopen($this->logoLink, "r");
+    		$contents = fread($handle, filesize($this->logoLink));
+    		fclose($handle);
+    		$logoByteStream = base64_encode( $contents );
+    	}
+    	return $logoByteStream;
+    }
+    
+    /**
+     * Get Photo byte array
+     *
+     * @return byte array of the photo
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getPhoto()
+    {
+    	$photoByteStream = "";
+    	if( $this->photoLink != "")
+    	{
+    		$handle = fopen($this->photoLink, "r");
+    		$contents = fread($handle, filesize($this->photoLink));
+    		fclose($handle);
+    		$photoByteStream = base64_encode( $contents );
+    	}
+    	return $photoByteStream;
     }
 }

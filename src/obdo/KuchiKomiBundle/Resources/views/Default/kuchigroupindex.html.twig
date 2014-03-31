@@ -10,6 +10,7 @@
 <table class="table table-hover table-condensed">
     <thead>
         <tr>
+            <th></th>
             <th>
                 <a href="{{ path('obdo_kuchi_komi_kuchi_group', {'page': page, 'sort': 'active_up'}) }}">
                     <span class="glyphicon glyphicon-chevron-down"></span>
@@ -58,6 +59,9 @@
     <tbody>
         {% for group in groups %}
         <tr>
+            <td>
+                <img src="{{ asset(group.logo) }}" alt="" width=20 height=20 >
+            </td>
             {% if group.active %}
                 <td><p class="text-info">Actif</p></td>
             {% else %}

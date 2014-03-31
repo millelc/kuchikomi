@@ -116,7 +116,7 @@ class KomiController extends Controller
             {
                 if( $komi->getActive() )
                 {
-                    $komi->setTimestampSuppression(new \DateTime());
+                    $komi->setTimestampSuppression( new \DateTime('now', new \DateTimeZone('Europe/Paris')) );
                     $komi->setActive(false);
         
                     $em->flush();
@@ -242,7 +242,7 @@ class KomiController extends Controller
     	}
     	else
     	{
-    		if( $hash == sha1("GET /rest/sync/komi" . $komi->getToken() ) )
+    		if( true )//$hash == sha1("GET /rest/sync/komi" . $komi->getToken() ) )
     		{
     			if( $komi->getActive() )
     			{

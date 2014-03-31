@@ -54,6 +54,16 @@ class KuchiGroupController extends Controller
                 $em->persist($kuchiGroup);
                 $em->flush();
                 
+                // Création du répertoire pour stocker les images des KuchiKomis
+                $folder = $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup->getId();
+                if(!is_dir($folder))
+                {
+                	mkdir($folder);
+                }
+                
+                $em->persist($kuchiGroup);
+                $em->flush();
+                
                 $Logger->Info("[KuchiGroup] [user : ".$this->get('security.context')->getToken()->getUser()->getUserName()."] ".$kuchiGroup->getName()." added");
 
                 return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_group_view', array(

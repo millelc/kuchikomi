@@ -51,3 +51,7 @@ obdo_kuchi_komi_kuchi_add:
 obdo_kuchi_komi_kuchi_view:
     pattern:  /kuchi/{id}
     defaults: { _controller: obdoKuchiKomiBundle:Kuchi:view }
+    
+obdo_kuchi_komi_kuchikomi_view:
+    pattern:  /kuchikomi/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:view }

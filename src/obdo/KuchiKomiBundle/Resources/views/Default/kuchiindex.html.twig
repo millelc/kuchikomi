@@ -8,6 +8,7 @@
 <table class="table table-hover table-condensed">
     <thead>
         <tr>
+            <th></th>
             <th>
                 <a href="{{ path('obdo_kuchi_komi_kuchi', {'page': page, 'sort': 'active_up'}) }}">
                     <span class="glyphicon glyphicon-chevron-down"></span>
@@ -61,6 +62,9 @@
     <tbody>
         {% for kuchi in kuchis %}
         <tr>
+            <td>
+                <img src="{{ asset(kuchi.logoLink) }}" alt="" width=20 height=20 >
+            </td>
             {% if kuchi.active %}
                 <td><p class="text-info">Actif</p></td>
             {% else %}

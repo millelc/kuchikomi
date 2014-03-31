@@ -44,7 +44,19 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$kuchiGroup1->setName('Feuguerolles-Bully');
 		$this->addReference('kuchiGroup1', $kuchiGroup1);
 		$manager->persist($kuchiGroup1);
+		$manager->flush();
+		$kuchiGroup1->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup1->getId() . "/logo.jpg" );
+		$manager->persist($kuchiGroup1);
+		$manager->flush();
 		
+		// Kuchi Group
+		$obdoGroup = new KuchiGroup();
+		$obdoGroup->setName("ob'do");
+		$this->addReference('obdoGroup', $obdoGroup);
+		$manager->persist($obdoGroup);
+		$manager->flush();
+		$obdoGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $obdoGroup->getId() . "/logo.jpg" );
+		$manager->persist($obdoGroup);
 		$manager->flush();	
 	}
 }
