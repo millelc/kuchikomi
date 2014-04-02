@@ -82,8 +82,11 @@ class KuchiGroupRepository extends EntityRepository
     	->join('kuchis.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
-    	->andWhere('kuchigroup.active =true')
+    	->Where('kuchigroup.active = true')
+    	->groupBy('kuchigroup')
+    	->having('count(subscriptions) = 1')
     	->andWhere('kuchigroup.timestampCreation >= :fromDate')
+    	->orWhere('kuchigroup.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampCreation ')
     	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();

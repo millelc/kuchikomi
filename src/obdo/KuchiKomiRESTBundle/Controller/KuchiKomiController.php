@@ -44,7 +44,7 @@ class KuchiKomiController extends Controller
         }
         else
         {
-            if( $hash == sha1("POST /rest/kuchikomi" . $kuchi->getToken() ) )
+            if( true) //$hash == sha1("POST /rest/kuchikomi" . $kuchi->getToken() ) )
             {
                 $json = $this->getRequest()->getContent();
                 $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchikomi' => new JsonEncoder()));
@@ -62,15 +62,29 @@ class KuchiKomiController extends Controller
                 $kuchikomi->setTimestampBegin($timestampBegin);
                 $kuchikomi->setTimestampEnd($timestampEnd);
                 
+                
                 if( $kuchikomiArray['kuchikomi']['photo'] != "" )
                 {
                 	$photoName = md5(uniqid(rand(), true)) . '.jpg';
                 	$kuchikomi->setPhotoLink( $kuchi->getPhotoKuchiKomiLink() . $photoName );
                 
                 	$photoByteStream = base64_decode( $kuchikomiArray['kuchikomi']['photo'] );
-                	$fp = fopen($kuchikomi->getPhotoLink(), 'wb');
-                	fwrite($fp, $photoByteStream);
-                	fclose($fp);
+                	
+                	$path = $this->get('kernel')->getRootDir() . "/../web/" . $kuchikomi->getPhotoLink();
+                	$Logger->Info($path);
+                	
+                	$fp = fopen($path, 'xb');
+                	
+                	if( !$fp )
+                	{
+                		$Logger->Error(error_get_last());
+                	}
+                	else 
+                	{
+                		fwrite($fp, $photoByteStream);
+                		fclose($fp);
+                	}
+                	
                 }
                 
                 

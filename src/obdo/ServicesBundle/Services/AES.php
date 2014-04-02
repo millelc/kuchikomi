@@ -169,7 +169,7 @@ class AES {
         if ($this->validateParams())
         {
             return rtrim(trim(mcrypt_decrypt(
-              $this->cipher, $this->key, base64_decode($this->data), $this->mode, $this->getIV())), "\x02");
+              $this->cipher, $this->key, base64_decode($this->data), $this->mode, $this->getIV())), "\x00..\x1F");
         }
         else
         {

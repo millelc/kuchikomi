@@ -121,11 +121,16 @@ class Komi
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampLastUpdate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
+        $this->resetTimestampLastSynchro();
         $this->generateToken();
         $this->applicationVersion = "0.0.0";
     }
 
+    public function resetTimestampLastSynchro()
+    {
+    	$this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
+    }
+    
     /**
      * Get id
      *

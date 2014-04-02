@@ -21,6 +21,8 @@ class KuchiRepository extends EntityRepository
                     ->getSingleScalarResult();
     }
     
+
+    
     public function getKuchis($nombreParPage, $page, $sort)
     {
         // On déplace la vérification du numéro de page dans cette méthode
@@ -90,8 +92,9 @@ class KuchiRepository extends EntityRepository
     			   ->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
     			   ->addSelect('subscriptions')
     			   ->setParameter('komi', $komi)
-    			   ->andWhere('kuchi.active =true')
+    			   ->Where('kuchi.active =true')
     			   ->andWhere('kuchi.timestampCreation >= :fromDate')
+    			   ->orWhere('kuchi.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampCreation ')
      	           ->setParameter('fromDate', $komi->getTimestampLastSynchro() );
     	 
     	return $qb->getQuery()->getResult();
@@ -103,9 +106,8 @@ class KuchiRepository extends EntityRepository
     			   ->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
     			   ->addSelect('subscriptions')
     			   ->setParameter('komi', $komi)
-    			   ->andWhere('kuchi.active =true')
-    			   ->andWhere('kuchi.timestampCreation < :fromDate')
-    			   ->andWhere('kuchi.timestampLastUpdate >= :fromDate')
+    			   ->Where('kuchi.active =true')
+    			   ->andWhere('kuchi.timestampCreation < :fromDate AND kuchi.timestampLastUpdate >= :fromDate')
      	           ->setParameter('fromDate', $komi->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();

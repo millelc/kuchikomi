@@ -19,4 +19,24 @@ class SubscriptionRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult();
     }
+    
+    /**
+     * Get the number of subscription since the last $monthPeriod period
+     *
+     * @param integer $monthPeriod
+     */
+    public function getNbSubscriptions( $kuchi, $monthPeriod )
+    {
+    	$fromDate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+    	
+    	$qb = $this->createQueryBuilder('subscription')
+    	->select('COUNT(subscription)')
+    	->leftJoin('subscription.kuchi', 'kuchi')
+    	->andWhere('kuchi = :kuchi')
+    	->setParameter('kuchi', $kuchi)
+    	->andWhere('subscription.timestampCreation >= :fromDate')
+    	->setParameter('fromDate', $fromDate->sub(new \DateInterval('P'. $monthPeriod .'M')) );
+    	 
+    	return $qb->getQuery()->getSingleScalarResult();
+    }
 }

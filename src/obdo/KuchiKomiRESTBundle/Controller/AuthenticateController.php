@@ -98,6 +98,32 @@ class AuthenticateController extends Controller
         
         $clearId = $AES->decrypt();
         
+//         $Logger->Error("[POST rest/authenticatekuchi] clearId = " . $clearId );
+//         if(preg_match("#^%%OB-DO-2-0-0%%#", $clearId))
+//         {
+//         	$Logger->Info("[POST rest/authenticatekuchi] clearId START OK" );
+//         }
+//         else
+//         {
+//         	$Logger->Error("[POST rest/authenticatekuchi] clearId START KO" );
+//         }
+//         if(preg_match("#%%ID_PWD%%#", $clearId))
+//         {
+//         	$Logger->Info("[POST rest/authenticatekuchi] clearId MIDDLE OK" );
+//         }
+//         else
+//         {
+//         	$Logger->Error("[POST rest/authenticatekuchi] clearId MIDDLE KO" );
+//         }
+//         if(preg_match("#%%OB-DO-2-0-0%%$#", $clearId))
+//         {
+//         	$Logger->Info("[POST rest/authenticatekuchi] clearId END OK" );
+//         }
+//         else
+//         {
+//         	$Logger->Error("[POST rest/authenticatekuchi] clearId END KO" );
+//         }
+        
         if( $idCheck->isPostAuthenticateKuchiValid( $clearId) )
         {
             $kuchiId = $idCheck->getPostAuthenticateKuchiId($clearId);

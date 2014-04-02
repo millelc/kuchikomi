@@ -242,7 +242,7 @@ class KomiController extends Controller
     	}
     	else
     	{
-    		if( true )//$hash == sha1("GET /rest/sync/komi" . $komi->getToken() ) )
+    		if( $hash == sha1("GET /rest/komi/sync" . $komi->getToken() ) )
     		{
     			if( $komi->getActive() )
     			{

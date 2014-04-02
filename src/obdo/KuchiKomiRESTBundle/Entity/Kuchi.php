@@ -64,6 +64,13 @@ class Kuchi
     private $timestampSuppression;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestampLastSynchro", type="datetime")
+     */
+    private $timestampLastSynchro;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="active", type="boolean")
@@ -140,13 +147,18 @@ class Kuchi
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampLastUpdate  = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->resetTimestampLastSynchro();
         $this->generateToken();
         $this->logoLink = "";
         $this->photoLink = "";
         $this->photoKuchiKomiFolder = "";
     }
 
-
+    public function resetTimestampLastSynchro()
+    {
+    	$this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
+    }
+    
     /**
      * Get id
      *
@@ -339,6 +351,16 @@ class Kuchi
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+    
+    /**
+     * Get number of subscriptions
+     *
+     * @return number
+     */
+    public function getNbSubscriptions()
+    {
+    	return sizeof($this->subscriptions);
     }
 
     /**
@@ -573,5 +595,27 @@ class Kuchi
     		$photoByteStream = base64_encode( $contents );
     	}
     	return $photoByteStream;
+    }
+    
+    /**
+     * Get timestampLastSynchro
+     *
+     * @return \DateTime
+     */
+    public function getTimestampLastSynchro()
+    {
+    	return $this->timestampLastSynchro;
+    }
+    
+    /**
+     * Set timestampLastSynchro to current
+     *
+     * @return Kuchi
+     */
+    public function setCurrentTimestampLastSynchro()
+    {
+    	$this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+    
+    	return $this;
     }
 }

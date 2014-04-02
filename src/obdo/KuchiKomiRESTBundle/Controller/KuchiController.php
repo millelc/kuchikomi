@@ -3,6 +3,7 @@
 namespace obdo\KuchiKomiRESTBundle\Controller;
 
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
+use obdo\KuchiKomiRESTBundle\Entity\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -105,6 +106,7 @@ class KuchiController extends Controller
     
     	$em = $this->getDoctrine()->getManager();
     
+    	$repositorySubscription = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription');
     	$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
     	$repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
     
@@ -118,35 +120,26 @@ class KuchiController extends Controller
     	}
     	else
     	{
-    		if( $hash == sha1("GET /rest/sync/kuchi" . $kuchi->getToken() ) )
+    		if( $hash == sha1("GET /rest/kuchi/sync" . $kuchi->getToken() ) )
     		{
     			if( $kuchi->getActive() )
     			{
-//     				$addedKuchis = $repositoryKuchi->getAddedKuchis( $komi );
-//     				$updatedKuchis = $repositoryKuchi->getUpdatedKuchis( $komi );
-//     				$deletedKuchis = $repositoryKuchi->getDeletedKuchis( $komi );
     
-//     				$addedKuchiGroup = $repositoryKuchiGroup->getAddedGroups( $komi );
-//     				$updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
-//     				$deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
+     				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomisForKuchi( $kuchi );
+     				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomisForKuchi( $kuchi );
+     				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomisForKuchi( $kuchi );
     
-//     				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
-//     				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
-//     				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
+     				$kuchi->setCurrentTimestampLastSynchro();
+     				$em->flush();
+     				$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
     
-//     				$komi->setCurrentTimestampLastSynchro();
-//     				$em->flush();
-//     				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
-    
-//     				return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
-//     						'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
-//     						'DELETED_KUCHIS_GROUP' => $deletedKuchiGroup,
-//     						'ADDED_KUCHIS' => $addedKuchis,
-//     						'UPDATED_KUCHIS' => $updatedKuchis,
-//     						'DELETED_KUCHIS' => $deletedKuchis,
-//     						'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
-//     						'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
-//     						'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
+     				return array('STATS' => array(
+     						                       'NB_SUB' => $kuchi->getNbSubscriptions(),
+     											   'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)
+     				                             ),
+     						     'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
+     						     'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
+     						     'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
     			}
     			else
     			{

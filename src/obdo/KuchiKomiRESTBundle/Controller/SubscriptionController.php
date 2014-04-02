@@ -31,7 +31,6 @@ class SubscriptionController extends Controller
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
         $repositorySubscription = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription');
-        
                     
         
         $komi = $repositoryKomi->findOneByRandomId($id_komi);
