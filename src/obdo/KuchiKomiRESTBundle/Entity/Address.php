@@ -3,12 +3,18 @@
 namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * Address
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="obdo\KuchiKomiRESTBundle\Entity\AddressRepository")
+ * 
+ * @ExclusionPolicy("all")
+ * 
  */
 class Address
 {
@@ -25,6 +31,8 @@ class Address
      * @var string
      *
      * @ORM\Column(name="address_1", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $address1;
 
@@ -32,6 +40,8 @@ class Address
      * @var string
      *
      * @ORM\Column(name="address_2", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $address2;
 
@@ -39,6 +49,8 @@ class Address
      * @var string
      *
      * @ORM\Column(name="address_3", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $address3;
 
@@ -46,6 +58,8 @@ class Address
      * @var string
      *
      * @ORM\Column(name="postalCode", type="string", length=5)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $postalCode;
 
@@ -53,6 +67,8 @@ class Address
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
      */
     private $city;
 

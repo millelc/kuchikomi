@@ -94,7 +94,7 @@ class KuchiKomi
     /**
      * @var text
      *
-     * @ORM\Column(name="details", type="text")
+     * @ORM\Column(name="details", type="text", nullable=true)
      * @Expose
      * @Groups({"Synchro"})
      */
@@ -104,7 +104,7 @@ class KuchiKomi
     /**
      * @var string
      *
-     * @ORM\Column(name="photoLink", type="string", length=255)
+     * @ORM\Column(name="photoLink", type="string", length=255, nullable=true)
      */
     private $photoLink;
     

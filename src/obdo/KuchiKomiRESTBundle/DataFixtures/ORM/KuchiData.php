@@ -44,6 +44,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Kuchi1
 		$kuchi1 = new Kuchi();
 		$kuchi1->setName('Mairie');
+		$kuchi1->setPhoneNumber('02 31 23 34 45');
+		$kuchi1->setMailAddress('mairie@fb.com');
 		$kuchi1->setKuchiGroup($this->getReference('kuchiGroup1'));
 		$kuchi1->setPassword($Password->generateHash('essai'));
 		$kuchi1->setAddress($this->getReference('address1'));
@@ -61,6 +63,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Kuchi2
 		$kuchi2 = new Kuchi();
 		$kuchi2->setName('Médiathèque');
+		$kuchi2->setPhoneNumber('02 31 23 44 45');
+		$kuchi2->setMailAddress('mediatheque@fb.com');
 		$kuchi2->setKuchiGroup($this->getReference('kuchiGroup1'));
 		$kuchi2->setPassword($Password->generateHash('essai'));
 		$kuchi2->setAddress($this->getReference('address2'));
@@ -78,6 +82,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// David
 		$david = new Kuchi();
 		$david->setName('David');
+		$david->setPhoneNumber('00 00 00 00 03');
+		$david->setMailAddress('david.marechal@ob-do.com');
+		$david->setWebSite('www.ob-do.com');
 		$david->setKuchiGroup($this->getReference('obdoGroup'));
 		$david->setPassword($Password->generateHash('david'));
 		$david->setAddress($this->getReference('addressDavid'));
@@ -95,6 +102,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Nicolas
 		$nicolas = new Kuchi();
 		$nicolas->setName('Nicolas');
+		$nicolas->setPhoneNumber('00 00 00 00 04');
+		$nicolas->setMailAddress('nicolas.dries@ob-do.com');
+		$nicolas->setWebSite('www.ob-do.com');		
 		$nicolas->setKuchiGroup($this->getReference('obdoGroup'));
 		$nicolas->setPassword($Password->generateHash('nicolas'));
 		$nicolas->setAddress($this->getReference('addressNicolas'));
@@ -112,6 +122,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Julien
 		$julien = new Kuchi();
 		$julien->setName('Julien');
+		$julien->setPhoneNumber('00 00 00 00 05');
+		$julien->setMailAddress('julien.marie@ob-do.com');
+		$julien->setWebSite('www.ob-do.com');		
 		$julien->setKuchiGroup($this->getReference('obdoGroup'));
 		$julien->setPassword($Password->generateHash('julien'));
 		$julien->setAddress($this->getReference('addressJulien'));
@@ -129,6 +142,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Pascal
 		$pascal = new Kuchi();
 		$pascal->setName('Pascal');
+		$pascal->setPhoneNumber('00 00 00 00 06');
+		$pascal->setMailAddress('pascal.rouet@ob-do.com');
+		$pascal->setWebSite('www.ob-do.com');		
 		$pascal->setKuchiGroup($this->getReference('obdoGroup'));
 		$pascal->setPassword($Password->generateHash('pascal'));
 		$pascal->setAddress($this->getReference('addressPascal'));
@@ -146,6 +162,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Eric
 		$eric = new Kuchi();
 		$eric->setName('Eric');
+		$eric->setPhoneNumber('00 00 00 00 07');
+		$eric->setMailAddress('eric.goujou@ob-do.com');
+		$eric->setWebSite('www.ob-do.com');		
 		$eric->setKuchiGroup($this->getReference('obdoGroup'));
 		$eric->setPassword($Password->generateHash('eric'));
 		$eric->setAddress($this->getReference('addressEric'));
@@ -163,6 +182,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Bruno
 		$bruno = new Kuchi();
 		$bruno->setName('Bruno');
+		$bruno->setPhoneNumber('00 00 00 00 08');
+		$bruno->setMailAddress('bruno.perennou@ob-do.com');
+		$bruno->setWebSite('www.ob-do.com');		
 		$bruno->setKuchiGroup($this->getReference('obdoGroup'));
 		$bruno->setPassword($Password->generateHash('bruno'));
 		$bruno->setAddress($this->getReference('addressBruno'));
@@ -180,6 +202,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Samuel
 		$samuel = new Kuchi();
 		$samuel->setName('Samuel');
+		$samuel->setPhoneNumber('00 00 00 00 09');
+		$samuel->setMailAddress('samuel.lioult@ob-do.com');
+		$samuel->setWebSite('www.ob-do.com');		
 		$samuel->setKuchiGroup($this->getReference('obdoGroup'));
 		$samuel->setPassword($Password->generateHash('samuel'));
 		$samuel->setAddress($this->getReference('addressSamuel'));
@@ -197,6 +222,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Alain
 		$alain = new Kuchi();
 		$alain->setName('Alain');
+		$alain->setPhoneNumber('00 00 00 00 10');
+		$alain->setMailAddress('alain.werck@ob-do.com');
+		$alain->setWebSite('www.ob-do.com');		
 		$alain->setKuchiGroup($this->getReference('obdoGroup'));
 		$alain->setPassword($Password->generateHash('alain'));
 		$alain->setAddress($this->getReference('addressAlain'));
@@ -214,8 +242,11 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Mickael
 		$mickael = new Kuchi();
 		$mickael->setName('Mickael');
+		$mickael->setPhoneNumber('00 00 00 00 11');
+		$mickael->setMailAddress('mickael.boixiere@ob-do.com');
+		$mickael->setWebSite('www.ob-do.com');		
 		$mickael->setKuchiGroup($this->getReference('obdoGroup'));
-		$mickael->setPassword($Password->generateHash('mickael'));
+		$mickael->setPassword($Password->generateHash('mike'));
 		$mickael->setAddress($this->getReference('addressMickael'));
 		$this->addReference('mickael', $mickael);
 		$manager->persist($mickael);
@@ -231,6 +262,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Paul
 		$paul = new Kuchi();
 		$paul->setName('Paul');
+		$paul->setPhoneNumber('00 00 00 00 12');
+		$paul->setMailAddress('paul.vibert@ob-do.com');
+		$paul->setWebSite('www.ob-do.com');		
 		$paul->setKuchiGroup($this->getReference('obdoGroup'));
 		$paul->setPassword($Password->generateHash('paul'));
 		$paul->setAddress($this->getReference('addressPaul'));
@@ -248,6 +282,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Eva
 		$eva = new Kuchi();
 		$eva->setName('Eva');
+		$eva->setPhoneNumber('00 00 00 00 13');
+		$eva->setMailAddress('eva.landon@ob-do.com');
+		$eva->setWebSite('www.ob-do.com');		
 		$eva->setKuchiGroup($this->getReference('obdoGroup'));
 		$eva->setPassword($Password->generateHash('eva'));
 		$eva->setAddress($this->getReference('addressEva'));
@@ -265,6 +302,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		// Maxime
 		$maxime = new Kuchi();
 		$maxime->setName('Maxime');
+		$maxime->setPhoneNumber('00 00 00 00 14');
+		$maxime->setMailAddress('maxime.marie@ob-do.com');
+		$maxime->setWebSite('www.ob-do.com');		
 		$maxime->setKuchiGroup($this->getReference('obdoGroup'));
 		$maxime->setPassword($Password->generateHash('maxime'));
 		$maxime->setAddress($this->getReference('addressMaxime'));

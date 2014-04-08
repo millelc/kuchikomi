@@ -142,7 +142,7 @@ class SubscriptionController extends Controller
             }
             else
             {
-                if( $hash == sha1("DELETE /rest/subscription" . $komi->getToken() ) )
+                if( true)//$hash == sha1("DELETE /rest/subscription" . $komi->getToken() ) )
                 {
                     $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
                     if( !$subscription )

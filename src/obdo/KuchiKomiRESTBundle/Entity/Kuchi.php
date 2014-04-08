@@ -125,8 +125,38 @@ class Kuchi
     
     /**
     * @ORM\OneToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Address", cascade={"persist"})
+    * @Expose
+    * @Groups({"Synchro"})
     */
     private $address;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mailAddress", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
+     */
+    private $mailAddress;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="webSite", type="string", length=255)
+     * @Expose
+     * @Groups({"Synchro"})
+     */
+    private $webSite;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phoneNumber", type="string", length=50)
+     * @Expose
+     * @Groups({"Synchro"})
+     */
+    private $phoneNumber;
+    
     
     /**
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Subscription", mappedBy="kuchi")
@@ -152,6 +182,9 @@ class Kuchi
         $this->logoLink = "";
         $this->photoLink = "";
         $this->photoKuchiKomiFolder = "";
+        $this->phoneNumber = "";
+        $this->mailAddress = "";
+        $this->webSite = "";
     }
 
     public function resetTimestampLastSynchro()
@@ -617,5 +650,110 @@ class Kuchi
     	$this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
     
     	return $this;
+    }
+
+    /**
+     * Set timestampLastSynchro
+     *
+     * @param \DateTime $timestampLastSynchro
+     * @return Kuchi
+     */
+    public function setTimestampLastSynchro($timestampLastSynchro)
+    {
+        $this->timestampLastSynchro = $timestampLastSynchro;
+
+        return $this;
+    }
+
+    /**
+     * Set photoKuchiKomiFolder
+     *
+     * @param string $photoKuchiKomiFolder
+     * @return Kuchi
+     */
+    public function setPhotoKuchiKomiFolder($photoKuchiKomiFolder)
+    {
+        $this->photoKuchiKomiFolder = $photoKuchiKomiFolder;
+
+        return $this;
+    }
+
+    /**
+     * Get photoKuchiKomiFolder
+     *
+     * @return string 
+     */
+    public function getPhotoKuchiKomiFolder()
+    {
+        return $this->photoKuchiKomiFolder;
+    }
+
+    /**
+     * Set mailAddress
+     *
+     * @param string $mailAddress
+     * @return Kuchi
+     */
+    public function setMailAddress($mailAddress)
+    {
+        $this->mailAddress = $mailAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get mailAddress
+     *
+     * @return string 
+     */
+    public function getMailAddress()
+    {
+        return $this->mailAddress;
+    }
+
+    /**
+     * Set webSite
+     *
+     * @param string $webSite
+     * @return Kuchi
+     */
+    public function setWebSite($webSite)
+    {
+        $this->webSite = $webSite;
+
+        return $this;
+    }
+
+    /**
+     * Get webSite
+     *
+     * @return string 
+     */
+    public function getWebSite()
+    {
+        return $this->webSite;
+    }
+
+    /**
+     * Set phoneNumber
+     *
+     * @param string $phoneNumber
+     * @return Kuchi
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber
+     *
+     * @return string 
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
     }
 }

@@ -10,4 +10,4 @@ sudo rm -r temp_image
 sudo chmod -R 777 kuchikomi/web/images/
 
 cd kuchikomi
-php app/console doctrine:fixtures:load
+#php app/console doctrine:fixtures:load

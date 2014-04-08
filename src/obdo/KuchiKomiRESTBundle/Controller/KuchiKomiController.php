@@ -33,7 +33,7 @@ class KuchiKomiController extends Controller
         
         $repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
         $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
-                    
+                 
         
         $kuchi = $repositoryKuchi->findOneById($id_kuchi);
         if( !$kuchi )
@@ -44,24 +44,25 @@ class KuchiKomiController extends Controller
         }
         else
         {
-            if( true) //$hash == sha1("POST /rest/kuchikomi" . $kuchi->getToken() ) )
+            if( $hash == sha1("POST /rest/kuchikomi" . $kuchi->getToken() ) )
             {
                 $json = $this->getRequest()->getContent();
                 $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchikomi' => new JsonEncoder()));
                 $kuchikomiArray = $serializer->decode($json, 'json');
+                
                 $kuchikomi = new KuchiKomi();
                 
-                $timestampBegin = new \DateTime();
+                $timestampBegin = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
                 $timestampBegin->setTimestamp($kuchikomiArray['kuchikomi']['timestampBegin']);
-                $timestampEnd = new \DateTime();
+                
+                $timestampEnd = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
                 $timestampEnd->setTimestamp($kuchikomiArray['kuchikomi']['timestampEnd']);
-        
+                
                 $kuchikomi->setKuchi($kuchi);
                 $kuchikomi->setTitle($kuchikomiArray['kuchikomi']['title']);
                 $kuchikomi->setDetails($kuchikomiArray['kuchikomi']['details']);
                 $kuchikomi->setTimestampBegin($timestampBegin);
                 $kuchikomi->setTimestampEnd($timestampEnd);
-                
                 
                 if( $kuchikomiArray['kuchikomi']['photo'] != "" )
                 {
@@ -83,8 +84,7 @@ class KuchiKomiController extends Controller
                 	{
                 		fwrite($fp, $photoByteStream);
                 		fclose($fp);
-                	}
-                	
+                	}	
                 }
                 
                 

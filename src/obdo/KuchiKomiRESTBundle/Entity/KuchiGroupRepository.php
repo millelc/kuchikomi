@@ -4,6 +4,7 @@ namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use obdo\KuchiKomiRESTBundle\obdoKuchiKomiRESTBundle;
 
 /**
  * KuchiGroupRepository
@@ -83,12 +84,10 @@ class KuchiGroupRepository extends EntityRepository
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
     	->Where('kuchigroup.active = true')
-    	->groupBy('kuchigroup')
-    	->having('count(subscriptions) = 1')
-    	->andWhere('kuchigroup.timestampCreation >= :fromDate')
-    	->orWhere('kuchigroup.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampCreation ')
+    	->andWhere('subscriptions.active = true AND kuchigroup.timestampCreation >= :fromDate')
+    	->orWhere('subscriptions.active = true AND kuchigroup.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampLastUpdate ')
     	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
-    
+    	
     	return $qb->getQuery()->getResult();
     }
     
@@ -116,10 +115,10 @@ class KuchiGroupRepository extends EntityRepository
     	->join('kuchis.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
-    	->andWhere('kuchigroup.active = false')
-    	->andWhere('kuchigroup.timestampSuppression >= :fromDate')
+    	->Where('kuchigroup.active = false AND kuchigroup.timestampSuppression >= :fromDate')
     	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();
     }
+    
 }
