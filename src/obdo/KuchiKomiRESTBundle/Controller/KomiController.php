@@ -78,8 +78,8 @@ class KomiController extends Controller
         }
         else
         {
-            $response->setStatusCode(500);
-            $Logger->Error("[POST rest/komi] 500 - Invalid Komi id");
+            $response->setStatusCode(600);
+            $Logger->Error("[POST rest/komi] 600 - Invalid Komi id");
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -117,6 +117,7 @@ class KomiController extends Controller
                 if( $komi->getActive() )
                 {
                     $komi->setTimestampSuppression( new \DateTime('now', new \DateTimeZone('Europe/Paris')) );
+                    $komi->resetTimestampLastSynchro();
                     $komi->setActive(false);
         
                     $em->flush();
@@ -134,8 +135,8 @@ class KomiController extends Controller
             else
             {
                 // hash invalid
-                $response->setStatusCode(500);
-                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 500 - Invalid Komi id");
+                $response->setStatusCode(600);
+                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 600 - Invalid Komi id");
             }
             
             // disable current token
@@ -180,6 +181,7 @@ class KomiController extends Controller
                 {
                     $komi->setOsType($this->getRequest()->get('os_id'));
                     $komi->setApplicationVersion($this->getRequest()->get('version'));
+                    $komi->setGcmRegId($this->getRequest()->get('reg_id'));
                     $komi->setActive(true);
         
                     $em->flush();
@@ -197,8 +199,8 @@ class KomiController extends Controller
             else
             {
                 // hash invalid
-                $response->setStatusCode(500);
-                $Logger->Error("[PUT rest/komi/{id}/{hash}] 500 - Invalid Komi id");
+                $response->setStatusCode(600);
+                $Logger->Error("[PUT rest/komi/{id}/{hash}] 600 - Invalid Komi id");
             }
             
             // disable current token
@@ -282,8 +284,8 @@ class KomiController extends Controller
     		else
     		{
     			// hash invalid
-    			$response->setStatusCode(500);
-    			$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 500 - Invalid hash");
+    			$response->setStatusCode(600);
+    			$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 600 - Invalid hash");
     		}
     
     		// disable current token

@@ -60,8 +60,14 @@ class ThanksController extends Controller
 	                    $thanks = new Thanks();
 						$thanks->setKomi($komi);
 						$thanks->setKuchiKomi($kuchikomi);
+						
+						$kuchikomi->setTimestampLastUpdate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+						
+						$em->persist($kuchikomi);
 						$em->persist($thanks);
 						$em->flush(); 
+						
+						
 						
 	                    $response->setStatusCode(200);
 	                    $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
@@ -77,8 +83,8 @@ class ThanksController extends Controller
             else
             {
                 // hash invalid
-                $response->setStatusCode(500);
-                $Logger->Error("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 500 - Invalid Komi id");
+                $response->setStatusCode(600);
+                $Logger->Error("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 600 - hash invalid");
             }
             
             // disable current token

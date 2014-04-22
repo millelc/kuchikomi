@@ -19,55 +19,59 @@ class AuthenticateController extends Controller
      * @View(serializerGroups={"Authenticate"})
      */
     public function postAuthenticateAction()
-    {
+    {	
         $response = new Response();
                 
         $AES = $this->container->get('obdo_services.AES');
         $Logger = $this->container->get('obdo_services.Logger');
         $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
         
+        $Logger->Error("[POST rest/authenticate] START");
+        
         $em = $this->getDoctrine()->getManager();
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         
-        
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
+        
         $AES->setData($this->getRequest()->get('KK_id'));
         
         $clearId = $AES->decrypt();
         
+        
         if( $idCheck->isPostAuthenticateValid( $clearId) )
         {
-            $randomId = $idCheck->getPostAuthenticateRandomId($clearId);
+        	$randomId = $idCheck->getPostAuthenticateRandomId($clearId);
             
             $komi = $repositoryKomi->findOneByRandomId($randomId);
             
             if( !$komi )
             {
+            	
                 // Komi unknown !
                 $response->setStatusCode(501);
                 $Logger->Error("[POST rest/authenticate] 501 - Komi id=".$randomId." unkonwn");
             }
             else
             {   
-                // Token génération
+            	// Token génération
                 $komi->generateToken();
                 
                 $em->persist($komi);
                 $em->flush();
                 
-                return array('komi' => $komi);
-                
+                $response->headers->set('Content-Type', 'application/json');
+                return array('komi' => $komi);               
             }
         }
         else
         {
-            $response->setStatusCode(500);
-            $Logger->Error("[POST rest/authenticate] 500 - Invalid Komi id");                
+        	$response->setStatusCode(600);
+            $Logger->Error("[POST rest/authenticate] 600 - Invalid Komi id");                
         }
 
-        $response->headers->set('Content-Type', 'text/html');
+        $response->headers->set('Content-Type', 'application/json');
         // affiche les entêtes HTTP suivies du contenu
         $response->send();
         
@@ -163,8 +167,8 @@ class AuthenticateController extends Controller
         }
         else
         {
-            $response->setStatusCode(500);
-            $Logger->Error("[POST rest/authenticatekuchi] 500 - Invalid Kuchi id");                
+            $response->setStatusCode(600);
+            $Logger->Error("[POST rest/authenticatekuchi] 600 - Invalid Kuchi id");                
         }
 
         $response->headers->set('Content-Type', 'text/html');

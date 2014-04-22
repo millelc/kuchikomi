@@ -99,8 +99,8 @@ class KuchiKomiController extends Controller
             else
             {
                 // hash invalid
-                $response->setStatusCode(500);
-                $Logger->Error("[POST rest/kuchikomi] 500 - hash invalide");
+                $response->setStatusCode(600);
+                $Logger->Error("[POST rest/kuchikomi] 600 - hash invalide");
             }
 
             // disable current token
@@ -164,7 +164,7 @@ class KuchiKomiController extends Controller
     	}
     	else
     	{
-    		if( true ) //$hash == sha1("DELETE /rest/kuchikomi" . $kuchi->getToken() ) )
+    		if( $hash == sha1("DELETE /rest/kuchikomi" . $kuchi->getToken() ) )
     		{
     			$kuchikomi = $repositoryKuchiKomi->findOneById($id_kuchikomi);
     			
@@ -187,8 +187,8 @@ class KuchiKomiController extends Controller
     		else
     		{
     			// hash invalid
-    			$response->setStatusCode(500);
-    			$Logger->Error("[DELETE rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}] 500 - Invalid hash");
+    			$response->setStatusCode(600);
+    			$Logger->Error("[DELETE rest/kuchikomi/{id_kuchi}/{id_kuchikomi}/{hash}] 600 - Invalid hash");
     		}
     
     		// disable current token

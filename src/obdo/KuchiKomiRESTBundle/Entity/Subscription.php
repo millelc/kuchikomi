@@ -108,6 +108,18 @@ class Subscription
     }
 
     /**
+     * Set timestampSuppression to current
+     *
+     * @return Subscription
+     */
+    public function setCurrentTimestampSuppression()
+    {
+        $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+
+        return $this;
+    }
+
+    /**
      * Get timestampSuppression
      *
      * @return \DateTime 

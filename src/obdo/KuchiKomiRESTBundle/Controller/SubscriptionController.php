@@ -52,45 +52,55 @@ class SubscriptionController extends Controller
             }
             else
             {
-                if( $hash == sha1("POST /rest/subscription" . $komi->getToken() ) )
-                {
-                    $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
-                    if( !$subscription )
-                    {
-                        $subscription = new Subscription();
-                        $subscription->setKomi($komi);
-                        $subscription->setKuchi($kuchi);
-                        $subscription->setType($type);
-                        
-                        $em->persist($subscription);
-                        $em->flush();
-                        $response->setStatusCode(200);
-                        $Logger->Info("[POST rest/subscription] 200 - New subscription (". $komi->getRandomId() ."-". $kuchi->getName().") added");
-                    }
-                    else
-                    {
-                        if( !$subscription->getActive() )
-                        {
-                            $subscription->setActive(true);
-                            $subscription->setType($type);
-                            $em->flush();
-                            $response->setStatusCode(200);
-                            $Logger->Info("[POST rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") re-activated");
-                        }
-                        else
-                        {
-                            // subscription already exist and active
-                            $response->setStatusCode(503);
-                            $Logger->Warning("[POST rest/subscription] 503 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already exist");
-                        }
-                    }
-                }
-                else
-                {
-                    // hash invalid
-                    $response->setStatusCode(500);
-                    $Logger->Error("[POST rest/subscription] 500 - hash invalide");
-                }
+            	if( $kuchi->getActive() )
+            	{
+	                if( $hash == sha1("POST /rest/subscription" . $komi->getToken() ) )
+	                {
+	                    $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+	                    if( !$subscription )
+	                    {
+	                        $subscription = new Subscription();
+	                        $subscription->setKomi($komi);
+	                        $subscription->setKuchi($kuchi);
+	                        $subscription->setType($type);
+	                        
+	                        $em->persist($subscription);
+	                        $em->flush();
+	                        $response->setStatusCode(200);
+	                        $Logger->Info("[POST rest/subscription] 200 - New subscription (". $komi->getRandomId() ."-". $kuchi->getName().") added");
+	                    }
+	                    else
+	                    {
+	                        if( !$subscription->getActive() )
+	                        {
+	                            $subscription->setActive(true);
+	                            $subscription->setType($type);
+	                            $em->flush();
+	                            $response->setStatusCode(200);
+	                            $Logger->Info("[POST rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") re-activated");
+	                        }
+	                        else
+	                        {
+	                            // subscription already exist and active
+	                            $response->setStatusCode(503);
+	                            $Logger->Warning("[POST rest/subscription] 503 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already exist");
+	                        }
+	                    }
+	                }
+	                else
+	                {
+	                    // hash invalid
+	                    $response->setStatusCode(600);
+	                    $Logger->Error("[POST rest/subscription] 600 - hash invalide");
+	                }            		
+            	}
+            	else 
+            	{
+            		// Kuchi inactif
+            		$response->setStatusCode(504);
+            		$Logger->Error("[POST rest/subscription] 504 - Kuchi id " . $kuchi->getId() . " inactif");
+            	}
+
             }
             
             // disable current token
@@ -142,7 +152,7 @@ class SubscriptionController extends Controller
             }
             else
             {
-                if( true)//$hash == sha1("DELETE /rest/subscription" . $komi->getToken() ) )
+                if( $hash == sha1("DELETE /rest/subscription" . $komi->getToken() ) )
                 {
                     $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
                     if( !$subscription )
@@ -161,7 +171,7 @@ class SubscriptionController extends Controller
                         }
                         else
                         {
-                            $subscription->setTimestampSuppression(new \DateTime());
+                            $subscription->setCurrentTimestampSuppression();
                             $subscription->setActive(false);
                             
                             $em->flush();
@@ -173,8 +183,8 @@ class SubscriptionController extends Controller
                 else
                 {
                     // hash invalid
-                    $response->setStatusCode(500);
-                    $Logger->Error("[DELETE rest/subscription] 500 - hash invalide");
+                    $response->setStatusCode(600);
+                    $Logger->Error("[DELETE rest/subscription] 600 - hash invalide");
                 }
             }
             

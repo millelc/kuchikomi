@@ -76,8 +76,8 @@ class KuchiController extends Controller
             else
             {
                 // hash invalid
-                $response->setStatusCode(500);
-                $Logger->Error("[PUT rest/kuchi/{id}/{hash}] 500 - Invalid Kuchi id");
+                $response->setStatusCode(600);
+                $Logger->Error("[PUT rest/kuchi/{id}/{hash}] 600 - Invalid Kuchi id");
             }
             
             // disable current token
@@ -151,8 +151,8 @@ class KuchiController extends Controller
     		else
     		{
     			// hash invalid
-    			$response->setStatusCode(500);
-    			$Logger->Error("[GET rest/kuchi/sync/{id}/{hash}] 500 - Invalid hash");
+    			$response->setStatusCode(600);
+    			$Logger->Error("[GET rest/kuchi/sync/{id}/{hash}] 600 - Invalid hash");
     		}
     
     		// disable current token
