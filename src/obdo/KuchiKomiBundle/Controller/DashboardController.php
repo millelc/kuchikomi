@@ -14,6 +14,7 @@ class DashboardController extends Controller
     public function nbGroupAction()
     {
         $nbGroup = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')->getNbGroup();
+
         return $this->render('obdoKuchiKomiBundle:Dashboard:nbgroup.html.twig', array('nbGroup'=>$nbGroup));
     }
 
