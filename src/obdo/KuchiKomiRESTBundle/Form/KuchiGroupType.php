@@ -17,6 +17,7 @@ class KuchiGroupType extends AbstractType
         $builder
             ->add('name')
             ->add('nbMaxKuchi')
+            ->add('file', 'file')
         ;
     }
     

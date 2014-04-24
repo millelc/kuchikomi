@@ -25,7 +25,7 @@ use JMS\Serializer\Annotation\XmlElement;
 use JMS\Serializer\Annotation\XmlAttribute;
 
 /**
- * @XmlRoot("test-object")
+ * @XmlRoot("test-object", namespace="http://example.com/namespace")
  * @XmlNamespace(uri="http://example.com/namespace")
  * @XmlNamespace(uri="http://schemas.google.com/g/2005", prefix="gd")
  * @XmlNamespace(uri="http://www.w3.org/2005/Atom", prefix="atom")

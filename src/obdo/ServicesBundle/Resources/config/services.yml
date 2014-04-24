@@ -16,3 +16,6 @@ services:
     obdo_services.Notifier:
         class: obdo\ServicesBundle\Services\Notifier
         arguments: [ @kernel ]
+    
+    obdo_services.Picture_uploader:
+        class: obdo\ServicesBundle\Services\PictureUploader

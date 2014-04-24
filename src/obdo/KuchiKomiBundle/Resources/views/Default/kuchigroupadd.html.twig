@@ -11,20 +11,26 @@
         {{ form_errors(form) }}
         
         <div>
-            {{ form_label(form.name, "Nom") }}<br>
+            {{ form_label(form.name, "Nom") }}<br />
             {{ form_errors(form.name) }}
             {{ form_widget(form.name) }}
         </div>
-        
+        <br />
         <div>
-            {{ form_label(form.nbMaxKuchi, "Nombre MAX de Kuchi") }}<br>
+            {{ form_label(form.nbMaxKuchi, "Nombre MAX de Kuchi") }}<br />
             {{ form_errors(form.nbMaxKuchi) }}
             {{ form_widget(form.nbMaxKuchi) }}
+        </div>
+        <br />
+        <div>
+            {{ form_label(form.file, "Logo du groupe") }}<br />
+            {{ form_errors(form.file) }}
+            {{ form_widget(form.file) }}
         </div>
         
         {{ form_rest(form) }}
 
-        <br>
+        <br />
         <input type="submit" class="btn btn-primary" />
     </form>
     

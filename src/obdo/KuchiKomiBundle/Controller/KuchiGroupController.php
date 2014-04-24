@@ -60,7 +60,8 @@ class KuchiGroupController extends Controller
                 {
                 	mkdir($folder);
                 }
-                
+                $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getFile(), $folder);
+                $kuchiGroup->setLogo($logo);
                 $em->persist($kuchiGroup);
                 $em->flush();
                 

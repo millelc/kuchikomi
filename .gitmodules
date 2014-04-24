@@ -1,0 +1,12 @@
+[submodule "vendor/doctrine/data-fixtures"]
+	path = vendor/doctrine/data-fixtures
+	url = git://github.com/doctrine/data-fixtures.git
+[submodule "vendor/doctrine/doctrine-fixtures-bundle/Doctrine/Bundle/FixturesBundle"]
+	path = vendor/doctrine/doctrine-fixtures-bundle/Doctrine/Bundle/FixturesBundle
+	url = git://github.com/doctrine/DoctrineFixturesBundle.git
+[submodule "vendor/friendsofsymfony/user-bundle/FOS/UserBundle"]
+	path = vendor/friendsofsymfony/user-bundle/FOS/UserBundle
+	url = git://github.com/FriendsOfSymfony/FOSUserBundle.git
+[submodule "vendor/richsage/rms-push-notifications-bundle/RMS/PushNotificationsBundle"]
+	path = vendor/richsage/rms-push-notifications-bundle/RMS/PushNotificationsBundle
+	url = git://github.com/richsage/RMSPushNotificationsBundle.git

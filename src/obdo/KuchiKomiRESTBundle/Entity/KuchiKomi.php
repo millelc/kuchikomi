@@ -443,4 +443,5 @@ class KuchiKomi
     {
     	return count($this->thanks);
     }
+
 }

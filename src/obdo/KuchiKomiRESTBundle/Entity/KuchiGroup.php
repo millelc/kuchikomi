@@ -91,6 +91,8 @@ class KuchiGroup
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup", mappedBy="kuchiGroup")
     */
     private $subscriptions;
+    
+    private $file;
 
     public function __construct()
     {
@@ -366,4 +368,14 @@ class KuchiGroup
     	}
     	return $logoByteStream;
     }
+    
+    public function getFile() {
+        return $this->file;
+    }
+    public function setFile($file) {
+        $this->file = $file;
+    }
+
+
+
 }

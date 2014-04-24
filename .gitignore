@@ -6,3 +6,4 @@
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /build/
+/nbproject/private/
