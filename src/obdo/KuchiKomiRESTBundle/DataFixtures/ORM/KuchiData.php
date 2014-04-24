@@ -319,6 +319,24 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($maxime);
 		$manager->flush();
 		
-		
+		// News
+		$news = new Kuchi();
+		$news->setName('News');
+		$news->setPhoneNumber('-');
+		$news->setMailAddress('news@citykomi.com');
+		$news->setWebSite('www.citykomi.com');
+		$news->setKuchiGroup($this->getReference('citykomiGroup'));
+		$news->setPassword($Password->generateHash('news'));
+		$news->setAddress($this->getReference('addressNews'));
+		$this->addReference('news', $news);
+		$manager->persist($news);
+		$manager->flush();
+		$folder = $this->container->getParameter('path_kuchikomi_photo') . $news->getId();
+		$news->setPhotoKuchiKomiLink($folder . "/");
+		$folder = $this->container->getParameter('path_kuchi_photo') . $news->getId();
+		$news->setLogoLink($folder . "/logo.jpg");
+		$news->setPhotoLink($folder . "/photo.jpg");
+		$manager->persist($news);
+		$manager->flush();		
 	}
 }

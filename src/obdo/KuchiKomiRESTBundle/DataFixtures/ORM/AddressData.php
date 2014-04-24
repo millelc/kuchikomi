@@ -39,6 +39,16 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 	{
 		$manager->getConnection()->exec("ALTER TABLE Address AUTO_INCREMENT = 1;");
 		
+		// Address News
+		$addressNews = new Address();
+		$addressNews->setAddress1('');
+		$addressNews->setAddress2('');
+		$addressNews->setAddress3('');
+		$addressNews->setPostalCode('');
+		$addressNews->setCity('');
+		$this->addReference('addressNews', $addressNews);
+		$manager->persist($addressNews);
+		
 		// Address
 		$address1 = new Address();
 		$address1->setAddress1('Rue de Caen');

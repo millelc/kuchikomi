@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -91,6 +92,68 @@ class KuchiController extends Controller
         return $response;
     }
 
+    /**
+     * @Delete("/rest/kuchi/sync/{id}/{hash}")
+     * @return array
+     * @View()
+     */
+    public function deleteKuchiSyncAction($id, $hash)
+    {
+        $response = new Response();
+        
+        $Logger = $this->container->get('obdo_services.Logger');
+        $Password = $this->container->get('obdo_services.Password');
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+        
+        $kuchi = $repositoryKuchi->findOneById($id);
+        
+        if( !$kuchi )
+        {
+            // Kuchi unknown !
+            $response->setStatusCode(501);
+            $Logger->Info("[DELETE rest/kuchi/sync/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+        }
+        else
+        {
+            if( $hash == sha1("DELETE /rest/kuchi/sync" . $kuchi->getToken() ) )
+            {
+                if( $kuchi->getActive() )
+                {
+                	$kuchi->resetTimestampLastSynchro();
+                	
+                	$em->flush();
+                    $response->setStatusCode(200);
+                    $Logger->Info("[DELETE rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." last synchro reseted");
+                }
+                else
+                {
+                    // kuchi inactive
+                    $response->setStatusCode(502);
+                    $Logger->Info("[DELETE rest/kuchi/sync/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
+                }
+                
+            }
+            else
+            {
+                // hash invalid
+                $response->setStatusCode(600);
+                $Logger->Error("[DELETE rest/kuchi/sync/{id}/{hash}] 600 - Invalid hash");
+            }
+            
+            // disable current token
+            $kuchi->generateToken();
+        }
+
+        $response->headers->set('Content-Type', 'text/html');
+        // affiche les entêtes HTTP suivies du contenu
+        $response->send();
+        
+        return $response;
+    }
+    
     /**
      * @Get("/rest/kuchi/sync/{id}/{hash}")
      * @return array

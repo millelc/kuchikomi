@@ -39,7 +39,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 	{
 		$manager->getConnection()->exec("ALTER TABLE KuchiGroup AUTO_INCREMENT = 1;");
 		
-		// Kuchi Group
+		// Feuguerolles-Bully Group
 		$kuchiGroup1 = new KuchiGroup();
 		$kuchiGroup1->setName('Feuguerolles-Bully');
 		$this->addReference('kuchiGroup1', $kuchiGroup1);
@@ -49,7 +49,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$manager->persist($kuchiGroup1);
 		$manager->flush();
 		
-		// Kuchi Group
+		// ob-do Group
 		$obdoGroup = new KuchiGroup();
 		$obdoGroup->setName("ob'do");
 		$this->addReference('obdoGroup', $obdoGroup);
@@ -58,5 +58,15 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$obdoGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $obdoGroup->getId() . "/logo.jpg" );
 		$manager->persist($obdoGroup);
 		$manager->flush();	
+		
+		// CityKomi Group
+		$citykomiGroup = new KuchiGroup();
+		$citykomiGroup->setName("CityKomi");
+		$this->addReference('citykomiGroup', $citykomiGroup);
+		$manager->persist($citykomiGroup);
+		$manager->flush();
+		$citykomiGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $citykomiGroup->getId() . "/logo.jpg" );
+		$manager->persist($citykomiGroup);
+		$manager->flush();
 	}
 }
