@@ -1,0 +1,7 @@
+## src/obdo/KuchiKomiRESTBundle/Resources/config/validation.yml
+obdo\KuchiKomiRESTBundle\Entity\KuchiGroup:
+    properties:
+        logoimg:
+            - File:
+                mimeTypes: [image/png, image/gif, image/jpg, image/jpeg]
+                

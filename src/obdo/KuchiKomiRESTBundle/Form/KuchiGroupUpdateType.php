@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class KuchiGroupType extends AbstractType
+class KuchiGroupUpdateType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,9 +15,9 @@ class KuchiGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('nbMaxKuchi')
-            ->add('logoimg')
+            ->add('name','text', array('required' => false,))
+            ->add('nbMaxKuchi','integer', array('required' => false,))
+            ->add('logoimg','file', array('required' => false,))
         ;
     }
     

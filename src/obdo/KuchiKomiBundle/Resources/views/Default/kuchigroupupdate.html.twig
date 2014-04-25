@@ -3,7 +3,7 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
-<h3>Ajouter un groupe de Kuchi</h3>
+<h3>Modifier un groupe de Kuchi</h3>
 <div class="well">
     
     <form method="post" {{ form_enctype(form) }}>
@@ -14,12 +14,14 @@
             {{ form_label(form.name, "Nom") }}<br />
             {{ form_errors(form.name) }}
             {{ form_widget(form.name) }}
+            {% set name = {'attr': {'value': kuchiGroup.getName()} } %}
         </div>
         <br />
         <div>
             {{ form_label(form.nbMaxKuchi, "Nombre MAX de Kuchi") }}<br />
             {{ form_errors(form.nbMaxKuchi) }}
             {{ form_widget(form.nbMaxKuchi) }}
+            {% set name = {'attr': {'value': kuchiGroup.getNbMaxKuchi()} } %}
         </div>
         <br />
         <div>
@@ -32,6 +34,7 @@
 
         <br />
         <input type="submit" class="btn btn-primary" />
+        <input type="reset" class="btn btn-primary" />
     </form>
     
 </div>
