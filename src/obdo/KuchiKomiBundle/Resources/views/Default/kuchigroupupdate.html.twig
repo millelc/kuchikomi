@@ -29,10 +29,9 @@
             {{ form_errors(form.logoimg) }}
             {{ form_widget(form.logoimg) }}
         </div>
-        
-        {{ form_rest(form) }}
-
         <br />
+        {{ form_rest(form) |nl2br}}
+        
         <input type="submit" class="btn btn-primary" />
         <input type="reset" class="btn btn-primary" />
     </form>

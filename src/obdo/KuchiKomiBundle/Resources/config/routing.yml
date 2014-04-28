@@ -31,6 +31,10 @@ obdo_kuchi_komi_kuchi_group_add:
 obdo_kuchi_komi_kuchi_group_update:
     pattern:  /kuchigroup/update/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiGroup:update }
+ 
+obdo_kuchi_komi_kuchi_group_activ:
+    pattern:  /kuchigroup/activ/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiGroup:activ }
     
 obdo_kuchi_komi_kuchi:
     pattern:  /kuchi/{page}/{sort}

@@ -39,4 +39,20 @@ class SubscriptionRepository extends EntityRepository
     	 
     	return $qb->getQuery()->getSingleScalarResult();
     }
+    
+    /**
+     * Get the number of subscription active
+     *
+     */
+    public function getNbSubKomiActive($komi)
+    {
+    	
+    	$qb = $this->createQueryBuilder('subscription')
+    	->select('COUNT(subscription.komi)')
+    	->andWhere('subscription.komi = :komi')
+    	->setParameter('komi', $komi)
+    	->andWhere('subscription.active = 1');
+    	 
+    	return $qb->getQuery()->getSingleScalarResult();
+    }
 }
