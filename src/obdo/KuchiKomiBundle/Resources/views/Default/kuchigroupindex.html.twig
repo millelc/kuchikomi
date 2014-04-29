@@ -6,6 +6,11 @@
 <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_add') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
 
 <br>
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="flash-notice">
+        {{ flashMessage }}
+    </div>
+{% endfor %}
 <br>
 <table class="table table-hover table-condensed">
     <thead>

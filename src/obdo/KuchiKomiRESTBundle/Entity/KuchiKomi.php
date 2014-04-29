@@ -443,5 +443,14 @@ class KuchiKomi
     {
     	return count($this->thanks);
     }
-
+    
+    /**
+     * Get thanks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getThanks()
+    {
+        return $this->thanks;
+    }
 }

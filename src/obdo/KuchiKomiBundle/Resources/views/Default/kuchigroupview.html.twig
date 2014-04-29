@@ -3,79 +3,87 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
-<div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading"><h3><img src="{{ asset(KuchiGroup.logo) }}" alt="" width=50 height=50 >  {{ KuchiGroup.name }}</h3></div>
-  <div class="panel-body">
-    <p>...</p>
-  </div>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><h3><img src="{{ asset(KuchiGroup.logo) }}" alt="" width=50 height=50 >  {{ KuchiGroup.name }}</h3></div>
+        <div class="panel-body">
+            <p>...</p>
+        </div>
 
-  <!-- List group -->
-  <ul class="list-group">
-    <li class="list-group-item">Identifiant : {{ KuchiGroup.id }}</li>
-    <li class="list-group-item">Date de création : {{ KuchiGroup.timestampCreation|date('Y-m-d H:i:s') }}</li>
-    <li class="list-group-item">Date de suppression : {{ KuchiGroup.timestampSuppression|date('Y-m-d H:i:s') }}</li>
-    <li class="list-group-item">Actif : {{ KuchiGroup.active |default('0')}}</li>
-    <li class="list-group-item">Nombre MAX de Kuchi : {{ KuchiGroup.nbMaxKuchi }}</li>
-  </ul>
-  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_update', {'id': KuchiGroup.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>
-  {% if KuchiGroup.active %}
-    {% set txtbouton = 'Désactiver' %}
-  {% else %}
-    {% set txtbouton = 'Activer' %}
-  {% endif %}
-  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_activ', {'id': KuchiGroup.id}) }}"><span class="glyphicon glyphicon-remove"></span> {{ txtbouton }}</a>
-</div>
+        <!-- List group -->
+        <ul class="list-group">
+            <li class="list-group-item">Identifiant : {{ KuchiGroup.id }}</li>
+            <li class="list-group-item">Date de création : {{ KuchiGroup.timestampCreation|date('Y-m-d H:i:s') }}</li>
+            <li class="list-group-item">Date de suppression : {{ KuchiGroup.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+            <li class="list-group-item">Actif : {{ KuchiGroup.active |default('0')}}</li>
+            <li class="list-group-item">Nombre MAX de Kuchi : {{ KuchiGroup.nbMaxKuchi }}</li>
+        </ul>
+        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_update', {'id': KuchiGroup.id}) }}">
+            <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+        {% if KuchiGroup.active %}
+            {% set txtbouton = 'Désactiver' %}
+            {% set visible = 'hidden' %}
+        {% else %}
+            {% set txtbouton = 'Activer' %}
+            {% set visible = 'visible' %}
+        {% endif %}
+            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_activ', {'id': KuchiGroup.id}) }}">
+                <span class="glyphicon glyphicon-remove"></span> {{ txtbouton }}</a>
+            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_delete', {'id': KuchiGroup.id}) }}" style="visibility:{{ visible }};">
+                <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+        </div>
+        <br />
+        <div>{{ message|default('') }}</div>
+    <br />
+    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}">
+        <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    <br />
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Actif</th>
+                <th>Nom</th>
+                <th>Création</th>
+                <th>Suppression</th>
+                <th>Nb Abonnement</th>
+                <th>Nb KuchiKomi</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kuchi in KuchiGroup.kuchis %}
+                <tr>
+                    <td>
+                        <img src="{{ asset(kuchi.logoLink) }}" alt="" width=20 height=20 >
+                    </td>
+                    {% if kuchi.active %}
+                        <td><p class="text-info">Actif</p></td>
+                    {% else %}
+                        <td><p class="text-danger">Inactif</p></td>
+                    {% endif %}
 
-<br>
-<a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
-<br>
-<table class="table table-hover table-condensed">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Actif</th>
-            <th>Nom</th>
-            <th>Création</th>
-            <th>Suppression</th>
-            <th>Nb Abonnement</th>
-            <th>Nb KuchiKomi</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for kuchi in KuchiGroup.kuchis %}
-        <tr>
-            <td>
-                <img src="{{ asset(kuchi.logoLink) }}" alt="" width=20 height=20 >
-            </td>
-            {% if kuchi.active %}
-                <td><p class="text-info">Actif</p></td>
-            {% else %}
-                <td><p class="text-danger">Inactif</p></td>
-            {% endif %}
+                    <td>{{kuchi.name}}</td>
 
-            <td>{{kuchi.name}}</td>
+                    <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
 
-            <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+                    {% if kuchi.active %}
+                        <td>-</td>
+                    {% else %}
+                        <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+                    {% endif %}
 
-            {% if kuchi.active %}
-                <td>-</td>
-            {% else %}
-                <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
-            {% endif %}
-            
-            <td>{{kuchi.subscriptions|length}}</td>
-            
-            <td>{{kuchi.kuchikomis|length}}</td>
-            
-            <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+                    <td>{{kuchi.subscriptions|length}}</td>
 
-        </tr>
-        {% endfor %}
-    </tbody>
-    <foot>
-    </tfoot>
-</table>
+                    <td>{{kuchi.kuchikomis|length}}</td>
 
-{% endblock %}
+                    <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+        <foot>
+            </tfoot>
+    </table>
+
+    {% endblock %}

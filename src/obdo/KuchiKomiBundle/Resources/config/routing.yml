@@ -1,3 +1,5 @@
+#obdo/KuchiKomiBundle/Resources/config/routing.yml
+
 obdo_kuchi_komi_homepage:
     pattern:  /
     defaults: { _controller: obdoKuchiKomiBundle:Dashboard:index }
@@ -14,6 +16,7 @@ obdo_kuchi_komi_logs:
     requirements:
         sort: date_up|date_down|level_up|level_down|message_up|message_down
         
+#Routes pour les kuchigroups
 obdo_kuchi_komi_kuchi_group:
     pattern:  /kuchigroup/{page}/{sort}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiGroup:index }
@@ -36,6 +39,11 @@ obdo_kuchi_komi_kuchi_group_activ:
     pattern:  /kuchigroup/activ/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiGroup:activ }
     
+obdo_kuchi_komi_kuchi_group_delete:
+    pattern:  /kuchigroup/delete/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiGroup:delete }
+
+#Routes pour les kuchis
 obdo_kuchi_komi_kuchi:
     pattern:  /kuchi/{page}/{sort}
     defaults: { _controller: obdoKuchiKomiBundle:Kuchi:index }

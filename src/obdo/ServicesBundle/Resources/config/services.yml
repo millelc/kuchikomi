@@ -19,3 +19,6 @@ services:
     
     obdo_services.Picture_uploader:
         class: obdo\ServicesBundle\Services\PictureUploader
+    
+    obdo_services.Remove_dir:
+        class: obdo\ServicesBundle\Services\Removedir
