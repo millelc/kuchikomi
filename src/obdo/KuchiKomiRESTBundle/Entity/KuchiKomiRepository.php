@@ -28,13 +28,13 @@ class KuchiKomiRepository extends EntityRepository
        	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
-    	->Where('kuchikomi.active = true')
-    	->andWhere('subscriptions.active = true AND kuchikomi.timestampCreation >= :fromDate')
-    	->orWhere('subscriptions.active = true AND kuchikomi.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampLastUpdate ')
+    	->Where('kuchikomi.active = true AND subscriptions.active = true AND kuchikomi.timestampCreation >= :fromDate')
+    	->orWhere('kuchikomi.active = true AND subscriptions.active = true AND kuchikomi.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampLastUpdate ')
     	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();
     }
+    
 
     public function getAddedKuchiKomisForKuchi( $kuchi )
     {
@@ -73,11 +73,11 @@ class KuchiKomiRepository extends EntityRepository
     	->addSelect('kuchi')
     	->andWhere('kuchi = :kuchi')
     	->setParameter('kuchi', $kuchi)
-    	->andWhere('kuchikomi.active =true')
+    	->andWhere('kuchikomi.active = true')
     	->andWhere('kuchikomi.timestampCreation < :fromDate')
     	->andWhere('kuchikomi.timestampLastUpdate >= :fromDate')
     	->setParameter('fromDate', $kuchi->getTimestampLastSynchro() );
-    
+
     	return $qb->getQuery()->getResult();
     }
     
