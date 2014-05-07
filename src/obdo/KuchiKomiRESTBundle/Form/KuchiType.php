@@ -18,7 +18,12 @@ class KuchiType extends AbstractType
         $builder
             ->add('name',     		'text')
             ->add('password',     	'text')
-            ->add('address', 		 new AddressType());
+            ->add('phoneNumber',     	'text')
+            ->add('mailAddress',        'text', array('required' => false,))
+            ->add('webSite',            'text', array('required' => false,))
+            ->add('address', 		 new AddressType())
+            ->add('logoimg',            'file')
+            ->add('photoimg',           'file')
         ;
     }
     

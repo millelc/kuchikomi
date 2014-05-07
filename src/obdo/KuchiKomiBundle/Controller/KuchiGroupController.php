@@ -94,7 +94,7 @@ class KuchiGroupController extends Controller {
         $kuchiGroup = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiGroup')
                 ->find($id);
-
+        if ($kuchiGroup != null){
         //on sauvegarde avant modif
         $kuchiGroupname = $kuchiGroup->getName();
         $kuchiGroupNbmax = $kuchiGroup->getNbMaxKuchi();
@@ -146,10 +146,15 @@ class KuchiGroupController extends Controller {
                 }
             }
         }
+        
         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupupdate.html.twig', array(
                     'form' => $form->createView(),
                     'kuchiGroup' => $kuchiGroup,
         ));
+        }else
+        {
+          $this->indexAction(1, 'active_up');  
+        }
     }
     
     /*
@@ -207,24 +212,25 @@ class KuchiGroupController extends Controller {
 
         //2 cas si on (re)active, il faut (re)activer le komi, si on désactive, il faut verifier avant 
         // de désactiver le komi qu'il n'est pas abonné a un kushi actif.
-        $traitekomi = 0;
-        foreach ($akomi as $komi) {
-            if (!$newactive) {
-                // on verifie si le komi est abonné a des subscriptions actives
-                $traitekomi = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription')->getNbSubKomiActive($komi);
-
-                if ($traitekomi == 0) {
-                    // si le komi n'a pas de subscriptions actives, on verifie les groupes de subscriptions
-                    $traitekomi = $em->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup')->getNbSubGrpKomiActive($komi);
-                }
-            }
-
-            if ($traitekomi == 0) {
-                $komi->setActive($newactive);
-                $em->flush(); // màj dans la foulée
-            }
-        }
-        // $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " updated");
+//pas pour l'instant        
+//        $traitekomi = 0;
+//        foreach ($akomi as $komi) {
+//            if (!$newactive) {
+//                // on verifie si le komi est abonné a des subscriptions actives
+//                $traitekomi = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription')->getNbSubKomiActive($komi);
+//
+//                if ($traitekomi == 0) {
+//                    // si le komi n'a pas de subscriptions actives, on verifie les groupes de subscriptions
+//                    $traitekomi = $em->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup')->getNbSubGrpKomiActive($komi);
+//                }
+//            }
+//
+//            if ($traitekomi == 0) {
+//                $komi->setActive($newactive);
+//                $em->flush(); // màj dans la foulée
+//            }
+//        }
+        // $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " actived");
 
         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                     'KuchiGroup' => $kuchiGroup,
@@ -300,13 +306,14 @@ class KuchiGroupController extends Controller {
                // echo 'flush';
                 $em->flush();
                 //et on traite les komis
-                foreach ($akomi as $komi) {
-                    if(self::okeffaceKomi($komi)){
-                        $em->remove($komi);
-                        $em->flush();
-                    }
-                       
-                }
+                // pas pour l'instant
+//                foreach ($akomi as $komi) {
+//                    if(self::okeffaceKomi($komi)){
+//                        $em->remove($komi);
+//                        $em->flush();
+//                    }
+//                       
+//                }
           //Et on efface les repertoires
           foreach ($repertoire as $dir) {
              $this->container->get('obdo_services.Remove_dir')->rrmdir($dir); 

@@ -5,12 +5,25 @@
 
 <div class="row">
   <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbGroup")) }} </div>
-  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKuchi")) }} </div>
-  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKomi")) }} </div>
+  <div id="tuile" class="col-md-4"> 
+      <a href="{{ path('obdo_pChart', {'nom': 'kuchi'}) }}">
+          {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKuchi")) }} </a></div>
+  <div id="tuile" class="col-md-4"> <a href="{{ path('obdo_pChart', {'nom': 'komi'}) }}">
+          {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKomi")) }} </a></div>
 </div>
 <div class="row">
-  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbSubscription")) }} </div>
-  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKuchiKomi")) }} </div>
+  <div id="tuile" class="col-md-4"> 
+      <a href="{{ path('obdo_pChart', {'nom': 'subscription'}) }}">
+          {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbSubscription")) }} </a></div>
+  <div id="tuile" class="col-md-4"> 
+      <a href="{{ path('obdo_pChart', {'nom': 'kuchikomi'}) }}">
+          {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKuchiKomi")) }} </a></div>
+  <div id="tuile" class="col-md-4"> 
+      <a href="{{ path('obdo_pChart', {'nom': 'thanks'}) }}">
+          {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbThanks")) }} </a></div>
 </div>
 
+{# On définit un nouveau bloc, pour ajouter les graphiques #}
+{% block kk_stat_KuchiKomiBundle %}
+{% endblock %}  
 {% endblock %}

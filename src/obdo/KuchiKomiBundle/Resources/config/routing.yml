@@ -67,7 +67,54 @@ obdo_kuchi_komi_kuchi_add:
 obdo_kuchi_komi_kuchi_view:
     pattern:  /kuchi/{id}
     defaults: { _controller: obdoKuchiKomiBundle:Kuchi:view }
+
+obdo_kuchi_komi_kuchi_update:
+    pattern:  /kuchi/update/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Kuchi:update }
     
 obdo_kuchi_komi_kuchikomi_view:
     pattern:  /kuchikomi/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:view }
+
+#pour graphiques
+obdo_pChart:
+    pattern:  /graphique/{nom}
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:choix }
+    
+obdo_pChart_kuchi:
+    pattern:  /stat/kuchi
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:kuchistat }
+
+obdo_pChart_komi:
+    pattern:  /stat/komi
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:komistat }
+
+obdo_pChart_subscription:
+    pattern:  /stat/subscription
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:subscriptionstat }
+    
+obdo_pChart_kuchikomi:
+    pattern:  /stat/kuchikomi
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:kuchikomistat }
+
+obdo_pChart_thanks:
+    pattern:  /stat/thanks
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:thanksstat }
+    
+    
+#Route pour test pChart, à virer ASAP
+#pChart:
+#    pattern: /pChart/
+#    defaults: {_controller: obdopChartBundle:Examples:index }
+#    
+#pChart_index: 
+#    pattern:  /index
+#    defaults: { _controller: obdopChartBundle:Examples:index }
+#
+#pChart_view: 
+#    pattern:  /view/{number}
+#    defaults: { _controller: obdopChartBundle:Examples:view }
+#
+#pChart_example: 
+#    pattern:  /example/{number}
+#    defaults: { _controller: obdopChartBundle:Examples:example }

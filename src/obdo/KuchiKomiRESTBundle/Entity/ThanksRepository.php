@@ -12,5 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class ThanksRepository extends EntityRepository
 {
-    
+    public function getNbThanks()
+    {
+        return $this->createQueryBuilder('thanks')
+                    ->select('COUNT(thanks)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }

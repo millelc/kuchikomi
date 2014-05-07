@@ -4,4 +4,7 @@ obdo\KuchiKomiRESTBundle\Entity\KuchiGroup:
         logoimg:
             - File:
                 mimeTypes: [image/png, image/gif, image/jpg, image/jpeg]
+        photoimg:
+            - File:
+                mimeTypes: [image/png, image/gif, image/jpg, image/jpeg]
                 

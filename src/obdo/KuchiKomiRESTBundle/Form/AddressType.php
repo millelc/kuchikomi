@@ -16,8 +16,8 @@ class AddressType extends AbstractType
     {
         $builder
             ->add('address1',   'text')
-            ->add('address2',   'text')
-            ->add('address3',   'text')
+            ->add('address2',   'text', array('required' => false,))
+            ->add('address3',   'text', array('required' => false,))
             ->add('postalCode', 'text')
             ->add('city',       'text')
         ;

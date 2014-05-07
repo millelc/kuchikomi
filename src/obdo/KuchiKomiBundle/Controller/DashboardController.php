@@ -41,5 +41,11 @@ class DashboardController extends Controller
         $nbSubscription = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Subscription')->getNbSubscription();
         return $this->render('obdoKuchiKomiBundle:Dashboard:nbsubscription.html.twig', array('nbSubscription'=>$nbSubscription));
     }
+    
+    public function nbThanksAction()
+    {
+        $nbThanks = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Thanks')->getNbThanks();
+        return $this->render('obdoKuchiKomiBundle:Dashboard:nbthanks.html.twig', array('nbThanks'=>$nbThanks));
+    }
 
 }

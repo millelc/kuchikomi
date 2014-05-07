@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
+// pour la validation
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Address
@@ -60,6 +62,9 @@ class Address
      * @ORM\Column(name="postalCode", type="string", length=5)
      * @Expose
      * @Groups({"Synchro"})
+     * 
+     * @Assert\Regex(pattern = "/^[0-9]{5,5}$/", message = "Code postal erroné")
+     *               
      */
     private $postalCode;
 

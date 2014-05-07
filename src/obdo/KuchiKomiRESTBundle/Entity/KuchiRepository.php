@@ -4,6 +4,7 @@ namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * KuchiRepository
@@ -20,8 +21,19 @@ class KuchiRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult();
     }
-    
+        
+    public function getNbKuchiMois($mois,$an)
+    {
+        $requete = 'select day( date( k.timestampCreation )) as jour , count( k.timestampCreation ) as nbre ';
+        $requete = $requete . 'from Kuchi k where month( date( k.timestampCreation )) = :mois AND year( date( k.timestampCreation )) = :an';
+        $requete = $requete . ' group by day( date( k.timestampCreation ))';
 
+        $em = $this->getEntityManager();
+        $db = $em->getConnection();
+        $query = $db->prepare($requete);
+        $query->execute(array('mois' => intval($mois), 'an' => intval($an)));
+        return $query->fetchAll();
+    }
     
     public function getKuchis($nombreParPage, $page, $sort)
     {

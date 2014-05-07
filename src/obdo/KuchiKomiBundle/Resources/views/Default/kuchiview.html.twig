@@ -18,6 +18,8 @@
     <li class="list-group-item">Actif : {{ Kuchi.active }}</li>
     <li class="list-group-item">Groupe : <a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': Kuchi.kuchiGroup.id}) }}">{{Kuchi.kuchiGroup.name}}</a></li>
   </ul>
+  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_update', {'id': Kuchi.id}) }}">
+            <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
 </div>
 
 <br>

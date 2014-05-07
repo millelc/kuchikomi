@@ -10,6 +10,8 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 use obdo\KuchiKomiRESTBundle\Entity\Subscription;
+// pour la validation
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Kuchi
@@ -127,6 +129,8 @@ class Kuchi
     * @ORM\OneToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Address", cascade={"persist"})
     * @Expose
     * @Groups({"Synchro"})
+    *
+    *@Assert\Valid()  
     */
     private $address;
     
@@ -136,6 +140,9 @@ class Kuchi
      * @ORM\Column(name="mailAddress", type="string", length=255)
      * @Expose
      * @Groups({"Synchro"})
+     * 
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas un email valide.")
      */
     private $mailAddress;
     
@@ -145,6 +152,8 @@ class Kuchi
      * @ORM\Column(name="webSite", type="string", length=255)
      * @Expose
      * @Groups({"Synchro"})
+     * 
+     * @Assert\Url()
      */
     private $webSite;
     
@@ -168,8 +177,8 @@ class Kuchi
     */
     private $kuchikomis;
     
-    
-    
+    private $logoimg; //pour upload logo
+    private $photoimg; //pour upload photo
 
     public function __construct()
     {
@@ -755,5 +764,21 @@ class Kuchi
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+    
+    public function getLogoimg() {
+        return $this->logoimg;
+    }
+
+    public function setLogoimg($logoimg) {
+        $this->logoimg = $logoimg;
+    }
+    
+    public function getPhotoimg() {
+        return $this->photoimg;
+    }
+
+    public function setPhotoimg($photoimg) {
+        $this->photoimg = $photoimg;
     }
 }

@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new RMS\PushNotificationsBundle\RMSPushNotificationsBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new obdo\pChartBundle\obdopChartBundle(),
             new obdo\KuchiKomiBundle\obdoKuchiKomiBundle(),
             new obdo\KuchiKomiUserBundle\obdoKuchiKomiUserBundle(),
             new obdo\KuchiKomiMenuBundle\obdoKuchiKomiMenuBundle(),
