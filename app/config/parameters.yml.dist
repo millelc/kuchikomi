@@ -23,3 +23,5 @@ parameters:
     path_kuchikomi_photo: images/kuchikomi/
     path_kuchi_photo: images/kuchi/
     path_kuchigroup_photo: images/kuchigroup/
+    
+    CityKomiGroupId: 3

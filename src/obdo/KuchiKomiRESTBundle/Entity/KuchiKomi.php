@@ -113,6 +113,13 @@ class KuchiKomi
      */
     private $thanks;
     
+    /**
+     * @var boolean
+     *
+     * @Expose
+     * @Groups({"Synchro"})
+     */
+    private $isThanks;
     
     public function __construct()
     {
@@ -125,6 +132,7 @@ class KuchiKomi
         $this->timestampEnd = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->details = "";
         $this->photoLink = "";
+        $this->isThanks = false;
     }
 
     /**
@@ -443,14 +451,17 @@ class KuchiKomi
     {
     	return count($this->thanks);
     }
-    
+
     /**
-     * Get thanks
+     * Set isThanks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return boolean
+     *
      */
-    public function getThanks()
+    public function setIsThanks($thanks)
     {
-        return $this->thanks;
+    	$this->isThanks = $thanks;
+    
+    	return $this;
     }
 }

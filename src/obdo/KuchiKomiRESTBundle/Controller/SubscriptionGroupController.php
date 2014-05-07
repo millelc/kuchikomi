@@ -197,6 +197,7 @@ class SubscriptionGroupController extends Controller
                     if( !$subscriptionGroup )
                     {
                         // subscription group unkown
+                    	$response->setStatusCode(503);
                         $Logger->Warning("[DELETE rest/subscriptions] 503 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") unknown");
                     }
                     else
@@ -204,12 +205,14 @@ class SubscriptionGroupController extends Controller
                     	if( !$subscriptionGroup->getActive() )
                     	{
                     		// subscription group already de-activated
+                    		$response->setStatusCode(504);
                     		$Logger->Warning("[DELETE rest/subscriptions] 504 - Subscription group (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already de-activated");
                     	}
                     	else
                     	{
                     		$subscriptionGroup->setCurrentTimestampSuppression();
                     		$subscriptionGroup->setActive(false);
+                    		$response->setStatusCode(200);
                     		$Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");
                     	}
                     }
@@ -233,8 +236,6 @@ class SubscriptionGroupController extends Controller
                     }
                             
                     $em->flush();
-                    $response->setStatusCode(200);
-                    $Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");      
                 }
                 else
                 {

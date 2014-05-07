@@ -7,6 +7,8 @@ use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
 use obdo\KuchiKomiRESTBundle\Entity\Subscription;
+use obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup;
+use obdo\KuchiKomiRESTBundle\Entity\Thanks;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -37,6 +39,7 @@ class KomiController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
+        $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         
         
         $AES->setKey( $this->container->getParameter('aes_key') );
@@ -59,15 +62,34 @@ class KomiController extends Controller
                 $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
                 $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
                 $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
-        
                 $em->persist($komi);
+                $em->flush();
+                
+                // Create by default the subscriptionto the CityKomi group and all of these kuchis
+                $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
+                $subscriptionGroup = new SubscriptionGroup();
+                $subscriptionGroup->setKomi($komi);
+                $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
+                $subscriptionGroup->setType(0);
+                $em->persist($subscriptionGroup);
+                
+                foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
+                {
+                	$subscription = new Subscription();
+                	$subscription->setKomi($komi);
+                	$subscription->setKuchi($kuchi);
+                	$subscription->setType(0);
+                	 
+                	$em->persist($subscription);
+                }
+                          
                 $em->flush();
                 $response->setStatusCode(200);
                 
                 $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
                 
                 // Post message
-                $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "1"));               
+                $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
             }
             else
             {
@@ -256,9 +278,17 @@ class KomiController extends Controller
     				$updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
     				$deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
     				
+    				$this->checkSubscriptionGroup($komi, $addedKuchiGroup);
+    				$this->checkSubscriptionGroup($komi, $updatedKuchiGroup);
+    				$this->checkSubscriptionGroup($komi, $deletedKuchiGroup);
+    				
     				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
     				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
     				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
+    				
+    				$this->checkKuchiKomiThanks($komi, $addedKuchiKomis);
+    				$this->checkKuchiKomiThanks($komi, $updatedKuchiKomis);
+    				$this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
     				
     				$komi->setCurrentTimestampLastSynchro();
     				$em->flush();
@@ -299,4 +329,46 @@ class KomiController extends Controller
     	return $response;
     }
     
+    private function checkSubscriptionGroup($komi, $kuchiGroupList)
+    {
+    	$repositorySubscriptionGroup = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');
+    	
+    	foreach($kuchiGroupList as $KuchiGroup)
+    	{
+    		$subscriptionGroup = $repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $KuchiGroup));
+    		if( !$subscriptionGroup )
+    		{
+    			$KuchiGroup->setSubscribed(false);
+    		}
+    		else
+    		{
+    			if( $subscriptionGroup->getActive() )
+    			{
+    				$KuchiGroup->setSubscribed(true);
+    			}
+    			else 
+    			{
+    				$KuchiGroup->setSubscribed(false);
+    			}
+    		}
+    	}
+    }
+    
+    private function checkKuchiKomiThanks($komi, $KuchiKomiList)
+    {
+    	$repositoryThanks = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Thanks');
+    	 
+    	foreach($KuchiKomiList as $KuchiKomi)
+    	{
+    		$Thanks = $repositoryThanks->findOneBy(array('komi' => $komi, 'kuchikomi' => $KuchiKomi));
+    		if( !$Thanks )
+    		{
+    			$KuchiKomi->setIsThanks(false);
+    		}
+    		else
+    		{
+    			$KuchiKomi->setIsThanks(true);
+    		}
+    	}
+    }
 }

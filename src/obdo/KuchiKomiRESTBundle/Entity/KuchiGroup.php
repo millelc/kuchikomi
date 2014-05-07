@@ -92,7 +92,15 @@ class KuchiGroup
     */
     private $subscriptions;
     
-    private $logoimg; //pour upload image
+    /**
+     * @var boolean
+     *      
+     * @Expose
+     * @Groups({"Synchro"})
+     */
+    private $isSubscribed;
+    
+    private $file;
 
     public function __construct()
     {
@@ -102,6 +110,7 @@ class KuchiGroup
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->nbMaxKuchi = 10;
         $this->logo = "";
+        $this->isSubscribed = false;
     }
     
     /**
@@ -349,6 +358,20 @@ class KuchiGroup
         return $this->nbMaxKuchi;
     }
     
+    
+    /**
+     * Set isSubscribed to true
+     *
+     * @return boolean
+     * 
+     */
+    public function setSubscribed($subscribe)
+    {
+    	$this->isSubscribed = $subscribe;
+    
+    	return $this;
+    }
+    
     /**
      * Get Logo byte array
      *
@@ -369,15 +392,15 @@ class KuchiGroup
     	return $logoByteStream;
     }
     
-    public function getLogoimg() {
-        return $this->logoimg;
+    public function getFile() 
+    {
+        return $this->file;
     }
-
-    public function setLogoimg($logoimg) {
-        $this->logoimg = $logoimg;
+    
+    public function setFile($file) 
+    {
+        $this->file = $file;
     }
-
-
 
 
 
