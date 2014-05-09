@@ -34,7 +34,7 @@ class SubscriptionRepository extends EntityRepository
     	->leftJoin('subscription.kuchi', 'kuchi')
     	->andWhere('kuchi = :kuchi')
     	->setParameter('kuchi', $kuchi)
-    	->andWhere('subscription.timestampCreation >= :fromDate')
+    	->andWhere('subscription.active = true AND subscription.timestampCreation >= :fromDate')
     	->setParameter('fromDate', $fromDate->sub(new \DateInterval('P'. $monthPeriod .'M')) );
     	 
     	return $qb->getQuery()->getSingleScalarResult();

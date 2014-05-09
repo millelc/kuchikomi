@@ -1,4 +1,4 @@
-cd /Applications/MAMP/htdocs/kuchikomi/
+cd /nearforge/web/kuchikomi/
 php app/console cache:clear
 php app/console cache:clear --env=prod
 cd app
@@ -8,4 +8,4 @@ rm -r prod
 cd ..
 cd logs
 rm *
-scp -r /Applications/MAMP/htdocs/kuchikomi nearforge@192.168.1.253:/var/www/
+scp -r /nearforge/web/kuchikomi nearforge@192.168.1.253:/var/www/

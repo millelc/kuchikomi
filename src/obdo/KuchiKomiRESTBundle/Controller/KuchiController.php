@@ -198,7 +198,7 @@ class KuchiController extends Controller
     
      				return array('STATS' => array(
      						                       'NB_SUB' => $kuchi->getNbSubscriptions(),
-     											   'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)
+                                                                       'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)
      				                             ),
      						     'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
      						     'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
