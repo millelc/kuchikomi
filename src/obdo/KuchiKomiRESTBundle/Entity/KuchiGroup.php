@@ -392,6 +392,7 @@ class KuchiGroup
     	return $logoByteStream;
     }
     
+    //pour le logo du groupe
     public function getLogoimg() {
         return $this->logoimg;
     }
