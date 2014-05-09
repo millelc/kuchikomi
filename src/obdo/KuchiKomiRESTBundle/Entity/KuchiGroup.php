@@ -100,8 +100,8 @@ class KuchiGroup
      */
     private $isSubscribed;
     
-    private $file;
-
+    private $logoimg; //pour upload logo
+    
     public function __construct()
     {
         $this->active = true;
@@ -392,16 +392,13 @@ class KuchiGroup
     	return $logoByteStream;
     }
     
-    public function getFile() 
-    {
-        return $this->file;
-    }
-    
-    public function setFile($file) 
-    {
-        $this->file = $file;
+    public function getLogoimg() {
+        return $this->logoimg;
     }
 
+    public function setLogoimg($logoimg) {
+        $this->logoimg = $logoimg;
+    }
 
 
 }

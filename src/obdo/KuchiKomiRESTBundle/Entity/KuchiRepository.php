@@ -21,6 +21,16 @@ class KuchiRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult();
     }
+    
+    public function getNbKuchiGroup($kuchigroupid)
+    {
+        return $this->createQueryBuilder('kuchi')
+                    ->select('COUNT(kuchi)')
+                    ->andWhere('kuchi.active = true and kuchi.kuchiGroup = :groupid')
+                    ->setParameter('groupid', $kuchigroupid)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
         
     public function getNbKuchiMois($mois,$an)
     {
