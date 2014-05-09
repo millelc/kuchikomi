@@ -25,11 +25,11 @@ class KuchiKomiRepository extends EntityRepository
     	$qb = $this->createQueryBuilder('kuchikomi')
     	->leftJoin('kuchikomi.kuchi', 'kuchi')
     	->addSelect('kuchi')
-       	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+       	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi AND subscriptions.active = true')
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
-    	->Where('kuchikomi.active = true AND subscriptions.active = true AND kuchikomi.timestampCreation >= :fromDate')
-    	->orWhere('kuchikomi.active = true AND subscriptions.active = true AND kuchikomi.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampLastUpdate ')
+    	->Where('kuchikomi.active = true AND kuchikomi.timestampCreation >= :fromDate')
+    	->orWhere('kuchikomi.active = true AND kuchikomi.timestampCreation < :fromDate AND :fromDate < subscriptions.timestampLastUpdate ')
     	->setParameter('fromDate', $komi->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();
@@ -54,7 +54,7 @@ class KuchiKomiRepository extends EntityRepository
     	$qb = $this->createQueryBuilder('kuchikomi')
     	->leftJoin('kuchikomi.kuchi', 'kuchi')
     	->addSelect('kuchi')
-    	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi AND subscriptions.active = true')
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
     	->Where('kuchikomi.active = true AND kuchikomi.timestampCreation < :fromDate AND kuchikomi.timestampLastUpdate >= :fromDate')
@@ -81,7 +81,7 @@ class KuchiKomiRepository extends EntityRepository
     	$qb = $this->createQueryBuilder('kuchikomi')
     	->leftJoin('kuchikomi.kuchi', 'kuchi')
     	->addSelect('kuchi')
-    	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi')
+    	->join('kuchi.subscriptions', 'subscriptions', 'WITH', 'subscriptions.komi = :komi AND subscriptions.active = true')
     	->addSelect('subscriptions')
     	->setParameter('komi', $komi)
     	->Where('kuchikomi.active = false AND kuchikomi.timestampSuppression >= :fromDate')

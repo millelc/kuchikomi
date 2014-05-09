@@ -402,7 +402,15 @@ class Kuchi
      */
     public function getNbSubscriptions()
     {
-    	return sizeof($this->subscriptions);
+    	$result = 0;
+    	foreach ($this->subscriptions as $subscription)
+    	{
+    		if( $subscription->getActive() )
+    		{
+    			$result = $result + 1;
+    		}
+    	}
+    	return $result;
     }
 
     /**
