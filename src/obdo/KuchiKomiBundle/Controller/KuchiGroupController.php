@@ -33,9 +33,10 @@ class KuchiGroupController extends Controller {
         $kuchiGroup = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiGroup')
                 ->find($id);
-
+        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                     'KuchiGroup' => $kuchiGroup,
+                    'Btncache' => $hidden,
         ));
     }
     
@@ -140,8 +141,10 @@ class KuchiGroupController extends Controller {
                     $em = $this->getDoctrine()->getManager();
                     $em->flush();
                     $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " updated");
+                    $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
                     return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                                 'KuchiGroup' => $kuchiGroup,
+                                'Btncache' => $hidden,
                     ));
                 }
             }
@@ -230,10 +233,11 @@ class KuchiGroupController extends Controller {
 //                $em->flush(); // màj dans la foulée
 //            }
 //        }
-        // $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " actived");
-
+        $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " (d)actived");
+        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                     'KuchiGroup' => $kuchiGroup,
+                    'Btncache' => $hidden,
         ));
     }
     
@@ -331,9 +335,11 @@ class KuchiGroupController extends Controller {
                 )));
         }
         else{
+           $hidden = $this->btnafficheAddKomi($kuchiGroup, $id); 
            return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                     'KuchiGroup' => $kuchiGroup,
                     'message' => 'Le kuchigroup est actif suppression impossible.',
+                    'Btncache' => $hidden,
         )); 
         }
         
@@ -369,5 +375,15 @@ class KuchiGroupController extends Controller {
             $ok = true;
       return $ok;
     }
-
+    
+    public function btnafficheAddKomi($kuchiGroup, $id){
+        $hidden = false;
+        // combien de kuchis autorisés
+        $maxkuchi = $kuchiGroup->getNbMaxKuchi();
+        // combien de kuchis actifs pour ce groupe
+        $countkuchi = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->getNbKuchiGroup($id);
+        if ($countkuchi >= $maxkuchi)
+            $hidden = true;
+        return $hidden;
+    }
 }

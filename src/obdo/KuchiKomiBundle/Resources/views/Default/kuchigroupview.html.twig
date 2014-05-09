@@ -35,7 +35,11 @@
         <br />
         <div>{{ message|default('') }}</div>
     <br />
-    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}">
+        {% set btn_visible = 'visible' %}
+        {% if Btncache %}
+            {% set btn_visible = 'hidden' %}
+        {% endif %}    
+    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}" style="visibility:{{ btn_visible }};">
         <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
     <br />
     <table class="table table-hover table-condensed">
