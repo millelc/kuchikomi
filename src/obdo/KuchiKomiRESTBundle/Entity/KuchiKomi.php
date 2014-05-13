@@ -191,6 +191,18 @@ class KuchiKomi
         return $this->timestampLastUpdate;
     }
 
+        /**
+     * Get timestampEnd in ms
+     *
+     * @return \DateTime in millisecond
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getTimestampLastUpdatedMs()
+    {
+    	return $this->timestampLastUpdate->getTimestamp();
+    }
+    
     /**
      * Set timestampSuppression
      *
