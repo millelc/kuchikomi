@@ -9,6 +9,10 @@ obdo_kuchi_komi_user:
     defaults: { _controller: obdoKuchiKomiUserBundle:User:index }
     requirements:
         sort: name_up|name_down|role_up|role_down
+
+obdo_kuchi_komi_user_add:
+    pattern:  /user/add/
+    defaults: { _controller: obdoKuchiKomiUserBundle:User:ajout }
         
 obdo_kuchi_komi_logs:
     pattern:  /logs/{page}/{sort}

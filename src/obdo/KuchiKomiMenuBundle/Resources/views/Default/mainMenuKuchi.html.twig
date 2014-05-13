@@ -1,5 +1,6 @@
 {% extends "obdoKuchiKomiMenuBundle::baseMenu.html.twig" %}
 
 {% block kk_menu_body %}
-    <li><a href="#">Kuchi Link</a></li>
+    <li><a href="{{ path('obdo_kuchi_komi_homepage') }}">Dashboard</a></li>
+    <li><a href="{{ path('obdo_kuchi_komi_kuchi', {'page': 1, 'sort': 'active_up'}) }}">Kuchis</a></li>
 {% endblock %}

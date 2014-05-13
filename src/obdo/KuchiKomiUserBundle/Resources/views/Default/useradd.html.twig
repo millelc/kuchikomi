@@ -1,0 +1,50 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+{% block fos_user_content %}
+
+<h3>Ajout user</h3>
+<div class="well">
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_errors(form) }}
+{#        {{ form_widget(form) }}#}
+        <table>
+            <tr>
+                <td>{{ form_label(form.username, "Nom") }}</td>
+                <td>{{ form_errors(form.username) }}
+                    {{ form_widget(form.username) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.password, "Mot de passe") }}</td>
+                <td>{{ form_errors(form.password) }}
+                    {{ form_widget(form.password) }}
+                </td>
+            </tr>
+        
+            <tr>
+                <td>{{ form_label(form.email, "e-mail") }}</td>
+                <td>{{ form_errors(form.email) }}
+                    {{ form_widget(form.email) }}
+                </td>
+            </tr>
+            <tr> 
+                <td>{{ form_label(form.roles, "Rôle") }}</td>
+                <td>{{ form_errors(form.roles) }}
+                    {{ form_widget(form.roles) }}
+                </td>
+            </tr>
+        </table>
+        
+        <br />
+      
+        {{ form_rest(form) }}
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+
+{% endblock %}
