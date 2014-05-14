@@ -4,6 +4,7 @@ namespace obdo\KuchiKomiRESTBundle\Controller;
 
 use obdo\KuchiKomiRESTBundle\Entity\Komi;
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiAccount;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,8 +27,6 @@ class AuthenticateController extends Controller
         $Logger = $this->container->get('obdo_services.Logger');
         $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
         
-        $Logger->Error("[POST rest/authenticate] START");
-        
         $em = $this->getDoctrine()->getManager();
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
@@ -42,7 +41,7 @@ class AuthenticateController extends Controller
         
         if( $idCheck->isPostAuthenticateValid( $clearId) )
         {
-        	$randomId = $idCheck->getPostAuthenticateRandomId($clearId);
+            $randomId = $idCheck->getPostAuthenticateRandomId($clearId);
             
             $komi = $repositoryKomi->findOneByRandomId($randomId);
             
@@ -85,6 +84,7 @@ class AuthenticateController extends Controller
      */
     public function postAuthenticateKuchiAction()
     {
+        
         $response = new Response();
                 
         $AES = $this->container->get('obdo_services.AES');
@@ -93,8 +93,9 @@ class AuthenticateController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
-        
+        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
         
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
@@ -102,34 +103,9 @@ class AuthenticateController extends Controller
         
         $clearId = $AES->decrypt();
         
-//         $Logger->Error("[POST rest/authenticatekuchi] clearId = " . $clearId );
-//         if(preg_match("#^%%OB-DO-2-0-0%%#", $clearId))
-//         {
-//         	$Logger->Info("[POST rest/authenticatekuchi] clearId START OK" );
-//         }
-//         else
-//         {
-//         	$Logger->Error("[POST rest/authenticatekuchi] clearId START KO" );
-//         }
-//         if(preg_match("#%%ID_PWD%%#", $clearId))
-//         {
-//         	$Logger->Info("[POST rest/authenticatekuchi] clearId MIDDLE OK" );
-//         }
-//         else
-//         {
-//         	$Logger->Error("[POST rest/authenticatekuchi] clearId MIDDLE KO" );
-//         }
-//         if(preg_match("#%%OB-DO-2-0-0%%$#", $clearId))
-//         {
-//         	$Logger->Info("[POST rest/authenticatekuchi] clearId END OK" );
-//         }
-//         else
-//         {
-//         	$Logger->Error("[POST rest/authenticatekuchi] clearId END KO" );
-//         }
-        
         if( $idCheck->isPostAuthenticateKuchiValid( $clearId) )
         {
+            $randomId = $idCheck->getPostAuthenticateKuchiRandomId($clearId);
             $kuchiId = $idCheck->getPostAuthenticateKuchiId($clearId);
             
             $kuchi = $repositoryKuchi->findOneById($kuchiId);
@@ -142,27 +118,46 @@ class AuthenticateController extends Controller
             }
             else
             {   
-            	$password = $idCheck->getPostAuthenticateKuchiPassword($clearId);
-            	
-                // Check Password
-            	$passwordHash = hash("sha256", $this->container->getParameter('sha256_salt2').hash("sha256", hash("sha256", $password) . $this->container->getParameter('sha256_salt1')));
-                if( $passwordHash == $kuchi->getPassword() )
+                $komi = $repositoryKomi->findOneByRandomId($randomId);
+                
+                if( !$komi )
                 {
-                	// Token génération
-                	$kuchi->generateToken();
-                	 
-                	$em->persist($kuchi);
-                	$em->flush();
-                	 
-                	return array('kuchi' => $kuchi);
+                    // Komi unknown !
+                    $response->setStatusCode(503);
+                    $Logger->Error("[POST rest/authenticatekuchi] 503 - Komi id=".$randomId." unkonwn");
                 }
                 else
                 {
-                	// password not match !
-                	$response->setStatusCode(502);
-                	$Logger->Error("[POST rest/authenticatekuchi] 502 - Kuchi id=".$kuchiId." - password not match");
-                }
-                             
+                    $password = $idCheck->getPostAuthenticateKuchiPassword($clearId);
+
+                    // Check Password
+                    $passwordHash = hash("sha256", $this->container->getParameter('sha256_salt2').hash("sha256", hash("sha256", $password) . $this->container->getParameter('sha256_salt1')));
+                    if( $passwordHash == $kuchi->getPassword() )
+                    {
+                        // Generate a kuchi account if not exist
+                        $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+	                    
+                        if (!$kuchiAccount)
+                        {
+                            $kuchiAccount = new KuchiAccount();
+                            $kuchiAccount->setKomi($komi);
+                            $kuchiAccount->setKuchi($kuchi);
+                        }
+                        // Token génération
+                        $kuchiAccount->generateToken();
+
+                        $em->persist($kuchiAccount);
+                        $em->flush();
+
+                        return array('kuchiAccount' => $kuchiAccount);
+                    }
+                    else
+                    {
+                        // password not match !
+                        $response->setStatusCode(502);
+                        $Logger->Error("[POST rest/authenticatekuchi] 502 - Kuchi id=".$kuchiId." - password not match");
+                    }
+                }                
             }
         }
         else
@@ -176,6 +171,5 @@ class AuthenticateController extends Controller
         $response->send();
         
         return $response;
-    }
-    
+    } 
 }

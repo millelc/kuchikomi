@@ -2,7 +2,9 @@
 
 namespace obdo\KuchiKomiRESTBundle\Controller;
 
+use obdo\KuchiKomiRESTBundle\Entity\Komi;
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiAccount;
 use obdo\KuchiKomiRESTBundle\Entity\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,11 +23,11 @@ class KuchiController extends Controller
 {
 
     /**
-     * @Put("/rest/kuchi/{id}/{hash}")
+     * @Put("/rest/kuchi/{komiId}/{id}/{hash}")
      * @return array
      * @View()
      */
-    public function putKuchiAction($id, $hash)
+    public function putKuchiAction($komiId, $id, $hash)
     {
         $response = new Response();
         
@@ -35,6 +37,8 @@ class KuchiController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         
         $kuchi = $repositoryKuchi->findOneById($id);
         
@@ -42,47 +46,68 @@ class KuchiController extends Controller
         {
             // Kuchi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[PUT rest/kuchi/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
         }
         else
         {
-            if( $hash == sha1("PUT /rest/kuchi" . $kuchi->getToken() ) )
+            $komi = $repositoryKomi->findOneByRandomId($komiId);
+            
+            if( !$komi )
             {
-                if( $kuchi->getActive() )
-                {
-                	$json = $this->getRequest()->getContent();
-                	$serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchi' => new JsonEncoder()));
-                	$kuchiArray = $serializer->decode($json, 'json');
-                	
-                	$kuchi->setName($kuchiArray['kuchi']['name']);
-                	$kuchi->setPassword($Password->generateHash( $kuchiArray['kuchi']['password'] ));
-                	$kuchi->getAddress()->setAddress1( $kuchiArray['kuchi']['address1'] );
-                	$kuchi->getAddress()->setAddress2( $kuchiArray['kuchi']['address2'] );
-                	$kuchi->getAddress()->setAddress3( $kuchiArray['kuchi']['address3'] );
-                	$kuchi->getAddress()->setPostalCode( $kuchiArray['kuchi']['postal_code'] );
-                	$kuchi->getAddress()->setCity( $kuchiArray['kuchi']['city'] );
-        
-                    $em->flush();
-                    $response->setStatusCode(200);
-                    $Logger->Info("[PUT rest/kuchi/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." updated");
-                }
-                else
-                {
-                    // kuchi inactive
-                    $response->setStatusCode(502);
-                    $Logger->Info("[PUT rest/kuchi/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
-                }
-                
+                // Komi unknown !
+                $response->setStatusCode(503);
+                $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 503 - Komi id=".$komiId." unkonwn");
             }
             else
             {
-                // hash invalid
-                $response->setStatusCode(600);
-                $Logger->Error("[PUT rest/kuchi/{id}/{hash}] 600 - Invalid Kuchi id");
+                $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+	                    
+                if (!$kuchiAccount)
+                {
+                    // kuchi account unknown !
+                    $response->setStatusCode(504);
+                    $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 503 - Kuchi admin account unknown");
+                }
+                else
+                {
+                    if( $hash == sha1("PUT /rest/kuchi" . $kuchiAccount->getToken() ) )
+                    {
+                        if( $kuchi->getActive() )
+                        {
+                            $json = $this->getRequest()->getContent();
+                            $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchi' => new JsonEncoder()));
+                            $kuchiArray = $serializer->decode($json, 'json');
+
+                            $kuchi->setName($kuchiArray['kuchi']['name']);
+                            $kuchi->setPassword($Password->generateHash( $kuchiArray['kuchi']['password'] ));
+                            $kuchi->getAddress()->setAddress1( $kuchiArray['kuchi']['address1'] );
+                            $kuchi->getAddress()->setAddress2( $kuchiArray['kuchi']['address2'] );
+                            $kuchi->getAddress()->setAddress3( $kuchiArray['kuchi']['address3'] );
+                            $kuchi->getAddress()->setPostalCode( $kuchiArray['kuchi']['postal_code'] );
+                            $kuchi->getAddress()->setCity( $kuchiArray['kuchi']['city'] );
+
+                            $response->setStatusCode(200);
+                            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." updated");
+                        }
+                        else
+                        {
+                            // kuchi inactive
+                            $response->setStatusCode(502);
+                            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
+                        }
+                    }
+                    else
+                    {
+                        // hash invalid
+                        $response->setStatusCode(600);
+                        $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 600 - Invalid Kuchi id");
+                    }
+
+                    // disable current token
+                    $kuchiAccount->generateToken();
+                    $em->flush();
+                }
             }
-            
-            // disable current token
-            $kuchi->generateToken();
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -93,11 +118,11 @@ class KuchiController extends Controller
     }
 
     /**
-     * @Delete("/rest/kuchi/sync/{id}/{hash}")
+     * @Delete("/rest/kuchi/sync/{komiId}/{id}/{hash}")
      * @return array
      * @View()
      */
-    public function deleteKuchiSyncAction($id, $hash)
+    public function deleteKuchiSyncAction($komiId, $id, $hash)
     {
         $response = new Response();
         
@@ -107,6 +132,8 @@ class KuchiController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         
         $kuchi = $repositoryKuchi->findOneById($id);
         
@@ -114,37 +141,58 @@ class KuchiController extends Controller
         {
             // Kuchi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[DELETE rest/kuchi/sync/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
         }
         else
         {
-            if( $hash == sha1("DELETE /rest/kuchi/sync" . $kuchi->getToken() ) )
+            $komi = $repositoryKomi->findOneByRandomId($komiId);
+            
+            if( !$komi )
             {
-                if( $kuchi->getActive() )
-                {
-                	$kuchi->resetTimestampLastSynchro();
-                	
-                	$em->flush();
-                    $response->setStatusCode(200);
-                    $Logger->Info("[DELETE rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." last synchro reseted");
-                }
-                else
-                {
-                    // kuchi inactive
-                    $response->setStatusCode(502);
-                    $Logger->Info("[DELETE rest/kuchi/sync/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
-                }
-                
+                // Komi unknown !
+                $response->setStatusCode(503);
+                $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 503 - Komi id=".$komiId." unkonwn");
             }
             else
             {
-                // hash invalid
-                $response->setStatusCode(600);
-                $Logger->Error("[DELETE rest/kuchi/sync/{id}/{hash}] 600 - Invalid hash");
+                $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+	                    
+                if (!$kuchiAccount)
+                {
+                    // kuchi account unknown !
+                    $response->setStatusCode(504);
+                    $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 503 - Kuchi admin account unknown");
+                }
+                else
+                {
+                    if( $hash == sha1("DELETE /rest/kuchi/sync" . $kuchiAccount->getToken() ) )
+                    {
+                        if( $kuchi->getActive() )
+                        {
+                            $kuchiAccount->resetTimestampLastSynchro();
+
+                            $response->setStatusCode(200);
+                            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." last synchro reseted");
+                        }
+                        else
+                        {
+                            // kuchi inactive
+                            $response->setStatusCode(502);
+                            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
+                        }
+                    }
+                    else
+                    {
+                        // hash invalid
+                        $response->setStatusCode(600);
+                        $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 600 - Invalid hash");
+                    }
+
+                    // disable current token
+                    $kuchiAccount->generateToken();
+                    $em->flush();
+                }
             }
-            
-            // disable current token
-            $kuchi->generateToken();
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -155,11 +203,11 @@ class KuchiController extends Controller
     }
     
     /**
-     * @Get("/rest/kuchi/sync/{id}/{hash}")
+     * @Get("/rest/kuchi/sync/{komiId}/{id}/{hash}")
      * @return array
      * @View(serializerGroups={"Synchro"})
      */
-    public function getKuchiSyncAction($id, $hash)
+    public function getKuchiSyncAction($komiId, $id, $hash)
     {
     	$response = new Response();
     
@@ -172,6 +220,8 @@ class KuchiController extends Controller
     	$repositorySubscription = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription');
     	$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
     	$repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
+        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
     
     	$kuchi = $repositoryKuchi->findOneById($id);
     
@@ -179,47 +229,70 @@ class KuchiController extends Controller
     	{
     		// Kuchi unknown !
     		$response->setStatusCode(501);
-    		$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+    		$Logger->Info("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
     	}
     	else
     	{
-    		if( $hash == sha1("GET /rest/kuchi/sync" . $kuchi->getToken() ) )
-    		{
-    			if( $kuchi->getActive() )
-    			{
-    
-     				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomisForKuchi( $kuchi );
-     				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomisForKuchi( $kuchi );
-     				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomisForKuchi( $kuchi );
-    
-     				$kuchi->setCurrentTimestampLastSynchro();
-     				$em->flush();
-     				$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
-    
-     				return array('STATS' => array(
-     						                       'NB_SUB' => $kuchi->getNbSubscriptions(),
-                                                                       'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)
-     				                             ),
-     						     'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
-     						     'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
-     						     'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
-    			}
-    			else
-    			{
-    				// kuchi inactive
-    				$response->setStatusCode(502);
-    				$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
-    			}
-    		}
-    		else
-    		{
-    			// hash invalid
-    			$response->setStatusCode(600);
-    			$Logger->Error("[GET rest/kuchi/sync/{id}/{hash}] 600 - Invalid hash");
-    		}
-    
-    		// disable current token
-    		$kuchi->generateToken();
+            $komi = $repositoryKomi->findOneByRandomId($komiId);
+            
+            if( !$komi )
+            {
+                // Komi unknown !
+                $response->setStatusCode(503);
+                $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 503 - Komi id=".$komiId." unkonwn");
+            }
+            else
+            {
+                $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+	                    
+                if (!$kuchiAccount)
+                {
+                    // kuchi account unknown !
+                    $response->setStatusCode(504);
+                    $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 503 - Kuchi admin account unknown");
+                }
+                else
+                {
+                    if( $hash == sha1("GET /rest/kuchi/sync" . $kuchiAccount->getToken() ) )
+                    {
+                        if( $kuchi->getActive() )
+                        {
+
+                            $addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomisForKuchi( $kuchiAccount );
+                            $updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomisForKuchi( $kuchiAccount );
+                            $deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomisForKuchi( $kuchiAccount );
+
+                            $kuchiAccount->setCurrentTimestampLastSynchro();
+                            $em->flush();
+                            $Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
+
+                            return array('STATS' => array(
+                                                            'NB_SUB' => $kuchi->getNbSubscriptions(),
+                                                            'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)
+                                                         ),
+                                                 'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
+                                                 'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
+                                                 'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
+                        }
+                        else
+                        {
+                                // kuchi inactive
+                                $response->setStatusCode(502);
+                                $Logger->Info("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$kuchi->getId()." inactive");
+                        }
+                    }
+                    else
+                    {
+                            // hash invalid
+                            $response->setStatusCode(600);
+                            $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 600 - Invalid hash");
+                    }
+
+                    // disable current token
+                    $kuchiAccount->generateToken();
+                    $em->flush();
+                }
+            }
     	}
     
     	$response->headers->set('Content-Type', 'text/html');

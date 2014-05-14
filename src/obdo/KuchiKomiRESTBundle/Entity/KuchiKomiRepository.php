@@ -36,15 +36,15 @@ class KuchiKomiRepository extends EntityRepository
     }
     
 
-    public function getAddedKuchiKomisForKuchi( $kuchi )
+    public function getAddedKuchiKomisForKuchi( $kuchiAccount )
     {
     	$qb = $this->createQueryBuilder('kuchikomi')
     	->leftJoin('kuchikomi.kuchi', 'kuchi')
     	->addSelect('kuchi')
     	->Where('kuchi = :kuchi')
-    	->setParameter('kuchi', $kuchi)
+    	->setParameter('kuchi', $kuchiAccount->getKuchi() )
     	->andWhere('kuchikomi.active = true AND kuchikomi.timestampCreation >= :fromDate')
-    	->setParameter('fromDate', $kuchi->getTimestampLastSynchro() );
+    	->setParameter('fromDate', $kuchiAccount->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();
     }
@@ -63,15 +63,15 @@ class KuchiKomiRepository extends EntityRepository
     	return $qb->getQuery()->getResult();
     }
     
-    public function getUpdatedKuchiKomisForKuchi( $kuchi )
+    public function getUpdatedKuchiKomisForKuchi( $kuchiAccount )
     {
     	$qb = $this->createQueryBuilder('kuchikomi')
     	->leftJoin('kuchikomi.kuchi', 'kuchi')
     	->addSelect('kuchi')
     	->Where('kuchi = :kuchi')
-    	->setParameter('kuchi', $kuchi)
+    	->setParameter('kuchi', $kuchiAccount->getKuchi() )
     	->andWhere('kuchikomi.active = true AND kuchikomi.timestampCreation < :fromDate AND kuchikomi.timestampLastUpdate >= :fromDate')
-    	->setParameter('fromDate', $kuchi->getTimestampLastSynchro() );
+    	->setParameter('fromDate', $kuchiAccount->getTimestampLastSynchro() );
 
     	return $qb->getQuery()->getResult();
     }
@@ -90,15 +90,15 @@ class KuchiKomiRepository extends EntityRepository
     	return $qb->getQuery()->getResult();
     }
     
-    public function getDeletedKuchiKomisForKuchi( $kuchi )
+    public function getDeletedKuchiKomisForKuchi( $kuchiAccount )
     {
     	$qb = $this->createQueryBuilder('kuchikomi')
     	->leftJoin('kuchikomi.kuchi', 'kuchi')
     	->addSelect('kuchi')
     	->Where('kuchi = :kuchi')
-    	->setParameter('kuchi', $kuchi)
+    	->setParameter('kuchi', $kuchiAccount->getKuchi())
     	->andWhere('kuchikomi.active = false AND kuchikomi.timestampSuppression >= :fromDate')
-    	->setParameter('fromDate', $kuchi->getTimestampLastSynchro() );
+    	->setParameter('fromDate', $kuchiAccount->getTimestampLastSynchro() );
     
     	return $qb->getQuery()->getResult();
     }

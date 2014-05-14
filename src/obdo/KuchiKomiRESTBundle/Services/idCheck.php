@@ -27,13 +27,21 @@ class idCheck
     public function isPostAuthenticateKuchiValid( $id )
     {
     	return ( preg_match("#^%%OB-DO-2-0-0%%#", $id) AND // Commence par %%OB-DO-2-0-0%%
-    			preg_match("#%%ID_PWD%%#", $id) AND           // Contient %%ID_PWD%%
-    			preg_match("#%%OB-DO-2-0-0%%$#", $id));   // Termine par %%OB-DO-2-0-0%%
+                 preg_match("#%%ID_KUCHI%%#", $id) AND       // Contient %%ID_PWD%%
+    		 preg_match("#%%ID_PWD%%#", $id) AND       // Contient %%ID_PWD%%
+    		 preg_match("#%%OB-DO-2-0-0%%$#", $id));   // Termine par %%OB-DO-2-0-0%%
     }
 
+    public function getPostAuthenticateKuchiRandomId( $id )
+    {
+    	preg_match("#\%%OB-DO-2-0-0%%(.+)\%%ID_KUCHI%%#", $id, $randomId);
+    
+    	return $randomId[1];
+    }
+    
     public function getPostAuthenticateKuchiId( $id )
     {
-    	preg_match("#\%%OB-DO-2-0-0%%(.+)\%%ID_PWD%%#", $id, $kuchiId);
+    	preg_match("#\%%ID_KUCHI%%(.+)\%%ID_PWD%%#", $id, $kuchiId);
     
     	return $kuchiId[1];
     }

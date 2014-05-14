@@ -41,7 +41,6 @@ class KomiController extends Controller
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         
-        
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
         $AES->setData($this->getRequest()->get('KK_id'));

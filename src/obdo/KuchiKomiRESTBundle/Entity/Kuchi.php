@@ -7,7 +7,6 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 use obdo\KuchiKomiRESTBundle\Entity\Subscription;
 // pour la validation
@@ -24,9 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 
  */
 class Kuchi
-{
-    const TOKEN_SIZE = 13;
-        
+{       
     /**
      * @var integer
      *
@@ -65,12 +62,6 @@ class Kuchi
      */
     private $timestampSuppression;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="timestampLastSynchro", type="datetime")
-     */
-    private $timestampLastSynchro;
     
     /**
      * @var boolean
@@ -79,14 +70,6 @@ class Kuchi
      */
     private $active;
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="token", type="string", length=26)
-     * @Expose
-     * @Groups({"Authenticate"})
-     */
-    private $token;
 
     /**
      * @var text
@@ -186,19 +169,12 @@ class Kuchi
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampLastUpdate  = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $this->resetTimestampLastSynchro();
-        $this->generateToken();
         $this->logoLink = "";
         $this->photoLink = "";
         $this->photoKuchiKomiFolder = "";
         $this->phoneNumber = "";
         $this->mailAddress = "";
         $this->webSite = "";
-    }
-
-    public function resetTimestampLastSynchro()
-    {
-    	$this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
     }
     
     /**
@@ -278,30 +254,6 @@ class Kuchi
     public function getActive()
     {
         return $this->active;
-    }
-
-    /**
-     * Set token
-     *
-     * @param string $token
-     * @return Komi
-     */
-    public function generateToken()
-    {
-        $generator = new SecureRandom();
-        $this->token = bin2hex($generator->nextBytes( self::TOKEN_SIZE ));
-
-        return $this;
-    }
-
-    /**
-     * Get token
-     *
-     * @return string 
-     */
-    public function getToken()
-    {
-        return $this->token;
     }
     
     /**
@@ -501,20 +453,6 @@ class Kuchi
         return $this->address;
     }
 
-
-    /**
-     * Set token
-     *
-     * @param string $token
-     * @return Kuchi
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
     /**
      * Set logo_link
      *
@@ -645,41 +583,6 @@ class Kuchi
     		$photoByteStream = base64_encode( $contents );
     	}
     	return $photoByteStream;
-    }
-    
-    /**
-     * Get timestampLastSynchro
-     *
-     * @return \DateTime
-     */
-    public function getTimestampLastSynchro()
-    {
-    	return $this->timestampLastSynchro;
-    }
-    
-    /**
-     * Set timestampLastSynchro to current
-     *
-     * @return Kuchi
-     */
-    public function setCurrentTimestampLastSynchro()
-    {
-    	$this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-    
-    	return $this;
-    }
-
-    /**
-     * Set timestampLastSynchro
-     *
-     * @param \DateTime $timestampLastSynchro
-     * @return Kuchi
-     */
-    public function setTimestampLastSynchro($timestampLastSynchro)
-    {
-        $this->timestampLastSynchro = $timestampLastSynchro;
-
-        return $this;
     }
 
     /**

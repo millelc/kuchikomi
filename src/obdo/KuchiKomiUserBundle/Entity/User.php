@@ -53,7 +53,7 @@ class User extends BaseUser {
      *
      * @param obdo\KuchiKomiRestBundle\Entity\KuchiGroup $kuchigroups
      */
-    public function removeKuchiGroup(\Sdz\BlogBundle\Entity\KuchiGroup $kuchigroup) { // sans « s » !
+    public function removeKuchiGroup(\obdo\KuchiKomiRestBundle\Entity\KuchiGroup $kuchigroup) { // sans « s » !
         // Ici on utilise une méthode de l'ArrayCollection, pour supprimer la catégorie en argument
         $this->kuchigroups->removeElement($kuchigroup);
     }
@@ -82,7 +82,7 @@ class User extends BaseUser {
      *
      * @param obdo\KuchiKomiRestBundle\Entity\Kuchi $kuchis
      */
-    public function removeKuchi(\Sdz\BlogBundle\Entity\Kuchi $kuchi) { // sans « s » !
+    public function removeKuchi(\obdo\KuchiKomiRestBundle\Entity\Kuchi $kuchi) { // sans « s » !
         // Ici on utilise une méthode de l'ArrayCollection, pour supprimer la catégorie en argument
         $this->kuchis->removeElement($kuchi);
     }
