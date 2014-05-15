@@ -6,9 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class UserType extends AbstractType
+class UserKuchiType extends AbstractType
 {
-
     public function __construct($rolesChoices)
     {
         $this->rolesChoices = $rolesChoices;
@@ -20,10 +19,12 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('email')
-            ->add('password')
-            ->add('roles', 'choice', array('choices' => $this->rolesChoices, 'multiple' => true))
+            ->add('username', 'text', array('required' => false,))
+            ->add('email', 'text', array('required' => false,))
+            ->add('password', 'password', array('required' => false,))
+            ->add('roles', 'choice', array('choices' => $this->rolesChoices, 
+                                           'multiple' => true, 
+                                           'required' => false,))
             ->add('kuchigroups', 'entity', array(
                     'class'    => 'obdoKuchiKomiRESTBundle:KuchiGroup',
                     'property' => 'name',
@@ -32,8 +33,7 @@ class UserType extends AbstractType
             ->add('kuchis', 'entity', array(
                     'class'    => 'obdoKuchiKomiRESTBundle:Kuchi',
                     'property' => 'name',
-                    'multiple' => true,
-                    'required' => false));
+                    'multiple' => true));
     }
     
     /**

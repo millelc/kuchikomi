@@ -13,6 +13,10 @@ obdo_kuchi_komi_user:
 obdo_kuchi_komi_user_add:
     pattern:  /user/add/
     defaults: { _controller: obdoKuchiKomiUserBundle:User:ajout }
+
+obdo_kuchi_komi_user_add_suite:
+    pattern:  /user/add/suite/{username}/{usermail}/{userpwd}/{userrole}/
+    defaults: { _controller: obdoKuchiKomiUserBundle:User:ajoutsuite }
         
 obdo_kuchi_komi_logs:
     pattern:  /logs/{page}/{sort}

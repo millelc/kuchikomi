@@ -23,12 +23,12 @@ class User extends BaseUser {
     protected $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiGroup", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiGroup", cascade={"all"})
      */
     private $kuchigroups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", cascade={"all"})
      */
     private $kuchis;
 
