@@ -7,7 +7,8 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
-
+use Doctrine\Common\Collections\ArrayCollection;
+use obdo\KuchiKomiUserBundle\Entity\User;
 /**
  * KuchiGroup
  *
@@ -101,6 +102,14 @@ class KuchiGroup
     private $isSubscribed;
     
     private $logoimg; //pour upload logo
+    /**
+     * @var ArrayCollection KuchiGroup $users
+     *
+     * Inverse Side
+     *
+     * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiUserBundle\Entity\User", mappedBy="kuchigroups", cascade={"all"})
+     */
+    private $users;
     
     public function __construct()
     {
@@ -111,6 +120,7 @@ class KuchiGroup
         $this->nbMaxKuchi = 10;
         $this->logo = "";
         $this->isSubscribed = false;
+        $this->users = new ArrayCollection();
     }
     
     /**
@@ -400,6 +410,40 @@ class KuchiGroup
     public function setLogoimg($logoimg) {
         $this->logoimg = $logoimg;
     }
-
+    
+    public function addUser(User $user)
+    {
+        // Si l'objet fait déjà partie de la collection on ne l'ajoute pas
+        if (!$this->users->contains($user)) {
+            if (!$user->getKuchiGroups()->contains($this)) {
+                $user->addKuchiGroup($this);  
+            }
+            $this->users->add($user);
+        }
+    }
+ 
+    public function setUsers($items)
+    {
+        if ($items instanceof ArrayCollection || is_array($items)) {
+            foreach ($items as $item) {
+                $this->addUser($item);
+            }
+        } elseif ($items instanceof User) {
+            $this->addUser($items);
+        } else {
+            throw new Exception("$items must be an instance of User or ArrayCollection");
+        }
+    }
+ 
+    /**
+     * Get ArrayCollection
+     *
+     * @return ArrayCollection $users
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+ 
 
 }

@@ -5,12 +5,14 @@ namespace obdo\KuchiKomiUserBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiRepository;
 
 class UserKuchiType extends AbstractType
 {
-    public function __construct($rolesChoices)
+    public function __construct($rolesChoices, $userid)
     {
         $this->rolesChoices = $rolesChoices;
+        $this->userid = $userid;
     }
     /**
      * @param FormBuilderInterface $builder
@@ -18,6 +20,7 @@ class UserKuchiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $userid = $this->userid;
         $builder
             ->add('username', 'text', array('required' => false,))
             ->add('email', 'text', array('required' => false,))
@@ -33,7 +36,11 @@ class UserKuchiType extends AbstractType
             ->add('kuchis', 'entity', array(
                     'class'    => 'obdoKuchiKomiRESTBundle:Kuchi',
                     'property' => 'name',
-                    'multiple' => true));
+                    'multiple' => true ,
+                    'query_builder' => function(KuchiRepository $r)
+                    use($userid) {
+                    return $r->getKuchisByUserId($userid);
+                    }));
     }
     
     /**

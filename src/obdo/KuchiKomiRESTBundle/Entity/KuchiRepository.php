@@ -146,4 +146,15 @@ class KuchiRepository extends EntityRepository
     
     	return $qb->getQuery()->getResult();
     }
+    
+    public function getKuchisByUserId($userid){
+        //il faut aller chrercher les groupes du userid puis les kuchis des groupes
+        $qb = $this->createQueryBuilder('kuchi')
+                ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
+                ->join('kuchiGroup.users', 'users')
+                ->where('users.id = :userid')
+                ->setParameter('userid', $userid);
+
+        return $qb;
+    }
 }

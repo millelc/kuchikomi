@@ -62,9 +62,20 @@ class UserController extends Controller {
         $currentroles = unserialize($userrole);
         $currentrole = $currentroles[0];
         
-        $formk = $this->createForm(new UserKuchiType($this->getRoles(), $userk));
-        $formkg = $this->createForm(new UserKuchiGroupType($this->getRoles(), $userk));
-        $formerr = $formkg;
+        $formk = null;
+        $formkg = null;
+        
+        if ($currentrole == 'ROLE_KUCHI') {
+            $formk = $this->createForm(new UserKuchiType($this->getRoles(), 
+                                    $this->getUser()->getId(), $userk));
+            $formerr = $formk;
+        }else
+        {
+            $formkg = $this->createForm(new UserKuchiGroupType($this->getRoles(), 
+                                        $this->getUser()->getId(), $userk));
+            $formerr = $formkg;
+        }
+        
         
         $requestk = $this->get('request');
         
@@ -78,21 +89,25 @@ class UserController extends Controller {
                 $formerr = $formkg;
             }
             
-            if ($formk->isValid() || $formkg->isValid()) {
+            if (($formk != null && $formk->isValid()) || ($formkg != null && $formkg->isValid())) {
                 $userk->setPlainPassword($userpwd);
                 $userk->setEnabled(true);
                 $userk->setRoles($currentroles);
 
-                if($formkg['kuchigroups']->getData() != null){
-                  foreach($formkg['kuchigroups']->getData() as $kg){
-                    $userk->addKuchiGroup($kg);
-                  }  
-                }
                 
-                if($formk['kuchis']->getData() != null){
-                  foreach($formk['kuchis']->getData() as $k){
-                    $userk->addKuchi($k);
-                  }  
+                if ($currentrole == 'ROLE_KUCHI') {
+                    if($formk['kuchis']->getData() != null){
+                        foreach($formk['kuchis']->getData() as $k){
+                          $userk->addKuchi($k);
+                        }  
+                }
+                }else
+                {
+                    if($formkg['kuchigroups']->getData() != null){
+                        foreach($formkg['kuchigroups']->getData() as $kg){
+                          $userk->addKuchiGroup($kg);
+                        }  
+                    }  
                 }
                 
                 $em = $this->getDoctrine()->getManager();

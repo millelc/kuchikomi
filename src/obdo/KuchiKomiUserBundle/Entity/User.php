@@ -24,11 +24,19 @@ class User extends BaseUser {
 
     /**
      * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiGroup", cascade={"all"})
+     * @ORM\JoinTable(name="user_kuchigroup",
+     *   joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="kuchigroup_id", referencedColumnName="id")}
+     * )
      */
     private $kuchigroups;
 
     /**
      * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", cascade={"all"})
+     * @ORM\JoinTable(name="user_kuchi",
+     *   joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *   inverseJoinColumns={@ORM\JoinColumn(name="kuchi_id", referencedColumnName="id")}
+     * )
      */
     private $kuchis;
 

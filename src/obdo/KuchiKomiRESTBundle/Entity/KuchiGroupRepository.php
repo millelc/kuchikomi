@@ -4,7 +4,6 @@ namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use obdo\KuchiKomiRESTBundle\obdoKuchiKomiRESTBundle;
 
 /**
  * KuchiGroupRepository
@@ -118,4 +117,13 @@ class KuchiGroupRepository extends EntityRepository
     	return $qb->getQuery()->getResult();
     }
     
+    public function getGroupsByUserId($userid){
+        $qb = $this->createQueryBuilder('kuchigroup')
+                ->join('kuchigroup.users', 'users')
+                ->where('users.id = :userid')
+                ->setParameter('userid', $userid);
+
+        return $qb;
+    }
+            
 }

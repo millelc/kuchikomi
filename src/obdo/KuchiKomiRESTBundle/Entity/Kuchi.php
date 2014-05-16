@@ -7,8 +7,10 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
+use Doctrine\Common\Collections\ArrayCollection;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 use obdo\KuchiKomiRESTBundle\Entity\Subscription;
+use obdo\KuchiKomiUserBundle\Entity\User;
 // pour la validation
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -163,6 +165,15 @@ class Kuchi
     private $logoimg; //pour upload logo
     private $photoimg; //pour upload photo
 
+    /**
+     * @var ArrayCollection Kuchi $users
+     *
+     * Inverse Side
+     *
+     * @ORM\ManyToMany(targetEntity="obdo\KuchiKomiUserBundle\Entity\User", mappedBy="kuchis", cascade={"all"})
+     */
+    private $users;
+    
     public function __construct()
     {
         $this->active = true;
@@ -175,6 +186,7 @@ class Kuchi
         $this->phoneNumber = "";
         $this->mailAddress = "";
         $this->webSite = "";
+        $this->users = new ArrayCollection();
     }
     
     /**
@@ -691,5 +703,39 @@ class Kuchi
 
     public function setPhotoimg($photoimg) {
         $this->photoimg = $photoimg;
+    }
+    
+    public function addUser(User $user)
+    {
+        // Si l'objet fait déjà partie de la collection on ne l'ajoute pas
+        if (!$this->users->contains($user)) {
+            if (!$user->getKuchis()->contains($this)) {
+                $user->addKuchi($this);  
+            }
+            $this->users->add($user);
+        }
+    }
+ 
+    public function setUsers($items)
+    {
+        if ($items instanceof ArrayCollection || is_array($items)) {
+            foreach ($items as $item) {
+                $this->addUser($item);
+            }
+        } elseif ($items instanceof User) {
+            $this->addUser($items);
+        } else {
+            throw new Exception("$items must be an instance of User or ArrayCollection");
+        }
+    }
+ 
+    /**
+     * Get ArrayCollection
+     *
+     * @return ArrayCollection $users
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

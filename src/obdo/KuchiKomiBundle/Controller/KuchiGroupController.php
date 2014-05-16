@@ -58,6 +58,14 @@ class KuchiGroupController extends Controller {
             $form->bind($request);
 
             if ($form->isValid()) {
+                // ajout du lien user kuchigroup
+                $kuchiGroup->addUser($this->getUser());
+                // ajout du lien super_admin kuchigroup, pour l'instant avec id = 1
+                $admin = $this->getDoctrine()
+                            ->getRepository('obdo\KuchiKomiUserBundle\Entity\User')
+                            ->find(1);
+                $kuchiGroup->addUser($admin);
+                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($kuchiGroup);
                 $em->flush();
