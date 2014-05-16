@@ -149,8 +149,11 @@ class KuchiKomiController extends Controller
      */
     private function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi, $type)
     {	
-    	$Notifier = $this->container->get('obdo_services.Notifier');
-    	
+        $em = $this->getDoctrine()->getManager();
+        $Notifier = $this->container->get('obdo_services.Notifier');
+    	$repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        
+        
     	$subscriptions = $kuchi->getSubscriptions();
     	foreach ($subscriptions as $subscription)
     	{
@@ -159,6 +162,13 @@ class KuchiKomiController extends Controller
                 $komi = $subscription->getKomi();
                 $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => $type));
             }
+    	}
+        
+        $kuchiAccounts = $repositoryKuchiAccount->getKuchiAccountForKuchi($kuchi);
+        foreach ($kuchiAccounts as $kuchiAccount)
+    	{
+            $komi = $kuchiAccount->getKomi();
+            $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => "4"));
     	}
     }
     

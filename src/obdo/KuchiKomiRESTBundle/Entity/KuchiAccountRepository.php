@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class KuchiAccountRepository extends EntityRepository
 {
+    
+    public function getKuchiAccountForKuchi( $kuchi )
+    {
+    	$qb = $this->createQueryBuilder('kuchiAccount')
+                ->join('kuchiAccount.kuchi', 'kuchi', 'WITH', 'kuchi = :kuchi')
+                ->setParameter('kuchi', $kuchi )
+                ->join('kuchiAccount.komi', 'komi', 'WITH', 'komi.active = true');
+    
+    	return $qb->getQuery()->getResult();
+    }
 }
