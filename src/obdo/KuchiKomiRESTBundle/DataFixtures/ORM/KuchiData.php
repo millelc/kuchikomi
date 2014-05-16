@@ -22,7 +22,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 	 */
 	public function getOrder()
 	{
-		return 2;
+		return 3;
 	}
 	
 	
@@ -41,24 +41,26 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		
 		$manager->getConnection()->exec("ALTER TABLE Kuchi AUTO_INCREMENT = 1;");
 		
-		// Kuchi1
-		$kuchi1 = new Kuchi();
-		$kuchi1->setName('Mairie');
-		$kuchi1->setPhoneNumber('02 31 23 34 45');
-		$kuchi1->setMailAddress('mairie@fb.com');
-		$kuchi1->setKuchiGroup($this->getReference('kuchiGroup1'));
-		$kuchi1->setPassword($Password->generateHash('essai'));
-		$kuchi1->setAddress($this->getReference('address1'));
-		$this->addReference('kuchi1', $kuchi1);
-		$manager->persist($kuchi1);
+                // News
+		$news = new Kuchi();
+		$news->setName('News');
+		$news->setPhoneNumber('-');
+		$news->setMailAddress('news@citykomi.com');
+		$news->setWebSite('www.citykomi.com');
+		$news->setKuchiGroup($this->getReference('citykomiGroup'));
+		$news->setPassword($Password->generateHash('news'));
+		$news->setAddress($this->getReference('addressNews'));
+		$this->addReference('news', $news);
+		$manager->persist($news);
 		$manager->flush();
-		$folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi1->getId();
-		$kuchi1->setPhotoKuchiKomiLink($folder . "/");
-		$folder = $this->container->getParameter('path_kuchi_photo') . $kuchi1->getId();
-		$kuchi1->setLogoLink($folder . "/logo.jpg");
-		$kuchi1->setPhotoLink($folder . "/photo.jpg");
-		$manager->persist($kuchi1);
+		$folder = $this->container->getParameter('path_kuchikomi_photo') . $news->getId();
+		$news->setPhotoKuchiKomiLink($folder . "/");
+		$folder = $this->container->getParameter('path_kuchi_photo') . $news->getId();
+		$news->setLogoLink($folder . "/logo.jpg");
+		$news->setPhotoLink($folder . "/photo.jpg");
+		$manager->persist($news);
 		$manager->flush();
+            
 		
 		// Kuchi2
 		$kuchi2 = new Kuchi();
@@ -68,6 +70,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$kuchi2->setKuchiGroup($this->getReference('kuchiGroup1'));
 		$kuchi2->setPassword($Password->generateHash('essai'));
 		$kuchi2->setAddress($this->getReference('address2'));
+                $kuchi2->addUser($this->getReference('KuchiAdmin'));
 		$this->addReference('kuchi2', $kuchi2);
 		$manager->persist($kuchi2);
 		$manager->flush();
@@ -319,24 +322,24 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($maxime);
 		$manager->flush();
 		
-		// News
-		$news = new Kuchi();
-		$news->setName('News');
-		$news->setPhoneNumber('-');
-		$news->setMailAddress('news@citykomi.com');
-		$news->setWebSite('www.citykomi.com');
-		$news->setKuchiGroup($this->getReference('citykomiGroup'));
-		$news->setPassword($Password->generateHash('news'));
-		$news->setAddress($this->getReference('addressNews'));
-		$this->addReference('news', $news);
-		$manager->persist($news);
+		// Kuchi1
+		$kuchi1 = new Kuchi();
+		$kuchi1->setName('Mairie');
+		$kuchi1->setPhoneNumber('02 31 23 34 45');
+		$kuchi1->setMailAddress('mairie@fb.com');
+		$kuchi1->setKuchiGroup($this->getReference('kuchiGroup1'));
+		$kuchi1->setPassword($Password->generateHash('essai'));
+		$kuchi1->setAddress($this->getReference('address1'));
+                $kuchi1->addUser($this->getReference('KuchiAdmin'));
+		$this->addReference('kuchi1', $kuchi1);
+		$manager->persist($kuchi1);
 		$manager->flush();
-		$folder = $this->container->getParameter('path_kuchikomi_photo') . $news->getId();
-		$news->setPhotoKuchiKomiLink($folder . "/");
-		$folder = $this->container->getParameter('path_kuchi_photo') . $news->getId();
-		$news->setLogoLink($folder . "/logo.jpg");
-		$news->setPhotoLink($folder . "/photo.jpg");
-		$manager->persist($news);
-		$manager->flush();		
+		$folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi1->getId();
+		$kuchi1->setPhotoKuchiKomiLink($folder . "/");
+		$folder = $this->container->getParameter('path_kuchi_photo') . $kuchi1->getId();
+		$kuchi1->setLogoLink($folder . "/logo.jpg");
+		$kuchi1->setPhotoLink($folder . "/photo.jpg");
+		$manager->persist($kuchi1);
+		$manager->flush();
 	}
 }

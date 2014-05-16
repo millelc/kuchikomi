@@ -22,7 +22,7 @@ class LogData extends AbstractFixture implements ContainerAwareInterface, Ordere
 	 */
 	public function getOrder()
 	{
-		return 5; 
+		return 6; 
 	}
 	
 	/**

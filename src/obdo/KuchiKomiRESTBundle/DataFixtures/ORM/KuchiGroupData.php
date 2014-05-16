@@ -22,7 +22,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 	 */
 	public function getOrder()
 	{
-		return 1;
+		return 2;
 	}
 	
 	
@@ -39,34 +39,46 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 	{
 		$manager->getConnection()->exec("ALTER TABLE KuchiGroup AUTO_INCREMENT = 1;");
 		
-		// Feuguerolles-Bully Group
-		$kuchiGroup1 = new KuchiGroup();
-		$kuchiGroup1->setName('Feuguerolles-Bully');
-		$this->addReference('kuchiGroup1', $kuchiGroup1);
-		$manager->persist($kuchiGroup1);
-		$manager->flush();
-		$kuchiGroup1->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup1->getId() . "/logo.jpg" );
-		$manager->persist($kuchiGroup1);
-		$manager->flush();
-		
-		// ob-do Group
-		$obdoGroup = new KuchiGroup();
-		$obdoGroup->setName("ob'do");
-		$this->addReference('obdoGroup', $obdoGroup);
-		$manager->persist($obdoGroup);
-		$manager->flush();
-		$obdoGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $obdoGroup->getId() . "/logo.jpg" );
-		$manager->persist($obdoGroup);
-		$manager->flush();	
-		
+                		
 		// CityKomi Group
 		$citykomiGroup = new KuchiGroup();
 		$citykomiGroup->setName("CityKomi");
+                $citykomiGroup->addUser($this->getReference('SuperAdmin'));
+                $citykomiGroup->addUser($this->getReference('Admin'));
+                $citykomiGroup->addUser($this->getReference('GroupAdmin'));
 		$this->addReference('citykomiGroup', $citykomiGroup);
 		$manager->persist($citykomiGroup);
 		$manager->flush();
 		$citykomiGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $citykomiGroup->getId() . "/logo.jpg" );
 		$manager->persist($citykomiGroup);
 		$manager->flush();
+                
+		
+		// ob-do Group
+		$obdoGroup = new KuchiGroup();
+		$obdoGroup->setName("ob'do");
+                $obdoGroup->addUser($this->getReference('SuperAdmin'));
+                $obdoGroup->addUser($this->getReference('Admin'));
+                $obdoGroup->addUser($this->getReference('GroupAdmin'));
+		$this->addReference('obdoGroup', $obdoGroup);
+		$manager->persist($obdoGroup);
+		$manager->flush();
+		$obdoGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $obdoGroup->getId() . "/logo.jpg" );
+		$manager->persist($obdoGroup);
+		$manager->flush();	
+                
+                		// Feuguerolles-Bully Group
+		$kuchiGroup1 = new KuchiGroup();
+		$kuchiGroup1->setName('Feuguerolles-Bully');
+                $kuchiGroup1->addUser($this->getReference('SuperAdmin'));
+                $kuchiGroup1->addUser($this->getReference('Admin'));
+                $kuchiGroup1->addUser($this->getReference('GroupAdmin'));
+		$this->addReference('kuchiGroup1', $kuchiGroup1);
+		$manager->persist($kuchiGroup1);
+		$manager->flush();
+		$kuchiGroup1->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup1->getId() . "/logo.jpg" );
+		$manager->persist($kuchiGroup1);
+		$manager->flush();
+
 	}
 }

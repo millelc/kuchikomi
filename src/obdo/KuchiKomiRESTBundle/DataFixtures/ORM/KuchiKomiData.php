@@ -22,7 +22,7 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
 	 */
 	public function getOrder()
 	{
-		return 3;
+		return 4;
 	}
 	
 	

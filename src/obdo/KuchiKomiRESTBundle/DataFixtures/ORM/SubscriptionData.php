@@ -22,7 +22,7 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
 	 */
 	public function getOrder()
 	{
-		return 3;
+		return 4;
 	}
 	
 	

@@ -22,7 +22,7 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 	 */
 	public function getOrder()
 	{
-		return 1;
+		return 2;
 	}
 	
 	

@@ -41,14 +41,26 @@ class UserData extends AbstractFixture implements ContainerAwareInterface, Order
 		
 		// super admin
 		$userSuperAdmin = new User();
-		$userSuperAdmin->setUsername('admin');
-		$userSuperAdmin->setPlainPassword('admin');
+		$userSuperAdmin->setUsername('root');
+		$userSuperAdmin->setPlainPassword('root');
 		$userSuperAdmin->setEmail('nicolas.dries@ob-do.com');
 		$userSuperAdmin->setLocked(false);
 		$userSuperAdmin->setEnabled(true);
 		$userSuperAdmin->setSuperAdmin(true);
+                $this->addReference('SuperAdmin', $userSuperAdmin);
 		$manager->persist($userSuperAdmin);
 		
+                // admin
+		$userAdmin = new User();
+		$userAdmin->setUsername('admin');
+		$userAdmin->setPlainPassword('admin');
+		$userAdmin->setEmail('david.marechal@ob-do.com');
+		$userAdmin->setLocked(false);
+		$userAdmin->setEnabled(true);
+		$userAdmin->setRoles(array('ROLE_ADMIN'));
+                $this->addReference('Admin', $userAdmin);
+		$manager->persist($userAdmin);
+                
 		// Kuchi group admin
 		$kuchiGroupAdmin = new User();
 		$kuchiGroupAdmin->setUsername('kuchigroup');
@@ -57,6 +69,7 @@ class UserData extends AbstractFixture implements ContainerAwareInterface, Order
 		$kuchiGroupAdmin->setLocked(false);
 		$kuchiGroupAdmin->setEnabled(true);
 		$kuchiGroupAdmin->setRoles(array('ROLE_ADMIN_GROUP_KUCHI'));
+                $this->addReference('GroupAdmin', $kuchiGroupAdmin);
 		$manager->persist($kuchiGroupAdmin);
 		
 		// Kuchi admin
@@ -67,6 +80,7 @@ class UserData extends AbstractFixture implements ContainerAwareInterface, Order
 		$kuchiAdmin->setLocked(false);
 		$kuchiAdmin->setEnabled(true);
 		$kuchiAdmin->setRoles(array('ROLE_KUCHI'));
+                $this->addReference('KuchiAdmin', $kuchiAdmin);
 		$manager->persist($kuchiAdmin);
 
 		$manager->flush();	
