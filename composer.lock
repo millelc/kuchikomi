@@ -3,8 +3,58 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "eb3bd8234acde40cf4b20150d3a1ef1e",
+    "hash": "bfb620d5b6051d316920e125b266df26",
     "packages": [
+        {
+            "name": "coresphere/console-bundle",
+            "version": "dev-master",
+            "target-dir": "CoreSphere/ConsoleBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CoreSphere/ConsoleBundle.git",
+                "reference": "ac950e6b1f0ab40ff2b585f618931d1a5948197a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CoreSphere/ConsoleBundle/zipball/ac950e6b1f0ab40ff2b585f618931d1a5948197a",
+                "reference": "ac950e6b1f0ab40ff2b585f618931d1a5948197a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": ">=2.1.0,<3.0"
+            },
+            "require-dev": {
+                "symfony/console": ">=2.1.0,<3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "CoreSphere\\ConsoleBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Laszlo Korte",
+                    "email": "coresphere@laszlokorte.de"
+                },
+                {
+                    "name": "Marmus Ullman",
+                    "email": "mail@markus-ullmann.de"
+                }
+            ],
+            "description": "This bundle allows you accessing the symfony2 console via your browser",
+            "keywords": [
+                "console",
+                "javascript",
+                "symfony"
+            ],
+            "time": "2014-04-22 10:50:27"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -825,12 +875,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "e4c000a9b19096be0135d0773b56f7c757c93542"
+                "reference": "3969d7fe39fd58398bf9a00110ca349c000fa05e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e4c000a9b19096be0135d0773b56f7c757c93542",
-                "reference": "e4c000a9b19096be0135d0773b56f7c757c93542",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3969d7fe39fd58398bf9a00110ca349c000fa05e",
+                "reference": "3969d7fe39fd58398bf9a00110ca349c000fa05e",
                 "shasum": ""
             },
             "require": {
@@ -885,7 +935,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-04-08 21:21:16"
+            "time": "2014-05-18 21:15:38"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1748,25 +1798,28 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.1.0",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "748c01c1144713ac0118396935d10b6ceec91b68"
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/748c01c1144713ac0118396935d10b6ceec91b68",
-                "reference": "748c01c1144713ac0118396935d10b6ceec91b68",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "5.2-dev"
                 }
             },
             "autoload": {
@@ -1795,7 +1848,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-03-18 09:03:27"
+            "time": "2014-05-08 08:11:19"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -2289,16 +2342,16 @@
         },
         {
             "name": "willdurand/negotiation",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/Negotiation.git",
-                "reference": "cda64e26a980f433ce98200ba1b2301850489aab"
+                "reference": "a98fb6b9808610c1aa326c736893d3d77d9383b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/cda64e26a980f433ce98200ba1b2301850489aab",
-                "reference": "cda64e26a980f433ce98200ba1b2301850489aab",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/a98fb6b9808610c1aa326c736893d3d77d9383b6",
+                "reference": "a98fb6b9808610c1aa326c736893d3d77d9383b6",
                 "shasum": ""
             },
             "require": {
@@ -2335,7 +2388,7 @@
                 "header",
                 "negotiation"
             ],
-            "time": "2014-02-26 13:56:25"
+            "time": "2014-05-16 12:34:51"
         }
     ],
     "packages-dev": [
@@ -2351,7 +2404,8 @@
         "jms/serializer-bundle": 0,
         "friendsofsymfony/rest-bundle": 0,
         "friendsofsymfony/user-bundle": 20,
-        "richsage/rms-push-notifications-bundle": 20
+        "richsage/rms-push-notifications-bundle": 20,
+        "coresphere/console-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

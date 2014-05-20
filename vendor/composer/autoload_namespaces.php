@@ -40,6 +40,7 @@ return array(
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib'),
     'Doctrine\\Bundle\\FixturesBundle' => array($vendorDir . '/doctrine/doctrine-fixtures-bundle'),
     'Doctrine\\Bundle\\DoctrineBundle' => array($vendorDir . '/doctrine/doctrine-bundle'),
+    'CoreSphere\\ConsoleBundle' => array($vendorDir . '/coresphere/console-bundle'),
     'Buzz' => array($vendorDir . '/kriswallsmith/buzz/lib'),
     'Assetic' => array($vendorDir . '/kriswallsmith/assetic/src'),
     '' => array($baseDir . '/src'),

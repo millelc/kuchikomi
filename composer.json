@@ -24,7 +24,8 @@
         "jms/serializer-bundle": "@stable",
         "friendsofsymfony/rest-bundle": "@stable",
         "friendsofsymfony/user-bundle": "dev-master",
-        "richsage/rms-push-notifications-bundle": "dev-master"
+        "richsage/rms-push-notifications-bundle": "dev-master",
+        "coresphere/console-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
