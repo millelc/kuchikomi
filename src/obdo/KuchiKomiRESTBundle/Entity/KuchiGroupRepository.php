@@ -125,5 +125,59 @@ class KuchiGroupRepository extends EntityRepository
 
         return $qb;
     }
+    
+    public function getGroupListByUserId($nombreParPage, $page, $sort, $userid){
+        if ($page < 1)
+        {
+            throw new \InvalidArgumentException('L\'argument $page ne peut être inférieur à 1 (valeur : "'.$page.'").');
+        }
+        
+        $query = $this->createQueryBuilder('groups')
+                ->join('groups.users', 'users')
+                ->where('users.id = :userid')
+                ->setParameter('userid', $userid);
+        
+        if( $sort == "active_up")
+        {
+            $query->orderBy('groups.active','DESC');
+        }
+        elseif( $sort == "active_down" )
+        {
+            $query->orderBy('groups.active','ASC');
+        }
+        elseif( $sort == "name_up" )
+        {
+            $query->orderBy('groups.name','DESC');
+        }
+        elseif( $sort == "name_down" )
+        {
+            $query->orderBy('groups.name','ASC');
+        }
+        elseif( $sort == "creation_up" )
+        {
+            $query->orderBy('groups.timestampCreation','ASC');
+        }
+        elseif( $sort == "creation_down" )
+        {
+            $query->orderBy('groups.timestampCreation','DESC');
+        }
+        elseif( $sort == "suppression_up" )
+        {
+            $query->orderBy('groups.timestampSuppression','ASC');
+        }
+        elseif( $sort == "suppression_down" )
+        {
+            $query->orderBy('groups.timestampSuppression','DESC');
+        }
+        
+        $query->getquery();
+        // On définit l'article à partir duquel commencer la liste
+        $query->setFirstResult(($page-1) * $nombreParPage)
+                // Ainsi que le nombre d'articles à afficher
+                ->setMaxResults($nombreParPage);
+
+        return new Paginator($query);
+
+    }
             
 }

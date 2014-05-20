@@ -157,4 +157,71 @@ class KuchiRepository extends EntityRepository
 
         return $qb;
     }
+    
+    public function getKuchiListByUserId($nombreParPage, $page, $sort, $userid, $userrole){
+        if ($page < 1)
+        {
+            throw new \InvalidArgumentException('L\'argument $page ne peut être inférieur à 1 (valeur : "'.$page.'").');
+        }
+        
+       if($userrole == 'ROLE_KUCHI'){
+            $query = $this->createQueryBuilder('kuchis')
+                          ->leftJoin('kuchis.kuchiGroup', 'kuchiGroup')
+                          ->addSelect('kuchiGroup')
+                          ->join('kuchis.users', 'users')
+                          ->where('users.id = :userid')
+                          ->setParameter('userid', $userid);
+       }
+       else{
+           $query = $this->createQueryBuilder('kuchis')
+                          ->leftJoin('kuchis.kuchiGroup', 'kuchiGroup')
+                          ->addSelect('kuchiGroup')
+                          ->join('kuchiGroup.users', 'users')
+                          ->where('users.id = :userid')
+                          ->setParameter('userid', $userid);
+       }
+           
+        
+        if( $sort == "active_up")
+        {
+            $query->orderBy('kuchis.active','DESC');
+        }
+        elseif( $sort == "active_down" )
+        {
+            $query->orderBy('kuchis.active','ASC');
+        }
+        elseif( $sort == "name_up" )
+        {
+            $query->orderBy('kuchis.name','DESC');
+        }
+        elseif( $sort == "name_down" )
+        {
+            $query->orderBy('kuchis.name','ASC');
+        }
+        elseif( $sort == "creation_up" )
+        {
+            $query->orderBy('kuchis.timestampCreation','ASC');
+        }
+        elseif( $sort == "creation_down" )
+        {
+            $query->orderBy('kuchis.timestampCreation','DESC');
+        }
+        elseif( $sort == "suppression_up" )
+        {
+            $query->orderBy('kuchis.timestampSuppression','ASC');
+        }
+        elseif( $sort == "suppression_down" )
+        {
+            $query->orderBy('kuchis.timestampSuppression','DESC');
+        }
+        
+        $query->getquery();
+        // On définit l'article à partir duquel commencer la liste
+        $query->setFirstResult(($page-1) * $nombreParPage)
+                // Ainsi que le nombre d'articles à afficher
+                ->setMaxResults($nombreParPage);
+
+        return new Paginator($query);
+
+    }
 }

@@ -32,6 +32,7 @@ class UserKuchiGroupType extends AbstractType
                     'class'    => 'obdoKuchiKomiRESTBundle:KuchiGroup',
                     'property' => 'name',
                     'multiple' => true,
+                    'required' => false,
                     'query_builder' => function(KuchiGroupRepository $r)
                     use($userid) {
                     return $r->getGroupsByUserId($userid);

@@ -42,7 +42,7 @@
                     {{ role }}
                 {% endfor %}
             </td>
-            
+            <td><a href="{{ path('obdo_kuchi_komi_user_view', {'id': user.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
             {# <td><a href="{{ path('obdo_kuchi_komi_user_view', {'id': user.id}) }}"><span class="glyphicon glyphicon-plus"></span></a></td> #}
 
         </tr>

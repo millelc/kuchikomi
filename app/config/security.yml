@@ -41,7 +41,10 @@ security:
                 target:     /login
             remember_me:
                 key:        %secret% # %secret% est un paramètre de parameters.yml
-
+    
+    acl:
+        connection: default
+        
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/user, roles: ROLE_ADMIN, requires_channel: http }

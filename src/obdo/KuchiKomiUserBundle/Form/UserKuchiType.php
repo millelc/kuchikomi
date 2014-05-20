@@ -37,6 +37,7 @@ class UserKuchiType extends AbstractType
                     'class'    => 'obdoKuchiKomiRESTBundle:Kuchi',
                     'property' => 'name',
                     'multiple' => true ,
+                    'required' => false,
                     'query_builder' => function(KuchiRepository $r)
                     use($userid) {
                     return $r->getKuchisByUserId($userid);

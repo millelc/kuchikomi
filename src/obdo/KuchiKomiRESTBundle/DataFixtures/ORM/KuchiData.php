@@ -10,6 +10,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+
 class KuchiData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
 	/**
@@ -60,6 +64,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$news->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($news);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($news);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
             
 		
 		// Kuchi2
@@ -81,6 +101,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$kuchi2->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($kuchi2);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($kuchi2);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// David
 		$david = new Kuchi();
@@ -101,6 +137,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$david->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($david);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($david);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Nicolas
 		$nicolas = new Kuchi();
@@ -121,6 +173,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$nicolas->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($nicolas);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($nicolas);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Julien
 		$julien = new Kuchi();
@@ -141,6 +209,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$julien->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($julien);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($julien);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Pascal
 		$pascal = new Kuchi();
@@ -161,6 +245,23 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$pascal->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($pascal);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($pascal);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+		
 		
 		// Eric
 		$eric = new Kuchi();
@@ -181,6 +282,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$eric->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($eric);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($eric);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Bruno
 		$bruno = new Kuchi();
@@ -201,6 +318,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$bruno->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($bruno);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($bruno);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Samuel
 		$samuel = new Kuchi();
@@ -221,6 +354,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$samuel->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($samuel);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($samuel);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Alain
 		$alain = new Kuchi();
@@ -241,6 +390,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$alain->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($alain);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($alain);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Mickael
 		$mickael = new Kuchi();
@@ -261,6 +426,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$mickael->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($mickael);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($mickael);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Paul
 		$paul = new Kuchi();
@@ -281,6 +462,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$paul->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($paul);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($paul);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Eva
 		$eva = new Kuchi();
@@ -301,6 +498,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$eva->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($eva);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($eva);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Maxime
 		$maxime = new Kuchi();
@@ -321,6 +534,22 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$maxime->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($maxime);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($maxime);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 		
 		// Kuchi1
 		$kuchi1 = new Kuchi();
@@ -341,5 +570,21 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$kuchi1->setPhotoLink($folder . "/photo.jpg");
 		$manager->persist($kuchi1);
 		$manager->flush();
+                // create the ACL
+                $aclProvider = $this->container->get('security.acl.provider');
+                $objectIdentity = ObjectIdentity::fromDomainObject($kuchi1);
+                $acl = $aclProvider->createAcl($objectIdentity);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
+                //insert useracl
+                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
+                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+                $aclProvider->updateAcl($acl);
 	}
 }

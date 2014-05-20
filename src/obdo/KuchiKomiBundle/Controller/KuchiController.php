@@ -7,13 +7,21 @@ use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
 use obdo\KuchiKomiRESTBundle\Form\KuchiType;
 use obdo\KuchiKomiRESTBundle\Form\KuchiUpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use obdo\KuchiKomiUserBundle\Controller\AclController;
+// pour la gestion des acls
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class KuchiController extends Controller {
 
     public function indexAction($page, $sort) {
+        // on retrouve le role du user pour la requete d'affichage
+        $currentroles = $this->getUser()->getRoles();
+        $currentrole = $currentroles[0];
+        $userid = $this->getUser()->getId();
         $em = $this->getDoctrine()->getManager();
 
-        $kuchis = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->getKuchis(25, $page, $sort);
+        $kuchis = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi')
+                ->getKuchiListByUserId(25, $page, $sort, $userid, $currentrole);
 
         return $this->render('obdoKuchiKomiBundle:Default:kuchiindex.html.twig', array(
                     'kuchis' => $kuchis,
@@ -60,7 +68,13 @@ class KuchiController extends Controller {
                         $kuchi->setMailAddress('@');
                     if ($kuchi->getWebSite() == null)
                         $kuchi->setWebSite('http:');
-
+                    // ajout du lien user kuchi
+                    $kuchi->addUser($this->getUser());
+                    // ajout du lien super_admin kuchigroup, pour l'instant avec id = 1
+                    $admin = $this->getDoctrine()
+                            ->getRepository('obdo\KuchiKomiUserBundle\Entity\User')
+                            ->find(1);
+                    $kuchi->addUser($admin);
 
                     // Update password
                     $passwordToHash = $kuchi->getPassword();
@@ -90,6 +104,14 @@ class KuchiController extends Controller {
 
                     //$em->persist($kuchi);
                     $em->flush();
+                    
+                    // retrouve l'identifiant de sécurité de l'utilisateur actuellement connecté
+                    $securityContext = $this->get('security.context');
+                    $user = $securityContext->getToken()->getUser();
+                    // donne accès au propriétaire 
+                    AclController::addAcl($kuchi, $user, $this);
+                    // et à l'admin
+                    AclController::addAcl($kuchi, $admin, $this);
 
                     $Logger->Info("[Kuchi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchi->getName() . " added");
 
@@ -109,6 +131,15 @@ class KuchiController extends Controller {
         $kuchi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
                 ->find($id);
+        
+        //controle droit visu
+        $securityContext = $this->get('security.context');
+
+        // check for view access
+        if (false === $securityContext->isGranted('VIEW', $kuchi))
+        {
+            throw new AccessDeniedException();
+        }
 
         return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array(
                     'Kuchi' => $kuchi,
@@ -122,6 +153,15 @@ class KuchiController extends Controller {
         $kuchi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
                 ->find($id);
+        
+         $securityContext = $this->get('security.context');
+
+        // check for edit access
+        if (false === $securityContext->isGranted('EDIT', $kuchi))
+        {
+            throw new AccessDeniedException();
+        }
+        
         if ($kuchi != null) {
             //save avant
             $kuchiname = $kuchi->getName();

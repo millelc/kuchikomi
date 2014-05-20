@@ -2,9 +2,10 @@
 
 
 {% block kk_body_KuchiKomiBundle %}
-
-<a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_add') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
-
+{% if is_granted('ROLE_ADMIN') %}
+    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_add') }}">
+    <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+{% endif %}
 <br>
 {% for flashMessage in app.session.flashbag.get('notice') %}
     <div class="flash-notice">

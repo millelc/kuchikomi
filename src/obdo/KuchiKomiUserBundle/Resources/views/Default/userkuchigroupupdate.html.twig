@@ -1,0 +1,68 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+{% block fos_user_content %}
+
+<h3>Modification ACL/KuchiGRoup</h3>
+<h4>{{ user.getUsername() }}</h4>
+<div class="well">
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_errors(form) }}
+{#        {{ form_widget(form) }}#}
+        <table>
+            <tr style="display:none;">
+                
+                <td>{{ form_label(form.username, "Nom") }}</td>
+                <td>{{ form_errors(form.username) }}
+                    {{ form_widget(form.username) }}
+                    {% set username = {'attr': {'value': user.getUsername()} } %}
+                </td>
+            </tr>
+            <tr style="display:none;">
+                <td>{{ form_label(form.password, "Mot de passe") }}</td>
+                <td>{{ form_errors(form.password) }}
+                    {{ form_widget(form.password) }}
+                    {% set password = {'attr': {'value': user.getPlainPassword()} } %}
+                </td>
+            </tr>
+        
+            <tr style="display:none;">
+                <td>{{ form_label(form.email, "e-mail") }}</td>
+                <td>{{ form_errors(form.email) }}
+                    {{ form_widget(form.email) }}
+                    {% set email = {'attr': {'value': user.getEmail()} } %}
+                </td>
+            </tr>
+            <tr style="display:none;"> 
+                <td>{{ form_label(form.roles, "Rôle") }}</td>
+                <td>{{ form_errors(form.roles) }}
+                    {{ form_widget(form.roles) }}
+                    {% set roles = {'attr': {'value': user.getRoles()} } %}
+                </td>
+            </tr>
+            <tr style="display:none;"> 
+                <td>{{ form_label(form.kuchis, "Kuchis") }}</td>
+                <td>{{ form_errors(form.kuchis) }}
+                    {{ form_widget(form.kuchis) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.kuchigroups, "Groupe de Kuchis") }}</td>
+                <td>{{ form_errors(form.kuchigroups) }}
+                    {{ form_widget(form.kuchigroups) }}
+                </td>
+            </tr>
+        </table>
+        
+        <br />
+      
+        {{ form_rest(form) }}
+        <input type="submit" class="btn btn-primary"/>
+    </form>
+</div>
+
+
+{% endblock %}
