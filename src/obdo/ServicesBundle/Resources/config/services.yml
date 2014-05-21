@@ -15,10 +15,13 @@ services:
         
     obdo_services.Notifier:
         class: obdo\ServicesBundle\Services\Notifier
-        arguments: [ @kernel ]
+        arguments: [ @kernel, @doctrine.orm.entity_manager ]
     
     obdo_services.Picture_uploader:
         class: obdo\ServicesBundle\Services\PictureUploader
     
     obdo_services.Remove_dir:
         class: obdo\ServicesBundle\Services\Removedir
+        
+    obdo_services.Name_photo:
+        class: obdo\ServicesBundle\Services\NamePhoto

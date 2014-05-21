@@ -121,6 +121,8 @@ class KuchiKomi
      */
     private $isThanks;
     
+    private $photoimg; //pour upload photo
+    
     public function __construct()
     {
         $this->active = true;
@@ -475,5 +477,13 @@ class KuchiKomi
     	$this->isThanks = $thanks;
     
     	return $this;
+    }
+    
+    public function getPhotoimg() {
+        return $this->photoimg;
+    }
+
+    public function setPhotoimg($photoimg) {
+        $this->photoimg = $photoimg;
     }
 }

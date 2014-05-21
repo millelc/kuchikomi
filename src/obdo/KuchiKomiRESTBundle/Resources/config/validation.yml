@@ -13,4 +13,9 @@ obdo\KuchiKomiRESTBundle\Entity\Kuchi:
         photoimg:
             - File:
                 mimeTypes: [image/png, image/gif, image/jpg, image/jpeg]
-                
+
+obdo\KuchiKomiRESTBundle\Entity\KuchiKomi:
+    properties:
+        photoimg:
+            - File:
+                mimeTypes: [image/jpg, image/jpeg]

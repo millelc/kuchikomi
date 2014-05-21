@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class KuchiGroupType extends AbstractType
+class KuchiKomiType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,10 +15,11 @@ class KuchiGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('nbMaxKuchi')
-            ->add('nbAboPotentiel')
-            ->add('logoimg')
+            ->add('title')
+            ->add('timestampBegin','datetime')
+            ->add('timestampEnd','datetime')
+            ->add('details','textarea', array('required' => false,))
+            ->add('photoimg','file', array('required' => false,))
         ;
     }
     
@@ -28,7 +29,7 @@ class KuchiGroupType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'obdo\KuchiKomiRESTBundle\Entity\KuchiGroup'
+            'data_class' => 'obdo\KuchiKomiRESTBundle\Entity\KuchiKomi'
         ));
     }
 
@@ -37,6 +38,6 @@ class KuchiGroupType extends AbstractType
      */
     public function getName()
     {
-        return 'obdo_kuchikomirestbundle_kuchigroup';
+        return 'obdo_kuchikomirestbundle_kuchikomi';
     }
 }

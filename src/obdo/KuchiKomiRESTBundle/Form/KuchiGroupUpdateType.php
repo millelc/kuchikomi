@@ -17,6 +17,7 @@ class KuchiGroupUpdateType extends AbstractType
         $builder
             ->add('name','text', array('required' => false,))
             ->add('nbMaxKuchi','integer', array('required' => false,))
+            ->add('nbAboPotentiel','integer', array('required' => false,))
             ->add('logoimg','file', array('required' => false,))
         ;
     }

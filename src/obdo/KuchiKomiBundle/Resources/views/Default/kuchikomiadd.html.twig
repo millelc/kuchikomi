@@ -1,0 +1,51 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="panel panel-default">
+  <div class="panel-heading"><h3><img src="{{ asset(Kuchi.logoLink) }}" alt="" width=50 height=50 >  {{ Kuchi.name }}</h3></div>
+ <form method="post" {{ form_enctype(form) }}>
+        {# Les erreurs générales du formulaire. #}
+        {{ form_errors(form) }}
+        
+        <div>
+            {{ form_label(form.title, "Titre") }}<br />
+            {{ form_errors(form.title) }}
+            {{ form_widget(form.title) }}
+        </div>
+        <br />
+        <div>
+            {{ form_label(form.timestampBegin, "De :") }}<br />
+            {{ form_errors(form.timestampBegin) }}
+            {{ form_widget(form.timestampBegin) }}
+        </div>
+        <br />
+        <div>
+            {{ form_label(form.timestampEnd, "à :") }}<br />
+            {{ form_errors(form.timestampEnd) }}
+            {{ form_widget(form.timestampEnd) }}
+        </div>
+        <br />
+        <div>
+            {{ form_label(form.details, "Message") }}<br />
+            {{ form_errors(form.details) }}
+            {{ form_widget(form.details) }}
+        </div>
+            {{ ErrMsg }}
+        <br />
+        <div>
+            {{ form_label(form.photoimg, "Illustration") }}<br />
+            {{ form_errors(form.photoimg) }}
+            {{ form_widget(form.photoimg) }}
+        </div>
+        
+        {{ form_rest(form) }}
+
+        <br />
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+
+{% endblock %}

@@ -23,6 +23,12 @@
         </div>
         <br />
         <div>
+            {{ form_label(form.nbAboPotentiel, "Nombre abonnés potentiel") }}<br />
+            {{ form_errors(form.nbAboPotentiel) }}
+            {{ form_widget(form.nbAboPotentiel) }}
+        </div>
+        <br />
+        <div>
             {{ form_label(form.logoimg, "Logo du groupe") }}<br />
             {{ form_errors(form.logoimg) }}
             {{ form_widget(form.logoimg) }}

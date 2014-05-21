@@ -95,10 +95,10 @@ class KuchiController extends Controller {
                     if (!is_dir($folder)) {
                         mkdir($folder);
                     }
-                    $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder);
+                    $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder,'');
                     $kuchi->setLogoLink($logo);
 
-                    $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder);
+                    $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder,'');
                     $kuchi->setPhotoLink($photo);
 
 
@@ -223,7 +223,7 @@ class KuchiController extends Controller {
                         if ($kuchilogo != null) {
                             unlink($kuchilogo);
                         }
-                        $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder);
+                        $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder,'');
                         $kuchi->setLogoLink($logo);
                         $afaire = 1;
                     }
@@ -232,7 +232,7 @@ class KuchiController extends Controller {
                         if ($kuchiphoto != null) {
                             unlink($kuchiphoto);
                         }
-                        $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder);
+                        $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder,'');
                         $kuchi->setPhotoLink($photo);
                         $afaire = 1;
                     }

@@ -17,7 +17,7 @@ class PictureUploader {
         
     }
 
-    public function upload(UploadedFile $file, $directory)
+    public function upload(UploadedFile $file, $directory, $name)
     {
         
         if (!$file instanceof UploadedFile) {
@@ -25,11 +25,18 @@ class PictureUploader {
                     'There is no file to upload!'
             );
         }
-        $name = $file->getClientOriginalName();
-
-        $file->move($directory, $name);
+        if ($name == ''){
+           $name = $file->getClientOriginalName(); 
+        }
         
-        $logo = $directory.'/'.$name;
+        $file->move($directory, $name);
+        $last = $directory[strlen($directory)-1]; 
+        if ($last == '/'){
+          $logo = $directory.$name;  
+        }
+        else{
+            $logo = $directory.'/'.$name;
+        }
         
         return $logo;
     }

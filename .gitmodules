@@ -10,3 +10,6 @@
 [submodule "vendor/richsage/rms-push-notifications-bundle/RMS/PushNotificationsBundle"]
 	path = vendor/richsage/rms-push-notifications-bundle/RMS/PushNotificationsBundle
 	url = git://github.com/richsage/RMSPushNotificationsBundle.git
+[submodule "vendor/coresphere/console-bundle/CoreSphere/ConsoleBundle"]
+	path = vendor/coresphere/console-bundle/CoreSphere/ConsoleBundle
+	url = git://github.com/CoreSphere/ConsoleBundle.git

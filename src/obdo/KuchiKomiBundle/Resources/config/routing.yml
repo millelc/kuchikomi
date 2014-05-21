@@ -91,10 +91,15 @@ obdo_kuchi_komi_kuchi_view:
 obdo_kuchi_komi_kuchi_update:
     pattern:  /kuchi/update/{id}
     defaults: { _controller: obdoKuchiKomiBundle:Kuchi:update }
-    
+
+# Route pour les kuchikomis
 obdo_kuchi_komi_kuchikomi_view:
     pattern:  /kuchikomi/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:view }
+
+obdo_kuchi_komi_kuchikomi_add:
+    pattern:  /kuchikomi/add/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:add }
 
 #pour graphiques
 obdo_pChart:

@@ -17,6 +17,7 @@
             <li class="list-group-item">Date de suppression : {{ KuchiGroup.timestampSuppression|date('Y-m-d H:i:s') }}</li>
             <li class="list-group-item">Actif : {{ KuchiGroup.active |default('0')}}</li>
             <li class="list-group-item">Nombre MAX de Kuchi : {{ KuchiGroup.nbMaxKuchi }}</li>
+            <li class="list-group-item">Nombre abonnés potentiel : {{ KuchiGroup.nbAboPotentiel }}</li>
         </ul>
         <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_update', {'id': KuchiGroup.id}) }}">
             <span class="glyphicon glyphicon-pencil"></span> Modifier</a>

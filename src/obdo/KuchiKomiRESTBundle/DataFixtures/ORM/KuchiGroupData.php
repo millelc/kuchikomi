@@ -56,24 +56,10 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$citykomiGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $citykomiGroup->getId() . "/logo.jpg" );
 		$manager->persist($citykomiGroup);
 		$manager->flush();
-                // create the ACL
-                $aclProvider = $this->container->get('security.acl.provider');
-                $objectIdentity = ObjectIdentity::fromDomainObject($citykomiGroup);
-                $acl = $aclProvider->createAcl($objectIdentity);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                
-		
+                //  ACL
+                $this->addAcl($citykomiGroup, $this->getReference('SuperAdmin'));
+                $this->addAcl($citykomiGroup, $this->getReference('Admin'));
+                $this->addAcl($citykomiGroup, $this->getReference('GroupAdmin'));
 		
 		// ob-do Group
 		$obdoGroup = new KuchiGroup();
@@ -87,26 +73,15 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$obdoGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $obdoGroup->getId() . "/logo.jpg" );
 		$manager->persist($obdoGroup);
 		$manager->flush();
-                // create the ACL
-                $aclProvider = $this->container->get('security.acl.provider');
-                $objectIdentity = ObjectIdentity::fromDomainObject($obdoGroup);
-                $acl = $aclProvider->createAcl($objectIdentity);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
+                // ACL
+                $this->addAcl($obdoGroup, $this->getReference('SuperAdmin'));
+                $this->addAcl($obdoGroup, $this->getReference('Admin'));
+                $this->addAcl($obdoGroup, $this->getReference('GroupAdmin'));
                 
                 		// Feuguerolles-Bully Group
 		$kuchiGroup1 = new KuchiGroup();
 		$kuchiGroup1->setName('Feuguerolles-Bully');
+                $kuchiGroup1->setNbAboPotentiel(1300);
                 $kuchiGroup1->addUser($this->getReference('SuperAdmin'));
                 $kuchiGroup1->addUser($this->getReference('Admin'));
                 $kuchiGroup1->addUser($this->getReference('GroupAdmin'));
@@ -116,22 +91,26 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$kuchiGroup1->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup1->getId() . "/logo.jpg" );
 		$manager->persist($kuchiGroup1);
 		$manager->flush();
-                // create the ACL
-                $aclProvider = $this->container->get('security.acl.provider');
-                $objectIdentity = ObjectIdentity::fromDomainObject($kuchiGroup1);
-                $acl = $aclProvider->createAcl($objectIdentity);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('SuperAdmin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('Admin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);
-                //insert useracl
-                $securityIdentity = UserSecurityIdentity::fromAccount($this->getReference('GroupAdmin'));
-                $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-                $aclProvider->updateAcl($acl);                
+                // ACL
+                $this->addAcl($kuchiGroup1, $this->getReference('SuperAdmin'));
+                $this->addAcl($kuchiGroup1, $this->getReference('Admin'));
+                $this->addAcl($kuchiGroup1, $this->getReference('GroupAdmin'));               
 
 	}
+        function addAcl($objet, $user) {
+        // création de l'ACL
+        $aclProvider = $this->container->get('security.acl.provider');
+        $objectIdentity = ObjectIdentity::fromDomainObject($objet);
+        // si acl existe pas de création
+        try {
+            $acl = $aclProvider->findAcl($objectIdentity);
+        } catch (\Exception $e) {
+            $acl = $aclProvider->createAcl($objectIdentity);
+        }
+        $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+        // donne accès au user 
+        $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+        $aclProvider->updateAcl($acl);
+    }
 }

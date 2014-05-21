@@ -89,7 +89,7 @@ class KuchiKomiController extends Controller
 
                         if( $kuchikomiArray['kuchikomi']['photo'] != "" )
                         {
-                                $photoName = md5(uniqid(rand(), true)) . '.jpg';
+                                $photoName = $this->container->get('obdo_services.Name_photo')->newName();
                                 $kuchikomi->setPhotoLink( $kuchi->getPhotoKuchiKomiLink() . $photoName );
 
                                 $photoByteStream = base64_decode( $kuchikomiArray['kuchikomi']['photo'] );

@@ -92,7 +92,7 @@ class KuchiGroupController extends Controller {
                 if (!is_dir($folder)) {
                     mkdir($folder);
                 }
-                $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getLogoimg(), $folder);
+                $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getLogoimg(), $folder,'');
                 $kuchiGroup->setLogo($logo);
 
                 $em->flush();
@@ -143,6 +143,7 @@ class KuchiGroupController extends Controller {
             $kuchiGroupname = $kuchiGroup->getName();
             $kuchiGroupNbmax = $kuchiGroup->getNbMaxKuchi();
             $kuchiGroupImage = $kuchiGroup->getLogo();
+            $kuchiGroupNbpotentiel = $kuchiGroup->getNbAboPotentiel();
 
             $form = $this->createForm(new KuchiGroupUpdateType, $kuchiGroup);
             // On récupère la requête
@@ -167,6 +168,13 @@ class KuchiGroupController extends Controller {
                         }
                     } else
                         $kuchiGroup->setNbMaxKuchi($kuchiGroupNbmax);
+                    
+                    if ($kuchiGroup->getNbAboPotentiel() > 0 && $kuchiGroup->getNbAboPotentiel() != null) {
+                        if ($kuchiGroup->getNbAboPotentiel() != $kuchiGroupNbpotentiel) {
+                            $afaire = 1;
+                        }
+                    } else
+                        $kuchiGroup->setNbAboPotentiel($kuchiGroupNbpotentiel);
 
                     //logo si pas vide c'est qu'on uploade un nouveau fichier
 
@@ -176,7 +184,7 @@ class KuchiGroupController extends Controller {
                             unlink($kuchiGroupImage);
                         }
                         $folder = $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup->getId();
-                        $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getLogoimg(), $folder);
+                        $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getLogoimg(), $folder,'');
                         $kuchiGroup->setLogo($logo);
                         $afaire = 1;
                     }

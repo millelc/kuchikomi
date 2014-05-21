@@ -84,6 +84,13 @@ class KuchiGroup
     private $nbMaxKuchi;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbAboPotentiel", type="integer", nullable=TRUE)
+     */
+    private $nbAboPotentiel;
+    
+    /**
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="kuchiGroup")
     */
     private $kuchis;
@@ -368,7 +375,15 @@ class KuchiGroup
         return $this->nbMaxKuchi;
     }
     
-    
+    public function getNbAboPotentiel() {
+        return $this->nbAboPotentiel;
+    }
+
+    public function setNbAboPotentiel($nbAboPotentiel) {
+        $this->nbAboPotentiel = $nbAboPotentiel;
+    }
+
+        
     /**
      * Set isSubscribed to true
      *
