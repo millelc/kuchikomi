@@ -44,7 +44,7 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
 		$welcome = new KuchiKomi();
 		$welcome->setKuchi($this->getReference('news'));
 		$welcome->setTitle('Bienvenue !');
-		$welcome->setDetails("Toute l'équipe CityKomi est heureuse de vous acceuillir comme nouveau membre !");
+		$welcome->setDetails("Toute l'équipe CityKomi est heureuse de vous accueillir comme nouveau membre !");
 		$welcome->setTimestampEnd($welcome->getTimestampEnd()->add(new \DateInterval('P2D')));
 		$this->addReference('welcome', $welcome);
 		$manager->persist($welcome);
