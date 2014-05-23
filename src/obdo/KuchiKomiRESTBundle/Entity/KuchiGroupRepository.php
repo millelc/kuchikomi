@@ -117,6 +117,22 @@ class KuchiGroupRepository extends EntityRepository
     	return $qb->getQuery()->getResult();
     }
     
+     public function getNbGroupByUserId($userid)
+    {
+        return $this->createQueryBuilder('groups')
+                    ->select('COUNT(groups)')
+                    ->join('groups.users', 'users')
+                    ->where('users.id = :userid')
+                    ->setParameter('userid', $userid)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
+    /*
+     * Uniquement pour les formulaires, cette requete
+     * ne s'execute pas et c'est normal, elle s'execute pour remplir
+     * la liste de choix du formulaire
+     */
     public function getGroupsByUserId($userid){
         $qb = $this->createQueryBuilder('kuchigroup')
                 ->join('kuchigroup.users', 'users')
@@ -124,6 +140,16 @@ class KuchiGroupRepository extends EntityRepository
                 ->setParameter('userid', $userid);
 
         return $qb;
+    }
+    
+    //retourne la liste des groupe par userid
+    public function getListByUserId($userid){
+        $qb = $this->createQueryBuilder('kuchigroup')
+                ->join('kuchigroup.users', 'users')
+                ->where('users.id = :userid')
+                ->setParameter('userid', $userid);
+
+        return $qb->getQuery()->getResult();
     }
     
     public function getGroupListByUserId($nombreParPage, $page, $sort, $userid){
@@ -179,5 +205,6 @@ class KuchiGroupRepository extends EntityRepository
         return new Paginator($query);
 
     }
-            
+    
+    
 }

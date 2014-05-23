@@ -55,4 +55,22 @@ class SubscriptionRepository extends EntityRepository
     	 
     	return $qb->getQuery()->getSingleScalarResult();
     }
+    
+    /*
+     * Avoir le nbre de siuscription active pour un user
+     */
+    public function getNbSubActivebyId($userid)
+    {
+    	
+    	$qb = $this->createQueryBuilder('subscription')
+                ->select('COUNT(subscription.komi)')
+                ->leftjoin('subscription.kuchi','kuchi')
+                ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
+                ->join('kuchiGroup.users', 'users')
+                ->andWhere('users.id = :userid')
+                ->setParameter('userid', $userid)
+                ->andWhere('subscription.active = 1');
+    	 
+    	return $qb->getQuery()->getSingleScalarResult();
+    }
 }

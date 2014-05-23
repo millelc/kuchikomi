@@ -14,7 +14,9 @@
   <ul class="list-group">
     <li class="list-group-item">Detail : {{ kuchikomi.details }}</li>
     <li class="list-group-item">Date de création : {{ kuchikomi.timestampCreation|date('Y-m-d H:i:s') }}</li>
-    <li class="list-group-item">Date de suppression : {{ kuchikomi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+    {% if kuchikomi.active != 1 %}
+        <li class="list-group-item">Date de suppression : {{ kuchikomi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+    {% endif %}
     <li class="list-group-item">Date de début : {{ kuchikomi.timestampBegin|date('Y-m-d H:i:s') }}</li>
     <li class="list-group-item">Date de fin : {{ kuchikomi.timestampEnd|date('Y-m-d H:i:s') }}</li>    
     <li class="list-group-item">Actif : {{ kuchikomi.active }}</li>

@@ -102,4 +102,17 @@ class KuchiKomiRepository extends EntityRepository
     
     	return $qb->getQuery()->getResult();
     }
+    
+    public function getNbKuchiKomiByUserId($userid)
+    {
+        return $this->createQueryBuilder('kuchikomi')
+                    ->select('COUNT(kuchikomi)')
+                    ->leftjoin('kuchikomi.kuchi','kuchi')
+                    ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
+                    ->join('kuchiGroup.users', 'users')
+                    ->where('users.id = :userid')
+                    ->setParameter('userid', $userid)
+                    ->getQuery()
+                    ->getSingleScalarResult(); 
+    }
 }

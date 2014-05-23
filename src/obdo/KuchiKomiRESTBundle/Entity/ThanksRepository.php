@@ -19,4 +19,18 @@ class ThanksRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult();
     }
+    
+    public function getNbThanksByUserId($userid)
+    {
+        return $this->createQueryBuilder('thanks')
+                    ->select('COUNT(thanks)')
+                    ->leftjoin('thanks.kuchikomi','kuchikomi')
+                    ->leftjoin('kuchikomi.kuchi','kuchi')
+                    ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
+                    ->join('kuchiGroup.users', 'users')
+                    ->where('users.id = :userid')
+                    ->setParameter('userid', $userid)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }

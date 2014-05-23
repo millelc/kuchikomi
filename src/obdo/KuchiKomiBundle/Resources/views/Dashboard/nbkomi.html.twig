@@ -1,2 +1,8 @@
-<h1><p class="text-right">{{nbKomi}}</p></h1>
-<h5><p class="text-right">Total Komi</p></h5>
+{% if role == '1' %}
+    <h1><p class="text-right">{{nbKomi}}</p></h1>
+    <h5><p class="text-right">Total Komi</p></h5>
+{% endif %}
+{% if role == '0' %}
+    <h1><p class="text-right">{{nbKomi}} %</p></h1>
+    <h5><p class="text-right">Abonnés/Potentiel</p></h5>
+{% endif %}

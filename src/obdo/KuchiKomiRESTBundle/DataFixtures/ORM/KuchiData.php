@@ -402,9 +402,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($kuchi1);
 		$manager->flush();
                 // ACL
-                $this->addAcl($maxime, $this->getReference('SuperAdmin'));
-                $this->addAcl($maxime, $this->getReference('Admin'));
-                $this->addAcl($maxime, $this->getReference('GroupAdmin'));
+                $this->addAcl($kuchi1, $this->getReference('SuperAdmin'));
+                $this->addAcl($kuchi1, $this->getReference('Admin'));
+                $this->addAcl($kuchi1, $this->getReference('GroupAdmin'));
 	}
         function addAcl($objet, $user) {
         // création de l'ACL

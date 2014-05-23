@@ -22,6 +22,7 @@ class KuchiKomiController extends Controller {
     public function addAction($id) {
         $Logger = $this->container->get('obdo_services.Logger');
         $msg = '';
+        $msgd = '';
         //on recupere le kuchi pour lequel on va créer un kuchikomi
         $kuchi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
@@ -40,13 +41,18 @@ class KuchiKomiController extends Controller {
             $form->bind($request);
 
             if ($form->isValid()) {
+                // on verifie que la date de début est inférieure ou  égale à la date de fin
+                if ($kuchikomi->getTimestampEndMs() < $kuchikomi->getTimestampBeginMs()){
+                    $msgd = 'La fin ne peut avoir lieu avant le commencement';
+                }
                 // on verifie si il y a une photo alors detail obligatoire
-                if ($kuchikomi->getPhotoimg() != null) {
+                if ($kuchikomi->getPhotoimg() != null and $msgd == '') {
                     if ($kuchikomi->getDetails() == null || $kuchikomi->getDetails() == '') {
                         $msg = 'Pour charger une illustration, il faut rédiger un message';
                     }
                 }
-                if ($msg == '') {
+                
+                if ($msg == '' and $msgd == '') {
                     $kuchikomi->setKuchi($kuchi);
                     $kuchikomi->setActive(true);
 
@@ -81,6 +87,7 @@ class KuchiKomiController extends Controller {
                     'form' => $form->createView(),
                     'Kuchi' => $kuchi,
                     'ErrMsg' => $msg,
+                    'ErrMsgd' => $msgd,
         ));
     }
 
