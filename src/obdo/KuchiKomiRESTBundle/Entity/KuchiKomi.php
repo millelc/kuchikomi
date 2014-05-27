@@ -38,6 +38,13 @@ class KuchiKomi
     private $kuchi;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="randomId", type="string", length=255)
+     */
+    private $randomId;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="timestampCreation", type="datetime")
@@ -109,6 +116,15 @@ class KuchiKomi
     private $photoLink;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="origin", type="integer")
+     * 
+     * origine du kuchikomi 0 = androïd, 1 = iOS, 2 = web
+     */
+    private $origin;
+    
+    /**
      * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Thanks", mappedBy="kuchikomi")
      */
     private $thanks;
@@ -126,6 +142,7 @@ class KuchiKomi
     public function __construct()
     {
         $this->active = true;
+        $this->randomId = uniqid('web');
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampLastUpdate  = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
@@ -133,6 +150,7 @@ class KuchiKomi
         $this->timestampBegin = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampEnd = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->details = "";
+        $this->origin = 2;
         $this->photoLink = "";
         $this->isThanks = false;
     }
@@ -146,7 +164,39 @@ class KuchiKomi
     {
         return $this->id;
     }
+    
+    /**
+     * Set randomId
+     *
+     * @param string $randomId
+     * @return string
+     */
+    public function setRandomId($randomId)
+    {
+        $this->randomId = $randomId;
 
+        return $this;
+    }
+
+    /**
+     * Get randomId
+     *
+     * @return string 
+     */
+    public function getRandomId()
+    {
+        return $this->randomId;
+    }
+    
+    public function getOrigin() {
+        return $this->origin;
+    }
+
+    public function setOrigin($origin) {
+        $this->origin = $origin;
+    }
+
+        
     /**
      * Set timestampCreation
      *

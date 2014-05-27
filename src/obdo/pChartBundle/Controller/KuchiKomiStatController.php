@@ -307,6 +307,9 @@ class KuchiKomiStatController extends Controller {
     }
 
     public function potentielstatAction($user) {
+        //definir mois et annee du jour en cours
+        $this->aujourdhui();
+        
         $response = new Response();
         $response->headers->set('Content-Type', 'image/png');
 
@@ -314,6 +317,7 @@ class KuchiKomiStatController extends Controller {
                 ->getListByUserId($user->getId());
         $nbAbo = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Subscription')
                 ->getNbSubActivebyId($user->getId());
+        
         $nbPotentiel = 0;
         foreach ($nbPotentiels as $nb) {
             $nbPotentiel = $nbPotentiel + $nb->getNbAboPotentiel();
@@ -328,6 +332,7 @@ class KuchiKomiStatController extends Controller {
             $dataset[1] = 100 - $pourcent;
             $absissa[0] = 'Abonné';
             $absissa[1] = 'Potentiel';
+          
             $chart = $this->piegraph($dataset,'Abonné/Potentiel',$absissa);
 
             ob_start();
@@ -384,8 +389,9 @@ class KuchiKomiStatController extends Controller {
         $MyData->setAbscissa($xdesc);
 
         //$MyData->setAbscissa("Labels");
+        $MyData->loadPalette(__DIR__ . "/../Resources/palettes/blind.color", TRUE);
         /* Create the pChart object */
-        $myPicture = new pImage(700, 230, $MyData);
+        $myPicture = new pImage(700, 230, $MyData,TRUE); // TRUE = backgroud transparent
 
         /* Turn on antialiasing */
         $myPicture->Antialias = FALSE;
@@ -395,12 +401,12 @@ class KuchiKomiStatController extends Controller {
         $myPicture->drawFilledRectangle(0, 0, 700, 230, $Settings);
 
         /* Do a gradient overlay */
-        $Settings = array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 255, "EndG" => 255, "EndB" => 255, "Alpha" => 50);
-        $myPicture->drawGradientArea(0, 0, 700, 230, DIRECTION_VERTICAL, $Settings);
-        $myPicture->drawGradientArea(0, 0, 700, 20, DIRECTION_VERTICAL, array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 66, "EndG" => 139, "EndB" => 202, "Alpha" => 100));
+//        $Settings = array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 255, "EndG" => 255, "EndB" => 255, "Alpha" => 50);
+//        $myPicture->drawGradientArea(0, 0, 700, 230, DIRECTION_VERTICAL, $Settings);
+//        $myPicture->drawGradientArea(0, 0, 700, 20, DIRECTION_VERTICAL, array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 66, "EndG" => 139, "EndB" => 202, "Alpha" => 100));
 
         /* Add a border to the picture */
-        $myPicture->drawRectangle(0, 0, 699, 229, array("R" => 66, "G" => 139, "B" => 202));
+//        $myPicture->drawRectangle(0, 0, 699, 229, array("R" => 66, "G" => 139, "B" => 202));
 
         /* Write the picture title */
         $myPicture->setFontProperties(array("FontName" => __DIR__ . "/../Resources/fonts/calibri.ttf", "FontSize" => 8));
@@ -449,36 +455,39 @@ class KuchiKomiStatController extends Controller {
         /* Create and populate the pData object */
         $MyData = new pData();
         $MyData->addPoints($dataset, "ScoreA");
+        
        // $MyData->setSerieDescription("ScoreA", "Application A");
 
         /* Define the absissa serie */
         $MyData->addPoints($absissa, "Labels");
         $MyData->setAbscissa("Labels");
-
+        /* Will replace the whole color scheme by the "light" palette */
+        $MyData->loadPalette(__DIR__ . "/../Resources/palettes/blind.color", TRUE);
         /* Create the pChart object */
-        $myPicture = new pImage(700, 230, $MyData);
+        $myPicture = new pImage(700, 230, $MyData,TRUE); // TRUE = backgroud transparent
 
 /* Create a solid background */
         $Settings = array("R" => 66, "G" => 139, "B" => 202, "Dash" => 1, "DashR" => 66, "DashG" => 139, "DashB" => 202);
         $myPicture->drawFilledRectangle(0, 0, 700, 230, $Settings);
 
 /* Do a gradient overlay */
-        $Settings = array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 255, "EndG" => 255, "EndB" => 255, "Alpha" => 50);
-        $myPicture->drawGradientArea(0, 0, 700, 230, DIRECTION_VERTICAL, $Settings);
-        $myPicture->drawGradientArea(0, 0, 700, 20, DIRECTION_VERTICAL, array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 66, "EndG" => 139, "EndB" => 202, "Alpha" => 100));
+//        $Settings = array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 255, "EndG" => 255, "EndB" => 255, "Alpha" => 50);
+//        $myPicture->drawGradientArea(0, 0, 700, 230, DIRECTION_VERTICAL, $Settings);
+//        $myPicture->drawGradientArea(0, 0, 700, 20, DIRECTION_VERTICAL, array("StartR" => 66, "StartG" => 139, "StartB" => 202, "EndR" => 66, "EndG" => 139, "EndB" => 202, "Alpha" => 100));
 
         /* Add a border to the picture */
-        $myPicture->drawRectangle(0, 0, 699, 229, array("R" => 66, "G" => 139, "B" => 202));
+//        $myPicture->drawRectangle(0, 0, 699, 229, array("R" => 66, "G" => 139, "B" => 202));
 
         /* Write the picture title */
         $myPicture->setFontProperties(array("FontName" => __DIR__ . "/../Resources/fonts/calibri.ttf", "FontSize" => 8));
-        $myPicture->drawText(10, 13, $titre1, array("R" => 255, "G" => 255, "B" => 255));
+       // $myPicture->drawText(10, 13, $titre1, array("R" => 255, "G" => 255, "B" => 255));
 
         /* Set the default font properties */
         $myPicture->setFontProperties(array("FontName" => __DIR__ . "/../Resources/fonts/Forgotte.ttf", "FontSize" => 10, "R" => 80, "G" => 80, "B" => 80));
 
         /* Enable shadow computing */
-        $myPicture->setShadow(TRUE, array("X" => 2, "Y" => 2, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 50));
+//        $myPicture->setShadow(TRUE, array("X" => 2, "Y" => 2, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 50));
+        
 
         /* Create the pPie object */
         $PieChart = new pPie($myPicture, $MyData);
@@ -490,7 +499,7 @@ class KuchiKomiStatController extends Controller {
         //$PieChart->draw2DPie(340, 125, array("DrawLabels" => TRUE, "LabelStacked" => TRUE, "Border" => TRUE));
 
         /* Draw a splitted pie chart */
-        $PieChart->draw2DPie(340, 125, array("WriteValues" => PIE_VALUE_PERCENTAGE, "DataGapAngle" => 10, 
+        $PieChart->draw2DRing(340, 125, array("WriteValues" => PIE_VALUE_PERCENTAGE, "DataGapAngle" => 10, 
             "DataGapRadius" => 6, "Border" => TRUE, "BorderR" => 255, "BorderG" => 255, "BorderB" => 255,
             "Precision" => 2, "ValuePosition" => PIE_VALUE_OUTSIDE));
 
@@ -502,9 +511,11 @@ class KuchiKomiStatController extends Controller {
 
         /* Write the legend box */
         $myPicture->setFontProperties(array("FontName" => __DIR__ . "/../Resources/fonts/calibri.ttf", "FontSize" => 8));
-        $PieChart->drawPieLegend(380, 210, array("Style" => LEGEND_NOBORDER, "Mode" => LEGEND_HORIZONTAL
+        $PieChart->drawPieLegend(10, 13, array("Style" => LEGEND_NOBORDER, "Mode" => LEGEND_HORIZONTAL
             , "FontR" => 255, "FontG" => 255, "FontB" => 255));
-
+        
+        $myPicture->setShadow(FALSE);
+    
         return $myPicture;
     }
 
