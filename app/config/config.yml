@@ -105,4 +105,8 @@ rms_push_notifications:
   android:
       gcm:
           api_key: AIzaSyAiOFq9kw-ArTNy1h-eQ1UBdwhILB2scpE
+  ios:
+      sandbox: true
+      pem: config/citykomi_push_key.pem
+      passphrase:
     

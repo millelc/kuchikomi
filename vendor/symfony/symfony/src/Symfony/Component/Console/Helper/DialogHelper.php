@@ -14,6 +14,8 @@ namespace Symfony\Component\Console\Helper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
+define('STDIN',fopen("php://stdin","r"));
+
 /**
  * The Dialog class provides helpers to interact with the user.
  *
@@ -102,6 +104,7 @@ class DialogHelper extends InputAwareHelper
             return $default;
         }
 
+        
         $output->write($question);
 
         $inputStream = $this->inputStream ?: STDIN;

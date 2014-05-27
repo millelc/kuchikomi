@@ -3,6 +3,7 @@
 namespace obdo\ServicesBundle\Services;
 
 use RMS\PushNotificationsBundle\Message\AndroidMessage;
+use RMS\PushNotificationsBundle\Message\iOSMessage;
 
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 
@@ -22,6 +23,8 @@ class Notifier
 	
     public function sendMessage( $deviceId, $osType, $msg, $data )
     {
+        $Logger = $this->container->get('obdo_services.Logger');
+        
     	// Post message
         if( $osType == 0 )
         {
@@ -32,6 +35,14 @@ class Notifier
             $message->setDeviceIdentifier( $deviceId );
             $this->container->get('rms_push_notifications')->send($message);
         } 
+        else if( $osType == 1 )
+        {
+            $message = new iOSMessage();
+            $message->setMessage( $msg );
+            $message->setDeviceIdentifier( $deviceId );
+            $this->container->get('rms_push_notifications')->send($message);
+            $Logger->Info("[PUSH iOS] deviceId = " . $deviceId);
+        }  
     }
     
     /**
