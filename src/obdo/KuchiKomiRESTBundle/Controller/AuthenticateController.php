@@ -50,7 +50,7 @@ class AuthenticateController extends Controller
             	
                 // Komi unknown !
                 $response->setStatusCode(501);
-                $Logger->Error("[POST rest/authenticate] 501 - Komi id=".$randomId." unkonwn");
+                $Logger->Error("[POST rest/authenticate] 501 - Komi id=".$randomId." unknown");
             }
             else
             {   
@@ -66,8 +66,8 @@ class AuthenticateController extends Controller
         }
         else
         {
-        	$response->setStatusCode(600);
-            $Logger->Error("[POST rest/authenticate] 600 - Invalid Komi id");                
+        	$response->setStatusCode(501);
+            $Logger->Error("[POST rest/authenticate] 501 - Invalid Komi id");                
         }
 
         $response->headers->set('Content-Type', 'application/json');
@@ -113,8 +113,8 @@ class AuthenticateController extends Controller
             if( !$kuchi )
             {
                 // Kuchi unknown !
-                $response->setStatusCode(501);
-                $Logger->Error("[POST rest/authenticatekuchi] 501 - Kuchi id=".$kuchiId." unkonwn");
+                $response->setStatusCode(502);
+                $Logger->Error("[POST rest/authenticatekuchi] 502 - Kuchi id=".$kuchiId." unknown");
             }
             else
             {   
@@ -123,8 +123,8 @@ class AuthenticateController extends Controller
                 if( !$komi )
                 {
                     // Komi unknown !
-                    $response->setStatusCode(503);
-                    $Logger->Error("[POST rest/authenticatekuchi] 503 - Komi id=".$randomId." unkonwn");
+                    $response->setStatusCode(501);
+                    $Logger->Error("[POST rest/authenticatekuchi] 501 - Komi id=".$randomId." unknown");
                 }
                 else
                 {
@@ -154,16 +154,16 @@ class AuthenticateController extends Controller
                     else
                     {
                         // password not match !
-                        $response->setStatusCode(502);
-                        $Logger->Error("[POST rest/authenticatekuchi] 502 - Kuchi id=".$kuchiId." - password not match");
+                        $response->setStatusCode(503);
+                        $Logger->Error("[POST rest/authenticatekuchi] 503 - Kuchi id=".$kuchiId." - password not match");
                     }
                 }                
             }
         }
         else
         {
-            $response->setStatusCode(600);
-            $Logger->Error("[POST rest/authenticatekuchi] 600 - Invalid Kuchi id");                
+            $response->setStatusCode(502);
+            $Logger->Error("[POST rest/authenticatekuchi] 502 - Invalid Kuchi id");                
         }
 
         $response->headers->set('Content-Type', 'text/html');

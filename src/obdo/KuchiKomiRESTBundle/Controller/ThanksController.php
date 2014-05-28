@@ -48,8 +48,8 @@ class ThanksController extends Controller
                 if( !$kuchikomi )
                 {
                     // kuchikomi unknown !
-                    $response->setStatusCode(502);
-                    $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 502 - KuchiKomi id=".$kuchiKomiId." unknown");
+                    $response->setStatusCode(503);
+                    $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 503 - KuchiKomi id=".$kuchiKomiId." unknown");
                 }
                 else
                 {
@@ -74,8 +74,8 @@ class ThanksController extends Controller
                 	}
                 	else 
                 	{
-                		$response->setStatusCode(503);
-                		$Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 503 - Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") already done");
+                		$response->setStatusCode(511);
+                		$Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 511 - Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") already done");
                 	}
                 }
                 
@@ -83,8 +83,8 @@ class ThanksController extends Controller
             else
             {
                 // hash invalid
-                $response->setStatusCode(600);
-                $Logger->Error("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 600 - hash invalid");
+                $response->setStatusCode(510);
+                $Logger->Error("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 510 - hash invalid");
             }
             
             // disable current token

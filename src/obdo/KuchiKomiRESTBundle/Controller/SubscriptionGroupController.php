@@ -50,8 +50,8 @@ class SubscriptionGroupController extends Controller
             if( !$kuchiGroup )
             {
                 // kuchi group unknown !
-                $response->setStatusCode(502);
-                $Logger->Error("[POST rest/subscriptions] 502 - Invalid Kuchi group id");
+                $response->setStatusCode(506);
+                $Logger->Error("[POST rest/subscriptions] 506 - Invalid Kuchi group id");
             }
             else
             {
@@ -121,23 +121,23 @@ class SubscriptionGroupController extends Controller
 	                        else
 	                        {
 	                            // subscription group already exist and active
-	                            $response->setStatusCode(503);
-	                            $Logger->Warning("[POST rest/subscriptions] 503 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already exist");
+	                            $response->setStatusCode(511);
+	                            $Logger->Warning("[POST rest/subscriptions] 511 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already exist");
 	                        }
 	                    }
 	                }
 	                else
 	                {
 	                    // hash invalid
-	                    $response->setStatusCode(600);
-	                    $Logger->Error("[POST rest/subscriptions] 600 - hash invalide");
+	                    $response->setStatusCode(510);
+	                    $Logger->Error("[POST rest/subscriptions] 510 - hash invalide");
 	                }
             	}
 	            else
 	            {
 	            	// Kuchi group inactif
-	            	$response->setStatusCode(504);
-	            	$Logger->Error("[POST rest/subscription] 504 - KuchiGroup id " . $kuchiGroup->getId() . " inactif");
+	            	$response->setStatusCode(508);
+	            	$Logger->Error("[POST rest/subscription] 508 - KuchiGroup id " . $kuchiGroup->getId() . " inactif");
 	            }	 
             }
             
@@ -186,8 +186,8 @@ class SubscriptionGroupController extends Controller
             if( !$kuchiGroup )
             {
                 // Kuchi group unknown !
-                $response->setStatusCode(502);
-                $Logger->Error("[DELETE rest/subscriptions] 502 - Invalid Kuchi group id");
+                $response->setStatusCode(506);
+                $Logger->Error("[DELETE rest/subscriptions] 506 - Invalid Kuchi group id");
             }
             else
             {
@@ -197,16 +197,16 @@ class SubscriptionGroupController extends Controller
                     if( !$subscriptionGroup )
                     {
                         // subscription group unkown
-                    	$response->setStatusCode(503);
-                        $Logger->Warning("[DELETE rest/subscriptions] 503 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") unknown");
+                    	$response->setStatusCode(505);
+                        $Logger->Warning("[DELETE rest/subscriptions] 505 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") unknown");
                     }
                     else
                     {
                     	if( !$subscriptionGroup->getActive() )
                     	{
                     		// subscription group already de-activated
-                    		$response->setStatusCode(504);
-                    		$Logger->Warning("[DELETE rest/subscriptions] 504 - Subscription group (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already de-activated");
+                    		$response->setStatusCode(508);
+                    		$Logger->Warning("[DELETE rest/subscriptions] 508 - Subscription group (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already de-activated");
                     	}
                     	else
                     	{
@@ -240,8 +240,8 @@ class SubscriptionGroupController extends Controller
                 else
                 {
                     // hash invalid
-                    $response->setStatusCode(600);
-                    $Logger->Error("[DELETE rest/subscriptions] 600 - hash invalide");
+                    $response->setStatusCode(510);
+                    $Logger->Error("[DELETE rest/subscriptions] 510 - hash invalide");
                 }
             }
             

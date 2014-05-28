@@ -82,23 +82,23 @@ class SubscriptionController extends Controller
 	                        else
 	                        {
 	                            // subscription already exist and active
-	                            $response->setStatusCode(503);
-	                            $Logger->Warning("[POST rest/subscription] 503 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already exist");
+	                            $response->setStatusCode(511);
+	                            $Logger->Warning("[POST rest/subscription] 511 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already exist");
 	                        }
 	                    }
 	                }
 	                else
 	                {
 	                    // hash invalid
-	                    $response->setStatusCode(600);
-	                    $Logger->Error("[POST rest/subscription] 600 - hash invalide");
+	                    $response->setStatusCode(510);
+	                    $Logger->Error("[POST rest/subscription] 510 - hash invalide");
 	                }            		
             	}
             	else 
             	{
             		// Kuchi inactif
-            		$response->setStatusCode(504);
-            		$Logger->Error("[POST rest/subscription] 504 - Kuchi id " . $kuchi->getId() . " inactif");
+            		$response->setStatusCode(508);
+            		$Logger->Error("[POST rest/subscription] 508 - Kuchi id " . $kuchi->getId() . " inactif");
             	}
 
             }
@@ -158,16 +158,16 @@ class SubscriptionController extends Controller
                     if( !$subscription )
                     {
                         // subscription unkown
-                        $response->setStatusCode(503);
-                        $Logger->Error("[DELETE rest/subscription] 503 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") unknown");
+                        $response->setStatusCode(500);
+                        $Logger->Error("[DELETE rest/subscription] 500 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") unknown");
                     }
                     else
                     {
                         if( !$subscription->getActive() )
                         {
                             // subscription already de-activated
-                            $response->setStatusCode(504);
-                            $Logger->Warning("[DELETE rest/subscription] 504 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already de-activated");
+                            $response->setStatusCode(508);
+                            $Logger->Warning("[DELETE rest/subscription] 508 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already de-activated");
                         }
                         else
                         {
@@ -183,7 +183,7 @@ class SubscriptionController extends Controller
                 else
                 {
                     // hash invalid
-                    $response->setStatusCode(600);
+                    $response->setStatusCode(510);
                     $Logger->Error("[DELETE rest/subscription] 600 - hash invalide");
                 }
             }
