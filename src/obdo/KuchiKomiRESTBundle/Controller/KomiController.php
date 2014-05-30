@@ -93,14 +93,14 @@ class KomiController extends Controller
             else
             {
                 // Komi already exist !
-                $response->setStatusCode(501);
-                $Logger->Error("[POST rest/komi] 501 - Komi id=".$komi->getRandomId()." already registered");
+                $response->setStatusCode(511);
+                $Logger->Error("[POST rest/komi] 511 - Komi id=".$komi->getRandomId()." already registered");
             }
         }
         else
         {
-            $response->setStatusCode(600);
-            $Logger->Error("[POST rest/komi] 600 - Invalid Komi id");
+            $response->setStatusCode(501);
+            $Logger->Error("[POST rest/komi] 501 - Invalid Komi id");
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -148,16 +148,16 @@ class KomiController extends Controller
                 else
                 {
                     // komi already inactive
-                    $response->setStatusCode(502);
-                    $Logger->Warning("[DELETE rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already inactive");
+                    $response->setStatusCode(508);
+                    $Logger->Info("[DELETE rest/komi/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." already inactive");
                 }
                 
             }
             else
             {
                 // hash invalid
-                $response->setStatusCode(600);
-                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 600 - Invalid Komi id");
+                $response->setStatusCode(510);
+                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - Invalid Komi id");
             }
             
             // disable current token
@@ -192,7 +192,7 @@ class KomiController extends Controller
         {
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Error("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            $Logger->Info("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
         }
         else
         {
@@ -212,16 +212,16 @@ class KomiController extends Controller
                 else
                 {
                     // komi already active
-                    $response->setStatusCode(502);
-                    $Logger->Warning("[PUT rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already active");
+                    $response->setStatusCode(507);
+                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 507 - Komi id=".$komi->getRandomId()." already active");
                 }
                 
             }
             else
             {
                 // hash invalid
-                $response->setStatusCode(600);
-                $Logger->Error("[PUT rest/komi/{id}/{hash}] 600 - Invalid Komi id");
+                $response->setStatusCode(510);
+                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Invalid Komi id");
             }
             
             // disable current token
@@ -261,7 +261,7 @@ class KomiController extends Controller
     	{
     		// Komi unknown !
     		$response->setStatusCode(501);
-    		$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+    		$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
     	}
     	else
     	{
@@ -291,6 +291,7 @@ class KomiController extends Controller
     				
     				$komi->setCurrentTimestampLastSynchro();
     				$em->flush();
+    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
     				
     				return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
     							 'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
@@ -305,15 +306,15 @@ class KomiController extends Controller
     			else
     			{
     				// komi inactive
-    				$response->setStatusCode(502);
-    				$Logger->Warning("[GET rest/komi/sync/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." inactive");
+    				$response->setStatusCode(508);
+    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." inactive");
     			}
     		}
     		else
     		{
     			// hash invalid
-    			$response->setStatusCode(600);
-    			$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 600 - Invalid hash");
+    			$response->setStatusCode(510);
+    			$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Invalid hash");
     		}
     
     		// disable current token
