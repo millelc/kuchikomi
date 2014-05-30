@@ -23,9 +23,7 @@ class Notifier
 	
     public function sendMessage( $deviceId, $osType, $msg, $data )
     {
-        $Logger = $this->container->get('obdo_services.Logger');
-        
-    	// Post message
+        // Post message
         if( $osType == 0 )
         {
             $message = new AndroidMessage();
@@ -41,7 +39,6 @@ class Notifier
             $message->setMessage( $msg );
             $message->setDeviceIdentifier( $deviceId );
             $this->container->get('rms_push_notifications')->send($message);
-            $Logger->Info("[PUSH iOS] deviceId = " . $deviceId);
         }  
     }
     

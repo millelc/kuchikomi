@@ -46,7 +46,7 @@ class KuchiController extends Controller
         {
             // Kuchi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+            $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
         }
         else
         {
@@ -141,7 +141,7 @@ class KuchiController extends Controller
         {
             // Kuchi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+            $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
         }
         else
         {
@@ -229,7 +229,7 @@ class KuchiController extends Controller
     	{
     		// Kuchi unknown !
     		$response->setStatusCode(501);
-    		$Logger->Info("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
+    		$Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Kuchi id=".$id." unkonwn");
     	}
     	else
     	{
@@ -264,8 +264,7 @@ class KuchiController extends Controller
 
                             $kuchiAccount->setCurrentTimestampLastSynchro();
                             $em->flush();
-                            $Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
-
+                         
                             return array('STATS' => array(
                                                             'NB_SUB' => $kuchi->getNbSubscriptions(),
                                                             'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)

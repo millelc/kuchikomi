@@ -149,7 +149,7 @@ class KomiController extends Controller
                 {
                     // komi already inactive
                     $response->setStatusCode(502);
-                    $Logger->Info("[DELETE rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already inactive");
+                    $Logger->Warning("[DELETE rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already inactive");
                 }
                 
             }
@@ -192,7 +192,7 @@ class KomiController extends Controller
         {
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            $Logger->Error("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
         }
         else
         {
@@ -213,7 +213,7 @@ class KomiController extends Controller
                 {
                     // komi already active
                     $response->setStatusCode(502);
-                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already active");
+                    $Logger->Warning("[PUT rest/komi/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." already active");
                 }
                 
             }
@@ -261,7 +261,7 @@ class KomiController extends Controller
     	{
     		// Komi unknown !
     		$response->setStatusCode(501);
-    		$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+    		$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
     	}
     	else
     	{
@@ -291,7 +291,6 @@ class KomiController extends Controller
     				
     				$komi->setCurrentTimestampLastSynchro();
     				$em->flush();
-    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
     				
     				return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
     							 'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
@@ -307,7 +306,7 @@ class KomiController extends Controller
     			{
     				// komi inactive
     				$response->setStatusCode(502);
-    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." inactive");
+    				$Logger->Warning("[GET rest/komi/sync/{id}/{hash}] 502 - Komi id=".$komi->getRandomId()." inactive");
     			}
     		}
     		else
