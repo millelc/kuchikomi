@@ -80,6 +80,7 @@ class KuchiKomiController extends Controller {
                             $kuchikomi->setTimestampBegin($timestampBegin);
                             $kuchikomi->setTimestampEnd($timestampEnd);
                             $kuchikomi->setOrigin($komi->getOsType());
+                            $kuchikomi->setRandomId($kuchikomiArray['kuchikomi']['random_id']);
 
                             if ($kuchikomiArray['kuchikomi']['photo'] != "") {
                                 $photoName = $this->container->get('obdo_services.Name_photo')->newName();
