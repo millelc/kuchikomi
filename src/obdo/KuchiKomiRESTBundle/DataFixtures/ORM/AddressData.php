@@ -49,25 +49,6 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 		$this->addReference('addressNews', $addressNews);
 		$manager->persist($addressNews);
 		
-		// Address
-		$address1 = new Address();
-		$address1->setAddress1('Rue de Caen');
-		$address1->setAddress2('');
-		$address1->setAddress3('');
-		$address1->setPostalCode('14320');
-		$address1->setCity('Feuguerolles-Bully');
-		$this->addReference('address1', $address1);
-		$manager->persist($address1);
-		
-		$address2 = new Address();
-		$address2->setAddress1('Rue de Maltot');
-		$address2->setAddress2('');
-		$address2->setAddress3('');
-		$address2->setPostalCode('14320');
-		$address2->setCity('Feuguerolles-Bully');
-		$this->addReference('address2', $address2);
-		$manager->persist($address2);
-		
 		// Address David
 		$addressDavid = new Address();
 		$addressDavid->setAddress1("38, rue de l'Europe");

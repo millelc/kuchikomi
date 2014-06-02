@@ -40,21 +40,6 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
 		
 		$manager->getConnection()->exec("ALTER TABLE Subscription AUTO_INCREMENT = 1;");
 		
-		// subscription
-		$subscription1 = new Subscription();
-		$subscription1->setKomi($this->getReference('komi1'));
-		$subscription1->setKuchi($this->getReference('kuchi1'));
-		$subscription1->setType(0);
-		$this->addReference('subscription1', $subscription1);
-		$manager->persist($subscription1);
-		
-// 		$subscription2 = new Subscription();
-// 		$subscription2->setKomi($this->getReference('komi1'));
-// 		$subscription2->setKuchi($this->getReference('kuchi3'));
-// 		$subscription2->setType(0);
-//		$this->addReference('subscription2', $subscription2);
-// 		$manager->persist($subscription2);
-		
 		$manager->flush();	
 	}
 }

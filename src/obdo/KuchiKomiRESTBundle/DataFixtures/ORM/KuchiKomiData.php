@@ -49,17 +49,6 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
 		$this->addReference('welcome', $welcome);
 		$manager->persist($welcome);
 		
-		
-		// KuchiKomi
-		$kuchikomi1 = new KuchiKomi();
-		$kuchikomi1->setKuchi($this->getReference('kuchi1'));
-		$kuchikomi1->setTitle('Nouveau kuchikomi 1');
-		$kuchikomi1->setDetails('from clean BDD');
-		$kuchikomi1->setTimestampEnd($kuchikomi1->getTimestampEnd()->add(new \DateInterval('P2D')));
-		$kuchikomi1->setPhotoLink( $this->getReference('kuchi1')->getPhotoKuchiKomiLink() . "4fc22bb386cf91ec6e5967aa0148fa76.jpg" );
-		$this->addReference('kuchikomi1', $kuchikomi1);
-		$manager->persist($kuchikomi1);
-		
 		$manager->flush();	
 	}
 }

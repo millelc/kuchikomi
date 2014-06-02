@@ -67,31 +67,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 // ACL
                 $this->addAcl($news, $this->getReference('SuperAdmin'));
                 $this->addAcl($news, $this->getReference('Admin'));
-                $this->addAcl($news, $this->getReference('GroupAdmin'));            
-		
-		// Kuchi2
-		$kuchi2 = new Kuchi();
-		$kuchi2->setName('Médiathèque');
-		$kuchi2->setPhoneNumber('02 31 23 44 45');
-		$kuchi2->setMailAddress('mediatheque@fb.com');
-		$kuchi2->setKuchiGroup($this->getReference('kuchiGroup1'));
-		$kuchi2->setPassword($Password->generateHash('essai'));
-		$kuchi2->setAddress($this->getReference('address2'));
-                $kuchi2->addUser($this->getReference('KuchiAdmin'));
-		$this->addReference('kuchi2', $kuchi2);
-		$manager->persist($kuchi2);
-		$manager->flush();
-		$folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi2->getId();
-		$kuchi2->setPhotoKuchiKomiLink($folder . "/");
-		$folder = $this->container->getParameter('path_kuchi_photo') . $kuchi2->getId();
-		$kuchi2->setLogoLink($folder . "/logo.jpg");
-		$kuchi2->setPhotoLink($folder . "/photo.jpg");
-		$manager->persist($kuchi2);
-		$manager->flush();
-                // ACL
-                $this->addAcl($kuchi2, $this->getReference('SuperAdmin'));
-                $this->addAcl($kuchi2, $this->getReference('Admin'));
-                $this->addAcl($kuchi2, $this->getReference('GroupAdmin'));            
+                $this->addAcl($news, $this->getReference('GroupAdmin'));                        
 		
 		// David
 		$david = new Kuchi();
@@ -382,29 +358,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $this->addAcl($maxime, $this->getReference('Admin'));
                 $this->addAcl($maxime, $this->getReference('GroupAdmin'));
 		
-		// Kuchi1
-		$kuchi1 = new Kuchi();
-		$kuchi1->setName('Mairie');
-		$kuchi1->setPhoneNumber('02 31 23 34 45');
-		$kuchi1->setMailAddress('mairie@fb.com');
-		$kuchi1->setKuchiGroup($this->getReference('kuchiGroup1'));
-		$kuchi1->setPassword($Password->generateHash('essai'));
-		$kuchi1->setAddress($this->getReference('address1'));
-                $kuchi1->addUser($this->getReference('KuchiAdmin'));
-		$this->addReference('kuchi1', $kuchi1);
-		$manager->persist($kuchi1);
-		$manager->flush();
-		$folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi1->getId();
-		$kuchi1->setPhotoKuchiKomiLink($folder . "/");
-		$folder = $this->container->getParameter('path_kuchi_photo') . $kuchi1->getId();
-		$kuchi1->setLogoLink($folder . "/logo.jpg");
-		$kuchi1->setPhotoLink($folder . "/photo.jpg");
-		$manager->persist($kuchi1);
-		$manager->flush();
-                // ACL
-                $this->addAcl($kuchi1, $this->getReference('SuperAdmin'));
-                $this->addAcl($kuchi1, $this->getReference('Admin'));
-                $this->addAcl($kuchi1, $this->getReference('GroupAdmin'));
+
 	}
         function addAcl($objet, $user) {
         // création de l'ACL

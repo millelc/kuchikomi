@@ -76,25 +76,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
                 // ACL
                 $this->addAcl($obdoGroup, $this->getReference('SuperAdmin'));
                 $this->addAcl($obdoGroup, $this->getReference('Admin'));
-                $this->addAcl($obdoGroup, $this->getReference('GroupAdmin'));
-                
-                		// Feuguerolles-Bully Group
-		$kuchiGroup1 = new KuchiGroup();
-		$kuchiGroup1->setName('Feuguerolles-Bully');
-                $kuchiGroup1->setNbAboPotentiel(1300);
-                $kuchiGroup1->addUser($this->getReference('SuperAdmin'));
-                $kuchiGroup1->addUser($this->getReference('Admin'));
-                $kuchiGroup1->addUser($this->getReference('GroupAdmin'));
-		$this->addReference('kuchiGroup1', $kuchiGroup1);
-		$manager->persist($kuchiGroup1);
-		$manager->flush();
-		$kuchiGroup1->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup1->getId() . "/logo.jpg" );
-		$manager->persist($kuchiGroup1);
-		$manager->flush();
-                // ACL
-                $this->addAcl($kuchiGroup1, $this->getReference('SuperAdmin'));
-                $this->addAcl($kuchiGroup1, $this->getReference('Admin'));
-                $this->addAcl($kuchiGroup1, $this->getReference('GroupAdmin'));               
+                $this->addAcl($obdoGroup, $this->getReference('GroupAdmin'));               
 
 	}
         function addAcl($objet, $user) {
