@@ -103,7 +103,7 @@ class AES {
           $this->mode = MCRYPT_MODE_STREAM;
           break;
           default:
-          $this->mode = MCRYPT_MODE_ECB;
+          $this->mode = MCRYPT_MODE_CBC;
           break;
         }
     }

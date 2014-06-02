@@ -14,8 +14,9 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    aes_key: 5CCA8DAB847F457C918D439459D3730B
+    aes_key: 0006c4e72c487446efaf8f6fbf8114c9
     aes_key_size: 128
+    aes_IV: 84e8c3ea8859a0e2
     
     sha256_salt1 : gdg(!cedhsf(327
     sha256_salt2 : m58$zed24)BVgRR

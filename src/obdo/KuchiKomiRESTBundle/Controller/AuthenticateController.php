@@ -33,11 +33,11 @@ class AuthenticateController extends Controller
         
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
+        $AES->setIV( $this->container->getParameter('aes_IV') );
         
         $AES->setData($this->getRequest()->get('KK_id'));
         
         $clearId = $AES->decrypt();
-        
         
         if( $idCheck->isPostAuthenticateValid( $clearId) )
         {
