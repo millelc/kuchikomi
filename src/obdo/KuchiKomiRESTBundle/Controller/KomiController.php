@@ -55,40 +55,49 @@ class KomiController extends Controller
             
             if( !$komi )
             {
-                // new Komi
-                $komi = new Komi();
-                $komi->setRandomId($randomId);
-                $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
-                $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
-                $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
-                $em->persist($komi);
-                $em->flush();
-                
-                // Create by default the subscriptionto the CityKomi group and all of these kuchis
-                $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
-                $subscriptionGroup = new SubscriptionGroup();
-                $subscriptionGroup->setKomi($komi);
-                $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
-                $subscriptionGroup->setType(0);
-                $em->persist($subscriptionGroup);
-                
-                foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
+                $komi = $repositoryKomi->findOneByGcmRegId($this->getRequest()->get('KK_regId'));
+                if ( !$komi )
                 {
-                	$subscription = new Subscription();
-                	$subscription->setKomi($komi);
-                	$subscription->setKuchi($kuchi);
-                	$subscription->setType(0);
-                	 
-                	$em->persist($subscription);
+                    // new Komi
+                    $komi = new Komi();
+                    $komi->setRandomId($randomId);
+                    $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
+                    $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
+                    $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
+                    $em->persist($komi);
+                    $em->flush();
+                
+                    // Create by default the subscriptionto the CityKomi group and all of these kuchis
+                    $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
+                    $subscriptionGroup = new SubscriptionGroup();
+                    $subscriptionGroup->setKomi($komi);
+                    $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
+                    $subscriptionGroup->setType(0);
+                    $em->persist($subscriptionGroup);
+
+                    foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
+                    {
+                            $subscription = new Subscription();
+                            $subscription->setKomi($komi);
+                            $subscription->setKuchi($kuchi);
+                            $subscription->setType(0);
+
+                            $em->persist($subscription);
+                    }
                 }
-                          
-                $em->flush();
-                $response->setStatusCode(200);
-                
-                $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
-                
-                // Post message
-                $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
+                // le komi existait déja avec un autre randomid, on le repasse à actif et on change son randomid
+                else{
+                    $komi->setRandomId($randomId);
+                    $komi->setActive(true);
+                }
+                // flush des subscription ou du update
+                    $em->flush();
+                    $response->setStatusCode(200);
+
+                    $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
+
+                    // Post message
+                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
             }
             else
             {

@@ -193,14 +193,11 @@ class KuchiController extends Controller {
                         $kuchi->setName($kuchiname);
 
                     if ($kuchi->getPassword() != null) { // champ mot de passe pas vide
-                        if ($kuchi->getPassword() != $kuchipass) { // mot de passe different
-                            // on verifie que le mot de passe a bien changé
-                            $passwordHash = $Password->generateHash($kuchi->getPassword());
-                            if ($passwordHash != $kuchipass) {
-                                $kuchi->setPassword($passwordHash);
-                                $afaire = 1;
-                            }
-                        }
+                        
+                        $passwordHash = $Password->generateHash($kuchi->getPassword());                            
+                        $kuchi->setPassword($passwordHash);
+                        $afaire = 1;
+                         
                     } else
                         $kuchi->setPassword($kuchipass);
 
