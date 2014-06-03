@@ -100,6 +100,7 @@ class AuthenticateController extends Controller
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
         $AES->setData($this->getRequest()->get('KK_id'));
+        $AES->setIV( $this->container->getParameter('aes_IV') );
         
         $clearId = $AES->decrypt();
         

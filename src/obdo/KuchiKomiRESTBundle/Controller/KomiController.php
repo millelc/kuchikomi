@@ -44,6 +44,7 @@ class KomiController extends Controller
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
         $AES->setData($this->getRequest()->get('KK_id'));
+        $AES->setIV( $this->container->getParameter('aes_IV') );
         
         $clearId = $AES->decrypt();
                     
@@ -86,18 +87,21 @@ class KomiController extends Controller
                     }
                 }
                 // le komi existait déja avec un autre randomid, on le repasse à actif et on change son randomid
-                else{
+                else
+                {
                     $komi->setRandomId($randomId);
                     $komi->setActive(true);
+                    $komi->resetTimestampLastSynchro();
                 }
+                
                 // flush des subscription ou du update
-                    $em->flush();
-                    $response->setStatusCode(200);
+                $em->flush();
+                $response->setStatusCode(200);
 
-                    $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
+                $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
 
-                    // Post message
-                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
+                // Post message
+                $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
             }
             else
             {
