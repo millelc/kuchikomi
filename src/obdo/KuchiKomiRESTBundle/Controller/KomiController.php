@@ -211,6 +211,12 @@ class KomiController extends Controller
         {
             if( $hash == sha1("PUT /rest/komi" . $komi->getToken() ) )
             {
+                // on teste le changement de smartphone du Komi
+                if ($this->getRequest()->get('reg_id') != $komi->getGcmRegId())
+                {
+                    $komi->setActive(false);
+                    $komi->setRandomId(($this->getRequest()->get('new_id')));
+                }
                 if( !$komi->getActive() )
                 {
                     $komi->setOsType($this->getRequest()->get('os_id'));
