@@ -13,3 +13,5 @@ RewriteBase /web
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ web/app.php [QSA,L]
 </IfModule>
+
+Options -Indexes

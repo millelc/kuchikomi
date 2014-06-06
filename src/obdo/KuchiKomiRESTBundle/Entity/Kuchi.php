@@ -253,6 +253,11 @@ class Kuchi
      */
     public function setActive($active)
     {
+        if( !$active )
+        {
+            $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        }
+        
         $this->active = $active;
 
         return $this;

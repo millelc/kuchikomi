@@ -86,12 +86,24 @@ class KomiController extends Controller
                             $em->persist($subscription);
                     }
                 }
-                // le komi existait déja avec un autre randomid, on le repasse à actif et on change son randomid
+                // le komi existait déja avec un autre randomid, on le repasse à actif, on supprime ces anciens abonnements et on change son randomid
                 else
                 {
                     $komi->setRandomId($randomId);
                     $komi->setActive(true);
                     $komi->resetTimestampLastSynchro();
+                    
+                    foreach($komi->getSubscriptions() as $subscription)
+                    {
+                            $subscription->setActive(false);
+                            $em->persist($subscription);
+                    }
+                    
+                    foreach($komi->getSubscriptionsGroup() as $subscriptionGroup)
+                    {
+                            $subscriptionGroup->setActive(false);
+                            $em->persist($subscriptionGroup);
+                    }
                 }
                 
                 // flush des subscription ou du update
@@ -211,28 +223,28 @@ class KomiController extends Controller
         {
             if( $hash == sha1("PUT /rest/komi" . $komi->getToken() ) )
             {
-                if ($this->getRequest()->get('reg_id') != $komi->getGcmRegId())
+                $newKomi = $repositoryKomi->findOneByRandomId($this->getRequest()->get('new_id'));
+                
+                
+                if( !$newKomi )
                 {
-                    $komi->setActive(false);
-                    $komi->setRandomId(($this->getRequest()->get('new_id')));
-                    $komi->resetTimestampLastSynchro();
-                }
-                if( !$komi->getActive() )
-                {
+                    $komi->setActive(true);
                     $komi->setOsType($this->getRequest()->get('os_id'));
                     $komi->setApplicationVersion($this->getRequest()->get('version'));
                     $komi->setGcmRegId($this->getRequest()->get('reg_id'));
-                    $komi->setActive(true);
+                    $komi->setRandomId(($this->getRequest()->get('new_id')));
+                    $komi->resetTimestampLastSynchro();
         
                     $em->flush();
+                    
                     $response->setStatusCode(200);
                     $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
                 }
                 else
                 {
-                    // komi already active
-                    $response->setStatusCode(507);
-                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 507 - Komi id=".$komi->getRandomId()." already active");
+                    // Komi already exist !
+                    $response->setStatusCode(511);
+                    $Logger->Error("[PUT rest/komi/{id}/{hash}] 511 - Komi id=" . $this->getRequest()->get('new_id') . " already registered");
                 }
                 
             }
