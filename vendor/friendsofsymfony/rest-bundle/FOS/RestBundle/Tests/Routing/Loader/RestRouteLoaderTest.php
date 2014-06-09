@@ -94,7 +94,7 @@ class RestRouteLoaderTest extends LoaderTest
         $etalonRoutes   = $this->loadEtalonRoutesInfo('annotated_users_controller.yml');
 
         $this->assertTrue($collection instanceof RestRouteCollection);
-        $this->assertEquals(17, count($collection->all()));
+        $this->assertEquals(21, count($collection->all()));
 
         foreach ($etalonRoutes as $name => $params) {
             $route = $collection->get($name);
@@ -103,6 +103,40 @@ class RestRouteLoaderTest extends LoaderTest
             $this->assertEquals($params['pattern'], $route->getPattern(), 'pattern failed to match for '.$name);
             $this->assertEquals($params['requirements'], $route->getRequirements(), 'requirements failed to match for '.$name);
             $this->assertContains($params['controller'], $route->getDefault('_controller'), 'controller failed to match for '.$name);
+            if (isset($params['condition'])) {
+                 $this->assertEquals($params['condition'], $route->getCondition(), 'condition failed to match for '.$name);
+            }
+
+        }
+    }
+    /**
+     * Test that annotated UsersController RESTful class gets parsed correctly with condition option (expression-language).
+     */
+    public function testAnnotatedConditionalUsersFixture()
+    {
+
+        if (!method_exists('Symfony\Component\Routing\Annotation\Route','setCondition')) {
+            $this->markTestSkipped('The "Routing" component have a version <2.4');
+            return;
+        }
+
+        $collection     = $this->loadFromControllerFixture('AnnotatedConditionalUsersController');
+        $etalonRoutes   = $this->loadEtalonRoutesInfo('annotated_conditional_controller.yml');
+
+        $this->assertTrue($collection instanceof RestRouteCollection);
+        $this->assertEquals(22, count($collection->all()));
+
+        foreach ($etalonRoutes as $name => $params) {
+            $route = $collection->get($name);
+
+            $this->assertNotNull($route, "no route found for '$name'");
+            $this->assertEquals($params['pattern'], $route->getPattern(), 'pattern failed to match for '.$name);
+            $this->assertEquals($params['requirements'], $route->getRequirements(), 'requirements failed to match for '.$name);
+            $this->assertContains($params['controller'], $route->getDefault('_controller'), 'controller failed to match for '.$name);
+            if (isset($params['condition'])) {
+                $this->assertEquals($params['condition'], $route->getCondition(), 'condition failed to match for '.$name);
+            }
+
         }
     }
 
@@ -197,6 +231,39 @@ class RestRouteLoaderTest extends LoaderTest
         $pos = array_flip(array_keys($collection->all()));
 
         $this->assertLessThan($pos['prefix_get_bars'], $pos['prefix_get_bars_custom']);
+    }
+
+    /**
+     * Test if the routes are also working with uninflected words
+     *
+     * @see https://github.com/FriendsOfSymfony/FOSRestBundle/pull/761
+     */
+    public function testMediaFixture()
+    {
+        $expectedMethod = 'GET';
+        $collection = $this->loadFromControllerFixture('MediaController');
+
+        $this->assertCount(2, $collection->all());
+        $this->assertEquals($expectedMethod, $collection->get('get_media')->getRequirement('_method'));
+        $this->assertEquals($expectedMethod, $collection->get('cget_media')->getRequirement('_method'));
+    }
+
+    /**
+     * Test if the routes are also working with uninflected words
+     *
+     * @see https://github.com/FriendsOfSymfony/FOSRestBundle/pull/761
+     */
+    public function testInformationFixture()
+    {
+        $collection = $this->loadFromControllerFixture('InformationController');
+
+        $this->assertCount(2, $collection->all());
+
+        $getRoute = $collection->get('get_information');
+        $cgetRoute = $collection->get('cget_information');
+
+        $this->assertEquals($getRoute, $cgetRoute);
+        $this->assertNotSame($getRoute, $cgetRoute);
     }
 
     /**

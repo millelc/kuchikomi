@@ -36,7 +36,7 @@ class FOSRestExtensionTest extends \PHPUnit_Framework_TestCase
     private $extension;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $includeFormat;
 
@@ -53,6 +53,7 @@ class FOSRestExtensionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->container = new ContainerBuilder();
+        $this->container->setParameter('kernel.bundles', array('JMSSerializerBundle' => true));
         $this->extension = new FOSRestExtension();
         $this->includeFormat = true;
         $this->formats = array(
@@ -89,6 +90,23 @@ class FOSRestExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->container->hasDefinition('fos_rest.body_listener'));
         $this->assertParameter($decoders, 'fos_rest.decoders');
         $this->assertParameter(false, 'fos_rest.throw_exception_on_unsupported_content_type');
+        $this->assertFalse($this->container->getDefinition('fos_rest.body_listener')->hasMethodCall('setArrayNormalizer'));
+    }
+
+    public function testLoadBodyListenerWithNormalizer()
+    {
+        $config = array(
+            'fos_rest' => array('body_listener' => array(
+                'array_normalizer' => 'fos_rest.normalizer.camel_keys'
+            ))
+        );
+        $this->extension->load($config, $this->container);
+
+        $this->assertServiceHasMethodCall(
+            'fos_rest.body_listener',
+            'setArrayNormalizer',
+            array(new Reference('fos_rest.normalizer.camel_keys'))
+        );
     }
 
     public function testDisableFormatListener()
@@ -406,7 +424,7 @@ class FOSRestExtensionTest extends \PHPUnit_Framework_TestCase
      *
      * @param Definition $loader               loader definition
      * @param string     $loaderClassParameter loader class parameter name
-     * @param boolean    $includeFormat        whether or not the requested view format must be included in the route path
+     * @param bool       $includeFormat        whether or not the requested view format must be included in the route path
      * @param string[]   $formats              supported view formats
      * @param string     $defaultFormat        default view format
      */
@@ -482,5 +500,42 @@ class FOSRestExtensionTest extends \PHPUnit_Framework_TestCase
     public function testExceptionThrownIfCallbackFilterIsUsed()
     {
         $this->extension->load(array('fos_rest' => array('view' => array('jsonp_handler' => array('callback_filter' => 'foo')))), $this->container);
+    }
+
+    public function testSerializerDefaultWhenJMSIsAvailable()
+    {
+        $this->extension->load(array(), $this->container);
+
+        $this->assertEquals('jms_serializer.serializer', $this->container->getAlias('fos_rest.serializer'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSerializerRequiredWhenJMSIsNotAvailable()
+    {
+        $this->container->setParameter('kernel.bundles', array());
+
+        $this->extension->load(array(), $this->container);
+    }
+
+    /**
+     * Asserts the service definition has the method call with the specified arguments.
+     *
+     * @param string $serviceId  The service id
+     * @param string $methodName The name of the method
+     * @param array  $arguments  The arguments of the method
+     */
+    private function assertServiceHasMethodCall($serviceId, $methodName, array $arguments = array())
+    {
+        $message = sprintf('The service "%s" has the method call "%s"', $serviceId, $methodName);
+        foreach ($this->container->getDefinition($serviceId)->getMethodCalls() as $methodCall) {
+            if ($methodCall[0] === $methodName) {
+                $this->assertEquals($arguments, $methodCall[1], $message);
+                return;
+            }
+        }
+
+        $this->assertTrue(false, $message);
     }
 }
