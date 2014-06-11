@@ -47,82 +47,93 @@ class KomiController extends Controller
         $AES->setIV( $this->container->getParameter('aes_IV') );
         
         $clearId = $AES->decrypt();
-                    
-        if( $idCheck->isPostKomiValid( $clearId) )
+        
+        //flag sur randomid
+        $randomidok = true;
+        if ($idCheck->getPostKomiRandomId($clearId) != null) 
         {
-            $randomId = $idCheck->getPostKomiRandomId($clearId);
-            
-            $komi = $repositoryKomi->findOneByRandomId($randomId);
-            
-            if( !$komi )
+                    
+            if( $idCheck->isPostKomiValid( $clearId) )
             {
-                $komi = $repositoryKomi->findOneByGcmRegId($this->getRequest()->get('KK_regId'));
-                if ( !$komi )
+                $randomId = $idCheck->getPostKomiRandomId($clearId);
+
+                $komi = $repositoryKomi->findOneByRandomId($randomId);
+
+                if( !$komi )
                 {
-                    // new Komi
-                    $komi = new Komi();
-                    $komi->setRandomId($randomId);
-                    $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
-                    $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
-                    $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
-                    $em->persist($komi);
-                    $em->flush();
-                
-                    // Create by default the subscriptionto the CityKomi group and all of these kuchis
-                    $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
-                    $subscriptionGroup = new SubscriptionGroup();
-                    $subscriptionGroup->setKomi($komi);
-                    $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
-                    $subscriptionGroup->setType(0);
-                    $em->persist($subscriptionGroup);
-
-                    foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
+                    $komi = $repositoryKomi->findOneByGcmRegId($this->getRequest()->get('KK_regId'));
+                    if ( !$komi )
                     {
-                            $subscription = new Subscription();
-                            $subscription->setKomi($komi);
-                            $subscription->setKuchi($kuchi);
-                            $subscription->setType(0);
+                        // new Komi
+                        $komi = new Komi();
+                        $komi->setRandomId($randomId);
+                        $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
+                        $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
+                        $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
+                        $em->persist($komi);
+                        $em->flush();
 
-                            $em->persist($subscription);
+                        // Create by default the subscriptionto the CityKomi group and all of these kuchis
+                        $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
+                        $subscriptionGroup = new SubscriptionGroup();
+                        $subscriptionGroup->setKomi($komi);
+                        $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
+                        $subscriptionGroup->setType(0);
+                        $em->persist($subscriptionGroup);
+
+                        foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
+                        {
+                                $subscription = new Subscription();
+                                $subscription->setKomi($komi);
+                                $subscription->setKuchi($kuchi);
+                                $subscription->setType(0);
+
+                                $em->persist($subscription);
+                        }
                     }
+                    // le komi existait déja avec un autre randomid, on le repasse à actif, on supprime ces anciens abonnements et on change son randomid
+                    else
+                    {
+                        $komi->setRandomId($randomId);
+                        $komi->setActive(true);
+                        $komi->resetTimestampLastSynchro();
+
+                        foreach($komi->getSubscriptions() as $subscription)
+                        {
+                                $subscription->setActive(false);
+                                $em->persist($subscription);
+                        }
+
+                        foreach($komi->getSubscriptionsGroup() as $subscriptionGroup)
+                        {
+                                $subscriptionGroup->setActive(false);
+                                $em->persist($subscriptionGroup);
+                        }
+                    }
+
+                    // flush des subscription ou du update
+                    $em->flush();
+                    $response->setStatusCode(200);
+
+                    $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
+
+                    // Post message
+                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
                 }
-                // le komi existait déja avec un autre randomid, on le repasse à actif, on supprime ces anciens abonnements et on change son randomid
                 else
                 {
-                    $komi->setRandomId($randomId);
-                    $komi->setActive(true);
-                    $komi->resetTimestampLastSynchro();
-                    
-                    foreach($komi->getSubscriptions() as $subscription)
-                    {
-                            $subscription->setActive(false);
-                            $em->persist($subscription);
-                    }
-                    
-                    foreach($komi->getSubscriptionsGroup() as $subscriptionGroup)
-                    {
-                            $subscriptionGroup->setActive(false);
-                            $em->persist($subscriptionGroup);
-                    }
+                    // Komi already exist !
+                    $response->setStatusCode(511);
+                    $Logger->Error("[POST rest/komi] 511 - Komi id=".$komi->getRandomId()." already registered");
                 }
-                
-                // flush des subscription ou du update
-                $em->flush();
-                $response->setStatusCode(200);
 
-                $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
-
-                // Post message
-                $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
+            } else {
+                $randomidok = false;
             }
-            else
-            {
-                // Komi already exist !
-                $response->setStatusCode(511);
-                $Logger->Error("[POST rest/komi] 511 - Komi id=".$komi->getRandomId()." already registered");
-            }
+        } else {
+            $randomidok = false;
         }
-        else
+        if (!$randomidok)
         {
             $response->setStatusCode(501);
             $Logger->Error("[POST rest/komi] 501 - Invalid Komi id");
@@ -211,6 +222,9 @@ class KomiController extends Controller
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         
+        //flag sur randomid
+        $randomidok = true;
+        
         $komi = $repositoryKomi->findOneByRandomId($id);
         
         if( !$komi )
@@ -228,17 +242,21 @@ class KomiController extends Controller
                 
                 if( !$newKomi )
                 {
-                    $komi->setActive(true);
-                    $komi->setOsType($this->getRequest()->get('os_id'));
-                    $komi->setApplicationVersion($this->getRequest()->get('version'));
-                    $komi->setGcmRegId($this->getRequest()->get('reg_id'));
-                    $komi->setRandomId(($this->getRequest()->get('new_id')));
-                    $komi->resetTimestampLastSynchro();
-        
-                    $em->flush();
-                    
-                    $response->setStatusCode(200);
-                    $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
+                    if ($this->getRequest()->get('new_id') != null){
+                        $komi->setActive(true);
+                        $komi->setOsType($this->getRequest()->get('os_id'));
+                        $komi->setApplicationVersion($this->getRequest()->get('version'));
+                        $komi->setGcmRegId($this->getRequest()->get('reg_id'));
+                        $komi->setRandomId(($this->getRequest()->get('new_id')));
+                        $komi->resetTimestampLastSynchro();
+
+                        $em->flush();
+
+                        $response->setStatusCode(200);
+                        $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
+                    }else{
+                       $randomidok = false; 
+                    }     
                 }
                 else
                 {
@@ -250,9 +268,13 @@ class KomiController extends Controller
             }
             else
             {
+                $randomidok = false; 
+            }    
+            //pb sur randomid
+            if(!$randomidok){
                 // hash invalid
-                $response->setStatusCode(510);
-                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Invalid Komi id");
+                    $response->setStatusCode(510);
+                    $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Invalid Komi id");
             }
             
             // disable current token
