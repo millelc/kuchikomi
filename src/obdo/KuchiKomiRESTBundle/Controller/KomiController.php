@@ -21,7 +21,7 @@ use FOS\RestBundle\Controller\Annotations\Get;
 
 
 class KomiController extends Controller
-{
+{   
     /**
      * @Post("/rest/komi")
      * @return array
@@ -31,15 +31,15 @@ class KomiController extends Controller
     {
         $response = new Response();
                 
+        $em = $this->getDoctrine()->getManager();
         $AES = $this->container->get('obdo_services.AES');
         $Logger = $this->container->get('obdo_services.Logger');
         $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
         $Notifier = $this->container->get('obdo_services.Notifier');
         
-        $em = $this->getDoctrine()->getManager();
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
-        $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
+        
         
         $AES->setKey( $this->container->getParameter('aes_key') );
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
@@ -50,13 +50,12 @@ class KomiController extends Controller
         
         //flag sur randomid
         $randomidok = true;
-        if ($idCheck->getPostKomiRandomId($clearId) != null) 
+        if( $idCheck->isPostKomiValid( $clearId) ) 
         {
-                    
-            if( $idCheck->isPostKomiValid( $clearId) )
+            $randomId = $idCheck->getPostKomiRandomId($clearId);
+            
+            if( !empty($randomId) )
             {
-                $randomId = $idCheck->getPostKomiRandomId($clearId);
-
                 $komi = $repositoryKomi->findOneByRandomId($randomId);
 
                 if( !$komi )
@@ -73,23 +72,7 @@ class KomiController extends Controller
                         $em->persist($komi);
                         $em->flush();
 
-                        // Create by default the subscriptionto the CityKomi group and all of these kuchis
-                        $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
-                        $subscriptionGroup = new SubscriptionGroup();
-                        $subscriptionGroup->setKomi($komi);
-                        $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
-                        $subscriptionGroup->setType(0);
-                        $em->persist($subscriptionGroup);
-
-                        foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
-                        {
-                                $subscription = new Subscription();
-                                $subscription->setKomi($komi);
-                                $subscription->setKuchi($kuchi);
-                                $subscription->setType(0);
-
-                                $em->persist($subscription);
-                        }
+                        $this->addCityKomiGroupSubscription($komi);
                     }
                     // le komi existait déja avec un autre randomid, on le repasse à actif, on supprime ces anciens abonnements et on change son randomid
                     else
@@ -100,15 +83,17 @@ class KomiController extends Controller
 
                         foreach($komi->getSubscriptions() as $subscription)
                         {
-                                $subscription->setActive(false);
-                                $em->persist($subscription);
+                            $subscription->setActive(false);
+                            $em->persist($subscription);
                         }
 
                         foreach($komi->getSubscriptionsGroup() as $subscriptionGroup)
                         {
-                                $subscriptionGroup->setActive(false);
-                                $em->persist($subscriptionGroup);
+                            $subscriptionGroup->setActive(false);
+                            $em->persist($subscriptionGroup);
                         }
+                        
+                        $this->addCityKomiGroupSubscription($komi);
                     }
 
                     // flush des subscription ou du update
@@ -127,12 +112,17 @@ class KomiController extends Controller
                     $Logger->Error("[POST rest/komi] 511 - Komi id=".$komi->getRandomId()." already registered");
                 }
 
-            } else {
+            } 
+            else 
+            {
                 $randomidok = false;
             }
-        } else {
+        } 
+        else 
+        {
             $randomidok = false;
         }
+        
         if (!$randomidok)
         {
             $response->setStatusCode(501);
@@ -140,9 +130,7 @@ class KomiController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        // affiche les entêtes HTTP suivies du contenu
-        $response->send();
-        
+        $response->setContent($clearId);
         return $response;
     }
     
@@ -422,5 +410,50 @@ class KomiController extends Controller
     			$KuchiKomi->setIsThanks(true);
     		}
     	}
+    }
+    
+    private function addCityKomiGroupSubscription($komi)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
+        $repositorySubscriptionGroup = $em->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');
+        $repositorySubscription = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription');
+        
+        // Create by default the subscriptionto the CityKomi group and all of these kuchis
+        $kuchiGroupCityKomi = $repositoryKuchiGroup->findOneById($this->container->getParameter('CityKomiGroupId'));
+        
+        $subscriptionGroup = $repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroupCityKomi));
+        if( !$subscriptionGroup )
+        {
+            $subscriptionGroup = new SubscriptionGroup();
+            $subscriptionGroup->setKomi($komi);
+            $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
+            $subscriptionGroup->setType(0);
+        }
+        else
+        {
+            $subscriptionGroup->setActive(true);
+        }
+        $em->persist($subscriptionGroup);
+        
+
+        foreach($kuchiGroupCityKomi->getKuchis() as $kuchi)
+        {
+            $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+            
+            if( !$subscription )
+            {
+                $subscription = new Subscription();
+                $subscription->setKomi($komi);
+                $subscription->setKuchi($kuchi);
+                $subscription->setType(0);
+            }
+            else
+            {
+                $subscription->setActive(true);
+            }
+            
+            $em->persist($subscription);
+        }
     }
 }
