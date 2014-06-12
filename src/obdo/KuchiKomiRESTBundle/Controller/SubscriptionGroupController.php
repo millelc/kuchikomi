@@ -146,8 +146,6 @@ class SubscriptionGroupController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        // affiche les entêtes HTTP suivies du contenu
-        $response->send();
         
         return $response;
     }
@@ -250,8 +248,6 @@ class SubscriptionGroupController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        // affiche les entêtes HTTP suivies du contenu
-        $response->send();
         
         return $response;
     }

@@ -123,8 +123,6 @@ class KuchiKomiController extends Controller {
 
 
         $response->headers->set('Content-Type', 'text/html');
-        $response->setContent("");
-        $response->send();
 
         return $response;
     }

@@ -22,4 +22,13 @@ class KuchiAccountRepository extends EntityRepository
     
     	return $qb->getQuery()->getResult();
     }
+    
+    public function getKuchiAccountForKomi( $komi )
+    {
+    	$qb = $this->createQueryBuilder('kuchiAccount')
+                ->join('kuchiAccount.komi', 'komi', 'WITH', 'komi = :komi')
+                ->setParameter('komi', $komi );
+    
+    	return $qb->getQuery()->getResult();
+    }
 }

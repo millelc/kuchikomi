@@ -94,6 +94,9 @@ class KomiController extends Controller
                         }
                         
                         $this->addCityKomiGroupSubscription($komi);
+                        
+                        // Delete all kuchiAccount linked to this Komi
+                        $this->deleteKuchiAccount($komi);
                     }
 
                     // flush des subscription ou du update
@@ -130,7 +133,7 @@ class KomiController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        $response->setContent($clearId);
+        
         return $response;
     }
     
@@ -176,6 +179,8 @@ class KomiController extends Controller
                     $Logger->Info("[DELETE rest/komi/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." already inactive");
                 }
                 
+                    // Delete all kuchiAccount linked to this Komi
+                    $this->deleteKuchiAccount($komi);
             }
             else
             {
@@ -189,8 +194,6 @@ class KomiController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        // affiche les entêtes HTTP suivies du contenu
-        $response->send();
         
         return $response;
     }
@@ -270,8 +273,6 @@ class KomiController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        // affiche les entêtes HTTP suivies du contenu
-        $response->send();
         
         return $response;
     }
@@ -300,9 +301,9 @@ class KomiController extends Controller
     
     	if( !$komi )
     	{
-    		// Komi unknown !
-    		$response->setStatusCode(501);
-    		$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            // Komi unknown !
+            $response->setStatusCode(501);
+            $Logger->Info("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
     	}
     	else
     	{
@@ -363,8 +364,6 @@ class KomiController extends Controller
     	}
     
     	$response->headers->set('Content-Type', 'text/html');
-    	// affiche les entêtes HTTP suivies du contenu
-    	$response->send();
     
     	return $response;
     }
@@ -375,22 +374,22 @@ class KomiController extends Controller
     	
     	foreach($kuchiGroupList as $KuchiGroup)
     	{
-    		$subscriptionGroup = $repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $KuchiGroup));
-    		if( !$subscriptionGroup )
-    		{
-    			$KuchiGroup->setSubscribed(false);
-    		}
-    		else
-    		{
-    			if( $subscriptionGroup->getActive() )
-    			{
-    				$KuchiGroup->setSubscribed(true);
-    			}
-    			else 
-    			{
-    				$KuchiGroup->setSubscribed(false);
-    			}
-    		}
+            $subscriptionGroup = $repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $KuchiGroup));
+            if( !$subscriptionGroup )
+            {
+                $KuchiGroup->setSubscribed(false);
+            }
+            else
+            {
+                if( $subscriptionGroup->getActive() )
+                {
+                    $KuchiGroup->setSubscribed(true);
+                }
+                else 
+                {
+                    $KuchiGroup->setSubscribed(false);
+                }
+            }
     	}
     }
     
@@ -400,15 +399,15 @@ class KomiController extends Controller
     	 
     	foreach($KuchiKomiList as $KuchiKomi)
     	{
-    		$Thanks = $repositoryThanks->findOneBy(array('komi' => $komi, 'kuchikomi' => $KuchiKomi));
-    		if( !$Thanks )
-    		{
-    			$KuchiKomi->setIsThanks(false);
-    		}
-    		else
-    		{
-    			$KuchiKomi->setIsThanks(true);
-    		}
+            $Thanks = $repositoryThanks->findOneBy(array('komi' => $komi, 'kuchikomi' => $KuchiKomi));
+            if( !$Thanks )
+            {
+                $KuchiKomi->setIsThanks(false);
+            }
+            else
+            {
+                $KuchiKomi->setIsThanks(true);
+            }
     	}
     }
     
@@ -454,6 +453,18 @@ class KomiController extends Controller
             }
             
             $em->persist($subscription);
+        }
+    }
+    
+    private function deleteKuchiAccount($komi)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        
+        $kuchiAccounts = $repositoryKuchiAccount->getKuchiAccountForKomi($komi);
+        foreach($kuchiAccounts as $kuchiAccount)
+        {
+            $em->remove($kuchiAccount);
         }
     }
 }
