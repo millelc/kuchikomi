@@ -88,6 +88,7 @@
     </thead>
     <tbody>
         {% for abo in Abonnements %}
+          
         <tr>
             
             <td>{{abo.titreabo}}</td>
@@ -96,12 +97,24 @@
             
             <td>{{abo.datedebabo|date('Y-m-d H:i:s')}}</td>
             
-            <td>{{abo.datefinabo|date('Y-m-d H:i:s')}}</td>
+            <td>
+                {% if abo.datefinabo|date('Ymd') < "now"|date('Ymd') %}
+                <span class="label label-danger">
+                    {% endif %}   
+                    {{abo.datefinabo|date('Y-m-d H:i:s')}}
+                {% if abo.datefinabo|date('Ymd') < "now"|date('Ymd') %}
+                    ...Abonnement terminée
+                </span>
+                {% endif %} 
+            </td>
+        
+        
             
             <td><a href="{{ path('obdo_kuchi_komi_abo_view', {'id': abo.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
-
+        
         </tr>
         {% endfor %}
+        
     </tbody>
     <foot>
     </tfoot>

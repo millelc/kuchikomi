@@ -19,6 +19,8 @@ class AbonnementsController extends Controller{
     public function addAction($clientid) {
         $Logger = $this->container->get('obdo_services.Logger');
         
+        $msgd = '';
+        
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($clientid); 
@@ -33,22 +35,28 @@ class AbonnementsController extends Controller{
             $form->bind($request);
 
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($abonnement);
-                $em->flush();
-                
-                $Logger->Info("[Abonnement] [user : " . $this->get('security.context')
-                        ->getToken()->getUser()->getUserName() . "] " . $abonnement->getTitreabo() . " added");
-                
-                return $this->redirect($this->generateUrl('obdo_kuchi_komi_client_view', array(
-                                    'id' => $clientid,
-                )));
+                // on verifie que la date de début est inférieure ou  égale à la date de fin
+                if ($abonnement->getDatefinabo() < $abonnement->getDatedebabo()){
+                    $msgd = 'La fin ne peut avoir lieu avant le commencement';
+                }else{
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($abonnement);
+                    $em->flush();
+
+                    $Logger->Info("[Abonnement] [user : " . $this->get('security.context')
+                            ->getToken()->getUser()->getUserName() . "] " . $abonnement->getTitreabo() . " added");
+
+                    return $this->redirect($this->generateUrl('obdo_kuchi_komi_client_view', array(
+                                        'id' => $clientid,
+                    )));
+                }
             }
         }
         return $this->render('obdoKuchiKomiBundle:Default:abonnementsadd.html.twig', array(
                         'form' => $form->createView(),
                         'action' => 'Ajouter',
                         'client' => $client,
+                        'ErrMsgd' => $msgd,
             ));
     }
     /*
