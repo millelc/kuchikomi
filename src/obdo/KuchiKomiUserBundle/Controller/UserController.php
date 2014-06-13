@@ -28,10 +28,16 @@ class UserController extends Controller {
         ));
     }
 
-    public function ajoutAction() {
+    public function ajoutAction($clientid) {
         $user = new User();
-
+      
         $form = $this->createForm(new UserType($this->getRoles()), $user);
+        
+         //si création d'un user depuis écran détail client
+        $cliid = 0;
+        if ($clientid != 'new'){
+            $cliid = $clientid;
+        }
 
         // On récupère la requête
         $request = $this->get('request');
@@ -45,25 +51,31 @@ class UserController extends Controller {
                 $userpwd = $user->getPassword();
                 $userrole = $user->getRoles();
                 $usermail = $user->getEmail();
+                
+                $userclient = $user->getClient()->getId();
                 $url = $this->generateUrl('obdo_kuchi_komi_user_add_suite', array('username' => $username,
                     'usermail' => $usermail,
+                    'userclient' => $userclient,
                     'userpwd' => $userpwd,
                     'userrole' => serialize($userrole)));
                 return $this->redirect($url);
             }
         }
         return $this->render('obdoKuchiKomiUserBundle:Default:useradd.html.twig', array(
+                    'cliid' => $cliid,
                     'form' => $form->createView(),
         ));
     }
 
-    public function ajoutsuiteAction($username, $usermail, $userpwd, $userrole) {
+    public function ajoutsuiteAction($username, $usermail, $userclient, $userpwd, $userrole) {
         $Logger = $this->container->get('obdo_services.Logger');
 
         $userk = new User();
         $userk->setUsername($username);
         $userk->setPassword($userpwd);
         $userk->setEmail($usermail);
+        if ($userclient != null)
+            $userk->setClient($userclient);
 
         $currentroles = unserialize($userrole);
         $currentrole = $currentroles[0];
@@ -283,7 +295,20 @@ class UserController extends Controller {
                 }
             }
         }
+        // ajout pour avoir les roles admin en + si super admin
+        if ($currentrole = 'ROLE_SUPER_ADMIN') {
+            $currentrole = 'ROLE_ADMIN';
+            $tabrole = array($currentrole => $tabroles[$currentrole]);
+            foreach ($tabrole as $name => $rolesHierarchy) {
+                $roles[$name] = $name;
 
+                foreach ($rolesHierarchy as $role) {
+                    if (!isset($roles[$role])) {
+                        $roles[$role] = $role;
+                    }
+                }
+            }
+        }
         return $roles;
     }
 

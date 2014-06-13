@@ -17,7 +17,19 @@
     <li class="list-group-item">Date de suppression : {{ Kuchi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
     <li class="list-group-item">Actif : {{ Kuchi.active }}</li>
     <li class="list-group-item">Groupe : <a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': Kuchi.kuchiGroup.id}) }}">{{Kuchi.kuchiGroup.name}}</a></li>
-  </ul>
+    <li class="list-group-item">Abonnement Client : {{ Abo.titreabo }}  </li>
+    {% if Abo.titreabo != "Pas d'abonnement en cours" %}
+        <li class="list-group-item">
+            {% if Abo.datefinabo|date('Ymd') < "now"|date('Ymd') %}
+                <span class="label label-danger">
+            {% endif %} 
+                Abonnement valide du : {{ Abo.datedebabo|date('Y-m-d') }} au : {{ Abo.datefinabo|date('Y-m-d') }}
+            {% if Abo.datefinabo|date('Ymd') < "now"|date('Ymd') %}
+                </span>
+            {% endif %}  
+        </li>
+    {% endif %}    
+   </ul>
   <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_update', {'id': Kuchi.id}) }}">
             <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
 </div>

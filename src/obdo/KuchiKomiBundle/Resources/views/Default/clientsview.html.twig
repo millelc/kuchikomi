@@ -1,0 +1,110 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h3> {{ Client.raissoc }}</h3></div>
+  
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Identifiant : {{ Client.id }}</li>
+    <li class="list-group-item">Date de création : {{ Client.timestampCreation|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Téléphone : {{ Client.telcli }}</li>
+    <li class="list-group-item">e-mail : {{ Client.mailcli }}</li>
+    <li class="list-group-item">Adresse : {{ Client.noruecli }} {{ Client.ruecli }}</li>
+    <li class="list-group-item">ville : {{ Client.codposcli }} {{ Client.villecli }}</li>
+    <li class="list-group-item"><div class="h4">Contact :  {{ Client.titrecontact }} {{ Client.nomcontact }}</div></li>
+    <li class="list-group-item">Téléphone : {{ Client.telcontact }}</li>
+    <li class="list-group-item">e-mail : {{ Client.mailcontact }}</li>
+  </ul>
+  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_client_update', {'id': Client.id}) }}">
+            <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+       
+</div>
+
+<br>
+<table>
+        <tr>
+            <td>
+            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_user_add', {'clientid': Client.id}) }}">
+            <span class="glyphicon glyphicon-user"><span class="glyphicon glyphicon-plus"></span></span> Création utilisateur</a>
+            </td>
+            <td>
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_client_user', {'clientid': Client.id}) }}">
+            <span class="glyphicon glyphicon-user"></span> Ajouter un utilisateur existant</a>
+            </td>
+        </tr>
+</table>
+<table class="table table-hover table-condensed">
+    
+    <thead>
+        <tr>
+            <th>Enlever</th>
+            <th>Login</th>
+            <th>e-mail</th>
+            <th>Dernier login</th>
+            <th>Verouillé</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in Users %}
+        <tr>
+            <td><a href="{{ path('obdo_kuchi_komi_user_remove', {'clientid': Client.id,'userid': user.id}) }}"><span class="glyphicon glyphicon-trash"></span></a></td>
+            
+            <td>{{user.username}}</td>
+
+            <td>{{user.email}}</td>
+            
+            <td>{{user.lastLogin|date('Y-m-d H:i:s')}}</td>
+            
+            <td>{% if user.locked == 0 %}
+                    Non
+                {% else %}
+                    Oui
+                {% endif %}
+            </td>
+
+            <td><a href="{{ path('obdo_kuchi_komi_user_view', {'id': user.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+<table class="table table-hover table-condensed">
+    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_abo_add', {'clientid': Client.id}) }}">
+            <span class="glyphicon glyphicon-pencil"></span> Nouvel abonnement</a>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Max kuchis</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for abo in Abonnements %}
+        <tr>
+            
+            <td>{{abo.titreabo}}</td>
+
+            <td>{{abo.nbMaxKuchi}}</td>
+            
+            <td>{{abo.datedebabo|date('Y-m-d H:i:s')}}</td>
+            
+            <td>{{abo.datefinabo|date('Y-m-d H:i:s')}}</td>
+            
+            <td><a href="{{ path('obdo_kuchi_komi_abo_view', {'id': abo.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+
+{% endblock %}

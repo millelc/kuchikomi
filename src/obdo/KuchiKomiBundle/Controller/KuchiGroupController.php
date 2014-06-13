@@ -49,7 +49,9 @@ class KuchiGroupController extends Controller {
             throw new AccessDeniedException();
         }
         
-        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
+        //le controle ce fait sur les abonnements la méthode à un mauvais nom, elle concerne le kuchi
+//        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
+        $hidden = false;
         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                     'KuchiGroup' => $kuchiGroup,
                     'Btncache' => $hidden,
@@ -192,7 +194,9 @@ class KuchiGroupController extends Controller {
                         $em = $this->getDoctrine()->getManager();
                         $em->flush();
                         $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " updated");
-                        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
+                       
+//                        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
+                        $hidden = false;
                         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
                                     'KuchiGroup' => $kuchiGroup,
                                     'Btncache' => $hidden,

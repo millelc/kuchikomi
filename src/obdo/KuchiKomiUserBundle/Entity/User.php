@@ -39,6 +39,12 @@ class User extends BaseUser {
      * )
      */
     private $kuchis;
+    
+   /**
+   * @ORM\Column(type="integer", nullable=true)
+   * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Clients", inversedBy="users")
+   */
+    private $client;
 
     public function __construct() {
         parent::__construct();
@@ -102,6 +108,14 @@ class User extends BaseUser {
      */
     public function getKuchis() { // Notez le « s », on récupère une liste de Kushi ici !
         return $this->kuchis;
+    }
+    
+    public function getClient() {
+        return $this->client;
+    }
+
+    public function setClient($client) {
+        $this->client = $client;
     }
 
 }

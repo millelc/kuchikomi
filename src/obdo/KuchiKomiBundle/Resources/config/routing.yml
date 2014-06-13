@@ -11,11 +11,11 @@ obdo_kuchi_komi_user:
         sort: name_up|name_down|role_up|role_down
 
 obdo_kuchi_komi_user_add:
-    pattern:  /user/add/
-    defaults: { _controller: obdoKuchiKomiUserBundle:User:ajout }
+    pattern:  /user/add/{clientid}
+    defaults: { _controller: obdoKuchiKomiUserBundle:User:ajout, clientid: new }
 
 obdo_kuchi_komi_user_add_suite:
-    pattern:  /user/add/suite/{username}/{usermail}/{userpwd}/{userrole}/
+    pattern:  /user/add/suite/{username}/{usermail}/{userclient}/{userpwd}/{userrole}/
     defaults: { _controller: obdoKuchiKomiUserBundle:User:ajoutsuite }
 
 obdo_kuchi_komi_user_add_acl_kuchigroup:
@@ -29,12 +29,59 @@ obdo_kuchi_komi_user_add_acl_kuchi:
 obdo_kuchi_komi_user_view:
     pattern:  /user/view/{id}
     defaults: { _controller: obdoKuchiKomiUserBundle:User:view }
+
+obdo_kuchi_komi_user_remove:
+    pattern: /client/user/remove/{clientid}/{userid}
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:userremove }
         
 obdo_kuchi_komi_logs:
     pattern:  /logs/{page}/{sort}
     defaults: { _controller: obdoKuchiKomiBundle:Log:Log }
     requirements:
         sort: date_up|date_down|level_up|level_down|message_up|message_down
+
+#Routes pour les clients
+obdo_kuchi_komi_client:
+    pattern:  /client/{page}/{sort}
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:index }
+    requirements:
+        sort: active_up|active_down|name_up|name_down|creation_up|creation_down|suppression_up|suppression_down
+
+obdo_kuchi_komi_client_add:
+    pattern:  /client/add/
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:add }
+
+obdo_kuchi_komi_client_view:
+    pattern:  /client/view/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:view }
+    
+obdo_kuchi_komi_client_update:
+    pattern:  /client/update/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:update }
+
+obdo_kuchi_komi_client_user:
+    pattern:  /client/update/user/{clientid}
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:user }
+    
+obdo_kuchi_komi_abo_add:
+    pattern: /client/abo/{clientid}
+    defaults: { _controller: obdoKuchiKomiBundle:Abonnements:add }
+
+obdo_kuchi_komi_abo_view:
+    pattern: /client/abo/view/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Abonnements:view }
+
+obdo_kuchi_komi_abo_update:
+    pattern: /client/abo/update/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Abonnements:update }
+
+obdo_kuchi_komi_abo_kuchi:
+    pattern: /client/abo/kuchi/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Abonnements:kuchi }
+
+obdo_kuchi_komi_kuchi_remove:
+    pattern: /client/abo/kuchi/{id}/{aboid}
+    defaults: { _controller: obdoKuchiKomiBundle:Abonnements:kuchiremove }
         
 #Routes pour les kuchigroups
 obdo_kuchi_komi_kuchi_group:

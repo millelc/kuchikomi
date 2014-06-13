@@ -162,6 +162,12 @@ class Kuchi
     */
     private $kuchikomis;
     
+    /**
+    * @ORM\Column(type="integer", nullable=true)
+    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", inversedBy="kuchis")
+    */
+    private $abonnement;
+    
     private $logoimg; //pour upload logo
     private $photoimg; //pour upload photo
 
@@ -743,4 +749,13 @@ class Kuchi
     {
         return $this->users;
     }
+    
+    public function getAbonnement() {
+        return $this->abonnement;
+    }
+
+    public function setAbonnement($abonnement) {
+        $this->abonnement = $abonnement;
+    }
+
 }

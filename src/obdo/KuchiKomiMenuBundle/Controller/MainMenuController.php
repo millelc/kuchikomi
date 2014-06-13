@@ -8,6 +8,10 @@ class MainMenuController extends Controller
 {
     public function mainMenuAction()
     {
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            return $this->render('obdoKuchiKomiMenuBundle:Default:mainMenuSuperAdmin.html.twig');
+        }
         if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
         {
             return $this->render('obdoKuchiKomiMenuBundle:Default:mainMenuAdmin.html.twig');

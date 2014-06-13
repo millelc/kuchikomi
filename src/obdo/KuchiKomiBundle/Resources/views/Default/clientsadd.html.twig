@@ -1,0 +1,90 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<h3>{{ action }} un client</h3>
+<div class="well">
+    <form method="post" {{ form_enctype(form) }} >
+        {{ form_errors(form) }}
+{#        {{ form_widget(form) }}#}
+        <table>
+            <tr>
+                <td>{{ form_label(form.raissoc, "Raison sociale") }}</td>
+                <td>{{ form_errors(form.raissoc) }}
+                    {{ form_widget(form.raissoc) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.telcli, "Téléphone société") }}</td>
+                <td>{{ form_errors(form.telcli) }}
+                    {{ form_widget(form.telcli) }}
+                </td>
+            </tr>
+        
+            <tr>
+                <td>{{ form_label(form.mailcli, "e-mail société") }}</td>
+                <td>{{ form_errors(form.mailcli) }}
+                    {{ form_widget(form.mailcli) }}
+                </td>
+            </tr>
+            <tr> 
+                <td>{{ form_label(form.ruecli, "Rue") }}</td>
+                <td>{{ form_errors(form.ruecli) }}
+                    {{ form_widget(form.ruecli) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.noruecli, "N° rue") }}</td>
+                <td>{{ form_errors(form.noruecli) }}
+                    {{ form_widget(form.noruecli) }}
+                </td>
+            </tr>
+            
+            <tr>    
+                <td>{{ form_label(form.codposcli, "Code Postal") }}</td>
+                <td>{{ form_errors(form.codposcli) }}
+                    {{ form_widget(form.codposcli) }}
+                </td>
+            </tr>
+            <tr> 
+                <td>{{ form_label(form.villecli, "Ville") }}</td>
+                <td>{{ form_errors(form.villecli) }}
+                    {{ form_widget(form.villecli) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.nomcontact, "Nom contact") }}</td>
+                <td>{{ form_errors(form.nomcontact) }}
+                    {{ form_widget(form.nomcontact) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.titrecontact, "Titre contact") }}</td>
+                <td>{{ form_errors(form.titrecontact) }}
+                    {{ form_widget(form.titrecontact) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.telcontact, "Tel. contact") }}</td>
+                <td>{{ form_errors(form.telcontact) }}
+                    {{ form_widget(form.telcontact) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.mailcontact, "email contact") }}</td>
+                <td>{{ form_errors(form.mailcontact) }}
+                    {{ form_widget(form.mailcontact) }}
+                </td>
+            </tr>
+        </table>
+        
+        <br />
+      
+        {{ form_rest(form) }}
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+
+{% endblock %}

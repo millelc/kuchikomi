@@ -49,5 +49,10 @@ class UserRepository extends EntityRepository
 	
 		return new Paginator($query);
 	}
+        
+        public function getUsersForForm(){
+            $qb = $this->createQueryBuilder('users');
+            return $qb;
+        }
 	
 }

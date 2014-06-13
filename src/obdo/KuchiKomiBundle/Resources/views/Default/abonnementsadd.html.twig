@@ -1,0 +1,54 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+<h3>{{ action }} un abonnement pour le client {{ client.raissoc }}</h3>
+<h4>{{ client.codposcli }} {{ client.villecli }}</h4>
+<div class="well">
+    <form method="post" {{ form_enctype(form) }} >
+        {{ form_errors(form) }}
+{#        {{ form_widget(form) }}#}
+        <table>
+            <tr>
+                <td>{{ form_label(form.titreabo, "Titre") }}</td>
+                <td>{{ form_errors(form.titreabo) }}
+                    {{ form_widget(form.titreabo) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.nbMaxKuchi, "Nombre max kuchis") }}</td>
+                <td>{{ form_errors(form.nbMaxKuchi) }}
+                    {{ form_widget(form.nbMaxKuchi) }}
+                </td>
+            </tr>
+        
+            <tr>
+                <td>{{ form_label(form.nomgrpKuchi, "Nom groupe kuchis") }}</td>
+                <td>{{ form_errors(form.nomgrpKuchi) }}
+                    {{ form_widget(form.nomgrpKuchi) }}
+                </td>
+            </tr>
+            <tr> 
+                <td>{{ form_label(form.datedebabo, "Date début") }}</td>
+                <td>{{ form_errors(form.datedebabo) }}
+                    {{ form_widget(form.datedebabo) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.datefinabo, "Date fin") }}</td>
+                <td>{{ form_errors(form.datefinabo) }}
+                    {{ form_widget(form.datefinabo) }}
+                </td>
+            </tr>
+            
+        </table>
+        
+        <br />
+      
+        {{ form_rest(form) }}
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+
+{% endblock %}

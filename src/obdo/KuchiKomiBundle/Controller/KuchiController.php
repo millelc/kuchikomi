@@ -6,6 +6,7 @@ use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
 use obdo\KuchiKomiRESTBundle\Form\KuchiType;
 use obdo\KuchiKomiRESTBundle\Form\KuchiUpdateType;
+use obdo\KuchiKomiRESTBundle\Entity\Abonnements;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use obdo\KuchiKomiUserBundle\Controller\AclController;
 // pour la gestion des acls
@@ -38,16 +39,18 @@ class KuchiController extends Controller {
         $kuchi = new Kuchi();
         $kuchiGroup = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')->find($groupId);
         $kuchi->setKuchiGroup($kuchiGroup);
-        // combien de kuchis autorisés
-        $maxkuchi = $kuchiGroup->getNbMaxKuchi();
-        // combien de kuchis actifs pour ce groupe
-        $countkuchi = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->getNbKuchiGroup($groupId);
-        if ($countkuchi >= $maxkuchi) {
-            return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
-                    'KuchiGroup' => $kuchiGroup,
-                    'message' => 'Le kuchigroup a '.$countkuchi.' kuchis ajout impossible.',
-        )); 
-        } else {
+ // le controle ce fait maintenant sur l'abonnement
+//        // combien de kuchis autorisés
+//        $maxkuchi = $kuchiGroup->getNbMaxKuchi();
+//        // combien de kuchis actifs pour ce groupe
+//        $countkuchi = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->getNbKuchiGroup($groupId);
+//       
+//        if ($countkuchi >= $maxkuchi) {
+//            return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
+//                    'KuchiGroup' => $kuchiGroup,
+//                    'message' => 'Le kuchigroup a '.$countkuchi.' kuchis ajout impossible.',
+//        )); 
+//        } else {
 
 
             $form = $this->createForm(new KuchiType, $kuchi);
@@ -124,7 +127,7 @@ class KuchiController extends Controller {
                         'form' => $form->createView(),
                         'action' => 'Ajouter',
             ));
-        }
+//        }
     }
 
     public function viewAction($id) {
@@ -140,9 +143,19 @@ class KuchiController extends Controller {
         {
             throw new AccessDeniedException();
         }
+        
+        if ($kuchi->getAbonnement() != null){
+            $abonnement = $this->getDoctrine()
+                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Abonnements')
+                ->find($kuchi->getAbonnement());
+        } else {
+            $abonnement = new Abonnements();
+            $abonnement->setTitreabo("Pas d'abonnement en cours");
+        }
 
         return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array(
                     'Kuchi' => $kuchi,
+                    'Abo'   => $abonnement,
         ));
     }
 
@@ -218,7 +231,11 @@ class KuchiController extends Controller {
                     if ($kuchi->getLogoimg() != null) {
                         // on efface l'ancien fichier avant l'upload
                         if ($kuchilogo != null) {
-                            unlink($kuchilogo);
+                            try{
+                                unlink($kuchilogo);
+                            }catch (\Exception $e){
+                              //juste au cas ou le fichier n'existe pas  
+                            }
                         }
                         $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder,'');
                         $kuchi->setLogoLink($logo);
@@ -227,7 +244,11 @@ class KuchiController extends Controller {
                     if ($kuchi->getPhotoimg() != null) {
                         // on efface l'ancien fichier avant l'upload
                         if ($kuchiphoto != null) {
-                            unlink($kuchiphoto);
+                            try{
+                                unlink($kuchiphoto);
+                            }catch (\Exception $e){
+                              //juste au cas ou le fichier n'existe pas  
+                            }
                         }
                         $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder,'');
                         $kuchi->setPhotoLink($photo);

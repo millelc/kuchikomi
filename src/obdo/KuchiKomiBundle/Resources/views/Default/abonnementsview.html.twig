@@ -1,0 +1,102 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">
+      <h3> {{ Client.raissoc }}</h3>
+      <h4> {{ Abonnement.titreabo }}</h4>
+  </div>
+  
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Nbr max kuchis : {{ Abonnement.nbMaxKuchi }}</li>
+    <li class="list-group-item">Date début : {{ Abonnement.datedebabo|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Date fin : {{ Abonnement.datefinabo|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Désignation groupe kuchi : {{ Abonnement.nomgrpKuchi }}</li>
+  </ul>
+  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_abo_update', {'id': Abonnement.id}) }}">
+            <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+</div>
+
+<br>
+   
+<table class="table table-hover table-condensed">
+    {% set btn_visible = 'visible' %}
+    {% if Btncache %}
+        {% set btn_visible = 'hidden' %}
+    {% endif %}   
+    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_abo_kuchi', {'id': Abonnement.id}) }}" style="visibility:{{ btn_visible }};">
+            <span class="glyphicon glyphicon-pencil"></span> Ajouter un kuchi à l'abonnement</a>
+   
+    <thead>
+        <tr>
+            <th>
+               Enlever
+            </th>
+            <th>
+                Actif
+            </th>
+            <th>
+                Nom
+            </th>
+            <th>
+                Groupe
+            </th>
+            <th>
+                Création
+            </th>
+            <th>
+                Suppression
+            </th>
+            <th>
+                Nb Souscriptions
+            </th>
+            <th>
+                Nb KuchiKomis
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for kuchi in kuchis %}
+        <tr>
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_remove', {'id': kuchi.id,'aboid': Abonnement.id}) }}"><span class="glyphicon glyphicon-trash"></span></a></td>
+            <td>
+                <img src="{{ asset(kuchi.logoLink) }}" alt="" width=20 height=20 >
+            </td>
+            {% if kuchi.active %}
+                <td><p class="text-info">Actif</p></td>
+            {% else %}
+                <td><p class="text-danger">Inactif</p></td>
+            {% endif %}
+
+            <td>{{kuchi.name}}</td>
+            
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchi.kuchiGroup.id}) }}">{{kuchi.kuchiGroup.name}}</a></td>
+
+            <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+
+            {% if kuchi.active %}
+                <td>-</td>
+            {% else %}
+                <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+            {% endif %}
+            
+            <td>{{kuchi.subscriptions|length}}</td>
+            
+            <td>{{kuchi.kuchikomis|length}}</td>
+            
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+
+
+{% endblock %}

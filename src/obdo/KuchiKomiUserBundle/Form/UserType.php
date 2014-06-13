@@ -24,6 +24,11 @@ class UserType extends AbstractType
             ->add('email')
             ->add('password')
             ->add('roles', 'choice', array('choices' => $this->rolesChoices, 'multiple' => true))
+            ->add('client', 'entity', array(
+                    'class'    => 'obdoKuchiKomiRESTBundle:Clients',
+                    'property' => 'raissoc',
+                    'multiple' => false,
+                    'required' => false))
             ->add('kuchigroups', 'entity', array(
                     'class'    => 'obdoKuchiKomiRESTBundle:KuchiGroup',
                     'property' => 'name',
