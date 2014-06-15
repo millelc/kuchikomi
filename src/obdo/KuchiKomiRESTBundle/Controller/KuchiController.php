@@ -258,7 +258,7 @@ class KuchiController extends Controller
                             $updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomisForKuchi( $kuchiAccount );
                             $deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomisForKuchi( $kuchiAccount );
 
-                            $kuchiAccount->setCurrentTimestampLastSynchro();
+                            $kuchiAccount->setCurrentTimestampLastSynchroSaved();
                             $em->flush();
                             $Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
 
@@ -295,5 +295,79 @@ class KuchiController extends Controller
     
     	return $response;
     }
+ 
+    /**
+     * @Post("/rest/kuchi/sync/{komiId}/{id}/{hash}")
+     * @return array
+     * @View()
+     */
+    public function postKuchiSyncAction($komiId, $id, $hash)
+    {
+    	$response = new Response();
     
+    	$Logger = $this->container->get('obdo_services.Logger');
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+    	$repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
+    
+    	$kuchi = $repositoryKuchi->findOneById($id);
+    
+    	if( !$kuchi )
+    	{
+            // Kuchi unknown !
+            $response->setStatusCode(502);
+            $Logger->Info("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
+    	}
+    	else
+    	{
+            $komi = $repositoryKomi->findOneByRandomId($komiId);
+            
+            if( !$komi )
+            {
+                // Komi unknown !
+                $response->setStatusCode(501);
+                $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 501 - Komi id=".$komiId." unkonwn");
+            }
+            else
+            {
+                $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+	                    
+                if (!$kuchiAccount)
+                {
+                    // kuchi account unknown !
+                    $response->setStatusCode(504);
+                    $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account unknown");
+                }
+                else
+                {
+                    if( $hash == sha1("POST /rest/kuchi/sync" . $kuchiAccount->getToken() ) )
+                    {
+                        
+                        $kuchiAccount->validateLastSynchro();
+                        $em->flush();
+                        $response->setStatusCode(200);
+                        $Logger->Info("[POST rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronization ACK");
+                    }
+                    else
+                    {
+                        // hash invalid
+                        $response->setStatusCode(510);
+                        $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Invalid hash");
+                    }
+
+                    // disable current token
+                    $kuchiAccount->generateToken();
+                    $em->flush();
+                }
+            }
+    	}
+    
+    	$response->headers->set('Content-Type', 'text/html');
+    
+    	return $response;
+    }
+
 }

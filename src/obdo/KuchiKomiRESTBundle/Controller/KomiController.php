@@ -331,7 +331,7 @@ class KomiController extends Controller
     				$this->checkKuchiKomiThanks($komi, $updatedKuchiKomis);
     				$this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
     				
-    				$komi->setCurrentTimestampLastSynchro();
+    				$komi->setCurrentTimestampLastSynchroSaved();
     				$em->flush();
     				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
     				
@@ -368,6 +368,54 @@ class KomiController extends Controller
     	return $response;
     }
     
+    /**
+     * @Post("/rest/komi/sync/{id}/{hash}")
+     * @return array
+     * @View()
+     */
+    public function postKomiSyncAction($id, $hash)
+    {
+    	$response = new Response();
+    
+    	$Logger = $this->container->get('obdo_services.Logger');
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
+    
+    	$komi = $repositoryKomi->findOneByRandomId($id);
+    
+    	if( !$komi )
+    	{
+            // Komi unknown !
+            $response->setStatusCode(501);
+            $Logger->Info("[POST rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+    	}
+    	else
+    	{
+            if( $hash == sha1("POST /rest/komi/sync" . $komi->getToken() ) )
+            {
+                $komi->validateLastSynchro();
+                $em->flush();
+                $response->setStatusCode(200);
+                $Logger->Info("[POST rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronization ACK");
+            }
+            else
+            {
+                // hash invalid
+                $response->setStatusCode(510);
+                $Logger->Error("[POST rest/komi/sync/{id}/{hash}] 510 - Invalid hash");
+            }
+
+            // disable current token
+            $komi->generateToken();
+        }
+    
+    	$response->headers->set('Content-Type', 'text/html');
+    
+    	return $response;
+    }
+
     private function checkSubscriptionGroup($komi, $kuchiGroupList)
     {
     	$repositorySubscriptionGroup = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');

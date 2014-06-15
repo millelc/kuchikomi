@@ -47,6 +47,13 @@ class KuchiAccount
     private $timestampLastSynchro;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestampLastSynchroSaved", type="datetime")
+     */
+    private $timestampLastSynchroSaved;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="token", type="string", length=26)
@@ -65,6 +72,7 @@ class KuchiAccount
     public function resetTimestampLastSynchro()
     {
     	$this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
+        $this->timestampLastSynchroSaved = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
     }
 
     /**
@@ -164,13 +172,23 @@ class KuchiAccount
      *
      * @return Komi
      */
-    public function setCurrentTimestampLastSynchro()
+    public function setCurrentTimestampLastSynchroSaved()
     {
-    	$this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+    	$this->timestampLastSynchroSaved = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
     
     	return $this;
     }
 
+    /**
+     * Validate the last synchro date saved
+     *
+     * @return Komi
+     */
+    public function validateLastSynchro()
+    {
+        $this->timestampLastSynchro = $this->timestampLastSynchroSaved;
+    }
+    
     /**
      * Get timestampLastSynchro
      *

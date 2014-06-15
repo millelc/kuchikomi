@@ -75,6 +75,13 @@ class Komi
     private $timestampLastSynchro;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="timestampLastSynchroSaved", type="datetime")
+     */
+    private $timestampLastSynchroSaved;
+
+    /**
      * @var \Integer
      *
      * @ORM\Column(name="osType", type="integer")
@@ -129,6 +136,7 @@ class Komi
     public function resetTimestampLastSynchro()
     {
     	$this->timestampLastSynchro = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
+        $this->timestampLastSynchroSaved = new \DateTime('2014-01-01 00:00:00.000000', new \DateTimeZone('Europe/Paris'));
     }
     
     /**
@@ -359,13 +367,22 @@ class Komi
      *
      * @return Komi
      */
-    public function setCurrentTimestampLastSynchro()
+    public function setCurrentTimestampLastSynchroSaved()
     {
-    	$this->timestampLastSynchro = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+    	$this->timestampLastSynchroSaved = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
     
     	return $this;
     }
     
+    /**
+     * Validate the last synchro date saved
+     *
+     * @return Komi
+     */
+    public function validateLastSynchro()
+    {
+        $this->timestampLastSynchro = $this->timestampLastSynchroSaved;
+    }
 
     /**
      * Get timestampLastSynchro
