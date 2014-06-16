@@ -53,30 +53,30 @@ class ThanksController extends Controller
                 }
                 else
                 {
-                	$thanks = $repositoryThanks->findOneBy(array('komi' => $komi, 'kuchikomi' => $kuchikomi));
-                	
-                	if( !$thanks )
-                	{
-	                    $thanks = new Thanks();
-						$thanks->setKomi($komi);
-						$thanks->setKuchiKomi($kuchikomi);
-						
-						$kuchikomi->setTimestampLastUpdate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
-						
-						$em->persist($kuchikomi);
-						$em->persist($thanks);
-						$em->flush(); 
-						
-						
-						
-	                    $response->setStatusCode(200);
-	                    $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
-                	}
-                	else 
-                	{
-                		$response->setStatusCode(511);
-                		$Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 511 - Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") already done");
-                	}
+                    $thanks = $repositoryThanks->findOneBy(array('komiRandomId' => $komi->getRandomId(), 'kuchikomi' => $kuchikomi));
+
+                    if( !$thanks )
+                    {
+                        $thanks = new Thanks();
+                        $thanks->setKomiRandomId($komi->getRandomId() );
+                        $thanks->setKuchiKomi($kuchikomi);
+
+                        $kuchikomi->setTimestampLastUpdate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+
+                        $em->persist($kuchikomi);
+                        $em->persist($thanks);
+                        $em->flush(); 
+
+
+
+                        $response->setStatusCode(200);
+                        $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
+                    }
+                    else 
+                    {
+                        $response->setStatusCode(511);
+                        $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 511 - Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") already done");
+                    }
                 }
                 
             }

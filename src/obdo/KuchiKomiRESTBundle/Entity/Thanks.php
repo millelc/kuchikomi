@@ -12,19 +12,20 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Thanks
 {
-  	/**
-   	* @ORM\Id
-   	* @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Komi")
-   	*/
-  	private $komi;
+    /**
+     * @var string
+     * @ORM\Id
+     * @ORM\Column(name="randomId", type="string", length=255)
+     */
+    private $komiRandomId;
 
-  	/**
-   	* @ORM\Id
-   	* @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi")
-   	*/
-  	private $kuchikomi;
+    /**
+    * @ORM\Id
+    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi")
+    */
+    private $kuchikomi;
 
-  	/**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="timestampCreation", type="datetime")
@@ -62,24 +63,24 @@ class Thanks
     /**
      * Set komi
      *
-     * @param \obdo\KuchiKomiRESTBundle\Entity\Komi $komi
+     * @param 
      * @return Thanks
      */
-    public function setKomi(\obdo\KuchiKomiRESTBundle\Entity\Komi $komi)
+    public function setKomiRandomId( $randomId )
     {
-        $this->komi = $komi;
+        $this->komiRandomId = $randomId;
 
         return $this;
     }
 
     /**
-     * Get komi
+     * Get komi randomId
      *
-     * @return \obdo\KuchiKomiRESTBundle\Entity\Komi 
+     * @return string
      */
-    public function getKomi()
+    public function getKomiRandomId()
     {
-        return $this->komi;
+        return $this->komiRandomId;
     }
 
     /**

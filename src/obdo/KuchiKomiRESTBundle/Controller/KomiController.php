@@ -233,13 +233,16 @@ class KomiController extends Controller
                 
                 if( !$newKomi )
                 {
-                    if ($this->getRequest()->get('new_id') != null){
+                    if ($this->getRequest()->get('new_id') != null)
+                    {
+                        $oldKomiRandomId = $komi->getRandomId();
                         $komi->setActive(true);
                         $komi->setOsType($this->getRequest()->get('os_id'));
                         $komi->setApplicationVersion($this->getRequest()->get('version'));
                         $komi->setGcmRegId($this->getRequest()->get('reg_id'));
                         $komi->setRandomId(($this->getRequest()->get('new_id')));
                         $komi->resetTimestampLastSynchro();
+                        $this->updateKuchiKomiThanks($oldKomiRandomId, $this->getRequest()->get('new_id'));
 
                         $em->flush();
 
@@ -444,10 +447,11 @@ class KomiController extends Controller
     private function checkKuchiKomiThanks($komi, $KuchiKomiList)
     {
     	$repositoryThanks = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Thanks');
-    	 
+    	$randomId = $komi->getRandomId();
+        
     	foreach($KuchiKomiList as $KuchiKomi)
     	{
-            $Thanks = $repositoryThanks->findOneBy(array('komi' => $komi, 'kuchikomi' => $KuchiKomi));
+            $Thanks = $repositoryThanks->findOneBy(array('komiRandomId' => $randomId, 'kuchikomi' => $KuchiKomi));
             if( !$Thanks )
             {
                 $KuchiKomi->setIsThanks(false);
@@ -456,6 +460,17 @@ class KomiController extends Controller
             {
                 $KuchiKomi->setIsThanks(true);
             }
+    	}
+    }
+    
+    private function updateKuchiKomiThanks($oldKomiRandomId, $newKomiRandomId)
+    {
+        $repositoryThanks = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Thanks');
+    	$Thanks = $repositoryThanks->findByKomiRandomId($oldKomiRandomId);
+        
+    	foreach($Thanks as $Thank)
+    	{
+            $Thank->setKomiRandomId($newKomiRandomId);
     	}
     }
     
