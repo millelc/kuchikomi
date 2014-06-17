@@ -169,6 +169,7 @@ class KuchiRepository extends EntityRepository
                     ->getSingleScalarResult();
     }
     
+    //pour alimentation formulaire le getResult ce fait dans le formulaire
     public function getKuchisByUserId($userid){
         //il faut aller chrercher les groupes du userid puis les kuchis des groupes
         $qb = $this->createQueryBuilder('kuchi')

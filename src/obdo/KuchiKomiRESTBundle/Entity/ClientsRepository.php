@@ -57,4 +57,5 @@ class ClientsRepository extends EntityRepository
 
         return new Paginator($query);
     }
+    
 }

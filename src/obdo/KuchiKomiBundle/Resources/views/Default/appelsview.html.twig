@@ -1,0 +1,27 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h3> {{ raissoc }}</h3></div>
+  
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Identifiant : {{ Appel.id }}</li>
+    <li class="list-group-item">Date d'appel : {{ Appel.dateappel|date('Y-m-d H:i:s') }}</li>
+    <li class="list-group-item">Nom correspondant : {{ Appel.nomcorresp }}</li>
+    <li class="list-group-item">Téléphone : {{ Appel.telcorresp }}</li>
+    <li class="list-group-item">Type appel : {{ Appel.typeappel.description }}</li>
+    <li class="list-group-item">Titre : {{ Appel.titreappel }}</li>
+    <li class="list-group-item">Raison : {{ Appel.raisonappel }}</li>
+    <li class="list-group-item">Solution : {{ Appel.solution }}</li>
+    <li class="list-group-item">Temps : {{ Appel.temps }}</li>
+  </ul>
+       
+</div>
+
+
+{% endblock %}

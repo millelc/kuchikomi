@@ -86,7 +86,7 @@ class Abonnements
     private $client;
     
     /**
-    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="object")
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="client")
     */
     private $kuchis;
     

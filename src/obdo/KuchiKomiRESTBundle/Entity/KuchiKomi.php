@@ -536,4 +536,39 @@ class KuchiKomi
     public function setPhotoimg($photoimg) {
         $this->photoimg = $photoimg;
     }
+    
+     /**
+     * @ORM\PreUpdate
+     * @ORM\PrePersist
+     */
+    public function updateTitle(){
+        $maj = array(
+                        "à" => "À",
+                        "è" => "È",
+                        "ì" => "Ì",
+                        "ò" => "Ò",
+                        "ù" => "Ù",
+                        "á" => "Á",
+                        "é" => "É",
+                        "í" => "Í",
+                        "ó" => "Ó",
+                        "ú" => "Ú",
+                        "â" => "Â",
+                        "ê" => "Ê",
+                        "î" => "Î",
+                        "ô" => "Ô",
+                        "û" => "Û",
+                        "ç" => "Ç",
+                      );
+        // on passe l'initale titre en majuscule!
+        $title = $this->getTitle();
+        $initale = mb_substr($title, 0, 1, 'UTF-8');
+        $suite = mb_substr($title, 1, strlen($title)-1, 'UTF-8');
+        if (array_key_exists($initale, $maj)){           
+            $title = $maj[$initale].$suite;
+        }else{       
+            $title[0] = strtoupper($title[0]);
+        }
+        $this->setTitle($title);
+    }
 }

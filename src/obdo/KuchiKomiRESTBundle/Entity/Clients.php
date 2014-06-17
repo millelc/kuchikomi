@@ -63,7 +63,7 @@ class Clients
     /**
      * @var string
      *
-     * @ORM\Column(name="codposcli", type="string", length=10, nullable=true)
+     * @ORM\Column(name="codposcli", type="string", length=10)
      * @Assert\Regex(pattern = "/^[0-9]{5,5}$/", message = "Code postal erroné")
      */
     private $codposcli;
@@ -130,9 +130,14 @@ class Clients
     private $users;
     
     /**
-    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", mappedBy="object")
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", mappedBy="Abonnements")
     */
     private $abonnements;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Appels", mappedBy="client")
+    */
+    private $appels;
 
     public function __construct()
     {
@@ -140,7 +145,6 @@ class Clients
         $this->timestampLastUpdate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->users = new ArrayCollection();
-        $this->abonnements = new ArrayCollection();
     }
     
     public function getUsers() 
@@ -148,10 +152,70 @@ class Clients
     return $this->users;
     }
   
+    /**
+     * Get abonnements
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
     public function getAbonnements() {
         return $this->abonnements;
     }
+    
+    /**
+     * Add abonnements
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Abonnements $abonnements
+     * @return Clients
+     */
+    public function addAbonnement(\obdo\KuchiKomiRESTBundle\Entity\Abonnements $abonnements)
+    {
+        $this->abonnements[] = $abonnements;
 
+        return $this;
+    }
+    
+    /**
+     * Remove abonnements
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Abonnements $abonnements
+     */
+    public function removeAbonnement(\obdo\KuchiKomiRESTBundle\Entity\Abonnements $abonnements)
+    {
+        $this->abonnements->removeElement($abonnements);
+    }
+    
+    /**
+     * Get appels
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAppels() {
+        return $this->appels;
+    }
+    
+    /**
+     * Add appel
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Appels $appels
+     * @return Clients
+     */
+    public function addAppel(\obdo\KuchiKomiRESTBundle\Entity\Appels $appels)
+    {
+        $this->appels[] = $appels;
+
+        return $this;
+    }
+    
+    /**
+     * Remove appel
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Appels $appels
+     */
+    public function removeAppel(\obdo\KuchiKomiRESTBundle\Entity\Appels $appels)
+    {
+        $this->appels->removeElement($appels);
+    }
+    
     /**
      * Get id
      *

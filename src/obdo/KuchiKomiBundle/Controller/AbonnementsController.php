@@ -25,6 +25,9 @@ class AbonnementsController extends Controller{
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($clientid); 
         $abonnement = new Abonnements();
+        // on passe les dates à la date du jour
+        $abonnement->setDatedebabo(new \DateTime());
+        $abonnement->setDatefinabo(new \DateTime());
         $form = $this->createForm(new AbonnementsType, $abonnement);
         // on affecte le client à l'abonnement
         $abonnement->setClient($clientid);

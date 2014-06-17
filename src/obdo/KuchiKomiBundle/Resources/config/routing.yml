@@ -79,6 +79,20 @@ obdo_kuchi_komi_abo_kuchi:
     pattern: /client/abo/kuchi/{id}
     defaults: { _controller: obdoKuchiKomiBundle:Abonnements:kuchi }
 
+obdo_kuchi_komi_appel:
+    pattern: /client/appel/{page}/{sort}
+    defaults: { _controller: obdoKuchiKomiBundle:Appels:index }
+    requirements:
+        sort: name_up|name_down|date_up|date_down
+        
+obdo_kuchi_komi_appel_view:
+    pattern:  /client/appel/view/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Appels:view }
+
+obdo_kuchi_komi_appel_add:
+    pattern:  /client/appel/add/
+    defaults: { _controller: obdoKuchiKomiBundle:Appels:add }
+
 obdo_kuchi_komi_kuchi_remove:
     pattern: /client/abo/kuchi/{id}/{aboid}
     defaults: { _controller: obdoKuchiKomiBundle:Abonnements:kuchiremove }
