@@ -38,26 +38,36 @@ class KuchiKomiController extends Controller {
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
 
         $kuchi = $repositoryKuchi->findOneById($id_kuchi);
-        if (!$kuchi) {
+        if (!$kuchi) 
+        {
             // kuchi unknown !
             $response->setStatusCode(502);
             $Logger->Error("[POST rest/kuchikomi] 502 - Invalid Kuchi id");
-        } else {
+        } 
+        else 
+        {
             $komi = $repositoryKomi->findOneByRandomId($id_komi);
 
-            if (!$komi) {
+            if (!$komi) 
+            {
                 // Komi unknown !
                 $response->setStatusCode(501);
                 $Logger->Error("[POST rest/kuchikomi] 501 - Komi id=" . $id_komi . " unknown");
-            } else {
+            } 
+            else 
+            {
                 $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
 
-                if (!$kuchiAccount) {
+                if (!$kuchiAccount) 
+                {
                     // kuchi account unknown !
                     $response->setStatusCode(504);
-                    $Logger->Error("[POST rest/kuchikomi] 504 - Kuchi admin account unknown");
-                } else {
-                    if ($hash == sha1("POST /rest/kuchikomi" . $kuchiAccount->getToken())) {
+                    $Logger->Error("[POST rest/kuchikomi] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
+                } 
+                else 
+                {
+                    if ($hash == sha1("POST /rest/kuchikomi" . $kuchiAccount->getToken())) 
+                    {
                         $json = $this->getRequest()->getContent();
                         $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchikomi' => new JsonEncoder()));
                         $kuchikomiArray = $serializer->decode($json, 'json');
@@ -93,9 +103,12 @@ class KuchiKomiController extends Controller {
 
                                 $fp = fopen($path, 'xb');
 
-                                if (!$fp) {
-                                    $Logger->Error(error_get_last());
-                                } else {
+                                if (!$fp) 
+                                {
+                                    $Logger->Error("[POST /rest/kuchikomi] Photo file open failed - Path = ".$path." - (" . error_get_last() . ")");
+                                } 
+                                else 
+                                {
                                     fwrite($fp, $photoByteStream);
                                     fclose($fp);
                                 }
@@ -108,7 +121,9 @@ class KuchiKomiController extends Controller {
                         }    
                         $response->setStatusCode(200);
                         $Logger->Info("[POST rest/kuchikomi] 200 - kuchikomi");
-                    } else {
+                    } 
+                    else 
+                    {
                         // hash invalid
                         $response->setStatusCode(510);
                         $Logger->Error("[POST rest/kuchikomi] 510 - hash invalide");
@@ -133,7 +148,8 @@ class KuchiKomiController extends Controller {
      * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi
      * @return Kuchi
      */
-    private function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi, $type) {
+    private function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi, $type) 
+    {
         $em = $this->getDoctrine()->getManager();
         $Notifier = $this->container->get('obdo_services.Notifier');
         $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
@@ -172,34 +188,46 @@ class KuchiKomiController extends Controller {
 
         $kuchi = $repositoryKuchi->findOneById($id_kuchi);
 
-        if (!$kuchi) {
+        if (!$kuchi) 
+        {
             // kuchi unknown !
-            $Logger->Info("[DELETE rest/kuchikomi/{komi}/{id_kuchi}/{id_kuchikomi}/{hash}] 502 - Kuchi id=" . $id_kuchi . " unknown...");
+            $Logger->Error("[DELETE rest/kuchikomi/] 502 - Kuchi id=" . $id_kuchi . " unknown...");
             $response->setStatusCode(502);
-        } else {
+        } 
+        else 
+        {
             $komi = $repositoryKomi->findOneByRandomId($komiId);
 
-            if (!$komi) {
+            if (!$komi) 
+            {
                 // Komi unknown !
                 $response->setStatusCode(501);
-                $Logger->Error("[DELETE rest/kuchikomi/{komi}/{id_kuchi}/{id_kuchikomi}/{hash}] 501 - Komi id=" . $komiId . " unknown");
-            } else {
+                $Logger->Error("[DELETE rest/kuchikomi/] 501 - Komi id=" . $komiId . " unknown");
+            } 
+            else 
+            {
                 $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
 
-                if (!$kuchiAccount) {
+                if (!$kuchiAccount) 
+                {
                     // kuchi account unknown !
                     $response->setStatusCode(504);
-                    $Logger->Error("[DELETE rest/kuchikomi/{komi}/{id_kuchi}/{id_kuchikomi}/{hash}] 504 - Kuchi admin account unknown");
-                } else {
-
-                    if ($hash == sha1("DELETE /rest/kuchikomi" . $kuchiAccount->getToken())) {
+                    $Logger->Error("[DELETE rest/kuchikomi/] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
+                } 
+                else 
+                {
+                    if ($hash == sha1("DELETE /rest/kuchikomi" . $kuchiAccount->getToken())) 
+                    {
                         $kuchikomi = $repositoryKuchiKomi->findOneById($id_kuchikomi);
 
-                        if (!$kuchikomi) {
+                        if (!$kuchikomi) 
+                        {
                             // kuchikomi unknown
                             $response->setStatusCode(503);
-                            $Logger->Info("[DELETE rest/kuchikomi/{komi}/{id_kuchi}/{id_kuchikomi}/{hash}] 503 - KuchiKomi id=" . $id_kuchikomi . " unknown...");
-                        } else {
+                            $Logger->Error("[DELETE rest/kuchikomi/] 503 - KuchiKomi id=" . $id_kuchikomi . " unknown...");
+                        } 
+                        else 
+                        {
                             $kuchikomi->setTimestampSuppression(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
                             $kuchikomi->setActive(false);
 
@@ -208,12 +236,14 @@ class KuchiKomiController extends Controller {
                             $this->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
 
                             $response->setStatusCode(200);
-                            $Logger->Info("[DELETE rest/kuchikomi/{komi}/{id_kuchi}/{id_kuchikomi}/{hash}] 200 - KuchiKomi id=" . $kuchikomi->getId() . " deleted");
+                            $Logger->Info("[DELETE rest/kuchikomi/] 200 - KuchiKomi id=" . $kuchikomi->getId() . " deleted");
                         }
-                    } else {
+                    } 
+                    else 
+                    {
                         // hash invalid
                         $response->setStatusCode(510);
-                        $Logger->Error("[DELETE rest/kuchikomi/{komi}/{id_kuchi}/{id_kuchikomi}/{hash}] 600 - Invalid hash");
+                        $Logger->Error("[DELETE rest/kuchikomi/] 510 - Invalid hash");
                     }
 
                     // disable current token

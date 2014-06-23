@@ -47,8 +47,7 @@ class AuthenticateController extends Controller
             
             if( !$komi )
             {
-            	
-                // Komi unknown !
+            	// Komi unknown !
                 $response->setStatusCode(501);
                 $Logger->Error("[POST rest/authenticate] 501 - Komi id=".$randomId." unknown");
             }
@@ -66,8 +65,8 @@ class AuthenticateController extends Controller
         }
         else
         {
-        	$response->setStatusCode(501);
-            $Logger->Error("[POST rest/authenticate] 501 - Invalid Komi id");                
+            $response->setStatusCode(501);
+            $Logger->Error("[POST rest/authenticate] 501 - clearId = (". $clearId . ") invalide");                
         }
 
         $response->headers->set('Content-Type', 'application/json');
@@ -162,7 +161,7 @@ class AuthenticateController extends Controller
         else
         {
             $response->setStatusCode(502);
-            $Logger->Error("[POST rest/authenticatekuchi] 502 - Invalid Kuchi id");                
+            $Logger->Error("[POST rest/authenticatekuchi] 502 - clearId = (". $clearId . ") invalide");                
         }
 
         $response->headers->set('Content-Type', 'text/html');

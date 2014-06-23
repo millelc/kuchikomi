@@ -37,7 +37,7 @@ class ThanksController extends Controller
         {
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 501 - Komi id=".$komiId." unknown");
+            $Logger->Error("[POST rest/thanks/] 501 - Komi id=".$komiId." unknown");
         }
         else
         {
@@ -49,7 +49,7 @@ class ThanksController extends Controller
                 {
                     // kuchikomi unknown !
                     $response->setStatusCode(503);
-                    $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 503 - KuchiKomi id=".$kuchiKomiId." unknown");
+                    $Logger->Error("[POST rest/thanks/] 503 - KuchiKomi id=".$kuchiKomiId." unknown");
                 }
                 else
                 {
@@ -70,12 +70,12 @@ class ThanksController extends Controller
 
 
                         $response->setStatusCode(200);
-                        $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
+                        $Logger->Info("[POST rest/thanks/] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
                     }
                     else 
                     {
                         $response->setStatusCode(511);
-                        $Logger->Info("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 511 - Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") already done");
+                        $Logger->Warning("[POST rest/thanks/] 511 - Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") already done");
                     }
                 }
                 
@@ -84,7 +84,7 @@ class ThanksController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[POST rest/thanks/{komi}/{kuchikomi}/{hash}] 510 - hash invalid");
+                $Logger->Error("[POST rest/thanks/] 510 - hash invalid");
             }
             
             // disable current token

@@ -47,7 +47,7 @@ class KuchiController extends Controller
         {
             // Kuchi unknown !
             $response->setStatusCode(502);
-            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
+            $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
         }
         else
         {
@@ -67,7 +67,7 @@ class KuchiController extends Controller
                 {
                     // kuchi account unknown !
                     $response->setStatusCode(504);
-                    $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 504 - Kuchi admin account unknown");
+                    $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
                 }
                 else
                 {
@@ -94,14 +94,14 @@ class KuchiController extends Controller
                         {
                             // kuchi inactive
                             $response->setStatusCode(508);
-                            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 508 - Kuchi id=".$kuchi->getId()." inactive");
+                            $Logger->Warning("[PUT rest/kuchi/{komi}/{id}/{hash}] 508 - Kuchi id=".$kuchi->getId()." inactive");
                         }
                     }
                     else
                     {
                         // hash invalid
                         $response->setStatusCode(510);
-                        $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 510 - Invalid Kuchi id");
+                        $Logger->Error("[PUT rest/kuchi/{komi}/{id}/{hash}] 510 - hash Invalid");
                     }
 
                     // disable current token
@@ -140,7 +140,7 @@ class KuchiController extends Controller
         {
             // Kuchi unknown !
             $response->setStatusCode(502);
-            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
+            $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
         }
         else
         {
@@ -160,7 +160,7 @@ class KuchiController extends Controller
                 {
                     // kuchi account unknown !
                     $response->setStatusCode(504);
-                    $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account unknown");
+                    $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
                 }
                 else
                 {
@@ -177,7 +177,7 @@ class KuchiController extends Controller
                         {
                             // kuchi inactive
                             $response->setStatusCode(508);
-                            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 508 - Kuchi id=".$kuchi->getId()." inactive");
+                            $Logger->Warning("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 508 - Kuchi id=".$kuchi->getId()." inactive");
                         }
                     }
                     else
@@ -224,9 +224,9 @@ class KuchiController extends Controller
     
     	if( !$kuchi )
     	{
-    		// Kuchi unknown !
-    		$response->setStatusCode(502);
-    		$Logger->Info("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
+            // Kuchi unknown !
+            $response->setStatusCode(502);
+            $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
     	}
     	else
     	{
@@ -246,7 +246,7 @@ class KuchiController extends Controller
                 {
                     // kuchi account unknown !
                     $response->setStatusCode(504);
-                    $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account unknown");
+                    $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
                 }
                 else
                 {
@@ -273,16 +273,16 @@ class KuchiController extends Controller
                         }
                         else
                         {
-                                // kuchi inactive
-                                $response->setStatusCode(508);
-                                $Logger->Info("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 508 - Kuchi id=".$kuchi->getId()." inactive");
+                            // kuchi inactive
+                            $response->setStatusCode(508);
+                            $Logger->Warning("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 508 - Kuchi id=".$kuchi->getId()." inactive");
                         }
                     }
                     else
                     {
-                            // hash invalid
-                            $response->setStatusCode(510);
-                            $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Invalid hash");
+                        // hash invalid
+                        $response->setStatusCode(510);
+                        $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Invalid hash");
                     }
 
                     // disable current token
@@ -320,7 +320,7 @@ class KuchiController extends Controller
     	{
             // Kuchi unknown !
             $response->setStatusCode(502);
-            $Logger->Info("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
+            $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 502 - Kuchi id=".$id." unkonwn");
     	}
     	else
     	{
@@ -340,7 +340,7 @@ class KuchiController extends Controller
                 {
                     // kuchi account unknown !
                     $response->setStatusCode(504);
-                    $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account unknown");
+                    $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
                 }
                 else
                 {

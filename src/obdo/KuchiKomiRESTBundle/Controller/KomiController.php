@@ -48,8 +48,7 @@ class KomiController extends Controller
         
         $clearId = $AES->decrypt();
         
-        //flag sur randomid
-        $randomidok = true;
+
         if( $idCheck->isPostKomiValid( $clearId) ) 
         {
             $randomId = $idCheck->getPostKomiRandomId($clearId);
@@ -118,18 +117,14 @@ class KomiController extends Controller
             } 
             else 
             {
-                $randomidok = false;
+                $response->setStatusCode(501);
+                $Logger->Error("[POST rest/komi] 501 - randomId is empty");
             }
         } 
         else 
         {
-            $randomidok = false;
-        }
-        
-        if (!$randomidok)
-        {
             $response->setStatusCode(501);
-            $Logger->Error("[POST rest/komi] 501 - Invalid Komi id");
+            $Logger->Error("[POST rest/komi] 501 - clearId = (". $clearId . ") invalide");
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -186,7 +181,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - Invalid Komi id");
+                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - hash invalide");
             }
             
             // disable current token
@@ -213,16 +208,13 @@ class KomiController extends Controller
         
         $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
         
-        //flag sur randomid
-        $randomidok = true;
-        
         $komi = $repositoryKomi->findOneByRandomId($id);
         
         if( !$komi )
         {
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            $Logger->Error("[PUT rest/komi/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
         }
         else
         {
@@ -248,8 +240,11 @@ class KomiController extends Controller
 
                         $response->setStatusCode(200);
                         $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
-                    }else{
-                       $randomidok = false; 
+                    }
+                    else
+                    {
+                        $response->setStatusCode(510);
+                        $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - new_id is empty");
                     }     
                 }
                 else
@@ -262,14 +257,9 @@ class KomiController extends Controller
             }
             else
             {
-                $randomidok = false; 
+                $response->setStatusCode(510);
+                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - hash Invalid");
             }    
-            //pb sur randomid
-            if(!$randomidok){
-                // hash invalid
-                    $response->setStatusCode(510);
-                    $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Invalid Komi id");
-            }
             
             // disable current token
             $komi->generateToken();
@@ -306,64 +296,64 @@ class KomiController extends Controller
     	{
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
     	}
     	else
     	{
-    		if( $hash == sha1("GET /rest/komi/sync" . $komi->getToken() ) )
-    		{
-    			if( $komi->getActive() )
-    			{
-    				$addedKuchis = $repositoryKuchi->getAddedKuchis( $komi );
-    				$updatedKuchis = $repositoryKuchi->getUpdatedKuchis( $komi );
-    				$deletedKuchis = $repositoryKuchi->getDeletedKuchis( $komi );
-    				
-    				$addedKuchiGroup = $repositoryKuchiGroup->getAddedGroups( $komi );
-    				$updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
-    				$deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
-    				
-    				$this->checkSubscriptionGroup($komi, $addedKuchiGroup);
-    				$this->checkSubscriptionGroup($komi, $updatedKuchiGroup);
-    				$this->checkSubscriptionGroup($komi, $deletedKuchiGroup);
-    				
-    				$addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
-    				$updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
-    				$deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
-    				
-    				$this->checkKuchiKomiThanks($komi, $addedKuchiKomis);
-    				$this->checkKuchiKomiThanks($komi, $updatedKuchiKomis);
-    				$this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
-    				
-    				$komi->setCurrentTimestampLastSynchroSaved();
-    				$em->flush();
-    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
-    				
-    				return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
-    							 'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
-    							 'DELETED_KUCHIS_GROUP' => $deletedKuchiGroup,
-    							 'ADDED_KUCHIS' => $addedKuchis,
-    				             'UPDATED_KUCHIS' => $updatedKuchis,
-    							 'DELETED_KUCHIS' => $deletedKuchis,
-    							 'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
-    							 'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
-    							 'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
-    			}
-    			else
-    			{
-    				// komi inactive
-    				$response->setStatusCode(508);
-    				$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." inactive");
-    			}
-    		}
-    		else
-    		{
-    			// hash invalid
-    			$response->setStatusCode(510);
-    			$Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Invalid hash");
-    		}
-    
-    		// disable current token
-    		$komi->generateToken();
+            if( $hash == sha1("GET /rest/komi/sync" . $komi->getToken() ) )
+            {
+                if( $komi->getActive() )
+                {
+                    $addedKuchis = $repositoryKuchi->getAddedKuchis( $komi );
+                    $updatedKuchis = $repositoryKuchi->getUpdatedKuchis( $komi );
+                    $deletedKuchis = $repositoryKuchi->getDeletedKuchis( $komi );
+
+                    $addedKuchiGroup = $repositoryKuchiGroup->getAddedGroups( $komi );
+                    $updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
+                    $deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
+
+                    $this->checkSubscriptionGroup($komi, $addedKuchiGroup);
+                    $this->checkSubscriptionGroup($komi, $updatedKuchiGroup);
+                    $this->checkSubscriptionGroup($komi, $deletedKuchiGroup);
+
+                    $addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
+                    $updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
+                    $deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
+
+                    $this->checkKuchiKomiThanks($komi, $addedKuchiKomis);
+                    $this->checkKuchiKomiThanks($komi, $updatedKuchiKomis);
+                    $this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
+
+                    $komi->setCurrentTimestampLastSynchroSaved();
+                    $em->flush();
+                    $Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
+
+                    return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
+                                             'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
+                                             'DELETED_KUCHIS_GROUP' => $deletedKuchiGroup,
+                                             'ADDED_KUCHIS' => $addedKuchis,
+                                 'UPDATED_KUCHIS' => $updatedKuchis,
+                                             'DELETED_KUCHIS' => $deletedKuchis,
+                                             'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
+                                             'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
+                                             'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
+                }
+                else
+                {
+                    // komi inactive
+                    $response->setStatusCode(508);
+                    $Logger->Warning("[GET rest/komi/sync/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." inactive");
+                }
+            }
+            else
+            {
+                // hash invalid
+                $response->setStatusCode(510);
+                $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Invalid hash");
+            }
+
+            // disable current token
+            $komi->generateToken();
     	}
     
     	$response->headers->set('Content-Type', 'text/html');
@@ -392,7 +382,7 @@ class KomiController extends Controller
     	{
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Info("[POST rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            $Logger->Error("[POST rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
     	}
     	else
     	{

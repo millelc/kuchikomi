@@ -137,7 +137,7 @@ class SubscriptionGroupController extends Controller
 	            {
 	            	// Kuchi group inactif
 	            	$response->setStatusCode(508);
-	            	$Logger->Error("[POST rest/subscription] 508 - KuchiGroup id " . $kuchiGroup->getId() . " inactif");
+	            	$Logger->Warning("[POST rest/subscription] 508 - KuchiGroup id " . $kuchiGroup->getId() . " inactif");
 	            }	 
             }
             
@@ -202,16 +202,16 @@ class SubscriptionGroupController extends Controller
                     {
                     	if( !$subscriptionGroup->getActive() )
                     	{
-                    		// subscription group already de-activated
-                    		$response->setStatusCode(508);
-                    		$Logger->Warning("[DELETE rest/subscriptions] 508 - Subscription group (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already de-activated");
+                            // subscription group already de-activated
+                            $response->setStatusCode(508);
+                            $Logger->Warning("[DELETE rest/subscriptions] 508 - Subscription group (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already de-activated");
                     	}
                     	else
                     	{
-                    		$subscriptionGroup->setCurrentTimestampSuppression();
-                    		$subscriptionGroup->setActive(false);
-                    		$response->setStatusCode(200);
-                    		$Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");
+                            $subscriptionGroup->setCurrentTimestampSuppression();
+                            $subscriptionGroup->setActive(false);
+                            $response->setStatusCode(200);
+                            $Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");
                     	}
                     }
                     
@@ -222,10 +222,10 @@ class SubscriptionGroupController extends Controller
                             $kuchis = $kuchiGroup->getKuchis();
                             foreach($kuchis as $kuchi)
                             {
-                	            $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+                	        $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
                                 if( $subscription )
                                 {
-                                	$subscription->setCurrentTimestampSuppression();
+                                    $subscription->setCurrentTimestampSuppression();
                                     $subscription->setActive(false);
                                     $em->persist($subscription);
                                 }

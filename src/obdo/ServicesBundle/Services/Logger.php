@@ -17,7 +17,7 @@ class Logger
     
     public function Info( $message )
     {
-        $this->flushLog(Log::LEVEL_INFO, $message);
+        //$this->flushLog(Log::LEVEL_INFO, $message);
     }
 
     public function Warning( $message )
