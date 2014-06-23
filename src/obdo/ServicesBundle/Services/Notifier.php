@@ -50,8 +50,6 @@ class Notifier
      */
     public function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi, $type)
     {	
-        //$em = $this->container->getDoctrine()->getManager();
-        //$Notifier = $this->container->get('obdo_services.Notifier');
     	$repositoryKuchiAccount = $this->em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
         
         
