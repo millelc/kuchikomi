@@ -6,11 +6,12 @@
 <br>
 <br>
 <a class="btn btn-primary" href="{{ path('obdo_kuchi_komi_client_add') }}">
-    <span class="glyphicon glyphicon-user"><span class="glyphicon glyphicon-plus"></span> </span>Nouveau client</a>
+    <span class="glyphicon glyphicon-user"><span class="glyphicon glyphicon-plus"></span> </span> Nouveau client</a>
 <table class="table table-hover table-condensed">
     <thead>
         <tr>
-            
+            <th>
+            </th>
             <th>
                 <a href="{{ path('obdo_kuchi_komi_client', {'page': page, 'sort': 'name_up'}) }}">
                     <span class="glyphicon glyphicon-chevron-down"></span>
@@ -24,11 +25,13 @@
                 <a href="{{ path('obdo_kuchi_komi_client', {'page': page, 'sort': 'creation_up'}) }}">
                     <span class="glyphicon glyphicon-chevron-down"></span>
                 </a>
-                Création
+                Date de création
                 <a href="{{ path('obdo_kuchi_komi_client', {'page': page, 'sort': 'creation_down'}) }}">
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
+            <th>Ville</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
