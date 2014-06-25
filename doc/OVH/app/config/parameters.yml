@@ -12,7 +12,8 @@ parameters:
     mailer_password: null
     locale: fr
     secret: ThisTokenIsNotSoSecretChangeIt
-    aes_key: 5CCA8DAB847F457C918D439459D3730B
+    aes_key: 00c1125a69814d6ba6c2c9597cfbda21
+    aes_IV: 00c63170ca723e99
     aes_key_size: 128
     sha256_salt1: gdg(!cedhsf(327
     sha256_salt2: m58$zed24)BVgRR
