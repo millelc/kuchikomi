@@ -8,10 +8,9 @@ SetEnv SESSION_USE_TRANS_SID 0
 
 <IfModule mod_rewrite.c>
 RewriteEngine on
-RewriteBase /web
  
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ web/app.php [QSA,L]
+RewriteRule ^(.*)$ web/$1 [QSA,L]
 </IfModule>
 
 Options -Indexes
