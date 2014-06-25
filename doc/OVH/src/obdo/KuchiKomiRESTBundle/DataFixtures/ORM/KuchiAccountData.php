@@ -8,9 +8,13 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use obdo\KuchiKomiRESTBundle\Entity\Log;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiAccount;
 
-class LogData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+
+class KuchiAccountData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -22,8 +26,9 @@ class LogData extends AbstractFixture implements ContainerAwareInterface, Ordere
      */
     public function getOrder()
     {
-        return 6; 
+            return 3;
     }
+
 
     /**
      * {@inheritDoc}
@@ -36,12 +41,10 @@ class LogData extends AbstractFixture implements ContainerAwareInterface, Ordere
     // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
     public function load(ObjectManager $manager)
     {
-
-        // Reset auto-increment
-        $connection = $manager->getConnection();
-        $connection->exec("ALTER TABLE Log AUTO_INCREMENT = 1;");
+        $manager->getConnection()->exec("ALTER TABLE KuchiAccount AUTO_INCREMENT = 1;");
 
 
-        $manager->flush();	
+
     }
+
 }

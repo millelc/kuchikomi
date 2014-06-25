@@ -8,9 +8,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use obdo\KuchiKomiRESTBundle\Entity\Log;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 
-class LogData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -22,8 +22,9 @@ class LogData extends AbstractFixture implements ContainerAwareInterface, Ordere
      */
     public function getOrder()
     {
-        return 6; 
+        return 4;
     }
+
 
     /**
      * {@inheritDoc}
@@ -37,10 +38,16 @@ class LogData extends AbstractFixture implements ContainerAwareInterface, Ordere
     public function load(ObjectManager $manager)
     {
 
-        // Reset auto-increment
-        $connection = $manager->getConnection();
-        $connection->exec("ALTER TABLE Log AUTO_INCREMENT = 1;");
+        $manager->getConnection()->exec("ALTER TABLE KuchiKomi AUTO_INCREMENT = 1;");
 
+        // KuchiKomi de bienvenue
+        $welcome = new KuchiKomi();
+        $welcome->setKuchi($this->getReference('news'));
+        $welcome->setTitle('Bienvenue !');
+        $welcome->setDetails("Toute l'équipe CityKomi est heureuse de vous accueillir comme nouveau membre !");
+        $welcome->setTimestampEnd($welcome->getTimestampEnd()->add(new \DateInterval('P5Y')));
+        $this->addReference('welcome', $welcome);
+        $manager->persist($welcome);
 
         $manager->flush();	
     }
