@@ -47,4 +47,20 @@ class AppelsRepository extends EntityRepository
 
         return new Paginator($query);
     }
+    
+    public function getNbAppels()
+    {
+        return $this->createQueryBuilder('appels')
+                    ->select('COUNT(appels)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
+    public function getTempsTotal()
+    {
+        return $this->createQueryBuilder('appels')
+                    ->select('SUM(appels.temps)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
 }

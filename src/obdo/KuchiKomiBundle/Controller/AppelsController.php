@@ -8,6 +8,7 @@ use obdo\KuchiKomiRESTBundle\Entity\Appels;
 use obdo\KuchiKomiRESTBundle\Entity\TypeAppel;
 use obdo\KuchiKomiRESTBundle\Form\AppelFormType;
 use obdo\KuchiKomiRESTBundle\Form\AppelForm;
+use obdo\KuchiKomiRESTBundle\Entity\SqlStat;
 
 /**
  * Description of AppelsController
@@ -112,6 +113,63 @@ class AppelsController extends Controller{
                         'action' => 'Ajouter',
                         'msgerr' => $msgerr
             )); 
+    }
+    
+    /*
+     * Stats sur les appels, détail/clients dans ClientsController
+     */
+    public function suiviAction(){
+        //Somme de tous les appels
+        $nbappels = $this->getDoctrine()
+                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Appels')
+                ->getNbAppels();
+        
+        //Temps total de tous les appels
+        $tempstotal = $this->getDoctrine()
+                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Appels')
+                ->getTempsTotal();
+        
+        //temps moyen
+        $tempsmoyen = 0;
+        if ($nbappels != 0){
+            $tempsmoyen = ceil($tempstotal/$nbappels);
+        }
+        
+    // Calculs pour l'année en cours
+        $datedeb = new \DateTime(); 
+        $datefin = new \DateTime();
+        // n° du jour de l'année
+        $nojouran = date('z',$datedeb->getTimestamp());
+        $deltadeb = -($nojouran).' day' ;
+        $deltafin = (365 - $nojouran).' day';
+        // on positionne date debut au 01 Janvier et date fin au 1 janvier année suivante
+        $datedeb->modify($deltadeb);
+        $datefin->modify($deltafin);
+        
+        $appelsans = SqlStat::getAppelsDateAn(date('Y-m-d',$datedeb->getTimestamp()),date('Y-m-d',$datefin->getTimestamp()), $this);
+        
+        $nbappelan = 0;
+        $tempstotalan = 0;
+        $tempsmoyenan = 0;
+        // si il y a eu des appels on somme
+        if($appelsans){
+            foreach($appelsans as $appelsan){
+                $nbappelan += $appelsan['nbre'];
+                $tempstotalan += $appelsan['ttemps'];
+            }
+        }
+        if ($nbappelan !=0){
+            $tempsmoyenan = ceil($tempstotalan/$nbappelan);
+        }
+        
+        return $this->render('obdoKuchiKomiBundle:Default:appelsuivi.html.twig', array(
+                            'nbappel' => $nbappels,
+                            'tempstotal' => $tempstotal,
+                            'tempsmoyen' => $tempsmoyen,
+                            'nbappelan' => $nbappelan,
+                            'tempstotalan' => $tempstotalan, 
+                            'tempsmoyenan' => $tempsmoyenan,
+             )); 
     }
     
 }

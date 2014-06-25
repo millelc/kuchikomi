@@ -115,4 +115,6 @@ class KuchiKomiRepository extends EntityRepository
                     ->getQuery()
                     ->getSingleScalarResult(); 
     }
+    
+    
 }

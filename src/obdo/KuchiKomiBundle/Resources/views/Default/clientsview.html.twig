@@ -22,6 +22,11 @@
   </ul>
   <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_client_update', {'id': Client.id}) }}">
             <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+            
+  {% if is_granted('ROLE_SUPER_ADMIN') %}          
+  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_client_suivi', {'clientid': Client.id}) }}">
+            <span class="glyphicon glyphicon-zoom-in"></span> Suivi client</a>
+  {% endif %}
        
 </div>
 

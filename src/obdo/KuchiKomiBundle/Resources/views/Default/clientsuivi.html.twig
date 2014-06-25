@@ -1,0 +1,47 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+    <div class="row">
+        <div id="tuile" class="col-md-4"> 
+            <h1><p class="text-right">{{ nomcli }}</p></h1>
+            <h5><p class="text-right">Suvi client</p></h5>
+        </div>
+        <div id="tuile" class="col-md-4"> 
+            <h1><p class="text-right">{{ totalKuchiKomis }}</p></h1>
+            <h5><p class="text-right">Total kuchikomis</p></h5>
+        </div>
+        <div id="tuile" class="col-md-4"> 
+            <h1><p class="text-right">{{ tailleimage }} Mo</p></h1>
+            <h5><p class="text-right">Taille totale des images</p></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div id="tuile" class="col-md-4"> 
+            <h1><p class="text-right">{{ moyenne }} caractères</p></h1>
+            <h5><p class="text-right">Taille moyenne des messages</p></h5>
+        </div>   
+        
+    </div>
+    <div class="row">
+        <div id="tuile" class="col-md-12">
+            <img src="{{ path('obdo_pChart_clientkuchikomi', {'clientid': clientid}) }}" class="col-xs-12"/>  
+        </div>
+    </div>
+    <div class="row">
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeldate', {'mode': 'an', 'clientid': clientid}) }}" class="col-xs-12"/>  
+        </div> 
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeldate', {'mode': 'mois', 'clientid': clientid}) }}" class="col-xs-12"/>  
+        </div> 
+    </div>
+    <div class="row">
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeltype', {'mode': 'an', 'clientid': clientid}) }}" class="col-xs-12"/>  
+        </div> 
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeltype', {'mode': 'mois', 'clientid': clientid}) }}" class="col-xs-12"/>  
+        </div> 
+    </div>
+{% endblock %}

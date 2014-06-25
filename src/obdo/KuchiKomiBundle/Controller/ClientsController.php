@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use obdo\KuchiKomiRESTBundle\Form\ClientsType;
 use obdo\KuchiKomiUserBundle\Entity\User;
 use obdo\KuchiKomiUserBundle\Entity\UserRepository;
+use obdo\KuchiKomiRESTBundle\Entity\SqlStat;
 	
 class ClientsController extends Controller{
     
@@ -186,5 +187,55 @@ class ClientsController extends Controller{
         return $this->redirect($this->generateUrl('obdo_kuchi_komi_client_view', array(
                                         'id' => $clientid,
                     )));
+    }
+    /*
+     * Quelques stats de suivi du client
+     */
+    public function suiviAction($clientid) {
+        $client = $this->getDoctrine()
+                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
+                ->find($clientid);
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //total kuchikomis du client
+        $nbKuchikomis = SqlStat::getNbKuchiKomiByClientId($clientid, $this);
+        $totalKuchiKomis = 0;
+        foreach ($nbKuchikomis as $nbKuchikomi){
+            $totalKuchiKomis = $nbKuchikomi['nbkuchikomi'];
+        }
+        
+        //taille images du client
+        $size = 0;
+        $abonnements = $em->getRepository('obdoKuchiKomiRESTBundle:Abonnements')->findByClient($clientid);
+        foreach ($abonnements as $abonnement){
+            $kuchis = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->findByAbonnement($abonnement->getId());
+            foreach ($kuchis as $kuchi){
+                $kuchikomis = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi')->findByKuchi($kuchi);
+                foreach ($kuchikomis as $kuchikomi){
+                    if ($kuchikomi->getPhotoLink() != null)
+                        $size += filesize($kuchikomi->getPhotoLink());
+                }
+                if ($kuchi->getLogoLink() != null)
+                    $size += filesize($kuchi->getLogoLink());
+                if ($kuchi->getPhotoLink() != null)
+                    $size += filesize($kuchi->getPhotoLink());
+            }
+        }
+        
+        // taille moyenne des messages du client
+        $avgKuchikomis = SqlStat::getAvgDetailClient($clientid, $this);
+        $moyenne = 0;
+        foreach ($avgKuchikomis as $avgKuchikomi){
+            $moyenne = $avgKuchikomi['moyenne'];
+        }
+        
+        return $this->render('obdoKuchiKomiBundle:Default:clientsuivi.html.twig', array(
+                            'nomcli' => $client->getRaissoc(),
+                            'totalKuchiKomis' => $totalKuchiKomis,
+                            'tailleimage' => round($size/(1024*1024),3),
+                            'moyenne' => round($moyenne),
+                            'clientid' => $clientid
+             )); 
     }
 }

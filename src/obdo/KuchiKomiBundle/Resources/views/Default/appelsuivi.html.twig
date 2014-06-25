@@ -1,0 +1,30 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+    <div class="row">
+        <div id="tuile" class="col-md-4"> 
+            <p>{{ nbappel }} appels pour un temps total de {{ tempstotal }} minutes 
+                et un temps moyen de {{ tempsmoyen }} minutes.</p>
+            <p>Cette année {{ nbappelan }} appels pour un temps total de {{ tempstotalan }} minutes 
+                et un temps moyen de {{ tempsmoyenan }} minutes.</p>
+            <h5><p class="text-right">Suvi appels au {{ "now"|date('d-m-Y') }}</p></h5>
+        </div>
+    </div>    
+    <div class="row">
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeldate', {'mode': 'an', 'clientid': 'nul'}) }}" class="col-xs-12"/>  
+        </div> 
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeldate', {'mode': 'mois', 'clientid': 'nul'}) }}" class="col-xs-12"/>  
+        </div> 
+    </div>
+    <div class="row">
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeltype', {'mode': 'an', 'clientid': 'nul'}) }}" class="col-xs-12"/>  
+        </div> 
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_appeltype', {'mode': 'mois', 'clientid': 'nul'}) }}" class="col-xs-12"/>  
+        </div> 
+    </div>
+{% endblock %}

@@ -63,6 +63,10 @@ obdo_kuchi_komi_client_user:
     pattern:  /client/update/user/{clientid}
     defaults: { _controller: obdoKuchiKomiBundle:Clients:user }
     
+obdo_kuchi_komi_client_suivi:
+    pattern:  /client/suivi/{clientid}
+    defaults: { _controller: obdoKuchiKomiBundle:Clients:suivi }
+    
 obdo_kuchi_komi_abo_add:
     pattern: /client/abo/{clientid}
     defaults: { _controller: obdoKuchiKomiBundle:Abonnements:add }
@@ -96,6 +100,10 @@ obdo_kuchi_komi_appel_add:
 obdo_kuchi_komi_kuchi_remove:
     pattern: /client/abo/kuchi/{id}/{aboid}
     defaults: { _controller: obdoKuchiKomiBundle:Abonnements:kuchiremove }
+
+obdo_kuchi_komi_appel_suivi:
+    pattern:  /client/appel/suivi/
+    defaults: { _controller: obdoKuchiKomiBundle:Appels:suivi }
         
 #Routes pour les kuchigroups
 obdo_kuchi_komi_kuchi_group:
@@ -187,6 +195,29 @@ obdo_pChart_thanks:
     pattern:  /stat/thanks
     defaults: { _controller: obdopChartBundle:KuchiKomiStat:thanksstat }
     
+obdo_pChart_image:
+    pattern:  /stat/image
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:imagestat }
+    
+obdo_pChart_creationjour:
+    pattern:  /stat/creation/{mode}
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:creationstat }
+    
+obdo_pChart_detail:
+    pattern:  /stat/detail
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:detailstat } 
+
+obdo_pChart_clientkuchikomi:
+    pattern:  /stat/clientkuchikomi/{clientid}
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:clientkuchikomistat }
+   
+obdo_pChart_appeldate:
+    pattern:  /stat/appel/date/{mode}/{clientid}
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:appeldatestat } 
+
+obdo_pChart_appeltype:
+    pattern:  /stat/appel/type/{mode}/{clientid}
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:appeltypestat } 
     
 #Route pour test pChart, à virer ASAP
 #pChart:

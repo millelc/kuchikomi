@@ -7,6 +7,10 @@
 <br>
 <a class="btn btn-primary" href="{{ path('obdo_kuchi_komi_appel_add') }}">
     <span class="glyphicon glyphicon-phone"><span class="glyphicon glyphicon-plus"></span> </span>Nouvel appel</a>
+{% if is_granted('ROLE_SUPER_ADMIN') %}          
+  <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_appel_suivi')}}">
+            <span class="glyphicon glyphicon-zoom-in"></span> Suivi appels</a>
+  {% endif %}
 <table class="table table-hover table-condensed">
     <thead>
         <tr>

@@ -22,8 +22,57 @@
       <a href="{{ path('obdo_pChart', {'nom': 'thanks'}) }}">
           {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbThanks")) }} </a></div>
 </div>
+  {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="row">
+        <div id="tuile" class="col-md-8"> 
+            <a href="{{ path('obdo_pChart', {'nom': 'image'}) }}">
+            {{ render(controller("obdoKuchiKomiBundle:Dashboard:tailledirImage")) }} 
+            </a>
+        </div>
+        <div id="tuile" class="col-md-4"> 
+            <a href="{{ path('obdo_pChart', {'nom': 'detail'}) }}">
+              {{ render(controller("obdoKuchiKomiBundle:Dashboard:tailleDetailKuchiKomi")) }}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_creationjour', {'mode': 'jour'}) }}" class="col-xs-12"/>
+        </div>
+        <div id="tuile" class="col-md-6"> 
+            <img src="{{ path('obdo_pChart_creationjour', {'mode': 'semaine'}) }}" class="col-xs-12"/>
+        </div>
+  </div>
+   <div class="row">
+    <div id="tuile" class="col-md-6"> 
+        <img src="{{ path('obdo_pChart_creationjour', {'mode': 'mois'}) }}" class="col-xs-12"/>
+    </div>
+    <div id="tuile" class="col-md-6"> 
+        <img src="{{ path('obdo_pChart_thanks') }}" class="col-xs-12"/>
+    </div>
+   </div>  
+   <div class="row">
+    <div id="tuile" class="col-md-6"> 
+        <img src="{{ path('obdo_pChart_kuchi') }}" class="col-xs-12"/>
+    </div>
+    <div id="tuile" class="col-md-6"> 
+        <img src="{{ path('obdo_pChart_komi') }}" class="col-xs-12"/>
+    </div>
+   </div> 
+   <div class="row">
+    <div id="tuile" class="col-md-6"> 
+        <img src="{{ path('obdo_pChart_subscription') }}" class="col-xs-12"/>
+    </div>
+    <div id="tuile" class="col-md-6"> 
+        <img src="{{ path('obdo_pChart_kuchikomi') }}" class="col-xs-12"/>
+    </div>
+   </div>   
+{% endif %}
+
 
 {# On définit un nouveau bloc, pour ajouter les graphiques #}
+<div class="row">
 {% block kk_stat_KuchiKomiBundle %}
-{% endblock %}  
+{% endblock %} 
+</div>
 {% endblock %}
