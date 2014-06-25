@@ -38,19 +38,14 @@ class AclData extends AbstractFixture implements ContainerAwareInterface, Ordere
 		
 		// Delete ACL
 		$connection = $manager->getConnection();
-		$connection->exec("DELETE FROM `kuchikomi`.`acl_entries`;");
                 $connection->exec("ALTER TABLE acl_entries AUTO_INCREMENT = 1;");
                 
-                $connection->exec("DELETE FROM `kuchikomi`.`acl_object_identity_ancestors`;");
                 $connection->exec("ALTER TABLE acl_object_identity_ancestors AUTO_INCREMENT = 1;");
                 
-		$connection->exec("DELETE FROM `kuchikomi`.`acl_object_identities`;");
                 $connection->exec("ALTER TABLE acl_object_identities AUTO_INCREMENT = 1;");
                 
-                $connection->exec("DELETE FROM `kuchikomi`.`acl_classes`;");
                 $connection->exec("ALTER TABLE acl_classes AUTO_INCREMENT = 1;");
                 
-		$connection->exec("DELETE FROM `kuchikomi`.`acl_security_identities`;");
                 $connection->exec("ALTER TABLE acl_security_identities AUTO_INCREMENT = 1;");
 	}
 }

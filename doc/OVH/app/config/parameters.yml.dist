@@ -26,3 +26,6 @@ parameters:
     path_kuchigroup_photo: images/kuchigroup/
     
     CityKomiGroupId: 1
+
+    max_photo_dir: 100
+    alert_photo_dir: 60
