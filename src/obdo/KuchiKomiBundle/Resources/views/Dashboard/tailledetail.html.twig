@@ -1,0 +1,6 @@
+Le kuchikomi ayant le message le plus long appartient à {{ name }}, il a été envoyé le {{ quand |date('d-m-Y à H:i:s')}} 
+et comporte {{ taillemax }} caractères. Il y a actuellement {{ nbrmax }} kuchikomi ayant cette longueur, seul le dernier est visible.
+<br />
+<meter min="0" max="{{ taillemax }}" low="1"  value="{{ moyenne }}">{{ moyenne }}</meter>{{ moyenne }} caractères en moyenne</td>
+
+<p class="text-right">Suivi taille message KuchiKomi</p>
