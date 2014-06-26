@@ -25,3 +25,6 @@ services:
         
     obdo_services.Name_photo:
         class: obdo\ServicesBundle\Services\NamePhoto
+    
+    obdo_services.imageLib:
+        class: obdo\ServicesBundle\Services\imageLib

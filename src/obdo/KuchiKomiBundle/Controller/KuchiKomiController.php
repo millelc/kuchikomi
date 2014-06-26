@@ -6,6 +6,7 @@ use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 use obdo\KuchiKomiRESTBundle\Form\KuchiKomiType;
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use obdo\ServicesBundle\Services\imageLib;
 
 class KuchiKomiController extends Controller {
 
@@ -63,6 +64,13 @@ class KuchiKomiController extends Controller {
                                 ->upload($kuchikomi->getPhotoimg(), $photodir, $photoname);
 
                         $kuchikomi->setPhotoLink($photo);
+                        
+                        list($width, $height, $type, $attr) = getimagesize($photo);
+                        if ($width > 640 || $height > 640){
+                            $newimage = new imageLib($photo);
+                            $newimage->resizeImage(640,640,'crop');
+                            $newimage -> saveImage($photo,"50");
+                        }
                     }
 
                     $em = $this->getDoctrine()->getManager();
