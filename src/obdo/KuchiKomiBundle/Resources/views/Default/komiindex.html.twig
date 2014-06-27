@@ -36,7 +36,6 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -58,8 +57,6 @@
                 <td>{{komi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
             {% endif %}
                         
-            <td><a href="{{ path('obdo_kuchi_komi_komi_notification', {'id': komi.id, 'page': page, 'sort': sort}) }}"><span class="glyphicon glyphicon-comment"></span></a></td>
-
         </tr>
         {% endfor %}
     </tbody>
