@@ -1,7 +1,7 @@
 {% extends "obdoKuchiKomiMenuBundle::baseMenu.html.twig" %}
 
 {% block kk_menu_body %}
-    <li><a href="{{ path('obdo_kuchi_komi_homepage') }}">Dashboard</a></li>
+    <li><a href="{{ path('obdo_kuchi_komi_homepage') }}">Tableau de bord</a></li>
     <li><a href="{{ path('obdo_kuchi_komi_user', {'page': 1, 'sort': 'name_up'}) }}">Utilisateurs</a></li>
     <li><a href="{{ path('obdo_kuchi_komi_kuchi_group', {'page': 1, 'sort': 'active_up'}) }}">Groupe de Kuchis</a></li>
     <li><a href="{{ path('obdo_kuchi_komi_kuchi', {'page': 1, 'sort': 'active_up'}) }}">Kuchis</a></li>

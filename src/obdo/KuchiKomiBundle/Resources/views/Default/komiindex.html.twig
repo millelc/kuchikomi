@@ -36,6 +36,7 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
+            <th>OS</th>
         </tr>
     </thead>
     <tbody>
@@ -55,6 +56,12 @@
                 <td>-</td>
             {% else %}
                 <td>{{komi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+            {% endif %}
+            
+            {% if komi.osType == 0%}
+                <td>Android</td>
+            {% else %}
+                <td>iOS</td>
             {% endif %}
                         
         </tr>
