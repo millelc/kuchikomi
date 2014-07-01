@@ -255,12 +255,26 @@ class KuchiController extends Controller {
                         $afaire = 1;
                     }
 
-                    if ($afaire == 1) {
+                    if ($afaire == 1) 
+                    {
                         $em = $this->getDoctrine()->getManager();
                         $em->flush();
                         $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchi->getName() . " updated");
+                        if ($kuchi->getAbonnement() != null)
+                        {
+                            $abonnement = $this->getDoctrine()
+                                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Abonnements')
+                                ->find($kuchi->getAbonnement());
+                        } 
+                        else 
+                        {
+                            $abonnement = new Abonnements();
+                            $abonnement->setTitreabo("Pas d'abonnement en cours");
+                        }
+
                         return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array(
-                                    'Kuchi' => $kuchi,
+                                            'Kuchi' => $kuchi,
+                                            'Abo'   => $abonnement,
                         ));
                     }
                 }
