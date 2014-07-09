@@ -50,11 +50,8 @@ class KuchiGroupController extends Controller {
         }
         
         //le controle ce fait sur les abonnements la méthode à un mauvais nom, elle concerne le kuchi
-//        $hidden = $this->btnafficheAddKomi($kuchiGroup, $id);
-        $hidden = false;
         return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
-                    'KuchiGroup' => $kuchiGroup,
-                    'Btncache' => $hidden,
+                    'KuchiGroup' => $kuchiGroup
         ));
     }
 

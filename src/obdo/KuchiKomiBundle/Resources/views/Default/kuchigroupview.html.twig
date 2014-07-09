@@ -19,29 +19,34 @@
             <li class="list-group-item">Nombre MAX de Kuchi : {{ KuchiGroup.nbMaxKuchi }}</li>
             <li class="list-group-item">Nombre abonnés potentiel : {{ KuchiGroup.nbAboPotentiel }}</li>
         </ul>
-        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_update', {'id': KuchiGroup.id}) }}">
-            <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
-        {% if KuchiGroup.active %}
-            {% set txtbouton = 'Désactiver' %}
-            {% set visible = 'hidden' %}
-        {% else %}
-            {% set txtbouton = 'Activer' %}
-            {% set visible = 'visible' %}
+        {% if is_granted("ROLE_SUPER_ADMIN") %}
+            
+            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_update', {'id': KuchiGroup.id}) }}">
+                <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+        
+        
+            {% if KuchiGroup.active %}
+                {% set txtbouton = 'Désactiver' %}
+                {% set visible = 'hidden' %}
+            {% else %}
+                {% set txtbouton = 'Activer' %}
+                {% set visible = 'visible' %}
+            {% endif %}
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_activ', {'id': KuchiGroup.id}) }}">
+                    <span class="glyphicon glyphicon-remove"></span> {{ txtbouton }}</a>
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_delete', {'id': KuchiGroup.id}) }}" style="visibility:{{ visible }};">
+                    <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
         {% endif %}
-            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_activ', {'id': KuchiGroup.id}) }}">
-                <span class="glyphicon glyphicon-remove"></span> {{ txtbouton }}</a>
-            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_delete', {'id': KuchiGroup.id}) }}" style="visibility:{{ visible }};">
-                <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
-        </div>
+    </div>
         <br />
         <div>{{ message|default('') }}</div>
     <br />
-        {% set btn_visible = 'visible' %}
-        {% if Btncache %}
-            {% set btn_visible = 'hidden' %}
-        {% endif %}    
-    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}" style="visibility:{{ btn_visible }};">
-        <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    
+    {% if is_granted("ROLE_SUPER_ADMIN") %}
+        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}">
+            <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    {% endif %}
+    
     <br />
     <table class="table table-hover table-condensed">
         <thead>
