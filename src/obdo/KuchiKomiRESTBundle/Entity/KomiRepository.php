@@ -56,6 +56,14 @@ class KomiRepository extends EntityRepository
     	{
     		$query->orderBy('komis.timestampSuppression','DESC');
     	}
+        elseif( $sort == "synchronisation_up" )
+    	{
+    		$query->orderBy('komis.timestampLastSynchro','ASC');
+    	}
+    	elseif( $sort == "synchronisation_down" )
+    	{
+    		$query->orderBy('komis.timestampLastSynchro','DESC');
+    	}
     
     	$query->getquery();
     	// On définit l'article à partir duquel commencer la liste

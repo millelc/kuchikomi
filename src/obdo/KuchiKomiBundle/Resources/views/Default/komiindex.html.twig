@@ -36,6 +36,15 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'synchronisation_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Last Sync
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'synchronisation_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
             <th>OS</th>
         </tr>
     </thead>
@@ -57,6 +66,8 @@
             {% else %}
                 <td>{{komi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
             {% endif %}
+            
+            <td>{{komi.timestampLastSynchro|date('Y-m-d H:i:s')}}</td>
             
             {% if komi.osType == 0%}
                 <td>Android</td>

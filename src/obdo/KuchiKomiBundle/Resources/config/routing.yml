@@ -143,7 +143,7 @@ obdo_kuchi_komi_komi:
     pattern:  /komi/{page}/{sort}
     defaults: { _controller: obdoKuchiKomiBundle:Komi:index }
     requirements:
-        sort: active_up|active_down|creation_up|creation_down|suppression_up|suppression_down
+        sort: active_up|active_down|creation_up|creation_down|suppression_up|suppression_down|synchronisation_up|synchronisation_down
 
 obdo_kuchi_komi_komi_notification:
     pattern:  /komi/{id}/{page}/{sort}/notification
@@ -169,7 +169,7 @@ obdo_kuchi_komi_kuchikomi_view:
 obdo_kuchi_komi_kuchikomi_add:
     pattern:  /kuchikomi/add/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:add }
-
+    
 #pour graphiques
 obdo_pChart:
     pattern:  /graphique/{nom}
