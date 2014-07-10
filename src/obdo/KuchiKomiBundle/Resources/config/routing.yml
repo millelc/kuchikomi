@@ -170,6 +170,10 @@ obdo_kuchi_komi_kuchikomi_add:
     pattern:  /kuchikomi/add/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:add }
     
+obdo_kuchi_komi_kuchikomi_delete:
+    pattern:  /kuchikomi/delete/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:delete }
+    
 #pour graphiques
 obdo_pChart:
     pattern:  /graphique/{nom}

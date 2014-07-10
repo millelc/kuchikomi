@@ -98,5 +98,38 @@ class KuchiKomiController extends Controller {
                     'ErrMsgd' => $msgd,
         ));
     }
+    
+    public function deleteAction($id) 
+    {
+        $Logger = $this->container->get('obdo_services.Logger');
+        
+        $kuchikomi = $this->getDoctrine()
+                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomi')
+                ->find($id);
+        
+        if( !$kuchikomi )
+        {
+            $Logger->Error("[WEB-DELETE kuchikomi] KuchiKomi id=" . $id . " unknown...");
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
+        }
+        else 
+        {
+            $kuchikomi->setTimestampSuppression(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+            $kuchikomi->setActive(false);
+
+            $this->getDoctrine()->getManager()->flush();
+            
+            $kuchi = $this->getDoctrine()
+                          ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
+                          ->find($kuchikomi->getKuchiId());
+            $this->container->get('obdo_services.Notifier')
+                            ->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(
+                    'id' => $kuchi->getId()
+            )));
+        }
+    }
+
 
 }

@@ -3,6 +3,24 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">Supprimer un KuchiKomi</h4>
+            </div>
+            <div class="modal-body">
+              Etes vous sur de vouloir supprimer ce KuchiKomi ?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+              <a href="{{ path('obdo_kuchi_komi_kuchikomi_delete', {'id': kuchikomi.id }) }}"><button type="button" class="btn btn-primary">Oui</button></a>
+            </div>
+          </div>
+        </div>
+    </div>
+            
 <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading"><h3>{{ kuchikomi.title }}</h3></div>
@@ -29,6 +47,12 @@
     <li class="list-group-item">Nombre de Merci : {{ kuchikomi.getNbThanks }}</li>
     <li class="list-group-item">Kuchi : <a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchikomi.kuchi.id}) }}">{{kuchikomi.kuchi.name}}</a></li>
   </ul>
+  
+    {% if kuchikomi.active %}
+        <a class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                    <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+    {% endif %}
+                    
 </div>
 
 
