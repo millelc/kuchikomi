@@ -14,8 +14,13 @@
         <ul class="list-group">
             <li class="list-group-item">Identifiant : {{ KuchiGroup.id }}</li>
             <li class="list-group-item">Date de création : {{ KuchiGroup.timestampCreation|date('Y-m-d H:i:s') }}</li>
-            <li class="list-group-item">Date de suppression : {{ KuchiGroup.timestampSuppression|date('Y-m-d H:i:s') }}</li>
-            <li class="list-group-item">Actif : {{ KuchiGroup.active |default('0')}}</li>
+            {% if KuchiGroup.active != 1 %}
+                <li class="list-group-item">Inactif</li>
+                <li class="list-group-item">Date de suppression : {{ KuchiGroup.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+            {% else %}
+                <li class="list-group-item">Actif</li>
+            {% endif %}
+
             <li class="list-group-item">Nombre MAX de Kuchi : {{ KuchiGroup.nbMaxKuchi }}</li>
             <li class="list-group-item">Nombre abonnés potentiel : {{ KuchiGroup.nbAboPotentiel }}</li>
         </ul>

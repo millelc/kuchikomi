@@ -21,7 +21,7 @@ class Notifier
 	}
 
 	
-    public function sendMessage( $deviceId, $osType, $msg, $data )
+    public function sendMessage( $deviceId, $osType, $msg, $data ,$isSilent)
     {
         // Post message
         if( $osType == 0 )
@@ -36,7 +36,12 @@ class Notifier
         else if( $osType == 1 )
         {
             $message = new iOSMessage();
-            $message->setMessage( $msg );
+            
+            // Manage silent push if data=3 dans le cas d'un delete
+            if( !$isSilent )
+            {
+                $message->setMessage( $msg );
+            }
             $message->setDeviceIdentifier( $deviceId );
             $this->container->get('rms_push_notifications')->send($message);
         }  
@@ -52,6 +57,12 @@ class Notifier
     {	
     	$repositoryKuchiAccount = $this->em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
         
+        // Manage iOS silent push if data=3 dans le cas d'un delete
+        $isSilent = false;
+        if( $type == "3")
+        {
+            $isSilent = true;
+        }
         
     	$subscriptions = $kuchi->getSubscriptions();
     	foreach ($subscriptions as $subscription)
@@ -59,7 +70,7 @@ class Notifier
             if( $subscription->getActive() )
             {
                 $komi = $subscription->getKomi();
-                $this->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => $type));
+                $this->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => $type), $isSilent);
             }
     	}
         
@@ -67,7 +78,7 @@ class Notifier
         foreach ($kuchiAccounts as $kuchiAccount)
     	{
             $komi = $kuchiAccount->getKomi();
-            $this->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => "4"));
+            $this->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => "4"), true);
     	}
     }
 }

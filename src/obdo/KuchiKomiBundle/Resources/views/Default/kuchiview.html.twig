@@ -13,8 +13,14 @@
   <ul class="list-group">
     <li class="list-group-item">Identifiant : {{ Kuchi.id }}</li>
     <li class="list-group-item">Date de création : {{ Kuchi.timestampCreation|date('Y-m-d H:i:s') }}</li>
-    <li class="list-group-item">Date de suppression : {{ Kuchi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
-    <li class="list-group-item">Actif : {{ Kuchi.active }}</li>
+
+    {% if Kuchi.active != 1 %}
+        <li class="list-group-item">Inactif</li>
+        <li class="list-group-item">Date de suppression : {{ Kuchi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+    {% else %}
+        <li class="list-group-item">Actif</li>
+    {% endif %}
+
     <li class="list-group-item">Groupe : <a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': Kuchi.kuchiGroup.id}) }}">{{Kuchi.kuchiGroup.name}}</a></li>
     <li class="list-group-item">Abonnement Client : {{ Abo.titreabo }}  </li>
     {% if Abo.titreabo != "Pas d'abonnement en cours" %}

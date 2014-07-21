@@ -89,6 +89,7 @@ class ThanksController extends Controller
             
             // disable current token
             $komi->generateToken();
+            $em->flush();
         }
 
         $response->headers->set('Content-Type', 'text/html');

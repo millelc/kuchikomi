@@ -43,68 +43,78 @@ class SubscriptionController extends Controller
         }
         else
         {
-            $kuchi = $repositoryKuchi->findOneById($id_kuchi);
-            if( !$kuchi )
+            if( $komi->getActive() )
             {
-                // kuchi unknown !
-                $response->setStatusCode(502);
-                $Logger->Error("[POST rest/subscription] 502 - Invalid Kuchi id");
-            }
-            else
-            {
-            	if( $kuchi->getActive() )
-            	{
-                    if( $hash == sha1("POST /rest/subscription" . $komi->getToken() ) )
+            
+                $kuchi = $repositoryKuchi->findOneById($id_kuchi);
+                if( !$kuchi )
+                {
+                    // kuchi unknown !
+                    $response->setStatusCode(502);
+                    $Logger->Error("[POST rest/subscription] 502 - Invalid Kuchi id");
+                }
+                else
+                {
+                    if( $kuchi->getActive() )
                     {
-                        $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
-                        if( !$subscription )
+                        if( $hash == sha1("POST /rest/subscription" . $komi->getToken() ) )
                         {
-                            $subscription = new Subscription();
-                            $subscription->setKomi($komi);
-                            $subscription->setKuchi($kuchi);
-                            $subscription->setType($type);
-
-                            $em->persist($subscription);
-                            $em->flush();
-                            $response->setStatusCode(200);
-                            $Logger->Info("[POST rest/subscription] 200 - New subscription (". $komi->getRandomId() ."-". $kuchi->getName().") added");
-                        }
-                        else
-                        {
-                            if( !$subscription->getActive() )
+                            $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+                            if( !$subscription )
                             {
-                                $subscription->setActive(true);
+                                $subscription = new Subscription();
+                                $subscription->setKomi($komi);
+                                $subscription->setKuchi($kuchi);
                                 $subscription->setType($type);
+
+                                $em->persist($subscription);
                                 $em->flush();
                                 $response->setStatusCode(200);
-                                $Logger->Info("[POST rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") re-activated");
+                                $Logger->Info("[POST rest/subscription] 200 - New subscription (". $komi->getRandomId() ."-". $kuchi->getName().") added");
                             }
                             else
                             {
-                                // subscription already exist and active
-                                $response->setStatusCode(511);
-                                $Logger->Warning("[POST rest/subscription] 511 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already exist");
+                                if( !$subscription->getActive() )
+                                {
+                                    $subscription->setActive(true);
+                                    $subscription->setType($type);
+                                    $em->flush();
+                                    $response->setStatusCode(200);
+                                    $Logger->Info("[POST rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") re-activated");
+                                }
+                                else
+                                {
+                                    // subscription already exist and active
+                                    $response->setStatusCode(511);
+                                    $Logger->Warning("[POST rest/subscription] 511 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") already exist");
+                                }
                             }
                         }
+                        else
+                        {
+                            // hash invalid
+                            $response->setStatusCode(510);
+                            $Logger->Error("[POST rest/subscription] 510 - hash invalide");
+                        }            		
                     }
-                    else
+                    else 
                     {
-                        // hash invalid
-                        $response->setStatusCode(510);
-                        $Logger->Error("[POST rest/subscription] 510 - hash invalide");
-                    }            		
-            	}
-            	else 
-            	{
-                    // Kuchi inactif
-                    $response->setStatusCode(508);
-                    $Logger->Warning("[POST rest/subscription] 508 - Kuchi id " . $kuchi->getId() . " inactif");
-            	}
-
+                        // Kuchi inactif
+                        $response->setStatusCode(508);
+                        $Logger->Warning("[POST rest/subscription] 508 - Kuchi id " . $kuchi->getId() . " inactif");
+                    }
+                }
+            }
+            else
+            {
+                // Komi inactif
+                $response->setStatusCode(512);
+                $Logger->Warning("[POST rest/subscription] 512 - Komi id " . $komi->getId() . " inactif");
             }
             
             // disable current token
             $komi->generateToken();
+            $em->flush();
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -188,6 +198,7 @@ class SubscriptionController extends Controller
             
             // disable current token
             $komi->generateToken();
+            $em->flush();
         }
 
         $response->headers->set('Content-Type', 'text/html');

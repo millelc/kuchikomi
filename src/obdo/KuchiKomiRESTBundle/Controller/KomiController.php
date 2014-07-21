@@ -186,6 +186,7 @@ class KomiController extends Controller
             
             // disable current token
             $komi->generateToken();
+            $em->flush();
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -263,6 +264,7 @@ class KomiController extends Controller
             
             // disable current token
             $komi->generateToken();
+            $em->flush();
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -325,6 +327,8 @@ class KomiController extends Controller
                     $this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
 
                     $komi->setCurrentTimestampLastSynchroSaved();
+                    $komi->generateToken();
+                    
                     $em->flush();
                     $Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
 
@@ -354,6 +358,7 @@ class KomiController extends Controller
 
             // disable current token
             $komi->generateToken();
+            $em->flush();
     	}
     
     	$response->headers->set('Content-Type', 'text/html');
@@ -402,6 +407,7 @@ class KomiController extends Controller
 
             // disable current token
             $komi->generateToken();
+            $em->flush();
         }
     
     	$response->headers->set('Content-Type', 'text/html');

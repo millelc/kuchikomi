@@ -260,6 +260,7 @@ class KuchiController extends Controller
                             $deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomisForKuchi( $kuchiAccount );
 
                             $kuchiAccount->setCurrentTimestampLastSynchroSaved();
+                            $kuchiAccount->generateToken();
                             $em->flush();
                             $Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
 

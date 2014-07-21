@@ -42,6 +42,12 @@ class KuchiKomiController extends Controller {
             $form->bind($request);
 
             if ($form->isValid()) {
+                
+                if ($kuchikomi->getDetails() == null)
+                {
+                    $kuchikomi->setDetails("");
+                }
+                
                 // on verifie que la date de début est inférieure ou  égale à la date de fin
                 if ($kuchikomi->getTimestampEndMs() < $kuchikomi->getTimestampBeginMs()){
                     $msgd = 'La fin ne peut avoir lieu avant le commencement';

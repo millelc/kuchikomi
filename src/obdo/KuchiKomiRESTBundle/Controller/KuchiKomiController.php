@@ -29,6 +29,7 @@ class KuchiKomiController extends Controller {
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');
+        $Notifier = $this->container->get('obdo_services.Notifier');
 
         $em = $this->getDoctrine()->getManager();
 
@@ -117,7 +118,7 @@ class KuchiKomiController extends Controller {
                             $em->persist($kuchikomi);
                             $em->flush();
                         
-                            $this->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
+                            $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
                         }    
                         $response->setStatusCode(200);
                         $Logger->Info("[POST rest/kuchikomi] 200 - kuchikomi");
@@ -143,34 +144,6 @@ class KuchiKomiController extends Controller {
     }
 
     /**
-     * Set a new notification to all Komi suscribers
-     *
-     * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi
-     * @return Kuchi
-     */
-    private function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi, $type) 
-    {
-        $em = $this->getDoctrine()->getManager();
-        $Notifier = $this->container->get('obdo_services.Notifier');
-        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
-
-
-        $subscriptions = $kuchi->getSubscriptions();
-        foreach ($subscriptions as $subscription) {
-            if ($subscription->getActive()) {
-                $komi = $subscription->getKomi();
-                $Notifier->sendMessage($komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => $type));
-            }
-        }
-
-        $kuchiAccounts = $repositoryKuchiAccount->getKuchiAccountForKuchi($kuchi);
-        foreach ($kuchiAccounts as $kuchiAccount) {
-            $komi = $kuchiAccount->getKomi();
-            $Notifier->sendMessage($komi->getGcmRegId(), $komi->getOsType(), $kuchikomi->getTitle(), array("type" => "4"));
-        }
-    }
-
-    /**
      * @Delete("/rest/kuchikomi/{komiId}/{id_kuchi}/{id_kuchikomi}/{hash}")
      * @return array
      * @View()
@@ -179,6 +152,8 @@ class KuchiKomiController extends Controller {
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');
+        $Notifier = $this->container->get('obdo_services.Notifier');
+        
         $em = $this->getDoctrine()->getManager();
 
         $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
@@ -233,7 +208,7 @@ class KuchiKomiController extends Controller {
 
                             $em->flush();
 
-                            $this->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
+                            $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
 
                             $response->setStatusCode(200);
                             $Logger->Info("[DELETE rest/kuchikomi/] 200 - KuchiKomi id=" . $kuchikomi->getId() . " deleted");
