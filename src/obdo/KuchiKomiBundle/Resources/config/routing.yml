@@ -132,12 +132,10 @@ obdo_kuchi_komi_kuchi_group_delete:
     pattern:  /kuchigroup/delete/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiGroup:delete }
 
-#Routes pour les kuchis
-obdo_kuchi_komi_kuchi:
-    pattern:  /kuchi/{page}/{sort}
-    defaults: { _controller: obdoKuchiKomiBundle:Kuchi:index }
-    requirements:
-        sort: active_up|active_down|name_up|name_down|creation_up|creation_down|suppression_up|suppression_down|group_up|group_down
+#Routes pour les komis
+obdo_kuchi_komi_komi_view:
+    pattern:  /komi/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:Komi:view }
 
 obdo_kuchi_komi_komi:
     pattern:  /komi/{page}/{sort}
@@ -149,6 +147,14 @@ obdo_kuchi_komi_komi_notification:
     pattern:  /komi/{id}/{page}/{sort}/notification
     defaults: { _controller: obdoKuchiKomiBundle:Komi:notification }
     
+
+#Routes pour les kuchis
+obdo_kuchi_komi_kuchi:
+    pattern:  /kuchi/{page}/{sort}
+    defaults: { _controller: obdoKuchiKomiBundle:Kuchi:index }
+    requirements:
+        sort: active_up|active_down|name_up|name_down|creation_up|creation_down|suppression_up|suppression_down|group_up|group_down
+
 obdo_kuchi_komi_kuchi_add:
     pattern:  /kuchi/new/{groupId}
     defaults: { _controller: obdoKuchiKomiBundle:Kuchi:add }

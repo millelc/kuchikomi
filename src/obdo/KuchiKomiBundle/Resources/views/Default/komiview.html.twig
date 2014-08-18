@@ -1,0 +1,76 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+{% block kk_body_KuchiKomiBundle %}
+        
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h3>Komi random Id = {{ Komi.randomId }}</h3></div>
+  
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Date de création : {{ Komi.timestampCreation|date('Y-m-d H:i:s') }}</li>
+
+    {% if Komi.active != 1 %}
+        <li class="list-group-item">Inactif</li>
+        <li class="list-group-item">Date de suppression : {{ Komi.timestampSuppression|date('Y-m-d H:i:s') }}</li>
+    {% else %}
+        <li class="list-group-item">Actif</li>
+    {% endif %}
+</div>
+
+<br>
+
+{#
+<table class="table table-hover table-condensed">
+    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_add', {'id': Kuchi.id}) }}">
+            <span class="glyphicon glyphicon-pencil"></span> Nouveau KuchiKomi</a>
+            <br>
+    <thead>
+        <tr>
+            <th>Etat</th>
+            <th>Titre</th>
+            <th>Création</th>
+            <th>Suppression</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Merci</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for kuchikomi in Kuchi.kuchikomis %}
+        <tr>
+            {% if kuchikomi.active %}
+                <td><p class="text-info">Actif</p></td>
+            {% else %}
+                <td><p class="text-danger">Inactif</p></td>
+            {% endif %}
+            
+            <td>{{kuchikomi.title}}</td>
+
+            <td>{{kuchikomi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+            
+            {% if kuchikomi.active %}
+                <td>-</td>
+            {% else %}
+                <td>{{kuchikomi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+            {% endif %}
+            
+            <td>{{kuchikomi.timestampBegin|date('Y-m-d H:i:s')}}</td>
+            
+            <td>{{kuchikomi.timestampEnd|date('Y-m-d H:i:s')}}</td>
+            
+            <td>{{kuchikomi.getNbThanks}}</td>
+
+            <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_view', {'id': kuchikomi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+           
+        </tr>
+        {% endfor %}
+    </tbody>
+    <foot>
+    </tfoot>
+</table>
+#}
+
+{% endblock %}

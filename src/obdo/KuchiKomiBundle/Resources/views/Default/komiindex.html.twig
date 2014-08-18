@@ -46,6 +46,7 @@
                 </a>
             </th>
             <th>OS</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -74,7 +75,8 @@
             {% else %}
                 <td>iOS</td>
             {% endif %}
-                        
+            
+            <td><a href="{{ path('obdo_kuchi_komi_komi_view', {'id': komi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
         </tr>
         {% endfor %}
     </tbody>
