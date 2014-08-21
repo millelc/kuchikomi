@@ -56,7 +56,7 @@ class Clients
     /**
      * @var string
      *
-     * @ORM\Column(name="noruecli", type="string", length=20)
+     * @ORM\Column(name="noruecli", type="string", length=20, nullable=true)
      */
     private $noruecli;
 
@@ -338,7 +338,12 @@ class Clients
      */
     public function getNoruecli()
     {
-        return $this->noruecli;
+        $result = "";
+        if( !$this->noruecli )
+        {
+            $result = $this->noruecli;
+        }
+        return $result;
     }
 
     /**
