@@ -105,7 +105,7 @@ class KomiController extends Controller
                     $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
 
                     // Post message
-                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"));               
+                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"), false);               
                 }
                 else
                 {
