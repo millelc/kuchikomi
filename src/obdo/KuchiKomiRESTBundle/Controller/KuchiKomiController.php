@@ -100,8 +100,7 @@ class KuchiKomiController extends Controller {
                                 $photoByteStream = base64_decode($kuchikomiArray['kuchikomi']['photo']);
 
                                 $path = $this->get('kernel')->getRootDir() . "/../web/" . $kuchikomi->getPhotoLink();
-                                $Logger->Info($path);
-
+                                
                                 $fp = fopen($path, 'xb');
 
                                 if (!$fp) 
@@ -121,7 +120,7 @@ class KuchiKomiController extends Controller {
                             $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
                         }    
                         $response->setStatusCode(200);
-                        $Logger->Info("[POST rest/kuchikomi] 200 - kuchikomi");
+                        //$Logger->Info("[POST rest/kuchikomi] 200 - kuchikomi");
                     } 
                     else 
                     {

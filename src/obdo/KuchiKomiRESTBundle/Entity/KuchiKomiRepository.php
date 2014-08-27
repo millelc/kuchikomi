@@ -20,6 +20,18 @@ class KuchiKomiRepository extends EntityRepository
                     ->getSingleScalarResult();
     }
     
+    public function getKuchiKomisToDisable()
+    {
+        $dateToCompare = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $dateToCompare->sub(new \DateInterval('P15D'));
+        
+    	$qb = $this->createQueryBuilder('kuchikomi')
+                    ->Where('kuchikomi.active = true AND kuchikomi.id > 1 AND kuchikomi.timestampEnd < :dateToCompare')
+                    ->setParameter('dateToCompare', $dateToCompare);
+    
+    	return $qb->getQuery()->getResult();
+    }
+    
     public function getAddedKuchiKomis( $komi )
     {
     	$qb = $this->createQueryBuilder('kuchikomi')

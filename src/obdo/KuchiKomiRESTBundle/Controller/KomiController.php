@@ -102,7 +102,7 @@ class KomiController extends Controller
                     $em->flush();
                     $response->setStatusCode(200);
 
-                    $Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
+                    //$Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
 
                     // Post message
                     $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"), false);               
@@ -165,13 +165,13 @@ class KomiController extends Controller
         
                     $em->flush();
                     $response->setStatusCode(200);
-                    $Logger->Info("[DELETE rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." unregistered");
+                    //$Logger->Info("[DELETE rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." unregistered");
                 }
                 else
                 {
                     // komi already inactive
                     $response->setStatusCode(508);
-                    $Logger->Info("[DELETE rest/komi/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." already inactive");
+                    $Logger->Warning("[DELETE rest/komi/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." already inactive");
                 }
                 
                     // Delete all kuchiAccount linked to this Komi
@@ -240,7 +240,7 @@ class KomiController extends Controller
                         $em->flush();
 
                         $response->setStatusCode(200);
-                        $Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
+                        //$Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
                     }
                     else
                     {
@@ -330,7 +330,7 @@ class KomiController extends Controller
                     $komi->generateToken();
                     
                     $em->flush();
-                    $Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
+                    //$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
 
                     return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
                                              'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
@@ -396,7 +396,7 @@ class KomiController extends Controller
                 $komi->validateLastSynchro();
                 $em->flush();
                 $response->setStatusCode(200);
-                $Logger->Info("[POST rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronization ACK");
+                //$Logger->Info("[POST rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronization ACK");
             }
             else
             {

@@ -94,7 +94,7 @@ class SubscriptionGroupController extends Controller
                                     $em->persist($subscriptionGroup);
                                     $em->flush();
                                     $response->setStatusCode(200);
-                                    $Logger->Info("[POST rest/subscriptions] 200 - New subscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") added");
+                                    //$Logger->Info("[POST rest/subscriptions] 200 - New subscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") added");
                                 }
                                 else
                                 {
@@ -118,7 +118,7 @@ class SubscriptionGroupController extends Controller
 
                                         $em->flush();
                                         $response->setStatusCode(200);
-                                        $Logger->Info("[POST rest/subscriptions] 200 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") re-activated");
+                                        //$Logger->Info("[POST rest/subscriptions] 200 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") re-activated");
                                     }
                                     else
                                     {
@@ -221,7 +221,7 @@ class SubscriptionGroupController extends Controller
                             $subscriptionGroup->setCurrentTimestampSuppression();
                             $subscriptionGroup->setActive(false);
                             $response->setStatusCode(200);
-                            $Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");
+                            //$Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");
                     	}
                     }
                     

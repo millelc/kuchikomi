@@ -70,7 +70,7 @@ class SubscriptionController extends Controller
                                 $em->persist($subscription);
                                 $em->flush();
                                 $response->setStatusCode(200);
-                                $Logger->Info("[POST rest/subscription] 200 - New subscription (". $komi->getRandomId() ."-". $kuchi->getName().") added");
+                                //$Logger->Info("[POST rest/subscription] 200 - New subscription (". $komi->getRandomId() ."-". $kuchi->getName().") added");
                             }
                             else
                             {
@@ -80,7 +80,7 @@ class SubscriptionController extends Controller
                                     $subscription->setType($type);
                                     $em->flush();
                                     $response->setStatusCode(200);
-                                    $Logger->Info("[POST rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") re-activated");
+                                    //$Logger->Info("[POST rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") re-activated");
                                 }
                                 else
                                 {
@@ -184,7 +184,7 @@ class SubscriptionController extends Controller
                             
                             $em->flush();
                             $response->setStatusCode(200);
-                            $Logger->Info("[DELETE rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") de-activated");                            
+                            //$Logger->Info("[DELETE rest/subscription] 200 - Subscription (". $komi->getRandomId() ."-". $kuchi->getName().") de-activated");                            
                         }
                     }
                 }

@@ -88,7 +88,7 @@ class KuchiController extends Controller
                             $kuchi->getAddress()->setCity( $kuchiArray['kuchi']['city'] );
 
                             $response->setStatusCode(200);
-                            $Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." updated");
+                            //$Logger->Info("[PUT rest/kuchi/{komi}/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." updated");
                         }
                         else
                         {
@@ -171,7 +171,7 @@ class KuchiController extends Controller
                             $kuchiAccount->resetTimestampLastSynchro();
 
                             $response->setStatusCode(200);
-                            $Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." last synchro reseted");
+                            //$Logger->Info("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." last synchro reseted");
                         }
                         else
                         {
@@ -262,7 +262,7 @@ class KuchiController extends Controller
                             $kuchiAccount->setCurrentTimestampLastSynchroSaved();
                             $kuchiAccount->generateToken();
                             $em->flush();
-                            $Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
+                            //$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
 
                             return array('STATS' => array(
                                                             'NB_SUB' => $kuchi->getNbSubscriptions(),
@@ -351,7 +351,7 @@ class KuchiController extends Controller
                         $kuchiAccount->validateLastSynchro();
                         $em->flush();
                         $response->setStatusCode(200);
-                        $Logger->Info("[POST rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronization ACK");
+                        //$Logger->Info("[POST rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronization ACK");
                     }
                     else
                     {

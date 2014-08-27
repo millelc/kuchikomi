@@ -70,7 +70,7 @@ class ThanksController extends Controller
 
 
                         $response->setStatusCode(200);
-                        $Logger->Info("[POST rest/thanks/] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
+                        //$Logger->Info("[POST rest/thanks/] 200 - new Thanks (".$komi->getRandomId()."-".$kuchikomi->getId().") added");
                     }
                     else 
                     {
