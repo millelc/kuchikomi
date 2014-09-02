@@ -23,7 +23,7 @@ class KuchiKomiRepository extends EntityRepository
     public function getKuchiKomisToDisable()
     {
         $dateToCompare = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $dateToCompare->sub(new \DateInterval('P15D'));
+        $dateToCompare->sub(new \DateInterval('P14D'));
         
     	$qb = $this->createQueryBuilder('kuchikomi')
                     ->Where('kuchikomi.active = true AND kuchikomi.id > 1 AND kuchikomi.timestampEnd < :dateToCompare')
