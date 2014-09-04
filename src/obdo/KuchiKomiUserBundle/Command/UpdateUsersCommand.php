@@ -21,7 +21,6 @@ class UpdateUsersCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine')->getManager();
         
         $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
-        $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         
         $kuchiGroups = $repositoryKuchiGroup->findAll();
         foreach($kuchiGroups as $kuchiGroup)
