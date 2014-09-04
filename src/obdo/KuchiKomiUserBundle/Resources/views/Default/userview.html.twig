@@ -28,7 +28,7 @@
             <li class="list-group-item"> L'utilisateur a droit au Kuchis :
                 <ul class="list-group">
                     {% for kuchi in kuchis %}
-                        <li class="list-group-item">{{ kuchi.name }}</li>
+                        <li class="list-group-item">{{ kuchi.kuchiGroup.name }}/{{ kuchi.name }}</li>
                     {% endfor %} 
                 </ul>
                 {% if is_granted('ROLE_ADMIN') %}

@@ -65,8 +65,7 @@ class SubscriptionRepository extends EntityRepository
     	$qb = $this->createQueryBuilder('subscription')
                 ->select('COUNT(subscription.komi)')
                 ->leftjoin('subscription.kuchi','kuchi')
-                ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
-                ->join('kuchiGroup.users', 'users')
+                ->join('kuchi.users', 'users')
                 ->andWhere('users.id = :userid')
                 ->setParameter('userid', $userid)
                 ->andWhere('subscription.active = 1');

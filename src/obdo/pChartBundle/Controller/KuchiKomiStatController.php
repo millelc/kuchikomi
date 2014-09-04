@@ -321,7 +321,7 @@ class KuchiKomiStatController extends Controller {
             $dark_grey = imagecolorallocate($image, 102, 102, 102);
             $white = imagecolorallocate($image, 255, 255, 255);
             $font_path = __DIR__ . "/../Resources/fonts/calibri.ttf";
-            $string = '0 merçi';
+            $string = '0 merci';
             imagettftext($image, 50, 0, 10, 60, $white, $font_path, $string);
 
             ob_start();
