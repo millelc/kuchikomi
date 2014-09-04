@@ -161,8 +161,7 @@ class KuchiRepository extends EntityRepository
     {
         return $this->createQueryBuilder('kuchi')
                     ->select('COUNT(kuchi)')
-                    ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
-                    ->join('kuchiGroup.users', 'users')
+                    ->join('kuchi.users', 'users')
                     ->where('users.id = :userid')
                     ->setParameter('userid', $userid)
                     ->getQuery()
@@ -170,7 +169,8 @@ class KuchiRepository extends EntityRepository
     }
     
     //pour alimentation formulaire le getResult ce fait dans le formulaire
-    public function getKuchisByUserId($userid){
+    public function getKuchisByUserId($userid)
+    {
         //il faut aller chrercher les groupes du userid puis les kuchis des groupes
         $qb = $this->createQueryBuilder('kuchi')
                 ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
@@ -181,30 +181,32 @@ class KuchiRepository extends EntityRepository
         return $qb;
     }
     
-    public function getKuchiListByUserId($nombreParPage, $page, $sort, $userid, $userrole){
+    public function getKuchiListByUserId($nombreParPage, $page, $sort, $userid, $userrole)
+    {
         if ($page < 1)
         {
             throw new \InvalidArgumentException('L\'argument $page ne peut être inférieur à 1 (valeur : "'.$page.'").');
         }
         
-       if($userrole == 'ROLE_KUCHI'){
+        if($userrole == 'ROLE_KUCHI')
+        {
             $query = $this->createQueryBuilder('kuchis')
                           ->leftJoin('kuchis.kuchiGroup', 'kuchiGroup')
                           ->addSelect('kuchiGroup')
                           ->join('kuchis.users', 'users')
                           ->where('users.id = :userid')
                           ->setParameter('userid', $userid);
-       }
-       else{
-           $query = $this->createQueryBuilder('kuchis')
+        }
+        else
+        {
+            $query = $this->createQueryBuilder('kuchis')
                           ->leftJoin('kuchis.kuchiGroup', 'kuchiGroup')
                           ->addSelect('kuchiGroup')
                           ->join('kuchiGroup.users', 'users')
                           ->where('users.id = :userid')
                           ->setParameter('userid', $userid);
-       }
+        }
            
-        
         if( $sort == "active_up")
         {
             $query->orderBy('kuchis.active','DESC');

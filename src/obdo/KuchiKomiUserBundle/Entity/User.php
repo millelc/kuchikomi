@@ -4,13 +4,29 @@ namespace obdo\KuchiKomiUserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\AttributeOverrides;
+use Doctrine\ORM\Mapping\AttributeOverride;
+use Doctrine\ORM\Mapping\Column;
+
 
 /**
  * User
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="obdo\KuchiKomiUserBundle\Entity\UserRepository")
+ * 
+ * @AttributeOverrides({
+ *      @AttributeOverride(name="emailCanonical",
+ *          column=@Column(
+ *              name     = "emailCanonical",
+ *              type     = "string",
+ *              unique   = false,
+                length   = 255
+ *          )
+ *      )
+ * })
  */
+       
 class User extends BaseUser {
 
     /**
@@ -45,6 +61,9 @@ class User extends BaseUser {
    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Clients", inversedBy="users")
    */
     private $client;
+    
+    
+    protected $emailCanonical;
 
     public function __construct() {
         parent::__construct();

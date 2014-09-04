@@ -14,12 +14,15 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 
 
 
-class UserController extends Controller {
+class UserController extends Controller 
+{
 
-    public function indexAction($page, $sort) {
+    public function indexAction($page, $sort) 
+    {
         $em = $this->getDoctrine()->getManager();
 
         $users = $em->getRepository('obdoKuchiKomiUserBundle:User')->getUsers(25, $page, $sort);
+        
         return $this->render('obdoKuchiKomiUserBundle:Default:userindex.html.twig', array(
                     'users' => $users,
                     'page' => $page,
@@ -28,31 +31,39 @@ class UserController extends Controller {
         ));
     }
 
-    public function ajoutAction($clientid) {
+    public function ajoutAction($clientid) 
+    {
         $user = new User();
       
         $form = $this->createForm(new UserType($this->getRoles()), $user);
         
          //si création d'un user depuis écran détail client
         $cliid = 0;
-        if ($clientid != 'new'){
+        if ($clientid != 'new')
+        {
             $cliid = $clientid;
         }
 
         // On récupère la requête
         $request = $this->get('request');
 
-        if ($request->getMethod() == 'POST') {
-
+        if ($request->getMethod() == 'POST') 
+        {
             $form->bind($request);
 
-            if ($form->isValid()) {
+            if ($form->isValid()) 
+            {
                 $username = $user->getUsername();
                 $userpwd = $user->getPassword();
                 $userrole = $user->getRoles();
                 $usermail = $user->getEmail();
                 
-                $userclient = $user->getClient()->getId();
+                $userclient = 0;
+                if( $user->getClient() != null )
+                {
+                    $userclient = $user->getClient()->getId();
+                }
+                
                 $url = $this->generateUrl('obdo_kuchi_komi_user_add_suite', array('username' => $username,
                     'usermail' => $usermail,
                     'userclient' => $userclient,
@@ -67,15 +78,18 @@ class UserController extends Controller {
         ));
     }
 
-    public function ajoutsuiteAction($username, $usermail, $userclient, $userpwd, $userrole) {
+    public function ajoutsuiteAction($username, $usermail, $userclient, $userpwd, $userrole) 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
 
         $userk = new User();
         $userk->setUsername($username);
         $userk->setPassword($userpwd);
         $userk->setEmail($usermail);
-        if ($userclient != null)
+        if ($userclient != 0)
+        {
             $userk->setClient($userclient);
+        }
 
         $currentroles = unserialize($userrole);
         $currentrole = $currentroles[0];
@@ -85,10 +99,13 @@ class UserController extends Controller {
         
         $objets = array();
 
-        if ($currentrole == 'ROLE_KUCHI') {
+        if ($currentrole == 'ROLE_KUCHI') 
+        {
             $formk = $this->createForm(new UserKuchiType($this->getRoles(), $this->getUser()->getId(), $userk));
             $formerr = $formk;
-        } else {
+        } 
+        else 
+        {
             $formkg = $this->createForm(new UserKuchiGroupType($this->getRoles(), $this->getUser()->getId(), $userk));
             $formerr = $formkg;
         }
@@ -96,33 +113,51 @@ class UserController extends Controller {
 
         $requestk = $this->get('request');
 
-        if ($requestk->getMethod() == 'POST') {
-            if ($currentrole == 'ROLE_KUCHI') {
+        if ($requestk->getMethod() == 'POST') 
+        {
+            if ($currentrole == 'ROLE_KUCHI') 
+            {
                 $formk->bind($requestk);
                 $formerr = $formk;
-            } else {
+            } 
+            else 
+            {
                 $formkg->bind($requestk);
                 $formerr = $formkg;
             }
 
-            if (($formk != null && $formk->isValid()) || ($formkg != null && $formkg->isValid())) {
+            if (($formk != null && $formk->isValid()) || ($formkg != null && $formkg->isValid())) 
+            {
                 $userk->setPlainPassword($userpwd);
                 $userk->setEnabled(true);
                 $userk->setRoles($currentroles);
 
-
-                if ($currentrole == 'ROLE_KUCHI') {
-                    if ($formk['kuchis']->getData() != null) {
-                        foreach ($formk['kuchis']->getData() as $k) {
+                if ($currentrole == 'ROLE_KUCHI')
+                {
+                    if ($formk['kuchis']->getData() != null) 
+                    {
+                        foreach ($formk['kuchis']->getData() as $k) 
+                        {
                             $userk->addKuchi($k);
                             $objets[] = $k;
                         }
                     }
-                } else {
-                    if ($formkg['kuchigroups']->getData() != null) {
-                        foreach ($formkg['kuchigroups']->getData() as $kg) {
+                }
+                else
+                {
+                    if ($formkg['kuchigroups']->getData() != null) 
+                    {
+                        foreach ($formkg['kuchigroups']->getData() as $kg) 
+                        {
                             $userk->addKuchiGroup($kg);
                             $objets[] = $kg;
+                            
+                            // Add all the kuchi from the groupe
+                            $kuchis = $kg->getKuchis();
+                            foreach($kuchis as $kuchi)
+                            {
+                                $userk->addKuchi($kuchi);
+                            }
                         }
                     }
                 }
@@ -133,16 +168,19 @@ class UserController extends Controller {
                 
                 // ajout acl nouvel utilisateur apres flush sinon user pas connu
                
-                foreach($objets as $objet){
-                   AclController::addAcl($objet, $userk, $this); 
-                   // si je suis pas kuchi, il faut ajouter l'acl des kuchis 
-                   // du groupe à l'utilisateur
-                   if ($currentrole != 'ROLE_KUCHI'){
-                       $kuchis = $objet->getKuchis();
-                       foreach($kuchis as $kuchi){
+                foreach($objets as $objet)
+                {
+                    AclController::addAcl($objet, $userk, $this); 
+                    // si je suis pas kuchi, il faut ajouter l'acl des kuchis 
+                    // du groupe à l'utilisateur
+                    if ($currentrole != 'ROLE_KUCHI')
+                    {
+                        $kuchis = $objet->getKuchis();
+                        foreach($kuchis as $kuchi)
+                        {
                            AclController::addAcl($kuchi, $userk, $this); 
-                       }
-                   }
+                        }
+                    }
                 }
                                 
                 $Logger->Info("[KuchiUser] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $userk->getUsername() . " added");
@@ -151,16 +189,22 @@ class UserController extends Controller {
                                     'page' => 1,
                                     'sort' => 'name_up',
                 )));
-            } else
+            } 
+            else
+            {
                 echo $formerr;
+            }
         }
-        if ($currentrole == 'ROLE_KUCHI') {
+        if ($currentrole == 'ROLE_KUCHI') 
+        {
 
             return $this->render('obdoKuchiKomiUserBundle:Default:userkuchiadd.html.twig', array(
                         'form' => $formk->createView(),
                         'nomuser' => $userk->getUsername(),
             ));
-        } else {
+        } 
+        else 
+        {
 
             return $this->render('obdoKuchiKomiUserBundle:Default:userkuchigroupadd.html.twig', array(
                         'form' => $formkg->createView(),
@@ -169,7 +213,8 @@ class UserController extends Controller {
         }
     }
 
-    public function viewAction($id) {
+    public function viewAction($id) 
+    {
         $user = $this->getDoctrine()
                 ->getRepository('obdoKuchiKomiUserBundle:User')
                 ->find($id);
@@ -193,7 +238,8 @@ class UserController extends Controller {
         ));
     }
 
-    public function addaclkuchigroupAction($userid){
+    public function addaclkuchigroupAction($userid)
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $user = $this->getDoctrine()
@@ -204,20 +250,26 @@ class UserController extends Controller {
        
         $requestk = $this->get('request');
 
-        if ($requestk->getMethod() == 'POST') {
+        if ($requestk->getMethod() == 'POST') 
+        {
             $formkg->bind($requestk);
-            if ($formkg->isValid()){
-                if ($formkg['kuchigroups']->getData() != null) {
+            if ($formkg->isValid())
+            {
+                if ($formkg['kuchigroups']->getData() != null) 
+                {
                     
-                    foreach ($formkg['kuchigroups']->getData() as $kg) {
-                        try{
+                    foreach ($formkg['kuchigroups']->getData() as $kg) 
+                    {
+                        try
+                        {
                             $user->addKuchiGroup($kg);
                         }
                         catch(\Exception $e) {
                         }
                         AclController::addAcl($kg, $user, $this); 
                         $kuchis = $kg->getKuchis();
-                        foreach($kuchis as $kuchi){
+                        foreach($kuchis as $kuchi)
+                        {
                             AclController::addAcl($kuchi, $user, $this); 
                         }
                     }
@@ -238,7 +290,8 @@ class UserController extends Controller {
             ));
     }
 
-    public function addaclkuchiAction($userid){
+    public function addaclkuchiAction($userid)
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $user = $this->getDoctrine()
@@ -249,15 +302,21 @@ class UserController extends Controller {
     
         $requestk = $this->get('request');
 
-        if ($requestk->getMethod() == 'POST') {
+        if ($requestk->getMethod() == 'POST') 
+        {
             $formk->bind($requestk);
-            if ($formk->isValid()){
-                if ($formk['kuchis']->getData() != null) {
-                    foreach ($formk['kuchis']->getData() as $k) {
-                        try{
+            if ($formk->isValid())
+            {
+                if ($formk['kuchis']->getData() != null) 
+                {
+                    foreach ($formk['kuchis']->getData() as $k) 
+                    {
+                        try
+                        {
                             $user->addKuchi($k);
                         }
-                        catch(\Exception $e) {
+                        catch(\Exception $e) 
+                        {
                         }
                         AclController::addAcl($k, $user, $this);
                     }
@@ -276,7 +335,9 @@ class UserController extends Controller {
                         'user' => $user,
             ));
     }
-    protected function getRoles() {
+    
+    protected function getRoles() 
+    {
         $roles = array();
         // pour n'afficher que les roles auquels le user à droit 
         // on évite ainsi qu'un admin puisse créer un super_admin.
@@ -286,24 +347,31 @@ class UserController extends Controller {
         $tabroles = $this->container->getParameter('security.role_hierarchy.roles');
         $tabrole = array($currentrole => $tabroles[$currentrole]);
 
-        foreach ($tabrole as $name => $rolesHierarchy) {
+        foreach ($tabrole as $name => $rolesHierarchy) 
+        {
             $roles[$name] = $name;
 
-            foreach ($rolesHierarchy as $role) {
-                if (!isset($roles[$role])) {
+            foreach ($rolesHierarchy as $role) 
+            {
+                if (!isset($roles[$role])) 
+                {
                     $roles[$role] = $role;
                 }
             }
         }
         // ajout pour avoir les roles admin en + si super admin
-        if ($currentrole = 'ROLE_SUPER_ADMIN') {
+        if ($currentrole = 'ROLE_SUPER_ADMIN') 
+        {
             $currentrole = 'ROLE_ADMIN';
             $tabrole = array($currentrole => $tabroles[$currentrole]);
-            foreach ($tabrole as $name => $rolesHierarchy) {
+            foreach ($tabrole as $name => $rolesHierarchy) 
+            {
                 $roles[$name] = $name;
 
-                foreach ($rolesHierarchy as $role) {
-                    if (!isset($roles[$role])) {
+                foreach ($rolesHierarchy as $role) 
+                {
+                    if (!isset($roles[$role])) 
+                    {
                         $roles[$role] = $role;
                     }
                 }
