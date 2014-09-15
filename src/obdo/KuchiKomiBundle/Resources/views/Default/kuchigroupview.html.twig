@@ -3,6 +3,15 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
+    {# On affiche les messages flash que définissent les contrôleurs du bundle #}
+    {% for key, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ key }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading"><h3><img src="{{ asset(KuchiGroup.logo) }}" alt="" width=50 height=50 class="img-thumbnail">  {{ KuchiGroup.name }}</h3></div>
@@ -32,15 +41,12 @@
         
             {% if KuchiGroup.active %}
                 {% set txtbouton = 'Désactiver' %}
-                {% set visible = 'hidden' %}
             {% else %}
                 {% set txtbouton = 'Activer' %}
-                {% set visible = 'visible' %}
             {% endif %}
                 <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_activ', {'id': KuchiGroup.id}) }}">
                     <span class="glyphicon glyphicon-remove"></span> {{ txtbouton }}</a>
-                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_delete', {'id': KuchiGroup.id}) }}" style="visibility:{{ visible }};">
-                    <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+
         {% endif %}
     </div>
         <br />

@@ -56,6 +56,21 @@ class SubscriptionRepository extends EntityRepository
     	return $qb->getQuery()->getSingleScalarResult();
     }
     
+    /**
+     * Return the number of subscription for each kuchi of a group
+     */
+    public function getNbSubscriptionsForKuchiGroup( $kuchiGroup )
+    {
+        $qb = $this->createQueryBuilder('subscription')
+    	->select('COUNT(subscription)')
+    	->leftJoin('subscription.kuchi', 'kuchi')
+        ->leftJoin('kuchi.kuchiGroup', 'kuchiGroup')
+        ->where('kuchiGroup = :kuchiGroup')
+    	->setParameter('kuchiGroup', $kuchiGroup);
+    	 
+    	return $qb->getQuery()->getSingleScalarResult();
+    }
+    
     /*
      * Avoir le nbre de siuscription active pour un user
      */

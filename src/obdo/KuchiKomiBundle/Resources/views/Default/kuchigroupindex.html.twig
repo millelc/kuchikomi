@@ -2,16 +2,24 @@
 
 
 {% block kk_body_KuchiKomiBundle %}
+
+
+{# On affiche les messages flash que définissent les contrôleurs du bundle #}
+{% for key, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ key }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+  
+<br>
 {% if is_granted('ROLE_SUPER_ADMIN') %}
     <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_add') }}">
     <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
 {% endif %}
 <br>
-{% for flashMessage in app.session.flashbag.get('notice') %}
-    <div class="flash-notice">
-        {{ flashMessage }}
-    </div>
-{% endfor %}
+
 <br>
 <table class="table table-hover table-condensed">
     <thead>

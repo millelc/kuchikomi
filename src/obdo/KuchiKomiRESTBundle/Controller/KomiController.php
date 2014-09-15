@@ -124,7 +124,7 @@ class KomiController extends Controller
         else 
         {
             $response->setStatusCode(501);
-            $Logger->Error("[POST rest/komi] 501 - clearId = (". $clearId . ") invalide");
+            $Logger->Error("[POST rest/komi] 501 - kk_id = (" . $this->getRequest()->get('KK_id') . ") - clearId = (" . $clearId . ") invalid");
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -181,7 +181,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - hash invalide");
+                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
             }
             
             // disable current token
@@ -259,7 +259,7 @@ class KomiController extends Controller
             else
             {
                 $response->setStatusCode(510);
-                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - hash Invalid");
+                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
             }    
             
             // disable current token
@@ -353,7 +353,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Invalid hash");
+                $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
             }
 
             // disable current token
@@ -402,7 +402,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[POST rest/komi/sync/{id}/{hash}] 510 - Invalid hash");
+                $Logger->Error("[POST rest/komi/sync/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
             }
 
             // disable current token

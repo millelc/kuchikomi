@@ -17,14 +17,18 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
  */
 class AclController {
 
-    public static function addAcl($objet, $user, $context) {
+    public static function addAcl($objet, $user, $context) 
+    {
         // création de l'ACL
         $aclProvider = $context->get('security.acl.provider');
         $objectIdentity = ObjectIdentity::fromDomainObject($objet);
         // si acl existe pas de création
-        try {
+        try 
+        {
             $acl = $aclProvider->findAcl($objectIdentity);
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) 
+        {
             $acl = $aclProvider->createAcl($objectIdentity);
         }
         $securityIdentity = UserSecurityIdentity::fromAccount($user);
@@ -38,21 +42,27 @@ class AclController {
      * Retourne les objets apartennant à la table $objet transmise en entrée
      * et pour lesquels l'utilisatuer $user a des droits.
      */
-    public static function lstObj($user, $objet, $provider) {
-
+    public static function lstObj($user, $objet, $provider) 
+    {
         $securityId = UserSecurityIdentity::fromAccount($user);
 
         $liste = array();
-        for ($i = 0; $i < count($objet); $i++) {
-            try {
+        for ($i = 0; $i < count($objet); $i++) 
+        {
+            try 
+            {
                 $acl = $provider->findAcl(ObjectIdentity::fromDomainObject($objet[$i]));
 
-                foreach ($acl->getObjectAces() as $ace) {
-                    if ($ace->getSecurityIdentity()->equals($securityId)) {
+                foreach ($acl->getObjectAces() as $ace) 
+                {
+                    if ($ace->getSecurityIdentity()->equals($securityId)) 
+                    {
                         $liste[] = $objet[$i];
                     }
                 }
-            } catch (\Exception $e) {
+            } 
+            catch (\Exception $e) 
+            {
                 
             }
         }

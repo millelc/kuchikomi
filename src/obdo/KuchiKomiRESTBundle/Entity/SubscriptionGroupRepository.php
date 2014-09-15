@@ -27,4 +27,17 @@ class SubscriptionGroupRepository extends EntityRepository
     	 
     	return $qb->getQuery()->getSingleScalarResult();
     }
+    
+    /**
+     * Return the number of subscription for a kuchigroup
+     */
+    public function getNbSubscriptionsForKuchiGroup( $kuchiGroup )
+    {
+        $qb = $this->createQueryBuilder('subscriptionGroup')
+    	->select('COUNT(subscriptionGroup)')
+    	->Where('subscriptionGroup.kuchiGroup = :kuchiGroup')
+    	->setParameter('kuchiGroup', $kuchiGroup);
+    	 
+    	return $qb->getQuery()->getSingleScalarResult();
+    }
 }
