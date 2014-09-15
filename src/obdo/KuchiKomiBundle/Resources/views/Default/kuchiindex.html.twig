@@ -56,7 +56,6 @@
             </th>
             <th>Nb Abonnement</th>
             <th>Nb KuchiKomis</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -71,7 +70,7 @@
                 <td><p class="text-danger">Inactif</p></td>
             {% endif %}
 
-            <td>{{kuchi.name}}</td>
+            <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}">{{kuchi.name}}</a></td>
             
             <td><a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchi.kuchiGroup.id}) }}">{{kuchi.kuchiGroup.name}}</a></td>
 
@@ -85,9 +84,7 @@
             
             <td>{{kuchi.subscriptions|length}}</td>
             
-            <td>{{kuchi.kuchikomis|length}}</td>
-            
-            <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
+            <td>{{kuchi.kuchikomis|length}}</td>                        
 
         </tr>
         {% endfor %}
