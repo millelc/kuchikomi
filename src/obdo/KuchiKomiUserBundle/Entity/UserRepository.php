@@ -40,6 +40,14 @@ class UserRepository extends EntityRepository
 		{
 			$query->orderBy('users.roles','DESC');
 		}
+                elseif( $sort == "login_up" )
+		{
+			$query->orderBy('users.lastLogin','ASC');
+		}
+		elseif( $sort == "login_down" )
+		{
+			$query->orderBy('users.lastLogin','DESC');
+		}
 	
 		$query->getquery();
 		// On définit l'article à partir duquel commencer la liste

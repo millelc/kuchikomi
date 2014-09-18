@@ -8,13 +8,9 @@
      <ul class="list-group">
             <li class="list-group-item">Nom : {{ user.username }}</li>
             <li class="list-group-item">e-mail : {{ user.email }}</li>
-            <li class="list-group-item">Date derniére utilisation: {{ user.lastLogin|date('Y-m-d H:i:s') }}</li>
-            <li class="list-group-item">Role :
-                {% for role in  user.roles %}
-                    {{ role }}
-                {% endfor %}
-            </li>
-            <li class="list-group-item"> L'utilisateur a droit au KuchiGroups :
+            <li class="list-group-item">Date dernier login : {{ user.lastLogin|date('Y-m-d H:i:s') }}</li>
+            <li class="list-group-item">Role : {{ user.roles[0] }}</li>
+            <li class="list-group-item"> L'utilisateur a droit au(x) KuchiGroup(s) :
                 <ul class="list-group">
                     {% for kgroup in kgroups %}
                         <li class="list-group-item">{{ kgroup.name }}</li>
@@ -25,7 +21,7 @@
                     <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
                 {% endif %}
             </li>
-            <li class="list-group-item"> L'utilisateur a droit au Kuchis :
+            <li class="list-group-item"> L'utilisateur a droit au(x) Kuchi(s) :
                 <ul class="list-group">
                     {% for kuchi in kuchis %}
                         <li class="list-group-item">{{ kuchi.kuchiGroup.name }}/{{ kuchi.name }}</li>

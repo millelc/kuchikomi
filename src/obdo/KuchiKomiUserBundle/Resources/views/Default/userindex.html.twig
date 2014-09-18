@@ -6,9 +6,12 @@
 {% block fos_user_content %}
 
 <br>
-<br>
+
 <a class="btn btn-primary" href="{{ path('obdo_kuchi_komi_user_add') }}">
     <span class="glyphicon glyphicon-user"><span class="glyphicon glyphicon-plus"></span> </span> Nouvel utilisateur</a>
+
+<br>
+<br>
 <table class="table table-hover table-condensed">
     <thead>
         <tr>
@@ -30,22 +33,23 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
-            <th></th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_user', {'page': page, 'sort': 'login_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                Dernier login
+                <a href="{{ path('obdo_kuchi_komi_user', {'page': page, 'sort': 'login_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>
         {% for user in users %}
         <tr>
-            <td>{{user.username}}</td>
-            
-            <td>
-                {% for role in user.roles %}
-                    {{ role }}
-                {% endfor %}
-            </td>
-            <td><a href="{{ path('obdo_kuchi_komi_user_view', {'id': user.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
-            {# <td><a href="{{ path('obdo_kuchi_komi_user_view', {'id': user.id}) }}"><span class="glyphicon glyphicon-plus"></span></a></td> #}
-
+            <td><a href="{{ path('obdo_kuchi_komi_user_view', {'id': user.id}) }}">{{user.username}}</a></td>
+            <td>{{ user.roles[0] }}</td>
+            <td>{{ user.lastLogin|date('Y-m-d H:i:s') }}</td>
         </tr>
         {% endfor %}
     </tbody>
