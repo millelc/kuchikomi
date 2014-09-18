@@ -45,7 +45,15 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
-            <th>OS</th>
+            <th>
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'os_up'}) }}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                OS
+                <a href="{{ path('obdo_kuchi_komi_komi', {'page': page, 'sort': 'os_down'}) }}">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>

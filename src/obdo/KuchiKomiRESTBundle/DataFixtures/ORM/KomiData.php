@@ -42,7 +42,7 @@ class KomiData extends AbstractFixture implements ContainerAwareInterface, Order
 		
 		// new Komi
 		$komi1 = new Komi();
-		$komi1->setRandomId('Nicolas');
+		$komi1->setRandomId('ac81d6f9cb600d38');
 		$komi1->setOsType(0);
 		$komi1->setApplicationVersion( '2.0.0' );
 		$komi1->setGcmRegId('sdfsdgrstyhrffsdggh');
@@ -50,5 +50,16 @@ class KomiData extends AbstractFixture implements ContainerAwareInterface, Order
 		$manager->persist($komi1);
 		$manager->flush();	
                 $AclManager->addAcl($komi1, $this->getReference('SuperAdmin'));
+                
+                // new Komi
+		$komi2 = new Komi();
+		$komi2->setRandomId('cb600d38ac81d6f9');
+		$komi2->setOsType(1);
+		$komi2->setApplicationVersion( '2.0.0' );
+		$komi2->setGcmRegId('sdfsdgrstyhrffsdggh');
+		$this->addReference('komi2', $komi2);
+		$manager->persist($komi2);
+		$manager->flush();	
+                $AclManager->addAcl($komi2, $this->getReference('SuperAdmin'));
 	}
 }

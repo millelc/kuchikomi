@@ -64,6 +64,14 @@ class KomiRepository extends EntityRepository
     	{
     		$query->orderBy('komis.timestampLastSynchro','DESC');
     	}
+        elseif( $sort == "os_up" )
+    	{
+    		$query->orderBy('komis.osType','ASC');
+    	}
+    	elseif( $sort == "os_down" )
+    	{
+    		$query->orderBy('komis.osType','DESC');
+    	}
     
     	$query->getquery();
     	// On définit l'article à partir duquel commencer la liste
