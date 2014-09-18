@@ -3,49 +3,78 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
+{# On affiche les messages flash que définissent les contrôleurs du bundle #}
+{% for key, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ key }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+    
 <div class="panel panel-default">
-  <div class="panel-heading"><h3><img src="{{ asset(Kuchi.logoLink) }}" alt="" width=50 height=50  class="img-thumbnail">  {{ Kuchi.name }}</h3></div>
- <form method="post" {{ form_enctype(form) }}>
+    <div class="panel-heading">
+        <h3><img src="{{ asset(Kuchi.logoLink) }}" alt="" width=50 height=50  class="img-thumbnail">  {{ Kuchi.name }}</h3>
+    </div>
+ 
+    <form method="post" {{ form_enctype(form) }}>
         {# Les erreurs générales du formulaire. #}
         {{ form_errors(form) }}
-        
-        <div>
-            {{ form_label(form.title, "Titre") }}<br />
-            {{ form_errors(form.title) }}
-            {{ form_widget(form.title) }}
+        <br />
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                {{ form_label(form.title, "Titre (40 caractères MAX)") }}<br />
+                {{ form_errors(form.title) }}
+                {{ form_widget(form.title) }}
+            </div>
         </div>
         <br />
-        <div>
-            {{ form_label(form.timestampBegin, "De :") }}<br />
-            {{ form_errors(form.timestampBegin) }}
-            {{ form_widget(form.timestampBegin) }}
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                {{ form_label(form.timestampBegin, "Du :") }}<br />
+                {{ form_errors(form.timestampBegin) }}
+                {{ form_widget(form.timestampBegin) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.timestampEnd, "au :") }}<br />
+                {{ form_errors(form.timestampEnd) }}
+                {{ form_widget(form.timestampEnd) }}
+            </div>
         </div>
         <br />
-        <div>
-            {{ form_label(form.timestampEnd, "à :") }}<br />
-            {{ form_errors(form.timestampEnd) }}
-            {{ form_widget(form.timestampEnd) }}
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                {{ form_label(form.details, "Message (300 caractères MAX)") }}<br />
+                {{ form_errors(form.details) }}
+                {{ form_widget(form.details) }}
+            </div>
         </div>
-        <span class="label label-danger">{{ ErrMsgd }}</span>
+            
         <br />
-        <div>
-            {{ form_label(form.details, "Message") }}<br />
-            {{ form_errors(form.details) }}
-            {{ form_widget(form.details) }}
-        </div>
-        <span class="label label-danger">{{ ErrMsg }}</span>
-        <br />
-        <div>
-            {{ form_label(form.photoimg, "Illustration") }}<br />
-            {{ form_errors(form.photoimg) }}
-            {{ form_widget(form.photoimg) }}
-            La taille idéale d'une image est de 640*640, les autres tailles seront redimensionnées
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-11">
+                {{ form_label(form.photoimg, "Photo") }}<br />
+                {{ form_errors(form.photoimg) }}
+                {{ form_widget(form.photoimg) }}
+                La taille idéale d'une image est de 640x640, les autres tailles seront redimensionnées
+            </div>
         </div>
         
         {{ form_rest(form) }}
 
-        <br />
-        <input type="submit" class="btn btn-primary" />
+        <br/>
+        <br/>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-11">
+                <input type="submit" class="btn btn-primary" />
+            </div>
+        </div>
+        <br/>
     </form>
 </div>
 

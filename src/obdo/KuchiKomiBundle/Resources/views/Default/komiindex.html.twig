@@ -46,7 +46,6 @@
                 </a>
             </th>
             <th>OS</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -58,7 +57,7 @@
                 <td><p class="text-danger">Inactif</p></td>
             {% endif %}
 
-            <td>{{komi.randomId}}</td>
+            <td><a href="{{ path('obdo_kuchi_komi_komi_view', {'id': komi.id}) }}">{{komi.randomId}}</a></td>
             
             <td>{{komi.timestampCreation|date('Y-m-d H:i:s')}}</td>
 
@@ -76,7 +75,6 @@
                 <td>iOS</td>
             {% endif %}
             
-            <td><a href="{{ path('obdo_kuchi_komi_komi_view', {'id': komi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
         </tr>
         {% endfor %}
     </tbody>

@@ -20,6 +20,7 @@ class LogCommand extends ContainerAwareCommand
     {
         $logger = $this->getContainer()->get('obdo_services.Logger');
         
+        
         $logger->Warning("Essai Log");
     }
 }

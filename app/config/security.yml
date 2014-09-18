@@ -49,4 +49,6 @@ security:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/user, roles: ROLE_ADMIN, requires_channel: http }
         - { path: ^/client, roles: ROLE_SUPER_ADMIN, requires_channel: http }
+        - { path: ^/logs, roles: ROLE_SUPER_ADMIN, requires_channel: http }
+        - { path: ^/komi, roles: ROLE_SUPER_ADMIN, requires_channel: http }
         

@@ -18,14 +18,16 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Put;
 
-class KuchiKomiController extends Controller {
+class KuchiKomiController extends Controller 
+{
 
     /**
      * @Post("/rest/kuchikomi/{id_komi}/{id_kuchi}/{hash}")
      * @return array
      * @View()
      */
-    public function postKuchiKomiAction($id_komi, $id_kuchi, $hash) {
+    public function postKuchiKomiAction($id_komi, $id_kuchi, $hash) 
+    {
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');
@@ -76,7 +78,8 @@ class KuchiKomiController extends Controller {
                         
                         //on cherche le randomid
                         $kuchikomi = $repositoryKuchiKomi->findOneByRandomId($kuchikomiArray['kuchikomi']['random_id']);
-                        if (!$kuchikomi){
+                        if (!$kuchikomi)
+                        {
                             $kuchikomi = new KuchiKomi();
                      
                             $timestampBegin = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
@@ -93,7 +96,8 @@ class KuchiKomiController extends Controller {
                             $kuchikomi->setOrigin($komi->getOsType());
                             $kuchikomi->setRandomId($kuchikomiArray['kuchikomi']['random_id']);
 
-                            if ($kuchikomiArray['kuchikomi']['photo'] != "") {
+                            if ($kuchikomiArray['kuchikomi']['photo'] != "") 
+                            {
                                 $photoName = $this->container->get('obdo_services.Name_photo')->newName();
                                 $kuchikomi->setPhotoLink($kuchi->getPhotoKuchiKomiLink() . $photoName);
 
@@ -116,6 +120,13 @@ class KuchiKomiController extends Controller {
 
                             $em->persist($kuchikomi);
                             $em->flush();
+                            
+                            // ACL update
+                            $AclManager = $this->container->get('obdo_services.AclManager');
+                            $superAdminUser = $this->getDoctrine()->getRepository('obdo\KuchiKomiUserBundle\Entity\User')->find(1);
+                            $currentUser = $this->get('security.context')->getToken()->getUser();
+                            $AclManager->addAcl($kuchikomi, $currentUser);
+                            $AclManager->addAcl($kuchikomi, $superAdminUser);
                         
                             $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
                         }    
@@ -136,7 +147,6 @@ class KuchiKomiController extends Controller {
             }
         }
 
-
         $response->headers->set('Content-Type', 'text/html');
 
         return $response;
@@ -147,7 +157,8 @@ class KuchiKomiController extends Controller {
      * @return array
      * @View()
      */
-    public function deleteKuchiKomiAction($komiId, $id_kuchi, $id_kuchikomi, $hash) {
+    public function deleteKuchiKomiAction($komiId, $id_kuchi, $id_kuchikomi, $hash) 
+    {
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');

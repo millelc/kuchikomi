@@ -12,14 +12,16 @@ class UpdateUsersCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('Users:update')
+        $this->setName('users:update')
              ->setDescription('Update des tables Users de Kuchi et KuchiGroup');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
+        $AclManager = $this->getContainer()->get('obdo_services.AclManager');
         
+        // Update all users
         $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         
         $kuchiGroups = $repositoryKuchiGroup->findAll();
@@ -45,6 +47,25 @@ class UpdateUsersCommand extends ContainerAwareCommand
             }
         }
         
+        //Update Acl
+        $repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
+        $kuchiKomis = $repositoryKuchiKomi->findAll();
+        foreach($kuchiKomis as $kuchikomi)
+        {
+            foreach($kuchikomi->getKuchi()->getUsers() as $user)
+            {
+                $AclManager->addAcl($kuchikomi, $user);
+                $text = "Add ACL (" . $kuchikomi->getTitle() . ":" . $user->getUsername() . ")";
+                $output->writeln($text);
+            }
+            foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
+            {
+                $AclManager->addAcl($kuchikomi, $user);
+                $text = "Add ACL (" . $kuchikomi->getTitle() . ":" . $user->getUsername() . ")";
+                $output->writeln($text);
+            }            
+        }
+
         $em->flush();
     }
 }

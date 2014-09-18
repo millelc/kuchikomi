@@ -43,6 +43,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
     {
         $manager->getConnection()->exec("ALTER TABLE KuchiGroup AUTO_INCREMENT = 1;");
 
+        $AclManager = $this->container->get('obdo_services.AclManager');
 
         // CityKomi Group
         $citykomiGroup = new KuchiGroup();
@@ -55,7 +56,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
         $manager->persist($citykomiGroup);
         $manager->flush();
         //  ACL
-        $this->addAcl($citykomiGroup, $this->getReference('SuperAdmin'));
+        $AclManager->addAcl($citykomiGroup, $this->getReference('SuperAdmin'));
 
         // ob-do Group
         $obdoGroup = new KuchiGroup();
@@ -68,25 +69,8 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
         $manager->persist($obdoGroup);
         $manager->flush();
         // ACL
-        $this->addAcl($obdoGroup, $this->getReference('SuperAdmin'));             
+        $AclManager->addAcl($obdoGroup, $this->getReference('SuperAdmin'));             
 
     }
 
-    function addAcl($objet, $user) 
-    {
-        // création de l'ACL
-        $aclProvider = $this->container->get('security.acl.provider');
-        $objectIdentity = ObjectIdentity::fromDomainObject($objet);
-        // si acl existe pas de création
-        try {
-            $acl = $aclProvider->findAcl($objectIdentity);
-        } catch (\Exception $e) {
-            $acl = $aclProvider->createAcl($objectIdentity);
-        }
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
-
-        // donne accès au user 
-        $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($acl);
-    }
 }

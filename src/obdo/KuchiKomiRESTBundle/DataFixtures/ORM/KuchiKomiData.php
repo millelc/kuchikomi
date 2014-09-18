@@ -37,7 +37,7 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
 	// Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
 	public function load(ObjectManager $manager)
 	{
-		
+		$AclManager = $this->container->get('obdo_services.AclManager');
 		$manager->getConnection()->exec("ALTER TABLE KuchiKomi AUTO_INCREMENT = 1;");
 
 		// KuchiKomi de bienvenue
@@ -48,7 +48,21 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
 		$welcome->setTimestampEnd($welcome->getTimestampEnd()->add(new \DateInterval('P5Y')));
 		$this->addReference('welcome', $welcome);
 		$manager->persist($welcome);
+                $manager->flush();
+                $AclManager->addAcl($welcome, $this->getReference('SuperAdmin'));
+                
+                // KuchiKomi de ToBeDeleted
+		$kk1 = new KuchiKomi();
+		$kk1->setKuchi($this->getReference('toBeDeleted1'));
+		$kk1->setTitle('KuchiKomi 1 !');
+		$kk1->setDetails("Mon premier kuchikomi !");
+		$kk1->setTimestampEnd($kk1->getTimestampEnd()->add(new \DateInterval('P5Y')));
+		$this->addReference('kk1', $kk1);
+		$manager->persist($kk1);
+                $manager->flush();
+                $AclManager->addAcl($kk1, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($kk1, $this->getReference('KuchiAdmin')); 
 		
-		$manager->flush();	
+			
 	}
 }

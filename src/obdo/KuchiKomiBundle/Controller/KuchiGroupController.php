@@ -5,7 +5,6 @@ namespace obdo\KuchiKomiBundle\Controller;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
 use obdo\KuchiKomiRESTBundle\Form\KuchiGroupType;
 use obdo\KuchiKomiRESTBundle\Form\KuchiGroupUpdateType;
-use obdo\KuchiKomiUserBundle\Controller\AclController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 // pour la gestion des acls
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -16,18 +15,26 @@ class KuchiGroupController extends Controller {
      * point entrée gestion kuchigroup
      */
 
-    public function indexAction($page, $sort) {
-        $em = $this->getDoctrine()->getManager();
+    public function indexAction($page, $sort) 
+    {
+        if( $this->get('security.context')->isGranted('ROLE_ADMIN_GROUP_KUCHI') )
+        {
+            $em = $this->getDoctrine()->getManager();
 
-        $groups = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')
-        ->getGroupListByUserId(25, $page, $sort, $this->getUser()->getId());
+            $groups = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')
+            ->getGroupListByUserId(25, $page, $sort, $this->getUser()->getId());
 
-        return $this->render('obdoKuchiKomiBundle:Default:kuchigroupindex.html.twig', array(
-                    'groups' => $groups,
-                    'page' => $page,
-                    'nombrePage' => ceil(count($groups) / 25),
-                    'sort' => $sort
-        ));
+            return $this->render('obdoKuchiKomiBundle:Default:kuchigroupindex.html.twig', array(
+                        'groups' => $groups,
+                        'page' => $page,
+                        'nombrePage' => ceil(count($groups) / 25),
+                        'sort' => $sort
+            ));
+        }
+        else
+        {
+            throw new AccessDeniedException();
+        }
     }
 
     /*
@@ -62,63 +69,71 @@ class KuchiGroupController extends Controller {
 
     public function addAction() 
     {
-        $Logger = $this->container->get('obdo_services.Logger');
-
-        $kuchiGroup = new KuchiGroup();
-
-        $form = $this->createForm(new KuchiGroupType, $kuchiGroup);
-
-        // On récupère la requête
-        $request = $this->get('request');
-
-        if ($request->getMethod() == 'POST') 
+        if( $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN') )
         {
-            $form->bind($request);
+            $Logger = $this->container->get('obdo_services.Logger');
+            $AclManager = $this->container->get('obdo_services.AclManager');
 
-            if ($form->isValid()) 
+            $kuchiGroup = new KuchiGroup();
+
+            $form = $this->createForm(new KuchiGroupType, $kuchiGroup);
+
+            // On récupère la requête
+            $request = $this->get('request');
+
+            if ($request->getMethod() == 'POST') 
             {
-                // ajout du lien user kuchigroup
-                $kuchiGroup->addUser($this->getUser());
-                // ajout du lien super_admin kuchigroup, pour l'instant avec id = 1
-                $admin = $this->getDoctrine()
-                        ->getRepository('obdo\KuchiKomiUserBundle\Entity\User')
-                        ->find(1);
-                $kuchiGroup->addUser($admin);
+                $form->bind($request);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($kuchiGroup);
-                $em->flush();
+                if ($form->isValid()) 
+                {
+                    // ajout du lien user kuchigroup
+                    $kuchiGroup->addUser($this->getUser());
+                    // ajout du lien super_admin kuchigroup, pour l'instant avec id = 1
+                    $admin = $this->getDoctrine()
+                            ->getRepository('obdo\KuchiKomiUserBundle\Entity\User')
+                            ->find(1);
+                    $kuchiGroup->addUser($admin);
 
-                // Création du répertoire pour stocker les images des KuchiKomis
-                $folder = $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup->getId();
-                if (!is_dir($folder)) {
-                    mkdir($folder);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($kuchiGroup);
+                    $em->flush();
+
+                    // Création du répertoire pour stocker les images des KuchiKomis
+                    $folder = $this->container->getParameter('path_kuchigroup_photo') . $kuchiGroup->getId();
+                    if (!is_dir($folder)) {
+                        mkdir($folder);
+                    }
+                    $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getLogoimg(), $folder,'');
+                    $kuchiGroup->setLogo($logo);
+
+                    $em->flush();
+
+                    // retrouve l'identifiant de sécurité de l'utilisateur actuellement connecté
+                    $securityContext = $this->get('security.context');
+                    $user = $securityContext->getToken()->getUser();
+                    // donne accès au propriétaire 
+                    $AclManager->addAcl($kuchiGroup, $user);
+                    // et à l'admin
+                    $AclManager->addAcl($kuchiGroup, $admin);
+
+                    $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " added");
+
+
+                    return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_group_view', array(
+                                        'id' => $kuchiGroup->getId()
+                    )));
                 }
-                $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchiGroup->getLogoimg(), $folder,'');
-                $kuchiGroup->setLogo($logo);
-
-                $em->flush();
-
-                // retrouve l'identifiant de sécurité de l'utilisateur actuellement connecté
-                $securityContext = $this->get('security.context');
-                $user = $securityContext->getToken()->getUser();
-                // donne accès au propriétaire 
-                AclController::addAcl($kuchiGroup, $user, $this);
-                // et à l'admin
-                AclController::addAcl($kuchiGroup, $admin, $this);
-                
-                $Logger->Info("[KuchiGroup] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchiGroup->getName() . " added");
-
-                        
-                return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_group_view', array(
-                                    'id' => $kuchiGroup->getId()
-                )));
             }
-        }
 
-        return $this->render('obdoKuchiKomiBundle:Default:kuchigroupadd.html.twig', array(
-                    'form' => $form->createView(),
-        ));
+            return $this->render('obdoKuchiKomiBundle:Default:kuchigroupadd.html.twig', array(
+                        'form' => $form->createView(),
+            ));
+        }
+        else
+        {
+            throw new AccessDeniedException();
+        }
     }
 
     /*

@@ -37,7 +37,7 @@ class KomiData extends AbstractFixture implements ContainerAwareInterface, Order
 	// Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
 	public function load(ObjectManager $manager)
 	{
-		
+		$AclManager = $this->container->get('obdo_services.AclManager');
 		$manager->getConnection()->exec("ALTER TABLE Komi AUTO_INCREMENT = 1;");
 		
 		// new Komi
@@ -48,7 +48,7 @@ class KomiData extends AbstractFixture implements ContainerAwareInterface, Order
 		$komi1->setGcmRegId('sdfsdgrstyhrffsdggh');
 		$this->addReference('komi1', $komi1);
 		$manager->persist($komi1);
-		
 		$manager->flush();	
+                $AclManager->addAcl($komi1, $this->getReference('SuperAdmin'));
 	}
 }

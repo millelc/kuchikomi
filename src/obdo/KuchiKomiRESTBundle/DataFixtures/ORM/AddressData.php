@@ -169,15 +169,33 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 		$this->addReference('addressMaxime', $addressMaxime);
 		$manager->persist($addressMaxime);
 
-		// 		$address3 = new Address();
-		// 		$address3->setAddress1('Rue de Maltot');
-		// 		$address3->setAddress2('');
-		// 		$address3->setAddress3('');
-		// 		$address3->setPostalCode('14320');
-		// 		$address3->setCity('Feuguerolles-Bully');
-		//		$this->addReference('address3', $address3);
-		// 		$manager->persist($address3);
+		$fbAddress = new Address();
+		$fbAddress->setAddress1('Rue de Maltot');
+		$fbAddress->setAddress2('');
+		$fbAddress->setAddress3('');
+		$fbAddress->setPostalCode('14320');
+		$fbAddress->setCity('Feuguerolles-Bully');
+		$this->addReference('fbAddress', $fbAddress);
+		$manager->persist($fbAddress);
+                
+                $tb1Address = new Address();
+		$tb1Address->setAddress1('Rue de Maltot');
+		$tb1Address->setAddress2('');
+		$tb1Address->setAddress3('');
+		$tb1Address->setPostalCode('14320');
+		$tb1Address->setCity('Feuguerolles-Bully');
+		$this->addReference('tb1Address', $tb1Address);
+		$manager->persist($tb1Address);
 		
+                $tb2Address = new Address();
+		$tb2Address->setAddress1('Rue de Maltot');
+		$tb2Address->setAddress2('');
+		$tb2Address->setAddress3('');
+		$tb2Address->setPostalCode('14320');
+		$tb2Address->setCity('Feuguerolles-Bully');
+		$this->addReference('tb2Address', $tb2Address);
+		$manager->persist($tb2Address);
+                
 		$manager->flush();	
 	}
 }

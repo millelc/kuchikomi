@@ -15,10 +15,10 @@ class KuchiKomiType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title','text', array('attr' => array('style' => 'width:100%', 'maxlength' => 40)))
             ->add('timestampBegin','datetime')
             ->add('timestampEnd','datetime')
-            ->add('details','textarea', array('required' => false,))
+            ->add('details','textarea', array('required' => false,'attr' => array('style' => 'width:100%', 'maxlength' => 300)))
             ->add('photoimg','file', array('required' => false,))
         ;
     }

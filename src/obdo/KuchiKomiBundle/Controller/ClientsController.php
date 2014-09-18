@@ -8,6 +8,7 @@ use obdo\KuchiKomiRESTBundle\Form\ClientsType;
 use obdo\KuchiKomiUserBundle\Entity\User;
 use obdo\KuchiKomiUserBundle\Entity\UserRepository;
 use obdo\KuchiKomiRESTBundle\Entity\SqlStat;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 	
 class ClientsController extends Controller{
     
@@ -26,7 +27,8 @@ class ClientsController extends Controller{
         ));
     }
     
-    public function addAction() {
+    public function addAction() 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $client = new Clients();
@@ -58,10 +60,22 @@ class ClientsController extends Controller{
             ));
     }
     
-    public function viewAction($id) {
+    public function viewAction($id) 
+    {
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($id);
+        
+        if( !$client )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "Le client avec l'identifiant " . $id . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
+        
         $users = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiUserBundle\Entity\User')
                 ->findByClient($id);
@@ -75,12 +89,24 @@ class ClientsController extends Controller{
         ));
     }
     
-    public function updateAction($id) {
+    public function updateAction($id) 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($id);
+        
+        if( !$client )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "Le client avec l'identifiant " . $id . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
+
         $form = $this->createForm(new ClientsType, $client);
 
         // On récupère la requête
@@ -111,13 +137,24 @@ class ClientsController extends Controller{
     /*
      * Ajout users existant à un client.
      */
-    public function userAction($clientid){
+    public function userAction($clientid)
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($clientid);
 
+        if( !$client )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "Le client avec l'identifiant " . $clientid . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
+        
         $a = array();
         // on genere le formulaire liste des users
         $formulaire = $this->createFormBuilder($a)
@@ -191,42 +228,64 @@ class ClientsController extends Controller{
     /*
      * Quelques stats de suivi du client
      */
-    public function suiviAction($clientid) {
+    public function suiviAction($clientid) 
+    {
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($clientid);
+        
+        if( !$client )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "Le client avec l'identifiant " . $clientid . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
         
         $em = $this->getDoctrine()->getManager();
         
         //total kuchikomis du client
         $nbKuchikomis = SqlStat::getNbKuchiKomiByClientId($clientid, $this);
         $totalKuchiKomis = 0;
-        foreach ($nbKuchikomis as $nbKuchikomi){
+        foreach ($nbKuchikomis as $nbKuchikomi)
+        {
             $totalKuchiKomis = $nbKuchikomi['nbkuchikomi'];
         }
         
         //taille images du client
         $size = 0;
         $abonnements = $em->getRepository('obdoKuchiKomiRESTBundle:Abonnements')->findByClient($clientid);
-        foreach ($abonnements as $abonnement){
+        foreach ($abonnements as $abonnement)
+        {
             $kuchis = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->findByAbonnement($abonnement->getId());
-            foreach ($kuchis as $kuchi){
+            foreach ($kuchis as $kuchi)
+            {
                 $kuchikomis = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi')->findByKuchi($kuchi);
-                foreach ($kuchikomis as $kuchikomi){
+                foreach ($kuchikomis as $kuchikomi)
+                {
                     if ($kuchikomi->getPhotoLink() != null)
+                    {
                         $size += filesize($kuchikomi->getPhotoLink());
+                    }
                 }
                 if ($kuchi->getLogoLink() != null)
+                {
                     $size += filesize($kuchi->getLogoLink());
+                }
                 if ($kuchi->getPhotoLink() != null)
+                {
                     $size += filesize($kuchi->getPhotoLink());
+                }
             }
         }
         
         // taille moyenne des messages du client
         $avgKuchikomis = SqlStat::getAvgDetailClient($clientid, $this);
         $moyenne = 0;
-        foreach ($avgKuchikomis as $avgKuchikomi){
+        foreach ($avgKuchikomis as $avgKuchikomi)
+        {
             $moyenne = $avgKuchikomi['moyenne'];
         }
         

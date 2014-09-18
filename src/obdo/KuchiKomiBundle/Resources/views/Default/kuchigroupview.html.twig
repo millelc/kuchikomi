@@ -15,9 +15,6 @@
     <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading"><h3><img src="{{ asset(KuchiGroup.logo) }}" alt="" width=50 height=50 class="img-thumbnail">  {{ KuchiGroup.name }}</h3></div>
-        <div class="panel-body">
-            <p>...</p>
-        </div>
 
         <!-- List group -->
         <ul class="list-group">
@@ -69,7 +66,6 @@
                 <th>Suppression</th>
                 <th>Nb Abonnement</th>
                 <th>Nb KuchiKomi</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -84,7 +80,7 @@
                         <td><p class="text-danger">Inactif</p></td>
                     {% endif %}
 
-                    <td>{{kuchi.name}}</td>
+                    <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}">{{kuchi.name}}</a></td>
 
                     <td>{{kuchi.timestampCreation|date('Y-m-d H:i:s')}}</td>
 
@@ -97,8 +93,6 @@
                     <td>{{kuchi.subscriptions|length}}</td>
 
                     <td>{{kuchi.kuchikomis|length}}</td>
-
-                    <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
 
                 </tr>
             {% endfor %}

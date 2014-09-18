@@ -42,6 +42,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
     public function load(ObjectManager $manager)
     {
         $Password = $this->container->get('obdo_services.Password');
+        $AclManager = $this->container->get('obdo_services.AclManager');
 
         $manager->getConnection()->exec("ALTER TABLE Kuchi AUTO_INCREMENT = 1;");
 
@@ -65,7 +66,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($news);
         $manager->flush();
         // ACL
-        $this->addAcl($news, $this->getReference('SuperAdmin'));                       
+        $AclManager->addAcl($news, $this->getReference('SuperAdmin'));                       
 
         // David
         $david = new Kuchi();
@@ -87,7 +88,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($david);
         $manager->flush();
         // ACL
-        $this->addAcl($david, $this->getReference('SuperAdmin')); 
+        $AclManager->addAcl($david, $this->getReference('SuperAdmin')); 
 
         // Nicolas
         $nicolas = new Kuchi();
@@ -109,7 +110,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($nicolas);
         $manager->flush(); 
         // ACL
-        $this->addAcl($nicolas, $this->getReference('SuperAdmin'));
+        $AclManager->addAcl($nicolas, $this->getReference('SuperAdmin'));
 
         // Julien
         $julien = new Kuchi();
@@ -131,7 +132,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($julien);
         $manager->flush();
         // ACL
-        $this->addAcl($julien, $this->getReference('SuperAdmin'));
+        $AclManager->addAcl($julien, $this->getReference('SuperAdmin'));
 
         // Pascal
         $pascal = new Kuchi();
@@ -153,7 +154,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($pascal);
         $manager->flush();
         // ACL
-        $this->addAcl($pascal, $this->getReference('SuperAdmin'));
+        $AclManager->addAcl($pascal, $this->getReference('SuperAdmin'));
 
 
         // Eric
@@ -176,7 +177,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($eric);
         $manager->flush();
         // ACL
-        $this->addAcl($eric, $this->getReference('SuperAdmin'));
+        $AclManager->addAcl($eric, $this->getReference('SuperAdmin'));
 
         // Bruno
         $bruno = new Kuchi();
@@ -198,7 +199,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($bruno);
         $manager->flush();
         // ACL
-        $this->addAcl($bruno, $this->getReference('SuperAdmin'));
+        $AclManager->addAcl($bruno, $this->getReference('SuperAdmin'));
 
         // Mickael
         $mickael = new Kuchi();
@@ -220,24 +221,6 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
         $manager->persist($mickael);
         $manager->flush();
         // ACL
-        $this->addAcl($mickael, $this->getReference('SuperAdmin'));
-    }
-        
-    function addAcl($objet, $user) 
-    {
-        // création de l'ACL
-        $aclProvider = $this->container->get('security.acl.provider');
-        $objectIdentity = ObjectIdentity::fromDomainObject($objet);
-        // si acl existe pas de création
-        try {
-            $acl = $aclProvider->findAcl($objectIdentity);
-        } catch (\Exception $e) {
-            $acl = $aclProvider->createAcl($objectIdentity);
-        }
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
-
-        // donne accès au user 
-        $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($acl);
+        $AclManager->addAcl($mickael, $this->getReference('SuperAdmin'));
     }
 }

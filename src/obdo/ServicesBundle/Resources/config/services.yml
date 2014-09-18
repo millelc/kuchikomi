@@ -28,3 +28,7 @@ services:
     
     obdo_services.imageLib:
         class: obdo\ServicesBundle\Services\imageLib
+            
+    obdo_services.AclManager:
+        class: obdo\ServicesBundle\Services\AclManager
+        arguments: [ @kernel ]

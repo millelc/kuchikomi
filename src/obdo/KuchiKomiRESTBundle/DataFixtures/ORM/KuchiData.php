@@ -44,7 +44,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$Password = $this->container->get('obdo_services.Password');
 		
 		$manager->getConnection()->exec("ALTER TABLE Kuchi AUTO_INCREMENT = 1;");
-		
+		$AclManager = $this->container->get('obdo_services.AclManager');
+                
                 // News
 		$news = new Kuchi();
 		$news->setName('News');
@@ -65,9 +66,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($news);
 		$manager->flush();
                 // ACL
-                $this->addAcl($news, $this->getReference('SuperAdmin'));
-                $this->addAcl($news, $this->getReference('Admin'));
-                $this->addAcl($news, $this->getReference('GroupAdmin'));                        
+                $AclManager->addAcl($news, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($news, $this->getReference('Admin')); 
 		
 		// David
 		$david = new Kuchi();
@@ -89,9 +89,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($david);
 		$manager->flush();
                 // ACL
-                $this->addAcl($david, $this->getReference('SuperAdmin'));
-                $this->addAcl($david, $this->getReference('Admin'));
-                $this->addAcl($david, $this->getReference('GroupAdmin')); 
+                $AclManager->addAcl($david, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($david, $this->getReference('Admin')); 
 		
 		// Nicolas
 		$nicolas = new Kuchi();
@@ -113,9 +112,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($nicolas);
 		$manager->flush(); 
                 // ACL
-                $this->addAcl($nicolas, $this->getReference('SuperAdmin'));
-                $this->addAcl($nicolas, $this->getReference('Admin'));
-                $this->addAcl($nicolas, $this->getReference('GroupAdmin')); 
+                $AclManager->addAcl($nicolas, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($nicolas, $this->getReference('Admin'));
 		
 		// Julien
 		$julien = new Kuchi();
@@ -137,9 +135,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($julien);
 		$manager->flush();
                 // ACL
-                $this->addAcl($julien, $this->getReference('SuperAdmin'));
-                $this->addAcl($julien, $this->getReference('Admin'));
-                $this->addAcl($julien, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($julien, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($julien, $this->getReference('Admin'));
 		
 		// Pascal
 		$pascal = new Kuchi();
@@ -161,9 +158,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($pascal);
 		$manager->flush();
                 // ACL
-                $this->addAcl($pascal, $this->getReference('SuperAdmin'));
-                $this->addAcl($pascal, $this->getReference('Admin'));
-                $this->addAcl($pascal, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($pascal, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($pascal, $this->getReference('Admin'));
 		
 		
 		// Eric
@@ -186,9 +182,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($eric);
 		$manager->flush();
                 // ACL
-                $this->addAcl($eric, $this->getReference('SuperAdmin'));
-                $this->addAcl($eric, $this->getReference('Admin'));
-                $this->addAcl($eric, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($eric, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($eric, $this->getReference('Admin'));
 		
 		// Bruno
 		$bruno = new Kuchi();
@@ -210,9 +205,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($bruno);
 		$manager->flush();
                 // ACL
-                $this->addAcl($bruno, $this->getReference('SuperAdmin'));
-                $this->addAcl($bruno, $this->getReference('Admin'));
-                $this->addAcl($bruno, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($bruno, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($bruno, $this->getReference('Admin'));
 		
 		// Samuel
 		$samuel = new Kuchi();
@@ -234,9 +228,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($samuel);
 		$manager->flush();
                 // ACL
-                $this->addAcl($samuel, $this->getReference('SuperAdmin'));
-                $this->addAcl($samuel, $this->getReference('Admin'));
-                $this->addAcl($samuel, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($samuel, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($samuel, $this->getReference('Admin'));
                 
 		// Alain
 		$alain = new Kuchi();
@@ -258,9 +251,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($alain);
 		$manager->flush();
                 // ACL
-                $this->addAcl($alain, $this->getReference('SuperAdmin'));
-                $this->addAcl($alain, $this->getReference('Admin'));
-                $this->addAcl($alain, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($alain, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($alain, $this->getReference('Admin'));
 		
 		// Mickael
 		$mickael = new Kuchi();
@@ -282,9 +274,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($mickael);
 		$manager->flush();
                 // ACL
-                $this->addAcl($mickael, $this->getReference('SuperAdmin'));
-                $this->addAcl($mickael, $this->getReference('Admin'));
-                $this->addAcl($mickael, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($mickael, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($mickael, $this->getReference('Admin'));
 		
 		// Paul
 		$paul = new Kuchi();
@@ -306,9 +297,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($paul);
 		$manager->flush();
                 // ACL
-                $this->addAcl($paul, $this->getReference('SuperAdmin'));
-                $this->addAcl($paul, $this->getReference('Admin'));
-                $this->addAcl($paul, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($paul, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($paul, $this->getReference('Admin'));
 		
 		// Eva
 		$eva = new Kuchi();
@@ -330,9 +320,8 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($eva);
 		$manager->flush();
                 // ACL
-                $this->addAcl($eva, $this->getReference('SuperAdmin'));
-                $this->addAcl($eva, $this->getReference('Admin'));
-                $this->addAcl($eva, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($eva, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($eva, $this->getReference('Admin'));
 		
 		// Maxime
 		$maxime = new Kuchi();
@@ -354,26 +343,60 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->persist($maxime);
 		$manager->flush();
                 // ACL
-                $this->addAcl($maxime, $this->getReference('SuperAdmin'));
-                $this->addAcl($maxime, $this->getReference('Admin'));
-                $this->addAcl($maxime, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($maxime, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($maxime, $this->getReference('Admin'));
+                
+                // toBeDeleted1
+		$toBeDeleted1 = new Kuchi();
+		$toBeDeleted1->setName('toBeDeleted1');
+		$toBeDeleted1->setPhoneNumber('00 00 00 00 14');
+		$toBeDeleted1->setMailAddress('maxime.marie@ob-do.com');
+		$toBeDeleted1->setWebSite('www.ob-do.com');		
+		$toBeDeleted1->setKuchiGroup($this->getReference('toBeDeletedGroup'));
+		$toBeDeleted1->setPassword($Password->generateHash('maxime'));
+		$toBeDeleted1->setAddress($this->getReference('tb1Address'));
+                $toBeDeleted1->addUser($this->getReference('GroupAdmin'));
+                $toBeDeleted1->addUser($this->getReference('KuchiAdmin'));
+		$this->addReference('toBeDeleted1', $toBeDeleted1);
+		$manager->persist($toBeDeleted1);
+		$manager->flush();
+		$folder = $this->container->getParameter('path_kuchikomi_photo') . $toBeDeleted1->getId();
+		$toBeDeleted1->setPhotoKuchiKomiLink($folder . "/");
+		$folder = $this->container->getParameter('path_kuchi_photo') . $toBeDeleted1->getId();
+		$toBeDeleted1->setLogoLink($folder . "/logo.jpg");
+		$toBeDeleted1->setPhotoLink($folder . "/photo.jpg");
+		$manager->persist($toBeDeleted1);
+		$manager->flush();
+                // ACL
+                $AclManager->addAcl($toBeDeleted1, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($toBeDeleted1, $this->getReference('Admin'));
+                $AclManager->addAcl($toBeDeleted1, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($toBeDeleted1, $this->getReference('KuchiAdmin')); 
+                
+                // toBeDeleted2
+		$toBeDeleted2 = new Kuchi();
+		$toBeDeleted2->setName('toBeDeleted2');
+		$toBeDeleted2->setPhoneNumber('00 00 00 00 14');
+		$toBeDeleted2->setMailAddress('maxime.marie@ob-do.com');
+		$toBeDeleted2->setWebSite('www.ob-do.com');		
+		$toBeDeleted2->setKuchiGroup($this->getReference('toBeDeletedGroup'));
+		$toBeDeleted2->setPassword($Password->generateHash('maxime'));
+		$toBeDeleted2->setAddress($this->getReference('tb2Address'));
+		$this->addReference('toBeDeleted2', $toBeDeleted2);
+		$manager->persist($toBeDeleted2);
+		$manager->flush();
+		$folder = $this->container->getParameter('path_kuchikomi_photo') . $toBeDeleted2->getId();
+		$toBeDeleted2->setPhotoKuchiKomiLink($folder . "/");
+		$folder = $this->container->getParameter('path_kuchi_photo') . $toBeDeleted2->getId();
+		$toBeDeleted2->setLogoLink($folder . "/logo.jpg");
+		$toBeDeleted2->setPhotoLink($folder . "/photo.jpg");
+		$manager->persist($toBeDeleted2);
+		$manager->flush();
+                // ACL
+                $AclManager->addAcl($toBeDeleted2, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($toBeDeleted2, $this->getReference('Admin'));
+                $AclManager->addAcl($toBeDeleted2, $this->getReference('GroupAdmin'));
 		
-
 	}
-        function addAcl($objet, $user) {
-        // création de l'ACL
-        $aclProvider = $this->container->get('security.acl.provider');
-        $objectIdentity = ObjectIdentity::fromDomainObject($objet);
-        // si acl existe pas de création
-        try {
-            $acl = $aclProvider->findAcl($objectIdentity);
-        } catch (\Exception $e) {
-            $acl = $aclProvider->createAcl($objectIdentity);
-        }
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
-
-        // donne accès au user 
-        $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($acl);
-    }
+        
 }

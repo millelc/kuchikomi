@@ -8,7 +8,6 @@ use obdo\KuchiKomiUserBundle\Form\UserKuchiType;
 use obdo\KuchiKomiUserBundle\Form\UserKuchiGroupType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 // pour la gestion des acls
-use obdo\KuchiKomiUserBundle\Controller\AclController;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 
@@ -81,6 +80,7 @@ class UserController extends Controller
     public function ajoutsuiteAction($username, $usermail, $userclient, $userpwd, $userrole) 
     {
         $Logger = $this->container->get('obdo_services.Logger');
+        $AclManager = $this->container->get('obdo_services.AclManager');
 
         $userk = new User();
         $userk->setUsername($username);
@@ -136,10 +136,14 @@ class UserController extends Controller
                 {
                     if ($formk['kuchis']->getData() != null) 
                     {
-                        foreach ($formk['kuchis']->getData() as $k) 
+                        foreach ($formk['kuchis']->getData() as $kuchi) 
                         {
-                            $userk->addKuchi($k);
-                            $objets[] = $k;
+                            $userk->addKuchi($kuchi);
+                            $objets[] = $kuchi;
+                            foreach($kuchi->getKuchikomis() as $kuchikomi)
+                            {
+                                $objets[] = $kuchikomi;
+                            }
                         }
                     }
                 }
@@ -147,16 +151,21 @@ class UserController extends Controller
                 {
                     if ($formkg['kuchigroups']->getData() != null) 
                     {
-                        foreach ($formkg['kuchigroups']->getData() as $kg) 
+                        foreach ($formkg['kuchigroups']->getData() as $kuchigroup) 
                         {
-                            $userk->addKuchiGroup($kg);
-                            $objets[] = $kg;
+                            $userk->addKuchiGroup($kuchigroup);
+                            $objets[] = $kuchigroup;
                             
                             // Add all the kuchi from the groupe
-                            $kuchis = $kg->getKuchis();
+                            $kuchis = $kuchigroup->getKuchis();
                             foreach($kuchis as $kuchi)
                             {
                                 $userk->addKuchi($kuchi);
+                                $objets[] = $kuchi;
+                                foreach($kuchi->getKuchikomis() as $kuchikomi)
+                                {
+                                    $objets[] = $kuchikomi;
+                                }
                             }
                         }
                     }
@@ -170,17 +179,7 @@ class UserController extends Controller
                
                 foreach($objets as $objet)
                 {
-                    AclController::addAcl($objet, $userk, $this); 
-                    // si je suis pas kuchi, il faut ajouter l'acl des kuchis 
-                    // du groupe à l'utilisateur
-                    if ($currentrole != 'ROLE_KUCHI')
-                    {
-                        $kuchis = $objet->getKuchis();
-                        foreach($kuchis as $kuchi)
-                        {
-                           AclController::addAcl($kuchi, $userk, $this); 
-                        }
-                    }
+                    $AclManager->addAcl($objet, $userk); 
                 }
                                 
                 $Logger->Info("[KuchiUser] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $userk->getUsername() . " added");
@@ -215,21 +214,23 @@ class UserController extends Controller
 
     public function viewAction($id) 
     {
+        $AclManager = $this->container->get('obdo_services.AclManager');
+        
         $user = $this->getDoctrine()
                 ->getRepository('obdoKuchiKomiUserBundle:User')
                 ->find($id);
         
         // on récupére la liste des kuchigroup que l'utilisateur à le droit de traiter
                
-        $provider = $this->container->get('security.acl.provider');
+        
         $repo = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         $kgs = $repo->findAll();
-        $kuchigroup = AclController::lstObj($user, $kgs, $provider);
+        $kuchigroup = $AclManager->lstObj($user, $kgs);
         
         // on récupére la liste des kuchi que l'utilisateur à le droit de traiter
         $repo = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
         $ks = $repo->findAll();
-        $kuchi = AclController::lstObj($user, $ks, $provider);
+        $kuchi = $AclManager->lstObj($user, $ks);
 
         return $this->render('obdoKuchiKomiUserBundle:Default:userview.html.twig', array(
                     'user' => $user,
@@ -241,6 +242,7 @@ class UserController extends Controller
     public function addaclkuchigroupAction($userid)
     {
         $Logger = $this->container->get('obdo_services.Logger');
+        $AclManager = $this->container->get('obdo_services.AclManager');
         
         $user = $this->getDoctrine()
                 ->getRepository('obdoKuchiKomiUserBundle:User')
@@ -266,11 +268,11 @@ class UserController extends Controller
                         }
                         catch(\Exception $e) {
                         }
-                        AclController::addAcl($kg, $user, $this); 
+                        $AclManager->addAcl($kg, $user); 
                         $kuchis = $kg->getKuchis();
                         foreach($kuchis as $kuchi)
                         {
-                            AclController::addAcl($kuchi, $user, $this); 
+                            $AclManager->addAcl($kuchi, $user); 
                         }
                     }
                     $em = $this->getDoctrine()->getManager();
@@ -293,6 +295,7 @@ class UserController extends Controller
     public function addaclkuchiAction($userid)
     {
         $Logger = $this->container->get('obdo_services.Logger');
+        $AclManager = $this->container->get('obdo_services.AclManager');
         
         $user = $this->getDoctrine()
                 ->getRepository('obdoKuchiKomiUserBundle:User')
@@ -318,7 +321,7 @@ class UserController extends Controller
                         catch(\Exception $e) 
                         {
                         }
-                        AclController::addAcl($k, $user, $this);
+                        $AclManager->addAcl($k, $user);
                     }
                     $em = $this->getDoctrine()->getManager();
                     $em->flush();

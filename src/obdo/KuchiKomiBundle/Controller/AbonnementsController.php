@@ -12,11 +12,13 @@ use obdo\KuchiKomiRESTBundle\Form\AbonnementsType;
  *
  * @author frederic
  */
-class AbonnementsController extends Controller{
+class AbonnementsController extends Controller
+{
     /*
      * Ajout d'un abonnement depuis un client
      */
-    public function addAction($clientid) {
+    public function addAction($clientid) 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $msgd = '';
@@ -24,6 +26,16 @@ class AbonnementsController extends Controller{
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
                 ->find($clientid); 
+        
+        if( !$client )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "Le client avec l'identifiant " . $clientid . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
         $abonnement = new Abonnements();
         // on passe les dates à la date du jour
         $abonnement->setDatedebabo(new \DateTime());
@@ -52,7 +64,7 @@ class AbonnementsController extends Controller{
                     return $this->redirect($this->generateUrl('obdo_kuchi_komi_client_view', array(
                                         'id' => $clientid,
                     )));
-                }
+                }   
             }
         }
         return $this->render('obdoKuchiKomiBundle:Default:abonnementsadd.html.twig', array(
@@ -65,10 +77,21 @@ class AbonnementsController extends Controller{
     /*
      * Affiche le détail d'un abonnement
      */
-    public function viewAction($id) {
+    public function viewAction($id) 
+    {
         $abonnement = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Abonnements')
                 ->find($id);
+        
+        if( !$abonnement )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "L'abonnement avec l'identifiant " . $id . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
         
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
@@ -90,12 +113,23 @@ class AbonnementsController extends Controller{
     /*
      * Modification d'un abonnement
      */
-    public function updateAction($id) {
+    public function updateAction($id) 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $abonnement = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Abonnements')
                 ->find($id);
+        
+        if( !$abonnement )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "L'abonnement avec l'identifiant " . $id . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
         
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
@@ -130,12 +164,23 @@ class AbonnementsController extends Controller{
     /*
      * Affectation d'un kuchi à un abonnement
      */
-    public function kuchiAction($id){
+    public function kuchiAction($id)
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $abonnement = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Abonnements')
                 ->find($id);
+        
+        if( !$abonnement )
+        {
+            $this->get('session')->getFlashBag()->add("danger", "L'abonnement avec l'identifiant " . $id . " n'existe pas... ");
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_client', array(
+                                    'page' => 1,
+                                    'sort' => 'name_up'
+                )));
+        }
         
         $client = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Clients')
@@ -188,7 +233,8 @@ class AbonnementsController extends Controller{
     /*
      * Retire un kuchi de l'abonnement
      */
-    public function kuchiremoveAction($id, $aboid){
+    public function kuchiremoveAction($id, $aboid)
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         
         $kuchi = $this->getDoctrine()
@@ -201,7 +247,8 @@ class AbonnementsController extends Controller{
                 ->find($aboid);
         
         // si on à trouvé le kuchi
-        if ($kuchi){
+        if ($kuchi)
+        {
             $kuchi->setAbonnement(null);
             $em = $this->getDoctrine()->getManager();
             $em->flush();
@@ -219,7 +266,8 @@ class AbonnementsController extends Controller{
      * Determine si le bouton d'affectation d'un kuchi à l'abonnement s'affiche
      * en fonction du maxkuchi de l'abonnement
      */
-    public function btnafficheAddKushi($abonnement) {
+    public function btnafficheAddKushi($abonnement) 
+    {
         $hidden = false;
        
         // combien de kuchis autorisés

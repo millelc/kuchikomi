@@ -1,26 +1,24 @@
 <?php
 
-namespace obdo\KuchiKomiUserBundle\Controller;
+namespace obdo\ServicesBundle\Services;
 
-// pour la gestion des acls
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-/**
- * Description of AclController
- * Gestion des acl
- * parametre l'objet à protéger/contrôler
- * parametre l'utilisateur qui demande l'accés/ pour lequel on créé un accés
- * @author frederic
- */
-class AclController {
+class AclManager
+{
+    private $container;
 
-    public static function addAcl($objet, $user, $context) 
+    public function __construct($kernel)
+    {
+        $this->container = $kernel->getContainer();
+    }
+
+    public function addAcl($objet, $user) 
     {
         // création de l'ACL
-        $aclProvider = $context->get('security.acl.provider');
+        $aclProvider = $this->container->get('security.acl.provider');
         $objectIdentity = ObjectIdentity::fromDomainObject($objet);
         // si acl existe pas de création
         try 
@@ -38,12 +36,21 @@ class AclController {
         $aclProvider->updateAcl($acl);
     }
     
+    public function deleteAcl( $user )
+    {
+        $aclProvider = $this->container->get('security.acl.provider');
+        $objectIdentity = ObjectIdentity::fromDomainObject($user);
+        $aclProvider->deleteAcl($objectIdentity);
+    }
+    
     /*
      * Retourne les objets apartennant à la table $objet transmise en entrée
      * et pour lesquels l'utilisatuer $user a des droits.
      */
-    public static function lstObj($user, $objet, $provider) 
+    public function lstObj($user, $objet) 
     {
+        $provider = $this->container->get('security.acl.provider');
+        
         $securityId = UserSecurityIdentity::fromAccount($user);
 
         $liste = array();

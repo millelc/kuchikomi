@@ -21,7 +21,12 @@
         <li class="list-group-item">Actif</li>
     {% endif %}
 
-    <li class="list-group-item">Groupe : <a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': Kuchi.kuchiGroup.id}) }}">{{Kuchi.kuchiGroup.name}}</a></li>
+    {% if is_granted('ROLE_ADMIN_GROUP_KUCHI') %}
+        <li class="list-group-item">Groupe : <a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': Kuchi.kuchiGroup.id}) }}">{{Kuchi.kuchiGroup.name}}</a></li>
+    {% else %}
+        <li class="list-group-item">Groupe : {{Kuchi.kuchiGroup.name}}</li>
+    {% endif %}
+    
     <li class="list-group-item">Abonnement Client : {{ Abo.titreabo }}  </li>
     {% if Abo.titreabo != "Pas d'abonnement en cours" %}
         <li class="list-group-item">
@@ -56,7 +61,6 @@
             <th>Début</th>
             <th>Fin</th>
             <th>Merci</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -68,7 +72,7 @@
                 <td><p class="text-danger">Inactif</p></td>
             {% endif %}
             
-            <td>{{kuchikomi.title}}</td>
+            <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_view', {'id': kuchikomi.id}) }}">{{kuchikomi.title}}</a></td>
 
             <td>{{kuchikomi.timestampCreation|date('Y-m-d H:i:s')}}</td>
             
@@ -83,8 +87,6 @@
             <td>{{kuchikomi.timestampEnd|date('Y-m-d H:i:s')}}</td>
             
             <td>{{kuchikomi.getNbThanks}}</td>
-
-            <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_view', {'id': kuchikomi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
            
         </tr>
         {% endfor %}

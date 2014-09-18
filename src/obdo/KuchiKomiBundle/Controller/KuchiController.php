@@ -8,7 +8,6 @@ use obdo\KuchiKomiRESTBundle\Form\KuchiType;
 use obdo\KuchiKomiRESTBundle\Form\KuchiUpdateType;
 use obdo\KuchiKomiRESTBundle\Entity\Abonnements;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use obdo\KuchiKomiUserBundle\Controller\AclController;
 // pour la gestion des acls
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -35,6 +34,7 @@ class KuchiController extends Controller {
     public function addAction($groupId) {
         $Logger = $this->container->get('obdo_services.Logger');
         $Password = $this->container->get('obdo_services.Password');
+        $AclManager = $this->container->get('obdo_services.AclManager');
 
         $kuchi = new Kuchi();
         $kuchiGroup = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')->find($groupId);
@@ -112,9 +112,9 @@ class KuchiController extends Controller {
                     $securityContext = $this->get('security.context');
                     $user = $securityContext->getToken()->getUser();
                     // donne accès au propriétaire 
-                    AclController::addAcl($kuchi, $user, $this);
+                    $AclManager->addAcl($kuchi, $user);
                     // et à l'admin
-                    AclController::addAcl($kuchi, $admin, $this);
+                    $AclManager->addAcl($kuchi, $admin);
 
                     $Logger->Info("[Kuchi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchi->getName() . " added");
 
