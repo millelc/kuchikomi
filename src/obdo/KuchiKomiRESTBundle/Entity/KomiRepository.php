@@ -21,6 +21,24 @@ class KomiRepository extends EntityRepository
                     ->getSingleScalarResult();
     }
     
+    public function getNbKomiAndroid()
+    {
+        return $this->createQueryBuilder('komi')
+                    ->select('COUNT(komi)')
+                    ->where('komi.osType = 0')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
+    public function getNbKomiiOS()
+    {
+        return $this->createQueryBuilder('komi')
+                    ->select('COUNT(komi)')
+                    ->where('komi.osType = 1')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
     public function getKomis($nombreParPage, $page, $sort)
     {
     	// On déplace la vérification du numéro de page dans cette méthode

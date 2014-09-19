@@ -9,7 +9,16 @@ class DashboardController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('obdoKuchiKomiBundle:Dashboard:index.html.twig');
+        $currentRole = $this->getUser()->getRoles()[0];
+        if ($currentRole == 'ROLE_SUPER_ADMIN')
+        {
+            return $this->render('obdoKuchiKomiBundle:Dashboard:indexadmin.html.twig');
+        }
+        else
+        {
+            return $this->render('obdoKuchiKomiBundle:Dashboard:index.html.twig');
+        }
+        
     }
     
     public function nbGroupAction()
@@ -29,38 +38,49 @@ class DashboardController extends Controller
 
     public function nbKomiAction()
     {
-        $user = $this->getUser();
-        $roles = $user->getRoles();
-        $role = $roles[0];
-        
-        if ($role == 'ROLE_SUPER_ADMIN'){
-           $nbKomi = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Komi')->getNbKomi();
-            return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomi.html.twig', 
-                    array('nbKomi'=>$nbKomi,
-                          'role' => '1')); 
-        }else{
-            $nbPotentiels = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')
-                    ->getListByUserId($user->getId());
-            $nbAbo = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Subscription')
-                ->getNbSubActivebyId($user->getId());
-            $nbPotentiel = 0;
-            foreach($nbPotentiels as $nb){
-                $nbPotentiel = $nbPotentiel + $nb->getNbAboPotentiel();
-            }
-            //print_r($nbPotentiels);
-            $pourcent = 0;
-            if ($nbPotentiel > 0){
-                $pourcent = ($nbAbo/$nbPotentiel)*100;
-            }
-            
-            return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomi.html.twig', 
-                    array('nbKomi'=> number_format($pourcent, 2),
-                    'role' => '0'));
-        }
         $nbKomi = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Komi')->getNbKomi();
-        return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomi.html.twig', array('nbKomi'=>$nbKomi));
+            return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomi.html.twig', 
+                    array('nbKomi'=>$nbKomi)); 
+    }
+    
+    public function nbKomiAndroidAction()
+    {
+        $nbKomi = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Komi')->getNbKomiAndroid();
+            return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomiandroid.html.twig', 
+                    array('nbKomi'=>$nbKomi)); 
+    }
+    
+    public function nbKomiiOSAction()
+    {
+        $nbKomi = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Komi')->getNbKomiiOS();
+            return $this->render('obdoKuchiKomiBundle:Dashboard:nbkomiios.html.twig', 
+                    array('nbKomi'=>$nbKomi)); 
     }
 
+    public function pourcentageAboAction()
+    {
+        $user = $this->getUser();
+        $nbPotentiels = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')
+                    ->getListByUserId($user->getId());
+        $nbAbo = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:Subscription')
+            ->getNbSubActivebyId($user->getId());
+        $nbPotentiel = 0;
+        
+        foreach($nbPotentiels as $nb)
+        {
+            $nbPotentiel = $nbPotentiel + $nb->getNbAboPotentiel();
+        }
+        
+        $pourcent = 0;
+        if ($nbPotentiel > 0)
+        {
+            $pourcent = ($nbAbo/$nbPotentiel)*100;
+        }
+
+        return $this->render('obdoKuchiKomiBundle:Dashboard:pourcentageAbo.html.twig', 
+                    array('pourcentageAbo'=> number_format($pourcent, 2)));
+    }
+    
     public function nbKuchiKomiAction()
     {
         $nbKuchiKomi = $this->getDoctrine()->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi')

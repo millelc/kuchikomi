@@ -6,9 +6,12 @@
 <div class="row">
   <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbGroup")) }} </div>
   <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKuchi")) }} </div>
-  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:pourcentageAbo")) }} </div>
 </div>
-
+<div class="row">
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKomi")) }} </div>
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKomiAndroid")) }} </div>
+  <div id="tuile" class="col-md-4"> {{ render(controller("obdoKuchiKomiBundle:Dashboard:nbKomiiOS")) }} </div>
+</div>
 <div class="row">
   <div id="tuile" class="col-md-4"> 
       <a href="{{ path('obdo_pChart', {'nom': 'subscription'}) }}">
