@@ -16,13 +16,13 @@ class Subscription
 {
     /**
     * @ORM\Id
-    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Komi")
+    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Komi", inversedBy="subscriptions")
     */
     private $komi;
 
     /**
     * @ORM\Id
-    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi")
+    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", inversedBy="subscriptions")
     */
     private $kuchi;
     

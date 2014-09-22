@@ -21,7 +21,7 @@ class Thanks
 
     /**
     * @ORM\Id
-    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi")
+    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi", inversedBy="thanks")
     */
     private $kuchikomi;
 
