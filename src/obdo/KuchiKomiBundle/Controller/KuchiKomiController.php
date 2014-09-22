@@ -105,13 +105,9 @@ class KuchiKomiController extends Controller {
                                 ->upload($kuchikomi->getPhotoimg(), $photodir, $photoname);
 
                         $kuchikomi->setPhotoLink($photo);
-                        
-                        list($width, $height, $type, $attr) = getimagesize($photo);
-                        if ($width > 640 || $height > 640){
-                            $newimage = new imageLib($photo);
-                            $newimage->resizeImage(640,640,'crop');
-                            $newimage -> saveImage($photo,"50");
-                        }
+                        $newimage = new imageLib($photo);
+                        $newimage->resizeImage(640,640,'crop');
+                        $newimage->saveImage($photo,"30");
                     }
 
                     $em = $this->getDoctrine()->getManager();
