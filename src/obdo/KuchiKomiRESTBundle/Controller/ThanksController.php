@@ -84,7 +84,7 @@ class ThanksController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[POST rest/thanks/] 510 - hash invalid");
+                $Logger->Error("[POST rest/thanks/] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
             }
             
             // disable current token
