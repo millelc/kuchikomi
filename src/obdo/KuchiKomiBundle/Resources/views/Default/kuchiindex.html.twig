@@ -54,8 +54,8 @@
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 </a>
             </th>
-            <th>Nb Abonnement</th>
-            <th>Nb KuchiKomis</th>
+            <th><center>Abonnements<br>(Actif/Total)</center></th>
+            <th><center>Nb KuchiKomis</center></th>
         </tr>
     </thead>
     <tbody>
@@ -86,9 +86,9 @@
                 <td>{{kuchi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
             {% endif %}
             
-            <td>{{kuchi.subscriptions|length}}</td>
+            <td><center>{{kuchi.getNbSubscriptionsActive}} / {{kuchi.getNbSubscriptionsAll}}</center></td>
             
-            <td>{{kuchi.kuchikomis|length}}</td>                        
+            <td><center>{{kuchi.kuchikomis|length}}</center></td>                        
 
         </tr>
         {% endfor %}

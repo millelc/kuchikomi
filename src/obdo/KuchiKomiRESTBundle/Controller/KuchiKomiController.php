@@ -121,13 +121,22 @@ class KuchiKomiController extends Controller
                             $em->persist($kuchikomi);
                             $em->flush();
                             
-                            // ACL update
+                            // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
                             $AclManager = $this->container->get('obdo_services.AclManager');
-                            $superAdminUser = $this->getDoctrine()->getRepository('obdo\KuchiKomiUserBundle\Entity\User')->find(1);
-                            $currentUser = $this->get('security.context')->getToken()->getUser();
-                            $AclManager->addAcl($kuchikomi, $currentUser);
-                            $AclManager->addAcl($kuchikomi, $superAdminUser);
-                        
+                            $securityContext = $this->get('security.context');
+                            $userAdmin = $this->getDoctrine()->getRepository('obdo\KuchiKomiUserBundle\Entity\User')->find(1);
+                            $userCurrent = $securityContext->getToken()->getUser();
+                            $AclManager->addAcl($kuchikomi, $userAdmin);
+                            $AclManager->addAcl($kuchikomi, $userCurrent);
+                            foreach($kuchikomi->getKuchi()->getUsers() as $user)
+                            {
+                                $AclManager->addAcl($kuchikomi, $user);
+                            }
+                            foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
+                            {
+                                $AclManager->addAcl($kuchikomi, $user);
+                            }
+                    
                             $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
                         }    
                         $response->setStatusCode(200);

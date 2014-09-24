@@ -371,21 +371,32 @@ class Kuchi
     }
     
     /**
-     * Get number of subscriptions
+     * Get number of active subscriptions
      *
      * @return number
      */
-    public function getNbSubscriptions()
+    public function getNbSubscriptionsActive()
     {
     	$result = 0;
     	foreach ($this->subscriptions as $subscription)
     	{
-    		if( $subscription->getActive() )
-    		{
-    			$result = $result + 1;
-    		}
+            if( $subscription->getActive() )
+            {
+                $result = $result + 1;
+            }
     	}
+        
     	return $result;
+    }
+    
+    /**
+     * Get number of active subscriptions
+     *
+     * @return number
+     */
+    public function getNbSubscriptionsAll()
+    {
+    	return count($this->subscriptions);
     }
 
     /**

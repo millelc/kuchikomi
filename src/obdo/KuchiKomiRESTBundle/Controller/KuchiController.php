@@ -265,7 +265,7 @@ class KuchiController extends Controller
                             //$Logger->Info("[GET rest/kuchi/sync/{id}/{hash}] 200 - Kuchi id=".$kuchi->getId()." synchronized");
 
                             return array('STATS' => array(
-                                                            'NB_SUB' => $kuchi->getNbSubscriptions(),
+                                                            'NB_SUB' => $kuchi->getNbSubscriptionsActive(),
                                                             'NB_SUB_1MONTH' => $repositorySubscription->getNbSubscriptions($kuchi, 1)
                                                          ),
                                                  'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
