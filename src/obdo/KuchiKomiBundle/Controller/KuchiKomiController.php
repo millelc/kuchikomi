@@ -115,11 +115,6 @@ class KuchiKomiController extends Controller {
                     $em->flush();
                     
                     // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
-                    $securityContext = $this->get('security.context');
-                    $userAdmin = $this->getDoctrine()->getRepository('obdo\KuchiKomiUserBundle\Entity\User')->find(1);
-                    $userCurrent = $securityContext->getToken()->getUser();
-                    $AclManager->addAcl($kuchikomi, $userAdmin);
-                    $AclManager->addAcl($kuchikomi, $userCurrent);
                     foreach($kuchikomi->getKuchi()->getUsers() as $user)
                     {
                         $AclManager->addAcl($kuchikomi, $user);
