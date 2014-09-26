@@ -272,6 +272,65 @@ class KomiController extends Controller
         return $response;
     }
 
+        /**
+     * @Put("/rest/komi/regid/{id}/{hash}")
+     * @return array
+     * @View()
+     */
+    public function putKomiRegIdAction($id, $hash)
+    {
+        $response = new Response();
+        
+        $Logger = $this->container->get('obdo_services.Logger');
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
+        
+        $komi = $repositoryKomi->findOneByRandomId($id);
+        
+        if( !$komi )
+        {
+            // Komi unknown !
+            $response->setStatusCode(501);
+            $Logger->Error("[PUT rest/komi/RegId/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+        }
+        else
+        {
+            if( $hash == sha1("PUT /rest/komi/regid" . $komi->getToken() ) )
+            {
+                if ($this->getRequest()->get('regid') != null)
+                {
+                    $komi->setGcmRegId($this->getRequest()->get('regid'));
+
+                    $em->flush();
+
+                    $response->setStatusCode(200);
+                    $Logger->Info("[PUT rest/komi/regid/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated");
+                }
+                else
+                {
+                    $response->setStatusCode(511);
+                    $Logger->Error("[PUT rest/komi/{id}/{hash}] 511 - regid is empty");
+                }     
+            }
+            else
+            {
+                $response->setStatusCode(510);
+                $Logger->Error("[PUT rest/komi/regid/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
+            }    
+            
+            // disable current token
+            $komi->generateToken();
+            $em->flush();
+        }
+
+        $response->headers->set('Content-Type', 'text/html');
+        
+        return $response;
+    }
+
+    
     /**
      * @Get("/rest/komi/sync/{id}/{hash}")
      * @return array

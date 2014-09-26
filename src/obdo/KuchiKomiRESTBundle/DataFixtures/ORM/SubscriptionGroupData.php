@@ -39,6 +39,19 @@ class SubscriptionGroupData extends AbstractFixture implements ContainerAwareInt
 	{
 		
 		$manager->getConnection()->exec("ALTER TABLE SubscriptionGroup AUTO_INCREMENT = 1;");
+                
+                $subscriptionGroup1 = new SubscriptionGroup();
+                $subscriptionGroup1->setKomi($this->getReference('komi2'));
+                $subscriptionGroup1->setKuchiGroup($this->getReference('toBeDeletedGroup'));
+                $subscriptionGroup1->setType(1);
+                $manager->persist($subscriptionGroup1);
+                
+                $subscriptionGroup2 = new SubscriptionGroup();
+                $subscriptionGroup2->setKomi($this->getReference('komi2'));
+                $subscriptionGroup2->setKuchiGroup($this->getReference('lyceeGroup'));
+                $subscriptionGroup2->setType(1);
+                $subscriptionGroup2->setActive(false);
+                $manager->persist($subscriptionGroup2);
 		
 		$manager->flush();	
 	}

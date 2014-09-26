@@ -42,7 +42,8 @@ class KuchiGroupController extends Controller {
      * affichage detail kuchigroup
      */
 
-    public function viewAction($id) {
+    public function viewAction($id) 
+    {
         $kuchiGroup = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiGroup')
                 ->find($id);

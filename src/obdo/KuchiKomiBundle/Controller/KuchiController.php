@@ -4,6 +4,8 @@ namespace obdo\KuchiKomiBundle\Controller;
 
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiGroup;
+use obdo\KuchiKomiRESTBundle\Entity\Subscription;
+use obdo\KuchiKomiRESTBundle\Entity\SubscriptionGroup;
 use obdo\KuchiKomiRESTBundle\Form\KuchiType;
 use obdo\KuchiKomiRESTBundle\Form\KuchiUpdateType;
 use obdo\KuchiKomiRESTBundle\Entity\Abonnements;
@@ -13,7 +15,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class KuchiController extends Controller {
 
-    public function indexAction($page, $sort) {
+    public function indexAction($page, $sort) 
+    {
         // on retrouve le role du user pour la requete d'affichage
         $currentroles = $this->getUser()->getRoles();
         $currentrole = $currentroles[0];
@@ -31,7 +34,8 @@ class KuchiController extends Controller {
         ));
     }
 
-    public function addAction($groupId) {
+    public function addAction($groupId) 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         $Password = $this->container->get('obdo_services.Password');
         $AclManager = $this->container->get('obdo_services.AclManager');
@@ -39,98 +43,107 @@ class KuchiController extends Controller {
         $kuchi = new Kuchi();
         $kuchiGroup = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup')->find($groupId);
         $kuchi->setKuchiGroup($kuchiGroup);
- // le controle ce fait maintenant sur l'abonnement
-//        // combien de kuchis autorisés
-//        $maxkuchi = $kuchiGroup->getNbMaxKuchi();
-//        // combien de kuchis actifs pour ce groupe
-//        $countkuchi = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Kuchi')->getNbKuchiGroup($groupId);
-//       
-//        if ($countkuchi >= $maxkuchi) {
-//            return $this->render('obdoKuchiKomiBundle:Default:kuchigroupview.html.twig', array(
-//                    'KuchiGroup' => $kuchiGroup,
-//                    'message' => 'Le kuchigroup a '.$countkuchi.' kuchis ajout impossible.',
-//        )); 
-//        } else {
 
+        $form = $this->createForm(new KuchiType, $kuchi);
 
-            $form = $this->createForm(new KuchiType, $kuchi);
+        // On récupère la requête
+        $request = $this->get('request');
 
-            // On récupère la requête
-            $request = $this->get('request');
+        if ($request->getMethod() == 'POST') 
+        {
+            $form->bind($request);
 
-            if ($request->getMethod() == 'POST') {
-                $form->bind($request);
-
-                if ($form->isValid()) {
-                    // En attendant de passer les champs à Null Allowed
-                    if ($kuchi->getAddress()->getAddress2() == null)
-                        $kuchi->getAddress()->setAddress2('.');
-                    if ($kuchi->getAddress()->getAddress3() == null)
-                        $kuchi->getAddress()->setAddress3('.');
-                    if ($kuchi->getMailAddress() == null)
-                        $kuchi->setMailAddress('@');
-                    if ($kuchi->getWebSite() == null)
-                        $kuchi->setWebSite('http:');
-                    // ajout du lien user kuchi
-                    $kuchi->addUser($this->getUser());
-                    // ajout du lien super_admin kuchigroup, pour l'instant avec id = 1
-                    $admin = $this->getDoctrine()
-                            ->getRepository('obdo\KuchiKomiUserBundle\Entity\User')
-                            ->find(1);
-                    $kuchi->addUser($admin);
-
-                    // Update password
-                    $passwordToHash = $kuchi->getPassword();
-                    $kuchi->setPassword($Password->generateHash($passwordToHash));
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($kuchi);
-                    $em->flush();
-
-                    // Création du répertoire pour stocker les images des KuchiKomis
-                    $folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi->getId();
-                    if (!is_dir($folder)) {
-                        mkdir($folder);
-                    }
-                    $kuchi->setPhotoKuchiKomiLink($folder . "/");
-
-                    // Création du répertoire pour stocker le logo et l'image d'un kuchi
-                    $folder = $this->container->getParameter('path_kuchi_photo') . $kuchi->getId();
-                    if (!is_dir($folder)) {
-                        mkdir($folder);
-                    }
-                    $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder,'');
-                    $kuchi->setLogoLink($logo);
-
-                    $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder,'');
-                    $kuchi->setPhotoLink($photo);
-
-
-                    //$em->persist($kuchi);
-                    $em->flush();
-                    
-                    // retrouve l'identifiant de sécurité de l'utilisateur actuellement connecté
-                    $securityContext = $this->get('security.context');
-                    $user = $securityContext->getToken()->getUser();
-                    // donne accès au propriétaire 
-                    $AclManager->addAcl($kuchi, $user);
-                    // et à l'admin
-                    $AclManager->addAcl($kuchi, $admin);
-
-                    $Logger->Info("[Kuchi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchi->getName() . " added");
-
-                    return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(
-                                        'id' => $kuchi->getId()
-                    )));
+            if ($form->isValid()) 
+            {
+                // En attendant de passer les champs à Null Allowed
+                if ($kuchi->getAddress()->getAddress2() == null)
+                {
+                    $kuchi->getAddress()->setAddress2('');
                 }
+                if ($kuchi->getAddress()->getAddress3() == null)
+                {
+                    $kuchi->getAddress()->setAddress3('');
+                }
+                if ($kuchi->getMailAddress() == null)
+                {
+                    $kuchi->setMailAddress('');
+                }
+                if ($kuchi->getWebSite() == null)
+                {
+                    $kuchi->setWebSite('');
+                }
+                
+                // Les user du kuchiGroup deviennent les user du nouveau kuchi
+                foreach($kuchiGroup->getUsers() as $user)
+                {
+                    $kuchi->addUser($user);
+                }
+                
+                // Update password
+                $passwordToHash = $kuchi->getPassword();
+                $kuchi->setPassword($Password->generateHash($passwordToHash));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($kuchi);
+                $em->flush();
+
+                // Création du répertoire pour stocker les images des KuchiKomis
+                $folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi->getId();
+                if (!is_dir($folder)) 
+                {
+                    mkdir($folder);
+                }
+                $kuchi->setPhotoKuchiKomiLink($folder . "/");
+
+                // Création du répertoire pour stocker le logo et l'image d'un kuchi
+                $folder = $this->container->getParameter('path_kuchi_photo') . $kuchi->getId();
+                if (!is_dir($folder)) 
+                {
+                    mkdir($folder);
+                }
+                $logo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getLogoimg(), $folder,'');
+                $kuchi->setLogoLink($logo);
+
+                $photo = $this->container->get('obdo_services.Picture_uploader')->upload($kuchi->getPhotoimg(), $folder,'');
+                $kuchi->setPhotoLink($photo);
+
+                $em->flush();
+
+                // Add ACL control for each user of the kuchi
+                foreach($kuchi->getUsers() as $user)
+                {
+                    $AclManager->addAcl($kuchi, $user);
+                }
+                
+                // Add subscription the new kuchi of each group subscriptions
+                foreach($kuchi->getKuchiGroup()->getSubscriptions() as $subscriptionGroup)
+                {
+                    if( $subscriptionGroup->getActive() )
+                    {
+                        $subscription = new Subscription();
+                        $subscription->setKomi($subscriptionGroup->getKomi());
+                        $subscription->setKuchi($kuchi);
+                        $subscription->setType(3);
+                        $em->persist($subscription);                        
+                    }
+                }      
+                $em->flush();
+
+                $Logger->Info("[Kuchi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchi->getName() . " added");
+
+                return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(
+                                    'id' => $kuchi->getId()
+                )));
             }
-            return $this->render('obdoKuchiKomiBundle:Default:kuchiadd.html.twig', array(
-                        'form' => $form->createView(),
-                        'action' => 'Ajouter',
-            ));
-//        }
+        }
+        
+        return $this->render('obdoKuchiKomiBundle:Default:kuchiadd.html.twig', array(
+                    'form' => $form->createView(),
+                    'action' => 'Ajouter',
+        ));
     }
 
-    public function viewAction($id) {
+    public function viewAction($id) 
+    {
         $kuchi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
                 ->find($id);
@@ -144,11 +157,14 @@ class KuchiController extends Controller {
             throw new AccessDeniedException();
         }
         
-        if ($kuchi->getAbonnement() != null){
+        if ($kuchi->getAbonnement() != null)
+        {
             $abonnement = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Abonnements')
                 ->find($kuchi->getAbonnement());
-        } else {
+        } 
+        else 
+        {
             $abonnement = new Abonnements();
             $abonnement->setTitreabo("Pas d'abonnement en cours");
         }
@@ -159,7 +175,8 @@ class KuchiController extends Controller {
         ));
     }
 
-    public function updateAction($id) {
+    public function updateAction($id) 
+    {
         $Logger = $this->container->get('obdo_services.Logger');
         $Password = $this->container->get('obdo_services.Password');
 
@@ -167,7 +184,7 @@ class KuchiController extends Controller {
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
                 ->find($id);
         
-         $securityContext = $this->get('security.context');
+        $securityContext = $this->get('security.context');
 
         // check for edit access
         if (false === $securityContext->isGranted('EDIT', $kuchi))
@@ -175,7 +192,8 @@ class KuchiController extends Controller {
             throw new AccessDeniedException();
         }
         
-        if ($kuchi != null) {
+        if ($kuchi != null) 
+        {
             //save avant
             $kuchiname = $kuchi->getName();
             $kuchipass = $kuchi->getPassword();
@@ -192,48 +210,68 @@ class KuchiController extends Controller {
             // On récupère la requête
             $request = $this->get('request');
 
-            if ($request->getMethod() == 'POST') {
+            if ($request->getMethod() == 'POST') 
+            {
                 $form->bind($request);
 
-                if ($form->isValid()) {
+                if ($form->isValid()) 
+                {
                     $afaire = 0;
 
-                    if ($kuchi->getName() != null) {
-                        if ($kuchi->getName() != $kuchiname) {
+                    if ($kuchi->getName() != null) 
+                    {
+                        if ($kuchi->getName() != $kuchiname) 
+                        {
                             $afaire = 1;
                         }
-                    } else
+                    } 
+                    else
+                    {
                         $kuchi->setName($kuchiname);
+                    }
 
-                    if ($kuchi->getPassword() != null) { // champ mot de passe pas vide
+                    if ($kuchi->getPassword() != null) 
+                    { // champ mot de passe pas vide
                         
                         $passwordHash = $Password->generateHash($kuchi->getPassword());                            
                         $kuchi->setPassword($passwordHash);
                         $afaire = 1;
-                         
-                    } else
+                    } 
+                    else
+                    {
                         $kuchi->setPassword($kuchipass);
+                    }
 
                     $kuchinewadress = $kuchi->getAddress();
-                    if ($kuchinewadress != null) {
+                    if ($kuchinewadress != null) 
+                    {
                         $kuchinewadd1 = $kuchiadress->getAddress1();
                         $kuchinewadd2 = $kuchiadress->getAddress2();
                         $kuchinewadd3 = $kuchiadress->getAddress3();
                         $kuchinewcp = $kuchiadress->getPostalCode();
                         $kuchinewcity = $kuchiadress->getCity();
-                        if ($kuchinewadd1 != $kuchiadd1 || $kuchinewadd2 != $kuchiadd2 || $kuchinewadd3 != $kuchiadd3 || $kuchinewcp != $kuchicp || $kuchinewcity != $kuchicity) {
+                        if ($kuchinewadd1 != $kuchiadd1 || $kuchinewadd2 != $kuchiadd2 || $kuchinewadd3 != $kuchiadd3 || $kuchinewcp != $kuchicp || $kuchinewcity != $kuchicity) 
+                        {
                             $afaire = 1;
                         }
-                    } else
+                    } 
+                    else
+                    {
                         $kuchi->setAddress($kuchiadress);
-
+                    }
+                    
                     $folder = $this->container->getParameter('path_kuchi_photo') . $kuchi->getId();
-                    if ($kuchi->getLogoimg() != null) {
+                    if ($kuchi->getLogoimg() != null) 
+                    {
                         // on efface l'ancien fichier avant l'upload
-                        if ($kuchilogo != null) {
-                            try{
+                        if ($kuchilogo != null) 
+                        {
+                            try
+                            {
                                 unlink($kuchilogo);
-                            }catch (\Exception $e){
+                            }
+                            catch (\Exception $e)
+                            {
                               //juste au cas ou le fichier n'existe pas  
                             }
                         }
@@ -241,12 +279,17 @@ class KuchiController extends Controller {
                         $kuchi->setLogoLink($logo);
                         $afaire = 1;
                     }
-                    if ($kuchi->getPhotoimg() != null) {
+                    if ($kuchi->getPhotoimg() != null) 
+                    {
                         // on efface l'ancien fichier avant l'upload
-                        if ($kuchiphoto != null) {
-                            try{
+                        if ($kuchiphoto != null) 
+                        {
+                            try
+                            {
                                 unlink($kuchiphoto);
-                            }catch (\Exception $e){
+                            }
+                            catch (\Exception $e)
+                            {
                               //juste au cas ou le fichier n'existe pas  
                             }
                         }
@@ -284,10 +327,13 @@ class KuchiController extends Controller {
                         'kuchi' => $kuchi,
                         'action' => 'Modifier',
             ));
-        } else
+        } 
+        else
+        {
             return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array(
                         'Kuchi' => $kuchi,
             ));
+        }
     }
 
 }
