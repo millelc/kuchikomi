@@ -59,88 +59,88 @@ class SubscriptionGroupController extends Controller
                 {
                     if( $kuchiGroup->getActive() )
                     {
-                            if( $hash == sha1("POST /rest/subscriptions" . $komi->getToken() ) )
+                        if( $hash == sha1("POST /rest/subscriptions" . $komi->getToken() ) )
+                        {
+                            $subscriptionGroup = $repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
+                            if( !$subscriptionGroup )
                             {
-                                $subscriptionGroup = $repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-                                if( !$subscriptionGroup )
+                                $subscriptionGroup = new SubscriptionGroup();
+                                $subscriptionGroup->setKomi($komi);
+                                $subscriptionGroup->setKuchiGroup($kuchiGroup);
+                                $subscriptionGroup->setType($type);
+
+                                $kuchis = $kuchiGroup->getKuchis();
+                                foreach($kuchis as $kuchi)
                                 {
-                                    $subscriptionGroup = new SubscriptionGroup();
-                                    $subscriptionGroup->setKomi($komi);
-                                    $subscriptionGroup->setKuchiGroup($kuchiGroup);
-                                    $subscriptionGroup->setType($type);
+                                    $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
 
-                                    $kuchis = $kuchiGroup->getKuchis();
-                                    foreach($kuchis as $kuchi)
+                                    if( !$subscription )
                                     {
-                                            $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+                                            $subscription = new Subscription();
+                                            $subscription->setKomi($komi);
+                                            $subscription->setKuchi($kuchi);
+                                            $subscription->setType($type);
 
-                                            if( !$subscription )
-                                            {
-                                                    $subscription = new Subscription();
-                                                    $subscription->setKomi($komi);
-                                                    $subscription->setKuchi($kuchi);
-                                                    $subscription->setType($type);
-
-                                                    $em->persist($subscription);
-                                            }
-                                            else 
-                                            {
-                                                    $subscription->setActive(true);
-                                                    $subscription->setType($type);
-                                            }
                                             $em->persist($subscription);
                                     }
-
-                                    $em->persist($subscriptionGroup);
-                                    $em->flush();
-                                    $response->setStatusCode(200);
-                                    //$Logger->Info("[POST rest/subscriptions] 200 - New subscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") added");
-                                }
-                                else
-                                {
-                                    if( !$subscriptionGroup->getActive() )
+                                    else 
                                     {
-                                            // re-activate the subscription to the group
-                                        $subscriptionGroup->setActive(true);
-                                        $subscriptionGroup->setType($type);
-
-                                        // re-activate the subscription to all existing kuchis from the group
-                                        $kuchis = $kuchiGroup->getKuchis();
-                                        foreach($kuchis as $kuchi)
-                                        {
-                                            $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
-                                            if( $subscription )
-                                            {
-                                                                    $subscription->setActive(true);
-                                                    $em->persist($subscription);
-                                            }
-                                        }
-
-                                        $em->flush();
-                                        $response->setStatusCode(200);
-                                        //$Logger->Info("[POST rest/subscriptions] 200 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") re-activated");
+                                            $subscription->setActive(true);
+                                            $subscription->setType($type);
                                     }
-                                    else
-                                    {
-                                        // subscription group already exist and active
-                                        $response->setStatusCode(511);
-                                        $Logger->Warning("[POST rest/subscriptions] 511 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already exist");
-                                    }
+                                    $em->persist($subscription);
                                 }
+
+                                $em->persist($subscriptionGroup);
+                                $em->flush();
+                                $response->setStatusCode(200);
+                                //$Logger->Info("[POST rest/subscriptions] 200 - New subscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") added");
                             }
                             else
                             {
-                                // hash invalid
-                                $response->setStatusCode(510);
-                                $Logger->Error("[POST rest/subscriptions] 510 - hash invalide");
+                                if( !$subscriptionGroup->getActive() )
+                                {
+                                        // re-activate the subscription to the group
+                                    $subscriptionGroup->setActive(true);
+                                    $subscriptionGroup->setType($type);
+
+                                    // re-activate the subscription to all existing kuchis from the group
+                                    $kuchis = $kuchiGroup->getKuchis();
+                                    foreach($kuchis as $kuchi)
+                                    {
+                                        $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+                                        if( $subscription )
+                                        {
+                                                                $subscription->setActive(true);
+                                                $em->persist($subscription);
+                                        }
+                                    }
+
+                                    $em->flush();
+                                    $response->setStatusCode(200);
+                                    //$Logger->Info("[POST rest/subscriptions] 200 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") re-activated");
+                                }
+                                else
+                                {
+                                    // subscription group already exist and active
+                                    $response->setStatusCode(511);
+                                    $Logger->Warning("[POST rest/subscriptions] 511 - SubscriptionGroup (". $komi->getRandomId() ."-". $kuchiGroup->getName().") already exist");
+                                }
                             }
-                    }
+                        }
                         else
                         {
-                            // Kuchi group inactif
-                            $response->setStatusCode(508);
-                            $Logger->Warning("[POST rest/subscriptions] 508 - KuchiGroup id " . $kuchiGroup->getId() . " inactif");
-                        }	 
+                            // hash invalid
+                            $response->setStatusCode(510);
+                            $Logger->Error("[POST rest/subscriptions] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
+                        }
+                    }
+                    else
+                    {
+                        // Kuchi group inactif
+                        $response->setStatusCode(508);
+                        $Logger->Warning("[POST rest/subscriptions] 508 - KuchiGroup id " . $kuchiGroup->getId() . " inactif");
+                    }	 
                 }
             }
             else

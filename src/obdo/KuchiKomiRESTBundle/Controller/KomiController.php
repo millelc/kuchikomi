@@ -181,7 +181,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
+                $Logger->Error("[DELETE rest/komi/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
             }
             
             // disable current token

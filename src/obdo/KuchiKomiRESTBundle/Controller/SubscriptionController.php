@@ -94,7 +94,7 @@ class SubscriptionController extends Controller
                         {
                             // hash invalid
                             $response->setStatusCode(510);
-                            $Logger->Error("[POST rest/subscription] 510 - hash invalide");
+                            $Logger->Error("[POST rest/subscription] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
                         }            		
                     }
                     else 
@@ -192,7 +192,7 @@ class SubscriptionController extends Controller
                 {
                     // hash invalid
                     $response->setStatusCode(510);
-                    $Logger->Error("[DELETE rest/subscription] 510 - hash invalide");
+                    $Logger->Error("[DELETE rest/subscription] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
                 }
             }
             

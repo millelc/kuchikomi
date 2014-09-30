@@ -141,7 +141,7 @@ class KuchiKomiController extends Controller
                     {
                         // hash invalid
                         $response->setStatusCode(510);
-                        $Logger->Error("[POST rest/kuchikomi] 510 - hash invalide");
+                        $Logger->Error("[POST rest/kuchikomi] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
                     }
 
                     // disable current token
