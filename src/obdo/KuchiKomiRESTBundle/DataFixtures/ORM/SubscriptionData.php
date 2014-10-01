@@ -46,7 +46,28 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
                 $subscription1->setType(0);
 
                 $manager->persist($subscription1);
+                
+                $subscription2 = new Subscription();
+                $subscription2->setKomi($this->getReference('komi2'));
+                $subscription2->setKuchi($this->getReference('nicolas'));
+                $subscription2->setType(1);
+
+                $manager->persist($subscription2);
 		
+                $subscription3 = new Subscription();
+                $subscription3->setKomi($this->getReference('komi2'));
+                $subscription3->setKuchi($this->getReference('david'));
+                $subscription3->setType(2);
+
+                $manager->persist($subscription3);
+                
+                $subscription4 = new Subscription();
+                $subscription4->setKomi($this->getReference('komi2'));
+                $subscription4->setKuchi($this->getReference('julien'));
+                $subscription4->setType(3);
+
+                $manager->persist($subscription4);
+                
 		$manager->flush();	
 	}
 }

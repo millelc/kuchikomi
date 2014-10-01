@@ -259,7 +259,7 @@ class KomiController extends Controller
             else
             {
                 $response->setStatusCode(510);
-                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
+                $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
             }    
             
             // disable current token
@@ -311,13 +311,13 @@ class KomiController extends Controller
                 else
                 {
                     $response->setStatusCode(511);
-                    $Logger->Error("[PUT rest/komi/{id}/{hash}] 511 - regid is empty");
+                    $Logger->Error("[PUT rest/komi/regid/{id}/{hash}] 511 - regid is empty");
                 }     
             }
             else
             {
                 $response->setStatusCode(510);
-                $Logger->Error("[PUT rest/komi/regid/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
+                $Logger->Error("[PUT rest/komi/regid/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
             }    
             
             // disable current token
@@ -412,7 +412,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
+                $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
             }
 
             // disable current token
@@ -461,7 +461,7 @@ class KomiController extends Controller
             {
                 // hash invalid
                 $response->setStatusCode(510);
-                $Logger->Error("[POST rest/komi/sync/{id}/{hash}] 510 - Komi id=".$komi->getRandomId()." - Invalid hash");
+                $Logger->Error("[POST rest/komi/sync/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
             }
 
             // disable current token

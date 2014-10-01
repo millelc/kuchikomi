@@ -184,7 +184,7 @@ class KuchiController extends Controller
                     {
                         // hash invalid
                         $response->setStatusCode(510);
-                        $Logger->Error("[DELETE rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Invalid hash");
+                        $Logger->Error("[DELETE rest/kuchi/sync/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
                     }
 
                     // disable current token
@@ -283,7 +283,7 @@ class KuchiController extends Controller
                     {
                         // hash invalid
                         $response->setStatusCode(510);
-                        $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Invalid hash");
+                        $Logger->Error("[GET rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
                     }
 
                     // disable current token
@@ -357,7 +357,7 @@ class KuchiController extends Controller
                     {
                         // hash invalid
                         $response->setStatusCode(510);
-                        $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Invalid hash");
+                        $Logger->Error("[POST rest/kuchi/sync/{komi}/{id}/{hash}] 510 - Komi id=". $komi->getRandomId() . " - osType=" . $komi->getOsType() . " - hash=" . $hash . " invalid");
                     }
 
                     // disable current token

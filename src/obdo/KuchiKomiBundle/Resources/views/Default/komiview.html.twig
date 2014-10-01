@@ -17,60 +17,107 @@
     {% else %}
         <li class="list-group-item">Actif</li>
     {% endif %}
+    
+    <li class="list-group-item">Date de dernière synchronisation : {{ Komi.timestampLastSynchro|date('Y-m-d H:i:s') }}</li>
+    
+    {% if Komi.osType == 0 %}
+        <li class="list-group-item">OS : Android</li>
+    {% elseif  Komi.osType == 1%}
+        <li class="list-group-item">OS : iOS</li>
+    {% else %}
+        <li class="list-group-item">OS : inconnu</li>
+    {% endif %}
 </div>
+
+    <br />
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Groupe</th>
+                <th>Actif</th>
+                <th>Nom</th>
+                <th>Création</th>
+                <th>Suppression</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subscriptionGroup in Komi.subscriptionsGroup %}
+                <tr>
+                    <td>
+                        <img src="{{ asset(subscriptionGroup.kuchiGroup.logo) }}" alt="" width=20 height=20 >
+                    </td>
+                    <td>Oui</td>
+                    {% if subscriptionGroup.active %}
+                        <td><p class="text-info">Actif</p></td>
+                    {% else %}
+                        <td><p class="text-danger">Inactif</p></td>
+                    {% endif %}
+
+                    <td><a href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': subscriptionGroup.kuchiGroup.id}) }}">{{subscriptionGroup.kuchiGroup.name}}</a></td>
+
+                    <td>{{subscriptionGroup.timestampCreation|date('Y-m-d H:i:s')}}</td>
+
+                    {% if subscriptionGroup.active %}
+                        <td>-</td>
+                    {% else %}
+                        <td>{{subscriptionGroup.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+                    {% endif %}
+
+                    {% if subscriptionGroup.type == 0 %}
+                        <td>NFC</td>
+                    {% elseif subscriptionGroup.type == 1 %}
+                        <td>QRCode</td>
+                    {% elseif subscriptionGroup.type == 2 %}
+                        <td>Web</td>
+                    {% else %}
+                        <td>Inconnu</td>
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
+            {% for subscription in Komi.subscriptions %}
+                <tr>
+                    <td>
+                        <img src="{{ asset(subscription.kuchi.logoLink) }}" alt="" width=20 height=20 >
+                    </td>
+                    <td></td>
+                    {% if subscription.active %}
+                        <td><p class="text-info">Actif</p></td>
+                    {% else %}
+                        <td><p class="text-danger">Inactif</p></td>
+                    {% endif %}
+
+                    <td><a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': subscription.kuchi.id}) }}">{{subscription.kuchi.name}}</a></td>
+
+                    <td>{{subscription.timestampCreation|date('Y-m-d H:i:s')}}</td>
+
+                    {% if subscription.active %}
+                        <td>-</td>
+                    {% else %}
+                        <td>{{subscription.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+                    {% endif %}
+
+                    {% if subscription.type == 0 %}
+                        <td>NFC</td>
+                    {% elseif subscription.type == 1 %}
+                        <td>QRCode</td>
+                    {% elseif subscription.type == 2 %}
+                        <td>Web</td>
+                    {% else %}
+                        <td>Inconnu</td>
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
+        </tbody>
+        <foot>
+            </tfoot>
+    </table>
+
 
 <br>
 
-{#
-<table class="table table-hover table-condensed">
-    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_add', {'id': Kuchi.id}) }}">
-            <span class="glyphicon glyphicon-pencil"></span> Nouveau KuchiKomi</a>
-            <br>
-    <thead>
-        <tr>
-            <th>Etat</th>
-            <th>Titre</th>
-            <th>Création</th>
-            <th>Suppression</th>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Merci</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for kuchikomi in Kuchi.kuchikomis %}
-        <tr>
-            {% if kuchikomi.active %}
-                <td><p class="text-info">Actif</p></td>
-            {% else %}
-                <td><p class="text-danger">Inactif</p></td>
-            {% endif %}
-            
-            <td>{{kuchikomi.title}}</td>
-
-            <td>{{kuchikomi.timestampCreation|date('Y-m-d H:i:s')}}</td>
-            
-            {% if kuchikomi.active %}
-                <td>-</td>
-            {% else %}
-                <td>{{kuchikomi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
-            {% endif %}
-            
-            <td>{{kuchikomi.timestampBegin|date('Y-m-d H:i:s')}}</td>
-            
-            <td>{{kuchikomi.timestampEnd|date('Y-m-d H:i:s')}}</td>
-            
-            <td>{{kuchikomi.getNbThanks}}</td>
-
-            <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_view', {'id': kuchikomi.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
-           
-        </tr>
-        {% endfor %}
-    </tbody>
-    <foot>
-    </tfoot>
-</table>
-#}
 
 {% endblock %}

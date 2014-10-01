@@ -43,7 +43,7 @@ class SubscriptionGroupData extends AbstractFixture implements ContainerAwareInt
                 $subscriptionGroup1 = new SubscriptionGroup();
                 $subscriptionGroup1->setKomi($this->getReference('komi2'));
                 $subscriptionGroup1->setKuchiGroup($this->getReference('toBeDeletedGroup'));
-                $subscriptionGroup1->setType(1);
+                $subscriptionGroup1->setType(0);
                 $manager->persist($subscriptionGroup1);
                 
                 $subscriptionGroup2 = new SubscriptionGroup();
@@ -53,6 +53,18 @@ class SubscriptionGroupData extends AbstractFixture implements ContainerAwareInt
                 $subscriptionGroup2->setActive(false);
                 $manager->persist($subscriptionGroup2);
 		
+                $subscriptionGroup3 = new SubscriptionGroup();
+                $subscriptionGroup3->setKomi($this->getReference('komi2'));
+                $subscriptionGroup3->setKuchiGroup($this->getReference('obdoGroup'));
+                $subscriptionGroup3->setType(2);
+                $manager->persist($subscriptionGroup3);
+                
+                $subscriptionGroup4 = new SubscriptionGroup();
+                $subscriptionGroup4->setKomi($this->getReference('komi2'));
+                $subscriptionGroup4->setKuchiGroup($this->getReference('citykomiGroup'));
+                $subscriptionGroup4->setType(3);
+                $manager->persist($subscriptionGroup4);
+                
 		$manager->flush();	
 	}
 }
