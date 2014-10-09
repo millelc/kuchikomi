@@ -26,7 +26,10 @@
         "friendsofsymfony/user-bundle": "dev-master",
         "richsage/rms-push-notifications-bundle": "dev-master",
         "coresphere/console-bundle": "dev-master"
-    },
+    },    
+    "require-dev": {
+        "phpunit/phpunit": "4.2.*"
+    },        
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

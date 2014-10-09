@@ -133,7 +133,7 @@ class AES {
       
     protected function getIV()
     {
-        if ($this->IV == "")
+        if ($this->IV == '')
         {
             $this->IV = mcrypt_create_iv(mcrypt_get_iv_size($this->cipher, $this->mode), MCRYPT_RAND);
         }
@@ -155,7 +155,7 @@ class AES {
         }
         else
         {
-            throw new InvalidArgumentException('Invlid params!');
+            throw new InvalidArgumentException('Invalid params!');
         }
     }
     
@@ -173,7 +173,7 @@ class AES {
         }
         else
         {
-            throw new InvalidArgumentException('Invlid params!');
+            throw new InvalidArgumentException('Invalid params!');
         }
     }
 
