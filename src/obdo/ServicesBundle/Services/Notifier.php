@@ -13,11 +13,12 @@ class Notifier
 {   
 	private $container;
         protected $em;
+        protected $message;
 	
 	public function __construct($kernel, EntityManager $em)
 	{
 		$this->container = $kernel->getContainer();
-                $this->em = $em;
+                $this->em = $em;               
 	}
 
 	
@@ -26,27 +27,34 @@ class Notifier
         // Post message
         if( $osType == 0 )
         {
-            $message = new AndroidMessage();
-            $message->setGCM(true);
-            $message->setMessage( $msg );
-            $message->setData( $data );
-            $message->setDeviceIdentifier( $deviceId );
-            $this->container->get('rms_push_notifications')->send($message);
+            $this->message = new AndroidMessage();
+            $this->message->setGCM(true);
+            $this->message->setMessage( $msg );
+            $this->message->setData( $data );
+            $this->message->setDeviceIdentifier( $deviceId );            
+            $this->container->get('rms_push_notifications')->send($this->message);
         } 
         else if( $osType == 1 )
         {
-            $message = new iOSMessage();
+            $this->message = new iOSMessage();
             
             // Manage silent push if data=3 dans le cas d'un delete
             if( !$isSilent )
             {
-                $message->setMessage( $msg );
+                $this->message->setMessage( $msg );
             }
-            $message->setDeviceIdentifier( $deviceId );
-            $this->container->get('rms_push_notifications')->send($message);
+            $this->message->setDeviceIdentifier( $deviceId );            
+            $this->container->get('rms_push_notifications')->send($this->message);            
         }  
     }
     
+
+    public function getMessage() {
+        return $this->message;
+    }
+
+        
+        
     /**
      * Set a new notification to all Komi suscribers
      *

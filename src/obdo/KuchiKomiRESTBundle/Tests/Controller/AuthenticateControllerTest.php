@@ -25,9 +25,6 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
 
     protected function setUp() {
         parent::setUp();
-        parent::$AES->setKey(parent::$container->getParameter('aes_key'));
-        parent::$AES->setBlockSize(parent::$container->getParameter('aes_key_size'));
-        parent::$AES->setIV(parent::$container->getParameter('aes_IV')); 
     }
     
            
@@ -369,7 +366,6 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
      */       
     public function test_N_PostAuthenticateKuchiAction_8()
     {    	
-        
         
         $KK_idKuchiBadKey = $this->prekey.$this->randomId."%%mauvais ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password.$this->postkey;
         

@@ -34,7 +34,7 @@ class KomiController extends Controller
         $em = $this->getDoctrine()->getManager();
         $AES = $this->container->get('obdo_services.AES');
         $Logger = $this->container->get('obdo_services.Logger');
-        $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');
+        $idCheck = $this->container->get('obdoKuchiKomiRestBundle.idCheck');   
         $Notifier = $this->container->get('obdo_services.Notifier');
         
         
@@ -45,15 +45,16 @@ class KomiController extends Controller
         $AES->setBlockSize( $this->container->getParameter('aes_key_size') );
         $AES->setData($this->getRequest()->get('KK_id'));
         $AES->setIV( $this->container->getParameter('aes_IV') );
-        
+                
         $clearId = $AES->decrypt();
         
 
         if( $idCheck->isPostKomiValid( $clearId) ) 
-        {
+        {              
             $randomId = $idCheck->getPostKomiRandomId($clearId);
+
             
-            if( !empty($randomId) )
+            if( !empty($randomId) && ($idCheck->getPostKomiMobileOsId($clearId) == "0" || $idCheck->getPostKomiMobileOsId($clearId) == "1"))
             {
                 $komi = $repositoryKomi->findOneByRandomId($randomId);
 
@@ -64,13 +65,13 @@ class KomiController extends Controller
                     {
                         // new Komi
                         $komi = new Komi();
-                        $komi->setRandomId($randomId);
+                        $komi->setRandomId($randomId);                        
                         $komi->setOsType($idCheck->getPostKomiMobileOsId($clearId));
                         $komi->setApplicationVersion( $idCheck->getVersion($clearId) );
-                        $komi->setGcmRegId($this->getRequest()->get('KK_regId'));
-                        $em->persist($komi);
+                        $komi->setGcmRegId($this->getRequest()->get('KK_regId'));                        
+                        $em->persist($komi);                       
                         $em->flush();
-
+                        
                         $this->addCityKomiGroupSubscription($komi);
                     }
                     // le komi existait déja avec un autre randomid, on le repasse à actif, on supprime ces anciens abonnements et on change son randomid
@@ -97,16 +98,16 @@ class KomiController extends Controller
                         // Delete all kuchiAccount linked to this Komi
                         $this->deleteKuchiAccount($komi);
                     }
+                                        
+                        // flush des subscription ou du update
+                        $em->flush();
+                        $response->setStatusCode(200);
 
-                    // flush des subscription ou du update
-                    $em->flush();
-                    $response->setStatusCode(200);
+                        //$Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
 
-                    //$Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
-
-                    // Post message
-                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"), false);               
-                }
+                        // Post message
+                        $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"), false);                                                                                                          
+                    }                
                 else
                 {
                     // Komi already exist !
@@ -116,9 +117,15 @@ class KomiController extends Controller
 
             } 
             else 
-            {
+            {                
                 $response->setStatusCode(501);
+                if(empty($randomId)){
                 $Logger->Error("[POST rest/komi] 501 - randomId is empty");
+                }
+                else
+                {
+                $Logger->Error("[POST rest/komi] 501 - Invalid Type OS");   
+                }
             }
         } 
         else 
@@ -221,32 +228,50 @@ class KomiController extends Controller
         {
             if( $hash == sha1("PUT /rest/komi" . $komi->getToken() ) )
             {
-                $newKomi = $repositoryKomi->findOneByRandomId($this->getRequest()->get('new_id'));
+                $new_id = $this->getRequest()->get('new_id');
+                $newKomi = $repositoryKomi->findOneByRandomId($new_id);
+                $os_id = $this->getRequest()->get('os_id');
+                $reg_id = $this->getRequest()->get('reg_id');
+                $version =  $this->getRequest()->get('version');
                 
                 
                 if( !$newKomi )
                 {
-                    if ($this->getRequest()->get('new_id') != null)
+                    if ($new_id != null && $os_id != null && $reg_id !=null && $version !=null)
                     {
                         $oldKomiRandomId = $komi->getRandomId();
                         $komi->setActive(true);
-                        $komi->setOsType($this->getRequest()->get('os_id'));
-                        $komi->setApplicationVersion($this->getRequest()->get('version'));
-                        $komi->setGcmRegId($this->getRequest()->get('reg_id'));
-                        $komi->setRandomId(($this->getRequest()->get('new_id')));
+                        $komi->setOsType($os_id);
+                        $komi->setApplicationVersion($version);
+                        $komi->setGcmRegId($reg_id);
+                        $komi->setRandomId(($new_id));
                         $komi->resetTimestampLastSynchro();
-                        $this->updateKuchiKomiThanks($oldKomiRandomId, $this->getRequest()->get('new_id'));
+                        $this->updateKuchiKomiThanks($oldKomiRandomId, $new_id);
 
                         $em->flush();
 
                         $response->setStatusCode(200);
                         //$Logger->Info("[PUT rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated - " .$komi->getApplicationVersion());
-                    }
+                    }                    
                     else
-                    {
-                        $response->setStatusCode(510);
-                        $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - new_id is empty");
-                    }     
+                        {
+                        if($new_id==null){
+                            $response->setStatusCode(510);
+                            $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - new_id is empty");                                                                       
+                        }
+                        if($os_id==null){
+                            $response->setStatusCode(510);
+                            $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - os_id is empty"); 
+                        }
+                        if($reg_id==null){
+                            $response->setStatusCode(510);
+                            $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - reg_id is empty"); 
+                        }
+                        if($version==null){
+                            $response->setStatusCode(510);
+                            $Logger->Error("[PUT rest/komi/{id}/{hash}] 510 - version is empty"); 
+                        }
+                    }
                 }
                 else
                 {
@@ -293,7 +318,7 @@ class KomiController extends Controller
         {
             // Komi unknown !
             $response->setStatusCode(501);
-            $Logger->Error("[PUT rest/komi/RegId/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
+            $Logger->Error("[PUT rest/komi/regid/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
         }
         else
         {
@@ -360,7 +385,7 @@ class KomiController extends Controller
             $Logger->Error("[GET rest/komi/sync/{id}/{hash}] 501 - Komi id=".$id." unkonwn");
     	}
     	else
-    	{
+    	{   
             if( $hash == sha1("GET /rest/komi/sync" . $komi->getToken() ) )
             {
                 if( $komi->getActive() )
@@ -372,34 +397,34 @@ class KomiController extends Controller
                     $addedKuchiGroup = $repositoryKuchiGroup->getAddedGroups( $komi );
                     $updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
                     $deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
-
+                        
                     $this->checkSubscriptionGroup($komi, $addedKuchiGroup);
                     $this->checkSubscriptionGroup($komi, $updatedKuchiGroup);
                     $this->checkSubscriptionGroup($komi, $deletedKuchiGroup);
-
+                    
                     $addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
                     $updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
                     $deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
-
+                    
                     $this->checkKuchiKomiThanks($komi, $addedKuchiKomis);
                     $this->checkKuchiKomiThanks($komi, $updatedKuchiKomis);
                     $this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
 
-                    $komi->setCurrentTimestampLastSynchroSaved();
+                    $komi->setCurrentTimestampLastSynchroSaved();                    
                     $komi->generateToken();
                     
                     $em->flush();
                     //$Logger->Info("[GET rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronized");
-
+                    
                     return array('ADDED_KUCHIS_GROUP' => $addedKuchiGroup,
                                              'UPDATED_KUCHIS_GROUP' => $updatedKuchiGroup,
                                              'DELETED_KUCHIS_GROUP' => $deletedKuchiGroup,
                                              'ADDED_KUCHIS' => $addedKuchis,
-                                 'UPDATED_KUCHIS' => $updatedKuchis,
+                                             'UPDATED_KUCHIS' => $updatedKuchis,
                                              'DELETED_KUCHIS' => $deletedKuchis,
                                              'ADDED_KUCHIKOMIS' => $addedKuchiKomis,
                                              'UPDATED_KUCHIKOMIS' => $updatedKuchiKomis,
-                                             'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);
+                                             'DELETED_KUCHIKOMIS' => $deletedKuchiKomis);   
                 }
                 else
                 {
@@ -418,6 +443,7 @@ class KomiController extends Controller
             // disable current token
             $komi->generateToken();
             $em->flush();
+            
     	}
     
     	$response->headers->set('Content-Type', 'text/html');
@@ -453,7 +479,7 @@ class KomiController extends Controller
             if( $hash == sha1("POST /rest/komi/sync" . $komi->getToken() ) )
             {
                 $komi->validateLastSynchro();
-                $em->flush();
+                $em->flush();                
                 $response->setStatusCode(200);
                 //$Logger->Info("[POST rest/komi/sync/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." synchronization ACK");
             }

@@ -37,50 +37,89 @@ class idCheck
     public function getPostAuthenticateKuchiRandomId( $id )
     {
     	preg_match("#\%%OB-DO-2-0-0%%(.+)\%%ID_KUCHI%%#", $id, $randomId);
-    
+        if(!$randomId)
+        {
+            return $randomId;
+        }
+        else
+        {
     	return $randomId[1];
+        }
     }
     
     public function getPostAuthenticateKuchiId( $id )
     {
     	preg_match("#\%%ID_KUCHI%%(.+)\%%ID_PWD%%#", $id, $kuchiId);
-    
-    	return $kuchiId[1];
+        if(!$kuchiId){
+            return  $kuchiId; 
+        }
+        else
+        {
+            return $kuchiId[1];
+        }
     }
     
     public function getPostAuthenticateKuchiPassword( $id )
     {
     	preg_match("#\%%ID_PWD%%(.+)\%%OB-DO-2-0-0%%#", $id, $password);
-    
-    	return $password[1];
+        if(!$password){
+          return $password;  
+        } 
+        else 
+        {
+          return $password[1];  
+        }
+    	
     }
 
     public function getPostKomiMobileOsId( $id )
     {
         preg_match("#\%%OB-DO-2-0-0%%(.+)\%%ID%%#", $id, $mobileOsId);
-        
-        return $mobileOsId[1];
+        if(!$mobileOsId){
+            return $mobileOsId;
+        }
+        else
+        {
+            return $mobileOsId[1];  
+        }        
     }
     
     public function getPostKomiRandomId ($id )
     {
-        preg_match("#\%%ID%%(.+)\%%OB-DO-2-0-0%%#", $id, $randomId);
         
-        return $randomId[1];
+        preg_match("#\%%ID%%(.+)\%%OB-DO-2-0-0%%#", $id, $randomId);
+        if(!$randomId){
+            return $randomId;
+            }
+        else
+            {
+           return $randomId[1]; 
+            }   
+        
     }
     
     public function getDeleteKomiRandomId ($id )
     {
         preg_match("#\%%OB-DO-2-0-0%%(.+)\%%OB-DO-2-0-0%%#", $id, $randomId);
-        
-        return $randomId[1];
+        if(!$randomId){
+            return $randomId;
+            }
+        else
+            {
+           return $randomId[1]; 
+            }
     }
 
     public function getPostAuthenticateRandomId ($id )
     {
         preg_match("#\%%OB-DO-2-0-0%%(.+)\%%OB-DO-2-0-0%%#", $id, $randomId);
-        
-        return $randomId[1];
+        if(!$randomId){
+            return $randomId;
+            }
+        else
+            {
+           return $randomId[1]; 
+            }
     }
     
     public function getVersion( $id )
