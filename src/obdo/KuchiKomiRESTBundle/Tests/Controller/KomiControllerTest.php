@@ -8,7 +8,7 @@
 
 namespace obdo\KuchiKomiRESTBundle\Tests\Controller;
 
-use obdo\KuchiKomiREStBundle\Tests\Controller\CityKomiWebTestCase;
+use obdo\KuchiKomiRESTBundle\Tests\Controller\CityKomiWebTestCase;
 /**
  * Description of KomiControllerTest
  *

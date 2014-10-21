@@ -5,7 +5,7 @@ namespace obdo\KuchiKomiRESTBundle\Tests\Controller;
 //use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\Container;
 use obdo\ServicesBundle\Services;
-use obdo\KuchiKomiREStBundle\Tests\Controller\CityKomiWebTestCase;
+use obdo\KuchiKomiRESTBundle\Tests\Controller\CityKomiWebTestCase;
 
 
 class AuthenticateControllerTest extends CityKomiWebTestCase
