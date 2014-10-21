@@ -20,6 +20,9 @@ use Symfony\Component\Security\Core\Util\SecureRandom;
 class Komi
 {
     const TOKEN_SIZE = 13;
+    const OS_TYPE_ANDROID = 0;
+    const OS_TYPE_IOS = 1;
+    const OS_TYPE_WINDOWS = 2;
     
     /**
      * @var integer

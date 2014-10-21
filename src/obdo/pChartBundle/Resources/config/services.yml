@@ -1,0 +1,7 @@
+parameters:
+#    obdo_services.example.class: obdo\ServicesBundle\Example
+
+services:
+    pChartBundle_services.graphCreator:
+        class: obdo\pChartBundle\Services\GraphCreator
+

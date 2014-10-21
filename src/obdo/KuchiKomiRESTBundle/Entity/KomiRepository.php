@@ -30,6 +30,15 @@ class KomiRepository extends EntityRepository
                     ->getSingleScalarResult();
     }
     
+    public function getOsDistribution()
+    {
+        return $this->createQueryBuilder('komi')
+                    ->select('komi.osType, COUNT(komi) as NB')
+                    ->groupBy('komi.osType')
+                    ->getQuery()
+                    ->getScalarResult();
+    }
+
     public function getNbKomiiOS()
     {
         return $this->createQueryBuilder('komi')
