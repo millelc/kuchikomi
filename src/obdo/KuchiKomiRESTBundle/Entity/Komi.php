@@ -20,10 +20,13 @@ use Symfony\Component\Security\Core\Util\SecureRandom;
 class Komi
 {
     const TOKEN_SIZE = 13;
-    const OS_ANDROID_TYPE = "1";
-    const OS_MAC_TYPE = '0';
 
-        /**
+    const OS_TYPE_ANDROID = 0;
+    const OS_TYPE_IOS = 1;
+    const OS_TYPE_WINDOWS = 2;
+    const OS_TYPE_UNKNOWN = 3;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -256,14 +259,17 @@ class Komi
      */
     public function setOsType($osType)
     {
-        if($osType==self::OS_ANDROID_TYPE){
+        if($osType==self::OS_TYPE_ANDROID){
             $this->osType = $osType;
         }
-        elseif ($osType==self::OS_MAC_TYPE){
+        elseif ($osType==self::OS_TYPE_IOS){
+            $this->osType = $osType;
+        }
+        elseif ($osType==self::OS_TYPE_WINDOWS){
             $this->osType = $osType;
         }
         else{
-            $this->osType= "non valide";
+            $this->osType= self::OS_TYPE_UNKNOWN;
         }
 
         return $this;

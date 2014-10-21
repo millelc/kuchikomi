@@ -317,6 +317,8 @@ class KomiControllerTest extends CityKomiWebTestCase {
     public function test_P_PutKomiAction_1(){
         $komi = $this->getLastKomiActive(parent::$repositoryKomi);
 
+        sleep(2);
+        
         $crawler= $this->client->request(
            'PUT',
            '/rest/komi/'.$komi->getRandomId().'/'.sha1("PUT /rest/komi" . $komi->getToken()),
