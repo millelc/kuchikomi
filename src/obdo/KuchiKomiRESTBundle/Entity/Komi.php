@@ -20,12 +20,13 @@ use Symfony\Component\Security\Core\Util\SecureRandom;
 class Komi
 {
     const TOKEN_SIZE = 13;
+
     const OS_TYPE_ANDROID = 0;
     const OS_TYPE_IOS = 1;
     const OS_TYPE_WINDOWS = 2;
+    const OS_TYPE_UNKNOWN = 3;
     
-    /**
-     * @var integer
+     /* @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -257,7 +258,18 @@ class Komi
      */
     public function setOsType($osType)
     {
-        $this->osType = $osType;
+        if($osType==self::OS_TYPE_ANDROID){
+            $this->osType = $osType;
+        }
+        elseif ($osType==self::OS_TYPE_IOS){
+            $this->osType = $osType;
+        }
+        elseif ($osType==self::OS_TYPE_WINDOWS){
+            $this->osType = $osType;
+        }
+        else{
+            $this->osType= self::OS_TYPE_UNKNOWN;
+        }
 
         return $this;
     }
@@ -377,6 +389,19 @@ class Komi
     	return $this;
     }
     
+     /**
+     * Get timestampLastSynchroSaved
+     *
+     * @return \DateTime 
+     */
+    public function getTimestampLastSynchroSaved()
+    {
+        
+        return $this->timestampLastSynchroSaved;
+        
+    }
+
+        
     /**
      * Validate the last synchro date saved
      *
