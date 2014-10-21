@@ -26,7 +26,8 @@ class Komi
     const OS_TYPE_WINDOWS = 2;
     const OS_TYPE_UNKNOWN = 3;
     
-     /* @var integer
+    /**
+     * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id

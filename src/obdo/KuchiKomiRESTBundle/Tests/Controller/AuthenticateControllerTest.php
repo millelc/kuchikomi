@@ -15,7 +15,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     public $randomId;
     public $KK_idKuchi;
     public $kuchi_id;
-    public $password;
+    public $passwordAuthenticate;
     public $prekey;
     public $postkey;  
     
@@ -38,7 +38,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
         $this->postkey = "%%OB-DO-2-0-0%%";
         $this->randomId ="ac81d6f9cb600d38"; 
         $this->kuchi_id ="2";
-        $this->password ="david";  
+        $this->passwordAuthenticate ="david";  
 
     }
        
@@ -193,7 +193,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
         $komi = parent::$repositoryKomi->findOneByRandomId($this->randomId);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));                
         
-        $KK_idKuchi = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchi = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         
         parent::$AES->setData($KK_idKuchi); 
         
@@ -220,7 +220,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     public function test_N_PostAuthenticateKuchiAction_1()
     {    	        
  
-        $KK_idKuchi = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchi = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         
         parent::$AES->setData($KK_idKuchi);
 
@@ -243,7 +243,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     public function test_N_PostAuthenticateKuchiAction_2()
     {
    
-        $KK_idKuchiKomiInvalid = $this->prekey."mauvais randomId"."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchiKomiInvalid = $this->prekey."mauvais randomId"."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         parent::$AES->setData($KK_idKuchiKomiInvalid);
     
     	$crawler = $this->client->request(
@@ -265,7 +265,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     {
                 
             
-        $KK_idKuchiInvalid = $this->prekey.$this->randomId."%%ID_KUCHI%%"."mauvaisKuchi"."%%ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchiInvalid = $this->prekey.$this->randomId."%%ID_KUCHI%%"."mauvaisKuchi"."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         parent::$AES->setData($KK_idKuchiInvalid);
         
             
@@ -325,7 +325,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     public function test_N_PostAuthenticateKuchiAction_6()
     {    
         
-        $KK_idKuchiInvalid = "mauvaispreKey".$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchiInvalid = "mauvaispreKey".$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         parent::$AES->setData($KK_idKuchiInvalid);
         
             
@@ -346,7 +346,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     public function test_N_PostAuthenticateKuchiAction_7()
     {    	        
  
-        $KK_idKuchiInvalid = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password."mauvaise postKey";
+        $KK_idKuchiInvalid = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate."mauvaise postKey";
         parent::$AES->setData($KK_idKuchiInvalid);
         
             
@@ -367,7 +367,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     public function test_N_PostAuthenticateKuchiAction_8()
     {    	
         
-        $KK_idKuchiBadKey = $this->prekey.$this->randomId."%%mauvais ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchiBadKey = $this->prekey.$this->randomId."%%mauvais ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         
         parent::$AES->setData($KK_idKuchiBadKey);
 
@@ -391,7 +391,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     {
         
  
-        $KK_idKuchiBadKey = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%mauvais ID_PWD%%".$this->password.$this->postkey;
+        $KK_idKuchiBadKey = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%mauvais ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
         
         parent::$AES->setData($KK_idKuchiBadKey);
 
