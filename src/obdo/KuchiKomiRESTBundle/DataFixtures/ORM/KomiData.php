@@ -61,5 +61,16 @@ class KomiData extends AbstractFixture implements ContainerAwareInterface, Order
 		$manager->persist($komi2);
 		$manager->flush();	
                 $AclManager->addAcl($komi2, $this->getReference('SuperAdmin'));
-	}
+	
+                $komi3 = new Komi();
+		$komi3->setRandomId('cb612345ac81d6f8');
+		$komi3->setOsType(1);
+		$komi3->setApplicationVersion( '2.0.0' );
+		$komi3->setGcmRegId('hujtioeplzmapcjitro');
+		$this->addReference('komi3', $komi3);
+		$manager->persist($komi3);
+		$manager->flush();	
+                $AclManager->addAcl($komi3, $this->getReference('SuperAdmin'));
+        }
+        
 }

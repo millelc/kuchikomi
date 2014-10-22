@@ -37,9 +37,7 @@ class KomiControllerTest extends CityKomiWebTestCase {
         $this->postkey = "%%OB-DO-2-0-0%%";
         $this->randomId ="ac81d6f9cb600d38";
         $this->newRandomId=  uniqid("rdi");
-        $this->newRegId=  uniqid("nwrgid");
-        $this->regId = "koiedthuassopzecith";
-        
+        $this->newRegId=  uniqid("nwrgid");               
    
     }
     
@@ -111,9 +109,9 @@ class KomiControllerTest extends CityKomiWebTestCase {
      * vérifie la souscription à CityKomiGroupId
      */
     public function test_P_PostKomiAction_3(){
-        
+        $regIdexist = $this->getLastKomiActive(parent::$repositoryKomi)->getGcmRegId();
         $KK_Id = $this->prekey."1"."%%ID%%".$this->newRandomId.$this->postkey;
-        $this->getcrawler($KK_Id, $this->regId);
+        $this->getcrawler($KK_Id, $regIdexist);
         
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $komi=parent::$repositoryKomi->findOneByRandomId($this->newRandomId);                
@@ -136,7 +134,7 @@ class KomiControllerTest extends CityKomiWebTestCase {
         
         $KK_Id = $this->prekey."0"."ID%%".$this->newRandomId.$this->postkey;
     
-        $this->getcrawler($KK_Id,  $this->regId);
+        $this->getcrawler($KK_Id,  $this->newRegId);
         
         $this->assertEquals(501, $this->client->getResponse()->getStatusCode());          
         
@@ -150,7 +148,7 @@ class KomiControllerTest extends CityKomiWebTestCase {
                 
         $KK_Id = "NotPreKey"."0"."%%ID%%".$this->newRandomId.$this->postkey;
     
-        $this->getcrawler($KK_Id,  $this->regId);
+        $this->getcrawler($KK_Id,  $this->newRegId);
         
         $this->assertEquals(501, $this->client->getResponse()->getStatusCode());                
         
@@ -163,7 +161,7 @@ class KomiControllerTest extends CityKomiWebTestCase {
         
         $KK_Id = $this->prekey."0"."%%ID%%".$this->newRandomId."NotPostKey";
     
-        $this->getcrawler($KK_Id,  $this->regId);
+        $this->getcrawler($KK_Id,  $this->newRegId);
         
         $this->assertEquals(501, $this->client->getResponse()->getStatusCode());
     }
@@ -176,7 +174,7 @@ class KomiControllerTest extends CityKomiWebTestCase {
         
         $KK_Id = $this->prekey."56"."%%ID%%".$this->newRandomId.$this->postkey;
     
-        $this->getcrawler($KK_Id,  $this->regId);
+        $this->getcrawler($KK_Id,  $this->newRegId);
         
         $this->assertEquals(501, $this->client->getResponse()->getStatusCode());
     }

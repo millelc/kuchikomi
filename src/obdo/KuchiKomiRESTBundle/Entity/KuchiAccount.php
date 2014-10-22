@@ -62,7 +62,8 @@ class KuchiAccount
      */
     private $token;
 
-    public function __construct()
+
+        public function __construct()
     {
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->resetTimestampLastSynchro();
@@ -198,6 +199,16 @@ class KuchiAccount
     {
         return $this->timestampLastSynchro;
     }
+    
+    /**
+     * Get timestampLastSynchroSaved
+     *
+     * @return \DateTime 
+     */
+    public function getTimestampLastSynchroSaved() 
+    {
+        return $this->timestampLastSynchroSaved;
+    }
 
     /**
      * Get token
@@ -208,4 +219,7 @@ class KuchiAccount
     {
         return $this->token;
     }
+    
+
+
 }
