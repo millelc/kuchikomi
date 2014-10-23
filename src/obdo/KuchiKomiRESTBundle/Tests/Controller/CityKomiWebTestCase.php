@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace obdo\KuchiKomiREStBundle\Tests\Controller;
+namespace obdo\KuchiKomiRESTBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -36,18 +36,6 @@ abstract class CityKomiWebTestCase extends WebTestCase
     
 
         
-    public static function setUpBeforeClass() 
-    {
-        parent::setUpBeforeClass();
-        //start the symfony kernel
-         
-    }
-
-   
-//    public function setUp() {
-//        parent::setUp();
-//        self::$client2=  static::createClient();
-//    }
     protected function setUp() {
         parent::setUp();
         $this->client =  static::createClient();        
@@ -105,7 +93,7 @@ abstract class CityKomiWebTestCase extends WebTestCase
         while($komis[$x]->getActive()==TRUE){
             $x=$x+1;
         }
-        return $komis[$x];
+        return $komis[$x];        
     }
     
 

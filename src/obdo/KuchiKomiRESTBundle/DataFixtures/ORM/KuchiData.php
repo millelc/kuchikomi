@@ -340,6 +340,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$folder = $this->container->getParameter('path_kuchi_photo') . $maxime->getId();
 		$maxime->setLogoLink($folder . "/logo.jpg");
 		$maxime->setPhotoLink($folder . "/photo.jpg");
+                $maxime->setActive(FALSE);
 		$manager->persist($maxime);
 		$manager->flush();
                 // ACL

@@ -41,9 +41,36 @@ class KuchiAccountData extends AbstractFixture implements ContainerAwareInterfac
     // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
     public function load(ObjectManager $manager)
     {
+				        
         $manager->getConnection()->exec("ALTER TABLE KuchiAccount AUTO_INCREMENT = 1;");
+        
 
+        $kuchiAccount0 = new KuchiAccount();        
+        $kuchiAccount0->setKomi($this->getReference('komi1'));
+        $kuchiAccount0->setKuchi($this->getReference('david'));
+        
+        $kuchiAccount = new KuchiAccount();        
+        $kuchiAccount->setKomi($this->getReference('komi2'));
+        $kuchiAccount->setKuchi($this->getReference('maxime'));
+        
+        $kuchiAccount4 = new KuchiAccount();        
+        $kuchiAccount4->setKomi($this->getReference('komi3'));
+        $kuchiAccount4->setKuchi($this->getReference('maxime'));        
+        
+        $kuchiAccount2 = new KuchiAccount();
+        $kuchiAccount2->setKomi($this->getReference('komi3'));
+        $kuchiAccount2->setKuchi($this->getReference('eva'));
 
+        $kuchiAccount3 = new KuchiAccount();
+        $kuchiAccount3->setKomi($this->getReference('komi3'));
+        $kuchiAccount3->setKuchi($this->getReference('paul'));
+        
+        $manager->persist($kuchiAccount0);
+        $manager->persist($kuchiAccount);
+        $manager->persist($kuchiAccount2);
+        $manager->persist($kuchiAccount3);
+        $manager->persist($kuchiAccount4);
+        $manager->flush();
 
     }
 

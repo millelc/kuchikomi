@@ -5,7 +5,7 @@ namespace obdo\KuchiKomiRESTBundle\Tests\Controller;
 //use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\Container;
 use obdo\ServicesBundle\Services;
-use obdo\KuchiKomiREStBundle\Tests\Controller\CityKomiWebTestCase;
+use obdo\KuchiKomiRESTBundle\Tests\Controller\CityKomiWebTestCase;
 
 
 class AuthenticateControllerTest extends CityKomiWebTestCase
@@ -36,9 +36,9 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
         parent::__construct();
         $this->prekey = "%%OB-DO-2-0-0%%";
         $this->postkey = "%%OB-DO-2-0-0%%";
-        $this->randomId ="ac81d6f9cb600d38"; 
-        $this->kuchi_id ="2";
-        $this->passwordAuthenticate ="david";  
+        $this->randomId ="cb612345ac81d6f8"; 
+        $this->kuchi_id ="11";
+        $this->passwordAuthenticate ='paul';  
 
     }
        
@@ -179,13 +179,46 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
     
     
     /**
-     * Test positif de PostAuthenticateKuchiAction
+     * Test positif de PostAuthenticateKuchiAction pour un kuchiAccount non existant
      * 3 assertions : 
      * Statut code : 200
-     * nouveau token reponse et token base différents
+     * 
      * ancien token et token base égaux
      */
     public function test_P_PostAuthenticateKuchiAction_1()
+    {  
+        
+                  
+        $kuchi = parent::$repositoryKuchi->findOneById($this->kuchi_id);
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->randomId);
+        //$kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));                
+        
+        $KK_idKuchi = $this->prekey.$this->randomId."%%ID_KUCHI%%".$this->kuchi_id."%%ID_PWD%%".$this->passwordAuthenticate.$this->postkey;
+        
+        parent::$AES->setData($KK_idKuchi); 
+        
+            	$crawler = $this->client->request(
+    			'POST',
+    			'/rest/authenticatekuchi',
+    			array('KK_id'=>parent::$AES->encrypt()),
+                        array(),
+    			array('HTTP_ACCEPT' => 'application/json')
+    	);                
+                                             
+           $this->assertEquals( 200, $this->client->getResponse()->getStatusCode());
+          // $this->assertJsonStringNotEqualsJsonString('{"kuchiAccount":{"token":"'.$kuchiAccount->getToken().'"}}',$this->client->getResponse()->getContent());                            
+           
+           parent::$em->close();
+           $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+           $this->assertJsonStringEqualsJsonString('{"kuchiAccount":{"token":"'.$kuchiAccount->getToken().'"}}',$this->client->getResponse()->getContent());
+        
+    }
+    
+    /**
+     * Test positif de PostAuthenticateKuchiAction pour un kuchiAccount existant
+     * nouveau token reponse et token base différents
+     */
+        public function test_P_PostAuthenticateKuchiAction_2()
     {  
         
                   
@@ -213,6 +246,7 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
            $this->assertJsonStringEqualsJsonString('{"kuchiAccount":{"token":"'.$kuchiAccount->getToken().'"}}',$this->client->getResponse()->getContent());
         
     }
+    
     
     /**
      * Test négatif de PostAuthenticateKuchiAction pour une route inéxacte
