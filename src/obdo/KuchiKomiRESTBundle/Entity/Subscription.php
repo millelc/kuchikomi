@@ -3,6 +3,7 @@
 namespace obdo\KuchiKomiRESTBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use obdo\KuchiKomiRESTBundle\Entity\SubscriptionBase;
 
 /**
  * Subscription
@@ -12,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks()
  * 
  */
-class Subscription
-{
+class Subscription extends SubscriptionBase
+{        
     /**
     * @ORM\Id
     * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Komi", inversedBy="subscriptions")
@@ -68,6 +69,7 @@ class Subscription
         $this->timestampCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampLastUpdate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->timestampSuppression = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->type = self::TYPE_WEB;
     }
 
 
@@ -211,7 +213,7 @@ class Subscription
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = $this->getRegisteredType($type);
 
         return $this;
     }

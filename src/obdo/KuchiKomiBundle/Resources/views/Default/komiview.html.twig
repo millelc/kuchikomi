@@ -20,10 +20,12 @@
     
     <li class="list-group-item">Date de dernière synchronisation : {{ Komi.timestampLastSynchro|date('Y-m-d H:i:s') }}</li>
     
-    {% if Komi.osType == 0 %}
+    {% if Komi.osType == constant('OS_TYPE_ANDROID', Komi) %}
         <li class="list-group-item">OS : Android</li>
-    {% elseif  Komi.osType == 1%}
+    {% elseif  Komi.osType == constant('OS_TYPE_IOS', Komi) %}
         <li class="list-group-item">OS : iOS</li>
+    {% elseif  Komi.osType == constant('OS_TYPE_WINDOWS', Komi) %}
+        <li class="list-group-item">OS : Windows</li>
     {% else %}
         <li class="list-group-item">OS : inconnu</li>
     {% endif %}
@@ -65,11 +67,11 @@
                         <td>{{subscriptionGroup.timestampSuppression|date('Y-m-d H:i:s')}}</td>
                     {% endif %}
 
-                    {% if subscriptionGroup.type == 0 %}
+                    {% if subscriptionGroup.type == constant('TYPE_NFC', subscriptionGroup) %}
                         <td>NFC</td>
-                    {% elseif subscriptionGroup.type == 1 %}
+                    {% elseif subscriptionGroup.type == constant('TYPE_QRCode', subscriptionGroup) %}
                         <td>QRCode</td>
-                    {% elseif subscriptionGroup.type == 2 %}
+                    {% elseif subscriptionGroup.type == constant('TYPE_WEB', subscriptionGroup) %}
                         <td>Web</td>
                     {% else %}
                         <td>Inconnu</td>
@@ -99,11 +101,11 @@
                         <td>{{subscription.timestampSuppression|date('Y-m-d H:i:s')}}</td>
                     {% endif %}
 
-                    {% if subscription.type == 0 %}
+                    {% if subscription.type == constant('TYPE_NFC', subscription) %}
                         <td>NFC</td>
-                    {% elseif subscription.type == 1 %}
+                    {% elseif subscription.type == constant('TYPE_QRCode', subscription) %}
                         <td>QRCode</td>
-                    {% elseif subscription.type == 2 %}
+                    {% elseif subscription.type == constant('TYPE_WEB', subscription) %}
                         <td>Web</td>
                     {% else %}
                         <td>Inconnu</td>

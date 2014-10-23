@@ -43,20 +43,19 @@ class SubscriptionGroupData extends AbstractFixture implements ContainerAwareInt
                 $subscriptionGroup1 = new SubscriptionGroup();
                 $subscriptionGroup1->setKomi($this->getReference('komi2'));
                 $subscriptionGroup1->setKuchiGroup($this->getReference('toBeDeletedGroup'));
-                $subscriptionGroup1->setType(0);
                 $manager->persist($subscriptionGroup1);
                 
                 $subscriptionGroup2 = new SubscriptionGroup();
                 $subscriptionGroup2->setKomi($this->getReference('komi2'));
                 $subscriptionGroup2->setKuchiGroup($this->getReference('lyceeGroup'));
-                $subscriptionGroup2->setType(1);
+                $subscriptionGroup2->setType(SubscriptionGroup::TYPE_NFC);
                 $subscriptionGroup2->setActive(false);
                 $manager->persist($subscriptionGroup2);
 		
                 $subscriptionGroup3 = new SubscriptionGroup();
                 $subscriptionGroup3->setKomi($this->getReference('komi2'));
                 $subscriptionGroup3->setKuchiGroup($this->getReference('obdoGroup'));
-                $subscriptionGroup3->setType(2);
+                $subscriptionGroup3->setType(SubscriptionGroup::TYPE_QRCode);
                 $manager->persist($subscriptionGroup3);
                 
                 $subscriptionGroup4 = new SubscriptionGroup();

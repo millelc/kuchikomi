@@ -122,7 +122,6 @@ class KuchiController extends Controller {
                         $subscription = new Subscription();
                         $subscription->setKomi($subscriptionGroup->getKomi());
                         $subscription->setKuchi($kuchi);
-                        $subscription->setType(3);
                         $em->persist($subscription);                        
                     }
                 }      

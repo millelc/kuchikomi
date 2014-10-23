@@ -77,10 +77,14 @@
             
             <td>{{komi.timestampLastSynchro|date('Y-m-d H:i:s')}}</td>
             
-            {% if komi.osType == 0%}
+            {% if komi.osType == constant('OS_TYPE_ANDROID', komi)%}
                 <td>Android</td>
-            {% else %}
+            {% elseif  komi.osType == constant('OS_TYPE_IOS', komi) %}
                 <td>iOS</td>
+            {% elseif  komi.osType == constant('OS_TYPE_WINDOWS', komi) %}
+                <td>Windows</td>
+            {% else %}
+                <td>Inconnu</td>
             {% endif %}
             
         </tr>

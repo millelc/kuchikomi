@@ -72,7 +72,7 @@ class KomiController extends Controller
                         $em->persist($komi);                       
                         $em->flush();
                         
-                        $this->addCityKomiGroupSubscription($komi);
+                        $this->addCityKomiGroupSubscription($em, $komi);
                     }
                     // le komi existait déja avec un autre randomid, on le repasse à actif, on supprime ces anciens abonnements et on change son randomid
                     else
@@ -93,21 +93,21 @@ class KomiController extends Controller
                             $em->persist($subscriptionGroup);
                         }
                         
-                        $this->addCityKomiGroupSubscription($komi);
+                        $this->addCityKomiGroupSubscription($em, $komi);
                         
                         // Delete all kuchiAccount linked to this Komi
-                        $this->deleteKuchiAccount($komi);
+                        $this->deleteKuchiAccount($em, $komi);
                     }
                                         
-                        // flush des subscription ou du update
-                        $em->flush();
-                        $response->setStatusCode(200);
+                    // flush des subscription ou du update
+                    $em->flush();
+                    $response->setStatusCode(200);
 
-                        //$Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
+                    //$Logger->Info("[POST rest/komi] 200 - Komi id=".$komi->getRandomId()." registered");
 
-                        // Post message
-                        $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"), false);                                                                                                          
-                    }                
+                    // Post message
+                    $Notifier->sendMessage( $komi->getGcmRegId(), $komi->getOsType(), 'Bienvenue !', array("type" => "2"), false);                                                                                                          
+                }                
                 else
                 {
                     // Komi already exist !
@@ -119,12 +119,13 @@ class KomiController extends Controller
             else 
             {                
                 $response->setStatusCode(501);
-                if(empty($randomId)){
-                $Logger->Error("[POST rest/komi] 501 - randomId is empty");
+                if(empty($randomId))
+                {
+                    $Logger->Error("[POST rest/komi] 501 - randomId is empty");
                 }
                 else
                 {
-                $Logger->Error("[POST rest/komi] 501 - Invalid Type OS");   
+                    $Logger->Error("[POST rest/komi] 501 - Invalid Type OS");   
                 }
             }
         } 
@@ -170,6 +171,9 @@ class KomiController extends Controller
                     $komi->resetTimestampLastSynchro();
                     $komi->setActive(false);
         
+                    $this->deleteKomiSubscription($em, $komi);
+                    $this->deleteKuchiAccount($em, $komi);
+                
                     $em->flush();
                     $response->setStatusCode(200);
                     //$Logger->Info("[DELETE rest/komi/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." unregistered");
@@ -180,9 +184,6 @@ class KomiController extends Controller
                     $response->setStatusCode(508);
                     $Logger->Warning("[DELETE rest/komi/{id}/{hash}] 508 - Komi id=".$komi->getRandomId()." already inactive");
                 }
-                
-                    // Delete all kuchiAccount linked to this Komi
-                    $this->deleteKuchiAccount($komi);
             }
             else
             {
@@ -246,7 +247,8 @@ class KomiController extends Controller
                         $komi->setGcmRegId($reg_id);
                         $komi->setRandomId(($new_id));
                         $komi->resetTimestampLastSynchro();
-                        $this->updateKuchiKomiThanks($oldKomiRandomId, $new_id);
+                        $this->updateKuchiKomiThanks($em, $oldKomiRandomId, $new_id);
+                        $this->activeKomiSubscription($em, $komi);
 
                         $em->flush();
 
@@ -398,17 +400,17 @@ class KomiController extends Controller
                     $updatedKuchiGroup = $repositoryKuchiGroup->getUpdatedGroups( $komi );
                     $deletedKuchiGroup = $repositoryKuchiGroup->getDeletedGroups( $komi );
                         
-                    $this->checkSubscriptionGroup($komi, $addedKuchiGroup);
-                    $this->checkSubscriptionGroup($komi, $updatedKuchiGroup);
-                    $this->checkSubscriptionGroup($komi, $deletedKuchiGroup);
+                    $this->checkSubscriptionGroup($em, $komi, $addedKuchiGroup);
+                    $this->checkSubscriptionGroup($em, $komi, $updatedKuchiGroup);
+                    $this->checkSubscriptionGroup($em, $komi, $deletedKuchiGroup);
                     
                     $addedKuchiKomis = $repositoryKuchiKomi->getAddedKuchiKomis( $komi );
                     $updatedKuchiKomis = $repositoryKuchiKomi->getUpdatedKuchiKomis( $komi );
                     $deletedKuchiKomis = $repositoryKuchiKomi->getDeletedKuchiKomis( $komi );
                     
-                    $this->checkKuchiKomiThanks($komi, $addedKuchiKomis);
-                    $this->checkKuchiKomiThanks($komi, $updatedKuchiKomis);
-                    $this->checkKuchiKomiThanks($komi, $deletedKuchiKomis);
+                    $this->checkKuchiKomiThanks($em, $komi, $addedKuchiKomis);
+                    $this->checkKuchiKomiThanks($em, $komi, $updatedKuchiKomis);
+                    $this->checkKuchiKomiThanks($em, $komi, $deletedKuchiKomis);
 
                     $komi->setCurrentTimestampLastSynchroSaved();                    
                     $komi->generateToken();
@@ -500,9 +502,9 @@ class KomiController extends Controller
     	return $response;
     }
 
-    private function checkSubscriptionGroup($komi, $kuchiGroupList)
+    private function checkSubscriptionGroup($em, $komi, $kuchiGroupList)
     {
-    	$repositorySubscriptionGroup = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');
+    	$repositorySubscriptionGroup = $em->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');
     	
     	foreach($kuchiGroupList as $KuchiGroup)
     	{
@@ -525,9 +527,9 @@ class KomiController extends Controller
     	}
     }
     
-    private function checkKuchiKomiThanks($komi, $KuchiKomiList)
+    private function checkKuchiKomiThanks($em, $komi, $KuchiKomiList)
     {
-    	$repositoryThanks = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Thanks');
+    	$repositoryThanks = $em->getRepository('obdoKuchiKomiRESTBundle:Thanks');
     	$randomId = $komi->getRandomId();
         
     	foreach($KuchiKomiList as $KuchiKomi)
@@ -544,9 +546,9 @@ class KomiController extends Controller
     	}
     }
     
-    private function updateKuchiKomiThanks($oldKomiRandomId, $newKomiRandomId)
+    private function updateKuchiKomiThanks($em, $oldKomiRandomId, $newKomiRandomId)
     {
-        $repositoryThanks = $this->getDoctrine()->getManager()->getRepository('obdoKuchiKomiRESTBundle:Thanks');
+        $repositoryThanks = $em->getRepository('obdoKuchiKomiRESTBundle:Thanks');
     	$Thanks = $repositoryThanks->findByKomiRandomId($oldKomiRandomId);
         
     	foreach($Thanks as $Thank)
@@ -555,9 +557,8 @@ class KomiController extends Controller
     	}
     }
     
-    private function addCityKomiGroupSubscription($komi)
+    private function addCityKomiGroupSubscription($em, $komi)
     {
-        $em = $this->getDoctrine()->getManager();
         $repositoryKuchiGroup = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         $repositorySubscriptionGroup = $em->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');
         $repositorySubscription = $em->getRepository('obdoKuchiKomiRESTBundle:Subscription');
@@ -571,7 +572,6 @@ class KomiController extends Controller
             $subscriptionGroup = new SubscriptionGroup();
             $subscriptionGroup->setKomi($komi);
             $subscriptionGroup->setKuchiGroup($kuchiGroupCityKomi);
-            $subscriptionGroup->setType(0);
         }
         else
         {
@@ -589,7 +589,6 @@ class KomiController extends Controller
                 $subscription = new Subscription();
                 $subscription->setKomi($komi);
                 $subscription->setKuchi($kuchi);
-                $subscription->setType(0);
             }
             else
             {
@@ -600,9 +599,8 @@ class KomiController extends Controller
         }
     }
     
-    private function deleteKuchiAccount($komi)
+    private function deleteKuchiAccount($em, $komi)
     {
-        $em = $this->getDoctrine()->getManager();
         $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
         
         $kuchiAccounts = $repositoryKuchiAccount->getKuchiAccountForKomi($komi);
@@ -611,4 +609,35 @@ class KomiController extends Controller
             $em->remove($kuchiAccount);
         }
     }
+    
+    private function deleteKomiSubscription($em, $komi)
+    {
+        foreach($komi->getSubscriptions() as $subscription)
+        {
+            $subscription->setActive(false);
+            $em->persist($subscription);
+        }
+
+        foreach($komi->getSubscriptionsGroup() as $subscriptionGroup)
+        {
+            $subscriptionGroup->setActive(false);
+            $em->persist($subscriptionGroup);
+        }
+    }
+    
+    private function activeKomiSubscription($em, $komi)
+    {
+        foreach($komi->getSubscriptions() as $subscription)
+        {
+            $subscription->setActive(true);
+            $em->persist($subscription);
+        }
+
+        foreach($komi->getSubscriptionsGroup() as $subscriptionGroup)
+        {
+            $subscriptionGroup->setActive(true);
+            $em->persist($subscriptionGroup);
+        }
+    }
+    
 }
