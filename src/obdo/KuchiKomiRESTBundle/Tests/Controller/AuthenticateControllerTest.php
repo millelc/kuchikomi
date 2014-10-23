@@ -36,9 +36,9 @@ class AuthenticateControllerTest extends CityKomiWebTestCase
         parent::__construct();
         $this->prekey = "%%OB-DO-2-0-0%%";
         $this->postkey = "%%OB-DO-2-0-0%%";
-        $this->randomId ="ac81d6f9cb600d38"; 
-        $this->kuchi_id ="2";
-        $this->passwordAuthenticate ="david";  
+        $this->randomId ="cb612345ac81d6f8"; 
+        $this->kuchi_id ="11";
+        $this->passwordAuthenticate ='paul';  
 
     }
        

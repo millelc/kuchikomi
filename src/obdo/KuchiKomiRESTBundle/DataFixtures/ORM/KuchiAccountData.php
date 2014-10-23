@@ -45,6 +45,10 @@ class KuchiAccountData extends AbstractFixture implements ContainerAwareInterfac
         $manager->getConnection()->exec("ALTER TABLE KuchiAccount AUTO_INCREMENT = 1;");
         
 
+        $kuchiAccount0 = new KuchiAccount();        
+        $kuchiAccount0->setKomi($this->getReference('komi1'));
+        $kuchiAccount0->setKuchi($this->getReference('david'));
+        
         $kuchiAccount = new KuchiAccount();        
         $kuchiAccount->setKomi($this->getReference('komi2'));
         $kuchiAccount->setKuchi($this->getReference('maxime'));
@@ -61,6 +65,7 @@ class KuchiAccountData extends AbstractFixture implements ContainerAwareInterfac
         $kuchiAccount3->setKomi($this->getReference('komi3'));
         $kuchiAccount3->setKuchi($this->getReference('paul'));
         
+        $manager->persist($kuchiAccount0);
         $manager->persist($kuchiAccount);
         $manager->persist($kuchiAccount2);
         $manager->persist($kuchiAccount3);

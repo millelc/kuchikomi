@@ -518,7 +518,7 @@ class KomiControllerTest extends CityKomiWebTestCase {
         $this->assertRegExp('/ADDED_KUCHIKOMIS/',  $this->client->getResponse()->getContent());
         $this->assertRegExp('/UPDATED_KUCHIKOMIS/',  $this->client->getResponse()->getContent());
         $this->assertRegExp('/DELETED_KUCHIKOMIS/',  $this->client->getResponse()->getContent());
-        //$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         parent::$em->close();
         $komi2=parent::$repositoryKomi->findOneByRandomId($this->randomId);
         $this->assertNotEquals($komi->getTimestampLastSynchroSaved(),$komi2->getTimestampLastSynchroSaved());        
