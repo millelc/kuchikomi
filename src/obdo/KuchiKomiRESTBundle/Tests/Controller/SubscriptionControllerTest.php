@@ -70,7 +70,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscription = parent::$repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
         $this->checkSubscription($newSubscription, true, $typeResult);
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
     /**
@@ -121,7 +121,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscription = parent::$repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
         $this->checkSubscription($newSubscription, true, $typeResult);
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
     
@@ -192,7 +192,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
                 );
         
         $this->assertEquals(502,$this->client->getResponse()->getStatusCode());
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
     
@@ -236,7 +236,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
                 );
         
         $this->assertEquals(512,$this->client->getResponse()->getStatusCode());  
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
     
     /**
@@ -281,7 +281,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
                 );
         
         $this->assertEquals(508,$this->client->getResponse()->getStatusCode());
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
     
     /**
@@ -326,7 +326,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
                 );
         
         $this->assertEquals(510,$this->client->getResponse()->getStatusCode()); 
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
     
     /**
@@ -378,7 +378,7 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
         $this->assertEquals(511,$this->client->getResponse()->getStatusCode());   
         $existingSubscription = parent::$repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
         $this->checkSubscription($existingSubscription, true, $typeResult);
-        $this->checkToken($oldToken, $komi->getRandomId());
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
     private function checkSubscription($subscription, $active, $type)
@@ -388,10 +388,5 @@ class SubscriptionControllerTest extends CityKomiWebTestCase
         $this->assertEquals($subscription->getType(), $type);
     }
     
-    private function checkToken($oldToken, $komiRandomId)
-    {
-        parent::$em->close();
-        $komi = parent::$repositoryKomi->findOneByRandomId($komiRandomId);
-        $this->assertNotEquals($komi->getToken(), $oldToken);
-    }
+
 }

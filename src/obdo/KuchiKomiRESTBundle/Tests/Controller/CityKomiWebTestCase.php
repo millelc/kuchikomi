@@ -71,7 +71,7 @@ abstract class CityKomiWebTestCase extends WebTestCase
      * charge les komi par ordre décroissant d'id     
      */
     
-    public function getLastKomiActive($repository){
+    protected function getLastKomiActive($repository){
         $komis= $repository
        ->findBy(array(), array('id' => 'desc'));
         $x=0;
@@ -88,7 +88,7 @@ abstract class CityKomiWebTestCase extends WebTestCase
      * charge les komi par ordre décroissant d'id     
      */
     
-    public function getLastKomiInactive($repository){
+    protected function getLastKomiInactive($repository){
         $komis= $repository
        ->findBy(array(), array('id' => 'desc'));
         $x=0;
@@ -98,6 +98,12 @@ abstract class CityKomiWebTestCase extends WebTestCase
         return $komis[$x];        
     }
     
+    protected function checkKomiToken($oldToken, $komiRandomId)            
+    {
+        parent::$em->close();
+        $komi = parent::$repositoryKomi->findOneByRandomId($komiRandomId);
+        $this->assertNotEquals($komi->getToken(), $oldToken);
+    }
 
 
 }
