@@ -398,6 +398,42 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $AclManager->addAcl($toBeDeleted2, $this->getReference('Admin'));
                 $AclManager->addAcl($toBeDeleted2, $this->getReference('GroupAdmin'));
 		
-	}
+                
+                /****************************************************/
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "P_PostSubscriptionAction_1", "kuchi_test_P_PostSubscriptionAction_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionAction_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "P_PostSubscriptionAction_2", "kuchi_test_P_PostSubscriptionAction_2_address");
+                $this->createKuchi($manager, $AclManager, $Password, "N_PostSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_PostSubscriptionAction_1", "kuchi_test_N_PostSubscriptionAction_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "N_PostSubscriptionAction_4", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_PostSubscriptionAction_4", "kuchi_test_N_PostSubscriptionAction_4_address", false);
+                $this->createKuchi($manager, $AclManager, $Password, "N_PostSubscriptionAction_5", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_PostSubscriptionAction_5", "kuchi_test_N_PostSubscriptionAction_5_address");
+                $this->createKuchi($manager, $AclManager, $Password, "N_PostSubscriptionAction_6", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_PostSubscriptionAction_6", "kuchi_test_N_PostSubscriptionAction_6_address");
+                
+        }
+        
+        private function createKuchi($manager, $AclManager, $Password, $name, $phoneNumber, $mail, $webSite, $kuchiGroupRef, $password, $addressRef, $active=true)
+        {
+            $kuchi_test = new Kuchi();
+            $kuchi_test->setName($name);
+            $kuchi_test->setPhoneNumber($phoneNumber);
+            $kuchi_test->setMailAddress($mail);
+            $kuchi_test->setWebSite($webSite);		
+            $kuchi_test->setKuchiGroup($this->getReference($kuchiGroupRef));
+            $kuchi_test->setPassword($Password->generateHash($password));
+            $kuchi_test->setAddress($this->getReference($addressRef));
+            $kuchi_test->setActive($active);
+            $this->addReference("kuchiRef_".$name, $kuchi_test);
+            $manager->persist($kuchi_test);
+            $manager->flush();
+            $folder = $this->container->getParameter('path_kuchikomi_photo') . $kuchi_test->getId();
+            $kuchi_test->setPhotoKuchiKomiLink($folder . "/");
+            $folder = $this->container->getParameter('path_kuchi_photo') . $kuchi_test->getId();
+            $kuchi_test->setLogoLink($folder . "/logo.jpg");
+            $kuchi_test->setPhotoLink($folder . "/photo.jpg");
+            $manager->persist($kuchi_test);
+            $manager->flush();
+            // ACL
+            $AclManager->addAcl($kuchi_test, $this->getReference('SuperAdmin'));
+            $AclManager->addAcl($kuchi_test, $this->getReference('Admin'));
+            $AclManager->addAcl($kuchi_test, $this->getReference('GroupAdmin'));
+        }
         
 }

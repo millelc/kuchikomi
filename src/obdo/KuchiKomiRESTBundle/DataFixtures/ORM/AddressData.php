@@ -196,6 +196,27 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 		$this->addReference('tb2Address', $tb2Address);
 		$manager->persist($tb2Address);
                 
+                /****************************************************/
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionAction_1_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionAction_2_address");
+                $this->createAddress($manager, "kuchi_test_N_PostSubscriptionAction_1_address");
+                $this->createAddress($manager, "kuchi_test_N_PostSubscriptionAction_4_address");
+                $this->createAddress($manager, "kuchi_test_N_PostSubscriptionAction_5_address");
+                $this->createAddress($manager, "kuchi_test_N_PostSubscriptionAction_6_address");
+                
+                
 		$manager->flush();	
 	}
+        
+        private function createAddress($manager, $name)
+        {
+            $Address_test = new Address();
+            $Address_test->setAddress1($name."_1");
+            $Address_test->setAddress2($name."_2");
+            $Address_test->setAddress3($name."_3");
+            $Address_test->setPostalCode("14000");
+            $Address_test->setCity($name."_city");
+            $this->addReference($name, $Address_test);
+            $manager->persist($Address_test);
+        }
 }

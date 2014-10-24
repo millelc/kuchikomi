@@ -67,6 +67,36 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
 
                 $manager->persist($subscription4);
                 
+                
+                /****************************************************/
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_Android_1", "kuchiRef_P_PostSubscriptionAction_2", Subscription::TYPE_NFC, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_Android_2", "kuchiRef_P_PostSubscriptionAction_2", Subscription::TYPE_QRCode, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_Android_3", "kuchiRef_P_PostSubscriptionAction_2", Subscription::TYPE_WEB, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_Android_4", "kuchiRef_P_PostSubscriptionAction_2", 123456, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_iOS_1", "kuchiRef_P_PostSubscriptionAction_2", Subscription::TYPE_NFC, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_iOS_2", "kuchiRef_P_PostSubscriptionAction_2", Subscription::TYPE_QRCode, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_iOS_3", "kuchiRef_P_PostSubscriptionAction_2", Subscription::TYPE_WEB, false);
+                $this->createSubscription($manager, "P_PostSubscriptionAction_2_iOS_4", "kuchiRef_P_PostSubscriptionAction_2", 123456, false);                
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_Android_1", "kuchiRef_N_PostSubscriptionAction_6", Subscription::TYPE_NFC);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_Android_2", "kuchiRef_N_PostSubscriptionAction_6", Subscription::TYPE_QRCode);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_Android_3", "kuchiRef_N_PostSubscriptionAction_6", Subscription::TYPE_WEB);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_Android_4", "kuchiRef_N_PostSubscriptionAction_6", 123456);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_iOS_1", "kuchiRef_N_PostSubscriptionAction_6", Subscription::TYPE_NFC);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_iOS_2", "kuchiRef_N_PostSubscriptionAction_6", Subscription::TYPE_QRCode);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_iOS_3", "kuchiRef_N_PostSubscriptionAction_6", Subscription::TYPE_WEB);
+                $this->createSubscription($manager, "N_PostSubscriptionAction_6_iOS_4", "kuchiRef_N_PostSubscriptionAction_6", 123456);                
+                
 		$manager->flush();	
 	}
+        
+        private function createSubscription($manager, $komiRef, $kuchiRef, $type, $active=true)
+        {
+            $newSubscription = new Subscription();
+            $newSubscription->setKomi($this->getReference($komiRef));
+            $newSubscription->setKuchi($this->getReference($kuchiRef));
+            $newSubscription->setType($type);
+            $newSubscription->setActive($active);
+
+            $manager->persist($newSubscription);
+        }
 }
