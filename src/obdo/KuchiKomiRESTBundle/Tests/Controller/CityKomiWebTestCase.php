@@ -104,6 +104,15 @@ abstract class CityKomiWebTestCase extends WebTestCase
         $komi = self::$repositoryKomi->findOneByRandomId($komiRandomId);
         $this->assertNotEquals($komi->getToken(), $oldToken);
     }
+    
+    protected function checkKuchiAccountToken($oldToken,$komi,$kuchi)
+    {
+        self::$em->close();
+        $kuchiaccount = self::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
+        $this->assertNotEquals($oldToken, $kuchiaccount->getToken());
+
+        
+    }
 
 
 }
