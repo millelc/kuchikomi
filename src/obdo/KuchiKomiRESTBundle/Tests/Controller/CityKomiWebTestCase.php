@@ -100,8 +100,8 @@ abstract class CityKomiWebTestCase extends WebTestCase
     
     protected function checkKomiToken($oldToken, $komiRandomId)            
     {
-        parent::$em->close();
-        $komi = parent::$repositoryKomi->findOneByRandomId($komiRandomId);
+        self::$em->close();
+        $komi = self::$repositoryKomi->findOneByRandomId($komiRandomId);
         $this->assertNotEquals($komi->getToken(), $oldToken);
     }
 
