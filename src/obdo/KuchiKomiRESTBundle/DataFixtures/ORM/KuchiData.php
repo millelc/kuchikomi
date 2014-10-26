@@ -46,28 +46,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$manager->getConnection()->exec("ALTER TABLE Kuchi AUTO_INCREMENT = 1;");
 		$AclManager = $this->container->get('obdo_services.AclManager');
                 
-                // News
-		$news = new Kuchi();
-		$news->setName('News');
-		$news->setPhoneNumber('-');
-		$news->setMailAddress('news@citykomi.com');
-		$news->setWebSite('www.citykomi.com');
-		$news->setKuchiGroup($this->getReference('citykomiGroup'));
-		$news->setPassword($Password->generateHash('news'));
-		$news->setAddress($this->getReference('addressNews'));
-		$this->addReference('news', $news);
-		$manager->persist($news);
-		$manager->flush();
-		$folder = $this->container->getParameter('path_kuchikomi_photo') . $news->getId();
-		$news->setPhotoKuchiKomiLink($folder . "/");
-		$folder = $this->container->getParameter('path_kuchi_photo') . $news->getId();
-		$news->setLogoLink($folder . "/logo.jpg");
-		$news->setPhotoLink($folder . "/photo.jpg");
-		$manager->persist($news);
-		$manager->flush();
-                // ACL
-                $AclManager->addAcl($news, $this->getReference('SuperAdmin'));
-                $AclManager->addAcl($news, $this->getReference('Admin')); 
+                 
 		
 		// David
 		$david = new Kuchi();
@@ -400,6 +379,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		
                 
                 /****************************************************/
+                $this->createKuchi($manager, $AclManager, $Password, "News", "00 00 00 00 00", "news@citykomi.com", "www.citykomi.com", "CityKomi", "News", "kuchi_test_News_address");
                 $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "P_PostSubscriptionAction_1", "kuchi_test_P_PostSubscriptionAction_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionAction_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "P_PostSubscriptionAction_2", "kuchi_test_P_PostSubscriptionAction_2_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_PostSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_PostSubscriptionAction_1", "kuchi_test_N_PostSubscriptionAction_1_address");
@@ -410,6 +390,16 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_1", "kuchi_test_N_DeleteSubscriptionAction_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_3", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_3", "kuchi_test_N_DeleteSubscriptionAction_3_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_4", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_4", "kuchi_test_N_DeleteSubscriptionAction_4_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_2_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_2", "P_PostSubscriptionGroupAction_2_1", "kuchi_test_P_PostSubscriptionGroupAction_2_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_2_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_2", "P_PostSubscriptionGroupAction_2_2", "kuchi_test_P_PostSubscriptionGroupAction_2_2_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_3_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_3", "P_PostSubscriptionGroupAction_3_1", "kuchi_test_P_PostSubscriptionGroupAction_3_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_3_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_3", "P_PostSubscriptionGroupAction_3_2", "kuchi_test_P_PostSubscriptionGroupAction_3_2_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_4_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_4", "P_PostSubscriptionGroupAction_4_1", "kuchi_test_P_PostSubscriptionGroupAction_4_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_4_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_4", "P_PostSubscriptionGroupAction_4_2", "kuchi_test_P_PostSubscriptionGroupAction_4_2_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_5_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_5", "P_PostSubscriptionGroupAction_5_1", "kuchi_test_P_PostSubscriptionGroupAction_5_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_5_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_5", "P_PostSubscriptionGroupAction_5_2", "kuchi_test_P_PostSubscriptionGroupAction_5_2_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_6_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_6", "P_PostSubscriptionGroupAction_6_1", "kuchi_test_P_PostSubscriptionGroupAction_6_1_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_6_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_6", "P_PostSubscriptionGroupAction_6_2", "kuchi_test_P_PostSubscriptionGroupAction_6_2_address");
                 
         }
         

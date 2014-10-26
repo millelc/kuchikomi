@@ -40,30 +40,33 @@ class SubscriptionGroupData extends AbstractFixture implements ContainerAwareInt
 		
 		$manager->getConnection()->exec("ALTER TABLE SubscriptionGroup AUTO_INCREMENT = 1;");
                 
-                $subscriptionGroup1 = new SubscriptionGroup();
-                $subscriptionGroup1->setKomi($this->getReference('komi2'));
-                $subscriptionGroup1->setKuchiGroup($this->getReference('toBeDeletedGroup'));
-                $manager->persist($subscriptionGroup1);
-                
-                $subscriptionGroup2 = new SubscriptionGroup();
-                $subscriptionGroup2->setKomi($this->getReference('komi2'));
-                $subscriptionGroup2->setKuchiGroup($this->getReference('lyceeGroup'));
-                $subscriptionGroup2->setType(SubscriptionGroup::TYPE_NFC);
-                $subscriptionGroup2->setActive(false);
-                $manager->persist($subscriptionGroup2);
-		
-                $subscriptionGroup3 = new SubscriptionGroup();
-                $subscriptionGroup3->setKomi($this->getReference('komi2'));
-                $subscriptionGroup3->setKuchiGroup($this->getReference('obdoGroup'));
-                $subscriptionGroup3->setType(SubscriptionGroup::TYPE_QRCode);
-                $manager->persist($subscriptionGroup3);
-                
-                $subscriptionGroup4 = new SubscriptionGroup();
-                $subscriptionGroup4->setKomi($this->getReference('komi2'));
-                $subscriptionGroup4->setKuchiGroup($this->getReference('citykomiGroup'));
-                $subscriptionGroup4->setType(3);
-                $manager->persist($subscriptionGroup4);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_Android_1", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_Android_2", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_Android_3", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_Android_4", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_iOS_1", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_iOS_2", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_iOS_3", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_3_iOS_4", "P_PostSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_Android_1", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_NFC, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_Android_2", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_QRCode, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_Android_3", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_Android_4", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_1", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_NFC, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_2", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_QRCode, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_3", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB, false);
+                $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_4", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB, false);
                 
 		$manager->flush();	
 	}
+        
+        private function createSubscriptionGroup($manager, $komiRef, $kuchiGroupRef, $type, $active=true)
+        {
+            $newSubscriptionGroup = new SubscriptionGroup();
+            $newSubscriptionGroup->setKomi($this->getReference($komiRef));
+            $newSubscriptionGroup->setKuchiGroup($this->getReference($kuchiGroupRef));
+            $newSubscriptionGroup->setType($type);
+            $newSubscriptionGroup->setActive($active);
+            $manager->persist($newSubscriptionGroup);
+        }
 }
