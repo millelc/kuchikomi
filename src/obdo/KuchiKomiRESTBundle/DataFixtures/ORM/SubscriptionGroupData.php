@@ -56,6 +56,43 @@ class SubscriptionGroupData extends AbstractFixture implements ContainerAwareInt
                 $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_2", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_QRCode, false);
                 $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_3", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB, false);
                 $this->createSubscriptionGroup($manager, "P_PostSubscriptionGroupAction_4_iOS_4", "P_PostSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB, false);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_Android_1", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_Android_2", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_Android_3", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_iOS_1", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_iOS_2", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_iOS_3", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_Windows_1", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_Windows_2", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_1_Windows_3", "P_DeleteSubscriptionGroupAction_1", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_Android_1", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_Android_2", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_Android_3", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_iOS_1", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_iOS_2", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_iOS_3", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_Windows_1", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_Windows_2", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_2_Windows_3", "P_DeleteSubscriptionGroupAction_2", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_Android_1", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_Android_2", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_Android_3", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_iOS_1", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_iOS_2", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_iOS_3", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_Windows_1", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_Windows_2", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_3_Windows_3", "P_DeleteSubscriptionGroupAction_3", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_Android_1", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_Android_2", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_Android_3", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_iOS_1", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_iOS_2", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_iOS_3", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_Windows_1", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_NFC);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_Windows_2", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_QRCode);
+                $this->createSubscriptionGroup($manager, "P_DeleteSubscriptionGroupAction_4_Windows_3", "P_DeleteSubscriptionGroupAction_4", SubscriptionGroup::TYPE_WEB);
+                
                 
 		$manager->flush();	
 	}

@@ -71,7 +71,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-        $this->checkSubscriptionGroup($newSubscriptionGroup, true, $typeResult);
+        $this->checkSubscriptionGroup($newSubscriptionGroup, true, true, $typeResult);
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
@@ -123,7 +123,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-        $this->checkSubscriptionGroup($newSubscriptionGroup, true, $typeResult);
+        $this->checkSubscriptionGroup($newSubscriptionGroup, true, true, $typeResult);
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
@@ -176,7 +176,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-        $this->checkSubscriptionGroup($newSubscriptionGroup, true, $typeResult);
+        $this->checkSubscriptionGroup($newSubscriptionGroup, true, true, $typeResult);
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
@@ -229,7 +229,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-        $this->checkSubscriptionGroup($newSubscriptionGroup, true, $typeResult);
+        $this->checkSubscriptionGroup($newSubscriptionGroup, true, true, $typeResult);
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
@@ -282,7 +282,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-        $this->checkSubscriptionGroup($newSubscriptionGroup, true, $typeResult);
+        $this->checkSubscriptionGroup($newSubscriptionGroup, true, true, $typeResult);
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
@@ -335,7 +335,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $newSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
-        $this->checkSubscriptionGroup($newSubscriptionGroup, true, $typeResult);
+        $this->checkSubscriptionGroup($newSubscriptionGroup, true, true, $typeResult);
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
 
@@ -543,51 +543,230 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         $this->checkKomiToken($oldToken, $komi->getRandomId());
     }
     
-//    /**
-//     * Test positif de DeleteSubscriptionAction de type NFC/QRCode/WEB/Inconnu avec Komi Android/IOS
-//     */
-//        
-//    public function test_P_DeleteSubscriptionAction_1()            
-//    {
-//        $kuchi = parent::$repositoryKuchi->findOneByName("P_DeleteSubscriptionAction_1");
-//        
-//        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionAction_1_Android_1");
-//        $this->template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, Subscription::TYPE_NFC);
-//        
-//        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionAction_1_Android_2");
-//        $this->template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, Subscription::TYPE_QRCode);
-//        
-//        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionAction_1_Android_3");
-//        $this->template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, Subscription::TYPE_WEB);
-//
-//        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionAction_1_iOS_1");
-//        $this->template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, Subscription::TYPE_NFC);
-//        
-//        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionAction_1_iOS_2");
-//        $this->template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, Subscription::TYPE_QRCode);
-//        
-//        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionAction_1_iOS_3");
-//        $this->template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, Subscription::TYPE_WEB);
-//        
-//    }
-//    
-//    private function template_test_P_DeleteSubscriptionAction_1($kuchi, $komi, $typeResult)
-//    {                
-//        $oldToken = $komi->getToken();
-//        
-//        $crawler=$this->client->request(
-//                'DELETE',
-//                '/rest/subscription/'.$kuchi->getId().'/'.$komi->getRandomId() .'/'.sha1('DELETE /rest/subscription'.$komi->getToken()),
-//                array(),
-//                array(),
-//                array()
-//                );
-//        
-//        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
-//        $deletedSubscription = parent::$repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
-//        $this->checkSubscription($deletedSubscription, false, $typeResult, true);
-//        $this->checkKomiToken($oldToken, $komi->getRandomId());
-//    }
+    /**
+     * Test positif de DeleteSubscriptionGroupAction de type NFC/QRCode/WEB avec Komi Android/IOS/Windows
+     * pas de kuchi, pas delete des abonnements des kuchis associé
+     */
+        
+    public function test_P_DeleteSubscriptionGroupAction_1()            
+    {
+        $kuchiGroup = parent::$repositoryKuchiGroup->findOneByName("P_DeleteSubscriptionGroupAction_1");
+        $opt = 0;
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_Android_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_Android_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_Android_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_iOS_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_iOS_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_iOS_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_Windows_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_Windows_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_1_Windows_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+    }
+    
+    private function template_test_P_DeleteSubscriptionGroupAction_1($kuchiGroup, $komi, $opt, $typeResult)
+    {                
+        $oldToken = $komi->getToken();
+        
+        $crawler=$this->client->request(
+                'DELETE',
+                '/rest/subscriptions/'.$kuchiGroup->getId().'/'.$komi->getRandomId() .'/'. $opt .'/'.sha1('DELETE /rest/subscriptions'.$komi->getToken()),
+                array(),
+                array(),
+                array()
+                );
+        
+        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
+        $deletedSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
+        $this->checkSubscriptionGroup($deletedSubscriptionGroup, false, true, $typeResult, true);
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
+    }
+
+    /**
+     * Test positif de DeleteSubscriptionGroupAction de type NFC/QRCode/WEB avec Komi Android/IOS/Windows
+     * pas de kuchi, delete des abonnements des kuchis associé
+     */
+        
+    public function test_P_DeleteSubscriptionGroupAction_2()            
+    {
+        $kuchiGroup = parent::$repositoryKuchiGroup->findOneByName("P_DeleteSubscriptionGroupAction_2");
+        $opt = 1;
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_Android_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_Android_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_Android_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_iOS_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_iOS_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_iOS_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_Windows_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_Windows_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_2_Windows_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+    }
+    
+    private function template_test_P_DeleteSubscriptionGroupAction_2($kuchiGroup, $komi, $opt, $typeResult)
+    {                
+        $oldToken = $komi->getToken();
+        
+        $crawler=$this->client->request(
+                'DELETE',
+                '/rest/subscriptions/'.$kuchiGroup->getId().'/'.$komi->getRandomId() .'/'. $opt .'/'.sha1('DELETE /rest/subscriptions'.$komi->getToken()),
+                array(),
+                array(),
+                array()
+                );
+        
+        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
+        $deletedSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
+        $this->checkSubscriptionGroup($deletedSubscriptionGroup, false, false, $typeResult, true);
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
+    }
+
+    /**
+     * Test positif de DeleteSubscriptionGroupAction de type NFC/QRCode/WEB avec Komi Android/IOS/Windows
+     * 2 kuchi, pas de delete des abonnements des kuchis associé
+     */
+        
+    public function test_P_DeleteSubscriptionGroupAction_3()            
+    {
+        $kuchiGroup = parent::$repositoryKuchiGroup->findOneByName("P_DeleteSubscriptionGroupAction_3");
+        $opt = 0;
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_Android_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_Android_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_Android_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_iOS_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_iOS_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_iOS_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_Windows_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_Windows_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_3_Windows_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+    }
+    
+    private function template_test_P_DeleteSubscriptionGroupAction_3($kuchiGroup, $komi, $opt, $typeResult)
+    {                
+        $oldToken = $komi->getToken();
+        
+        $crawler=$this->client->request(
+                'DELETE',
+                '/rest/subscriptions/'.$kuchiGroup->getId().'/'.$komi->getRandomId() .'/'. $opt .'/'.sha1('DELETE /rest/subscriptions'.$komi->getToken()),
+                array(),
+                array(),
+                array()
+                );
+        
+        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
+        $deletedSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
+        $this->checkSubscriptionGroup($deletedSubscriptionGroup, false, true, $typeResult, true);
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
+    }
+
+    /**
+     * Test positif de DeleteSubscriptionGroupAction de type NFC/QRCode/WEB avec Komi Android/IOS/Windows
+     * 2 kuchi, delete des abonnements des kuchis associé
+     */
+        
+    public function test_P_DeleteSubscriptionGroupAction_4()            
+    {
+        $kuchiGroup = parent::$repositoryKuchiGroup->findOneByName("P_DeleteSubscriptionGroupAction_4");
+        $opt = 1;
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_Android_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_Android_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_Android_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_iOS_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_iOS_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_iOS_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_Windows_1");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_NFC);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_Windows_2");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_QRCode);
+        
+        $komi = parent::$repositoryKomi->findOneByRandomId("P_DeleteSubscriptionGroupAction_4_Windows_3");
+        $this->template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, Subscription::TYPE_WEB);
+    }
+    
+    private function template_test_P_DeleteSubscriptionGroupAction_4($kuchiGroup, $komi, $opt, $typeResult)
+    {                
+        $oldToken = $komi->getToken();
+        
+        $crawler=$this->client->request(
+                'DELETE',
+                '/rest/subscriptions/'.$kuchiGroup->getId().'/'.$komi->getRandomId() .'/'. $opt .'/'.sha1('DELETE /rest/subscriptions'.$komi->getToken()),
+                array(),
+                array(),
+                array()
+                );
+        
+        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
+        $deletedSubscriptionGroup = parent::$repositorySubscriptionGroup->findOneBy(array('komi' => $komi, 'kuchiGroup' => $kuchiGroup));
+        $this->checkSubscriptionGroup($deletedSubscriptionGroup, false, false, $typeResult, true);
+        $this->checkKomiToken($oldToken, $komi->getRandomId());
+    }
+
 //
 //     /**
 //     * Test négatif de DeleteSubscriptionAction avec Komi inconnu.
@@ -729,7 +908,7 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
 //        $this->checkKomiToken($oldToken, $komi->getRandomId());
 //    }
 
-    private function checkSubscriptionGroup($subscriptionGroup, $active, $type, $checkSuppression=false)
+    private function checkSubscriptionGroup($subscriptionGroup, $active, $activeKuchi, $type, $checkSuppression=false)
     {
         $this->assertNotNull($subscriptionGroup);
         $this->assertEquals($subscriptionGroup->getActive(), $active);
@@ -744,9 +923,9 @@ class SubscriptionGroupControllerTest extends CityKomiWebTestCase
         {
             $subscription = parent::$repositorySubscription->findOneBy(array('komi' => $subscriptionGroup->getKomi(), 'kuchi' => $kuchi));
             $this->assertNotNull($subscription);
-            $this->assertEquals($subscription->getActive(), $active);
+            $this->assertEquals($subscription->getActive(), $activeKuchi);
             $this->assertEquals($subscription->getType(), $type);
-            if( $checkSuppression )
+            if( $checkSuppression && !$activeKuchi)
             {
                 $this->assertNotEquals($subscription->getTimestampCreation(), $subscription->getTimestampSuppression());
             }
