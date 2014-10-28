@@ -74,6 +74,16 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
                 $AclManager->addAcl($kk2, $this->getReference('SuperAdmin'));
                 $AclManager->addAcl($kk2, $this->getReference('KuchiAdmin'));
 		
+                $kk3 = new KuchiKomi();
+		$kk3->setKuchi($this->getReference('kuchiRef_P_DeleteKuchiKomiAction_1'));
+		$kk3->setTitle("Le KuchiKomi qu'on supprime");
+		$kk3->setDetails("Mon kuchikomi raté !");
+		$kk3->setTimestampEnd($kk3->getTimestampEnd()->add(new \DateInterval('P5Y')));
+		$this->addReference('kk3', $kk3);
+		$manager->persist($kk3);
+                $manager->flush();
+                $AclManager->addAcl($kk3, $this->getReference('SuperAdmin'));
+                $AclManager->addAcl($kk3, $this->getReference('KuchiAdmin'));
 			
 	}
         

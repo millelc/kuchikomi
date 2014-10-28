@@ -97,6 +97,7 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_1", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_NFC, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_2", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_QRCode, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_3", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_WEB, false);
+                $this->createSubscription($manager, "P_PostKuchiKomiAction_1_Abonne", "kuchiRef_P_PostKuchiKomiAction_1", Subscription::TYPE_QRCode);
                 
 		$manager->flush();	
 	}

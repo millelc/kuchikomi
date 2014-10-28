@@ -410,10 +410,13 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_1", "kuchi_test_N_DeleteSubscriptionAction_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_3", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_3", "kuchi_test_N_DeleteSubscriptionAction_3_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_4", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_4", "kuchi_test_N_DeleteSubscriptionAction_4_address");
+                $this->createKuchi($manager, $AclManager, $Password, "P_PostKuchiKomiAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_P_PostKuchiKomiAction_1", "P_PostKuchiKomiAction", "kuchi_test_P_PostKuchiKomiAction_1_address",$user=true);
+                $this->createKuchi($manager, $AclManager, $Password, "P_DeleteKuchiKomiAction_1","00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "P_DeleteKuchiKomiAction_1", "kuchi_test_P_DeleteKuchiKomiAction_1_address");
+
                 
         }
         
-        private function createKuchi($manager, $AclManager, $Password, $name, $phoneNumber, $mail, $webSite, $kuchiGroupRef, $password, $addressRef, $active=true)
+        private function createKuchi($manager, $AclManager, $Password, $name, $phoneNumber, $mail, $webSite, $kuchiGroupRef, $password, $addressRef, $active=true, $user=false)
         {
             $kuchi_test = new Kuchi();
             $kuchi_test->setName($name);
@@ -424,6 +427,9 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
             $kuchi_test->setPassword($Password->generateHash($password));
             $kuchi_test->setAddress($this->getReference($addressRef));
             $kuchi_test->setActive($active);
+            if($user){
+            $kuchi_test->addUser($this->getReference('User_test_PostKuchiKomiAction_1'));
+            }
             $this->addReference("kuchiRef_".$name, $kuchi_test);
             $manager->persist($kuchi_test);
             $manager->flush();

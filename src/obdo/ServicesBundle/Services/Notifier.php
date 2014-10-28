@@ -6,6 +6,7 @@ use RMS\PushNotificationsBundle\Message\AndroidMessage;
 use RMS\PushNotificationsBundle\Message\iOSMessage;
 
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 
 use Doctrine\ORM\EntityManager;
 
@@ -61,7 +62,7 @@ class Notifier
      * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi
      * @return Kuchi
      */
-    public function sendKuchiKomiNotification(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchi, \obdo\KuchiKomiRESTBundle\Entity\KuchiKomi $kuchikomi, $type)
+    public function sendKuchiKomiNotification(Kuchi $kuchi, KuchiKomi $kuchikomi, $type)
     {	
     	$repositoryKuchiAccount = $this->em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
         

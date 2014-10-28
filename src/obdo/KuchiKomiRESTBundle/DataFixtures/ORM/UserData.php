@@ -84,5 +84,23 @@ class UserData extends AbstractFixture implements ContainerAwareInterface, Order
 		$manager->persist($kuchiAdmin);
 
 		$manager->flush();	
+                
+                /*************************************************************/
+                
+                $this->createUser($manager, 'User_test_PostKuchiKomiAction_1', 'usertestPostKuchiKomi', 'test@ob-do.com', array('ROLE_KUCHI'));
+                
 	}
+        
+        private function createUser($manager,$name,$password,$mail,$roles,$locked=false,$enabled=true){
+            $user = new User ();
+            $user->setUsername($name);
+            $user->setPlainPassword($password);
+            $user->setEmail($mail);
+            $user->setLocked($locked);
+            $user->setEnabled($enabled);
+            $user->setRoles($roles);
+            $this->addReference($name, $user);
+            $manager->persist($user);
+            $manager->flush();                        
+        }
 }

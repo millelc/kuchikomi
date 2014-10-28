@@ -65,11 +65,21 @@ class KuchiAccountData extends AbstractFixture implements ContainerAwareInterfac
         $kuchiAccount3->setKomi($this->getReference('komi3'));
         $kuchiAccount3->setKuchi($this->getReference('paul'));
         
+        $kuchiAccount5 = new KuchiAccount();
+        $kuchiAccount5->setKomi($this->getReference('P_PostKuchiKomiAction_1'));
+        $kuchiAccount5->setKuchi($this->getReference("kuchiRef_P_PostKuchiKomiAction_1"));
+        
+        $kuchiAccount6 = new KuchiAccount();
+        $kuchiAccount6->setKomi($this->getReference('P_DeleteKuchiKomiAction_1'));
+        $kuchiAccount6->setKuchi($this->getReference("kuchiRef_P_DeleteKuchiKomiAction_1"));        
+        
         $manager->persist($kuchiAccount0);
         $manager->persist($kuchiAccount);
         $manager->persist($kuchiAccount2);
         $manager->persist($kuchiAccount3);
         $manager->persist($kuchiAccount4);
+        $manager->persist($kuchiAccount5);
+        $manager->persist($kuchiAccount6);
         $manager->flush();
 
     }

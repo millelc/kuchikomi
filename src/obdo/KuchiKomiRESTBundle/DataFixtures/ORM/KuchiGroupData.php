@@ -137,6 +137,25 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
                 $AclManager->addAcl($testGroup, $this->getReference('SuperAdmin'));
                 $AclManager->addAcl($testGroup, $this->getReference('Admin'));
                 $AclManager->addAcl($testGroup, $this->getReference('GroupAdmin')); 
-        }
-        
+                
+                //*********************************************************************/
+                
+                $this->createKuchiGroup($manager, $AclManager, "Group_P_PostKuchiKomiAction_1", "User_test_PostKuchiKomiAction_1", 'Admin');
+                
+
+            }
+            
+            
+            private  function createKuchiGroup($manager,$AclManager,$name,$refUser,$refUserAcl,$active=true){
+                $kuchigroup = new KuchiGroup();
+                $kuchigroup->setName($name);
+                $kuchigroup->setActive($active);
+                $kuchigroup->addUser($this->getReference($refUser));
+                $this->addReference($name,$kuchigroup);
+                $manager->flush();
+		$kuchigroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchigroup->getId() . "/logo_lycee.png" );
+		$manager->persist($kuchigroup);
+		$manager->flush();
+                $AclManager->addAcl($kuchigroup,  $this->getReference($refUserAcl));
+            }     
 }

@@ -312,8 +312,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test positif GetKuchiSyncAction
      */
     public function test_P_GetKuchiSyncAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
+        $kuchi = parent::$repositoryKuchi->findOneById('2');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));   
                 $kk2 = new KuchiKomi();
 		$kk2->setKuchi($kuchi);
@@ -341,7 +341,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
 
         //$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         parent::$em->close();
-        $kuchi2=parent::$repositoryKuchi->findOneById('12');
+        $kuchi2=parent::$repositoryKuchi->findOneById('2');
         $kuchiAccount2 = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $this->assertNotEquals($kuchiAccount2->getTimestampLastSynchroSaved(),$kuchiAccount->getTimestampLastSynchroSaved());        
         $this->assertNotEquals($kuchiAccount2->getToken(), $kuchiAccount->getToken());
