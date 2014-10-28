@@ -188,28 +188,30 @@ class SubscriptionGroupController extends Controller
                     	{
                             $subscriptionGroup->setCurrentTimestampSuppression();
                             $subscriptionGroup->setActive(false);
+                            
+                            switch ($opt)
+                            {
+                                case 1:
+                                    // unsuscribe all kumi from the groupe
+                                    $kuchis = $kuchiGroup->getKuchis();
+                                    foreach($kuchis as $kuchi)
+                                    {
+                                        $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+                                        if( $subscription )
+                                        {
+                                            $subscription->setCurrentTimestampSuppression();
+                                            $subscription->setActive(false);
+                                            $em->persist($subscription);
+                                        }
+                                    }
+                                break;
+                            }
+
                             $response->setStatusCode(200);
                             //$Logger->Info("[DELETE rest/subscriptions] 200 - Subscription group(". $komi->getRandomId() ."-". $kuchiGroup->getName().") de-activated");
                     	}
                     }
                     
-                    switch ($opt)
-                    {
-                    	case 1:
-            	            // unsuscribe all kumi from the groupe
-                            $kuchis = $kuchiGroup->getKuchis();
-                            foreach($kuchis as $kuchi)
-                            {
-                	        $subscription = $repositorySubscription->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
-                                if( $subscription )
-                                {
-                                    $subscription->setCurrentTimestampSuppression();
-                                    $subscription->setActive(false);
-                                    $em->persist($subscription);
-                                }
-                            }
-                        break;
-                    }
                             
                     $em->flush();
                 }

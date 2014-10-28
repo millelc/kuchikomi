@@ -44,20 +44,6 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$manager->getConnection()->exec("ALTER TABLE KuchiGroup AUTO_INCREMENT = 1;");
 		$AclManager = $this->container->get('obdo_services.AclManager');
                 		
-		// CityKomi Group
-		$citykomiGroup = new KuchiGroup();
-		$citykomiGroup->setName("CityKomi");
-                $citykomiGroup->addUser($this->getReference('SuperAdmin'));
-                $citykomiGroup->addUser($this->getReference('Admin'));
-                $this->addReference('citykomiGroup', $citykomiGroup);
-		$manager->persist($citykomiGroup);
-		$manager->flush();
-		$citykomiGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $citykomiGroup->getId() . "/logo.jpg" );
-		$manager->persist($citykomiGroup);
-		$manager->flush();
-                //  ACL
-                $AclManager->addAcl($citykomiGroup, $this->getReference('SuperAdmin'));
-                $AclManager->addAcl($citykomiGroup, $this->getReference('Admin'));
 		
 		// ob-do Group
 		$obdoGroup = new KuchiGroup();
@@ -122,6 +108,7 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
                 $AclManager->addAcl($toBeDeletedGroup, $this->getReference('GroupAdmin')); 
                 
                 /****************************************************/
+<<<<<<< .merge_file_J1QSws
 		$testGroup = new KuchiGroup();
 		$testGroup->setName("test group");
                 $testGroup->addUser($this->getReference('SuperAdmin'));
@@ -158,4 +145,52 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$manager->flush();
                 $AclManager->addAcl($kuchigroup,  $this->getReference($refUserAcl));
             }     
+=======
+                $this->createKuchiGroup($manager, $AclManager, "CityKomi");
+		$this->createKuchiGroup($manager, $AclManager, "Group_test");
+                $this->createKuchiGroup($manager, $AclManager, "P_PostSubscriptionGroupAction_1");
+                $this->createKuchiGroup($manager, $AclManager, "P_PostSubscriptionGroupAction_2");
+                $this->createKuchiGroup($manager, $AclManager, "P_PostSubscriptionGroupAction_3");
+                $this->createKuchiGroup($manager, $AclManager, "P_PostSubscriptionGroupAction_4");
+                $this->createKuchiGroup($manager, $AclManager, "P_PostSubscriptionGroupAction_5");
+                $this->createKuchiGroup($manager, $AclManager, "P_PostSubscriptionGroupAction_6");
+                $this->createKuchiGroup($manager, $AclManager, "N_PostSubscriptionGroupAction_1");
+                $this->createKuchiGroup($manager, $AclManager, "N_PostSubscriptionGroupAction_4", false);
+                $this->createKuchiGroup($manager, $AclManager, "N_PostSubscriptionGroupAction_5");
+                $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_1");
+                $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_2");
+                $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_3");
+                $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_4");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_1");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_3");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_4");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_5");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_6");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_7");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_8");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_9");
+                
+        }
+        
+        private function createKuchiGroup($manager, $AclManager, $name, $active=true)
+        {
+            $newGroup = new KuchiGroup();
+            $newGroup->setName($name);
+            $newGroup->setActive($active);
+            $newGroup->addUser($this->getReference('SuperAdmin'));
+            $newGroup->addUser($this->getReference('Admin'));
+            $newGroup->addUser($this->getReference('GroupAdmin'));
+            $this->addReference($name, $newGroup);
+            $manager->persist($newGroup);
+            $manager->flush();
+            $newGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $newGroup->getId() . "/logo_lycee.png" );
+            $manager->persist($newGroup);
+            $manager->flush();
+            // ACL
+            $AclManager->addAcl($newGroup, $this->getReference('SuperAdmin'));
+            $AclManager->addAcl($newGroup, $this->getReference('Admin'));
+            $AclManager->addAcl($newGroup, $this->getReference('GroupAdmin'));
+        }
+        
+>>>>>>> .merge_file_VxLEGD
 }

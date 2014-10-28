@@ -39,17 +39,6 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
 	{
 		$AclManager = $this->container->get('obdo_services.AclManager');
 		$manager->getConnection()->exec("ALTER TABLE KuchiKomi AUTO_INCREMENT = 1;");
-
-		// KuchiKomi de bienvenue
-		$welcome = new KuchiKomi();
-		$welcome->setKuchi($this->getReference('news'));
-		$welcome->setTitle('Bienvenue !');
-		$welcome->setDetails("Toute l'équipe CityKomi est heureuse de vous accueillir comme nouveau membre !");
-		$welcome->setTimestampEnd($welcome->getTimestampEnd()->add(new \DateInterval('P5Y')));
-		$this->addReference('welcome', $welcome);
-		$manager->persist($welcome);
-                $manager->flush();
-                $AclManager->addAcl($welcome, $this->getReference('SuperAdmin'));
                 
                 // KuchiKomi de ToBeDeleted
 		$kk1 = new KuchiKomi();
@@ -74,6 +63,7 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
                 $AclManager->addAcl($kk2, $this->getReference('SuperAdmin'));
                 $AclManager->addAcl($kk2, $this->getReference('KuchiAdmin'));
 		
+<<<<<<< HEAD
                 $kk3 = new KuchiKomi();
 		$kk3->setKuchi($this->getReference('kuchiRef_P_DeleteKuchiKomiAction_1'));
 		$kk3->setTitle("Le KuchiKomi qu'on supprime");
@@ -85,9 +75,22 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
                 $AclManager->addAcl($kk3, $this->getReference('SuperAdmin'));
                 $AclManager->addAcl($kk3, $this->getReference('KuchiAdmin'));
 			
+=======
+		/****************************************************/
+                $this->createKuchiKomi($manager, $AclManager, "Welcome", "kuchiRef_News", "Bienvenue !", "Toute l'équipe CityKomi est heureuse de vous accueillir comme nouveau membre !");
+>>>>>>> c886fae1bfb1a16335c42032f47da4b2a8107afe
 	}
         
-//        private function createKuchiKomi($kuchi,){
-//            
-//        }
+        private function createKuchiKomi($manager, $AclManager, $kuchikomiRef, $kuchiRef, $Title, $Details)
+        {
+            $newKuchikomi = new KuchiKomi();
+            $newKuchikomi->setKuchi($this->getReference($kuchiRef));
+            $newKuchikomi->setTitle($Title);
+            $newKuchikomi->setDetails($Details);
+            $newKuchikomi->setTimestampEnd($newKuchikomi->getTimestampEnd()->add(new \DateInterval('P5Y')));
+            $this->addReference($kuchikomiRef, $newKuchikomi);
+            $manager->persist($newKuchikomi);
+            $manager->flush();
+            $AclManager->addAcl($newKuchikomi, $this->getReference('SuperAdmin'));
+        }
 }

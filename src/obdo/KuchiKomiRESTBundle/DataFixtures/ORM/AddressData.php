@@ -39,15 +39,7 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 	{
 		$manager->getConnection()->exec("ALTER TABLE Address AUTO_INCREMENT = 1;");
 		
-		// Address News
-		$addressNews = new Address();
-		$addressNews->setAddress1('');
-		$addressNews->setAddress2('');
-		$addressNews->setAddress3('');
-		$addressNews->setPostalCode('');
-		$addressNews->setCity('');
-		$this->addReference('addressNews', $addressNews);
-		$manager->persist($addressNews);
+		
 		
 		// Address David
 		$addressDavid = new Address();
@@ -197,6 +189,7 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
 		$manager->persist($tb2Address);
                 
                 /****************************************************/
+                $this->createAddress($manager, "kuchi_test_News_address");
                 $this->createAddress($manager, "kuchi_test_P_PostSubscriptionAction_1_address");
                 $this->createAddress($manager, "kuchi_test_P_PostSubscriptionAction_2_address");
                 $this->createAddress($manager, "kuchi_test_N_PostSubscriptionAction_1_address");
@@ -207,10 +200,33 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionAction_1_address");
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionAction_3_address");
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionAction_4_address");
+<<<<<<< HEAD
                 $this->createAddress($manager, "kuchi_test_P_PostKuchiKomiAction_1_address");
                 $this->createAddress($manager, "kuchi_test_P_DeleteKuchiKomiAction_1_address");
                 
 		$manager->flush();	
+=======
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_2_1_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_2_2_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_3_1_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_3_2_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_4_1_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_4_2_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_5_1_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_5_2_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_6_1_address");
+                $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_6_2_address");
+                $this->createAddress($manager, "kuchi_test_P_DeleteSubscriptionGroupAction_3_1_address");
+                $this->createAddress($manager, "kuchi_test_P_DeleteSubscriptionGroupAction_3_2_address");
+                $this->createAddress($manager, "kuchi_test_P_DeleteSubscriptionGroupAction_4_1_address");
+                $this->createAddress($manager, "kuchi_test_P_DeleteSubscriptionGroupAction_4_2_address");
+                $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionGroupAction_8_1_address");
+                $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionGroupAction_8_2_address");
+                $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionGroupAction_9_1_address");
+                $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionGroupAction_9_2_address");
+                
+                $manager->flush();	
+>>>>>>> c886fae1bfb1a16335c42032f47da4b2a8107afe
 	}
         
         private function createAddress($manager, $name)

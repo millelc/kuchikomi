@@ -31,6 +31,7 @@ abstract class CityKomiWebTestCase extends WebTestCase
     public static $repositoryKuchiKomi;
     public static $repositoryKuchiGroup;        
     public static $repositorySubscription; 
+    public static $repositorySubscriptionGroup;
     protected $client;    
     public static $password;
     
@@ -58,6 +59,7 @@ abstract class CityKomiWebTestCase extends WebTestCase
         self::$repositoryKuchiAccount = self::$em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
         self::$repositoryKuchiGroup = self::$em->getRepository('obdoKuchiKomiRESTBundle:KuchiGroup');
         self::$repositorySubscription = self::$em->getRepository('obdoKuchiKomiRESTBundle:Subscription');
+        self::$repositorySubscriptionGroup = self::$em->getRepository('obdoKuchiKomiRESTBundle:SubscriptionGroup');
         self::$AES->setKey(self::$container->getParameter('aes_key'));
         self::$AES->setBlockSize(self::$container->getParameter('aes_key_size'));
         self::$AES->setIV(self::$container->getParameter('aes_IV'));   
