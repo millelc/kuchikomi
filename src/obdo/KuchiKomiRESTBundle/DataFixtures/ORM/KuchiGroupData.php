@@ -123,6 +123,14 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
                 $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_2");
                 $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_3");
                 $this->createKuchiGroup($manager, $AclManager, "P_DeleteSubscriptionGroupAction_4");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_1");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_3");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_4");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_5");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_6");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_7");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_8");
+                $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_9");
                 
         }
         
