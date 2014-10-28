@@ -69,12 +69,11 @@ class KuchiControllerTest extends CityKomiWebTestCase {
                 );
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
-        parent::$em->close();
-        $kuchi2 = parent::$repositoryKuchi->findOneById("2");
-        $kuchiAccount2 = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi2));
+        $this->checkKuchiAccountToken($kuchiAccount->getToken(), $komi, $kuchi);
+        $kuchi2 = parent::$repositoryKuchi->findOneById("2");        
         $this->assertNotEquals($kuchi->getPassword(), $kuchi2->getPassword());
         $this->assertEquals($kuchi->getId(), $kuchi2->getId());
-        $this->assertNotEquals($kuchiAccount->getToken(), $kuchiAccount2->getToken());        
+        ;        
         
     }
     
@@ -199,12 +198,10 @@ class KuchiControllerTest extends CityKomiWebTestCase {
                 array(),
                 array('HTTP_ACCEPT' => 'application/json')
                 );
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $tokenA = $kuchiAccount->getToken();
-        parent::$em->close();
-        $kuchiAccount=parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi, 'kuchi'=>$kuchi));
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());        
+        $this->checkKuchiAccountToken($kuchiAccount->getToken(), $komi, $kuchi);
         $this->assertEquals($kuchiAccount->getTimestampLastSynchroSaved(),$kuchiAccount->getTimestampLastSynchro());
-        $this->assertNotEquals($tokenA, $kuchiAccount->getToken());
+        
     }
     
     /**
