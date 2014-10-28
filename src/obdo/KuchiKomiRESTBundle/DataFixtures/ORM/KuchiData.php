@@ -390,11 +390,11 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_1", "kuchi_test_N_DeleteSubscriptionAction_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_3", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_3", "kuchi_test_N_DeleteSubscriptionAction_3_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionAction_4", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "N_DeleteSubscriptionAction_4", "kuchi_test_N_DeleteSubscriptionAction_4_address");
-<<<<<<< HEAD
+
                 $this->createKuchi($manager, $AclManager, $Password, "P_PostKuchiKomiAction_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_P_PostKuchiKomiAction_1", "P_PostKuchiKomiAction", "kuchi_test_P_PostKuchiKomiAction_1_address",$user=true);
                 $this->createKuchi($manager, $AclManager, $Password, "P_DeleteKuchiKomiAction_1","00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "P_DeleteKuchiKomiAction_1", "kuchi_test_P_DeleteKuchiKomiAction_1_address");
 
-=======
+
                 $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_2_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_2", "P_PostSubscriptionGroupAction_2_1", "kuchi_test_P_PostSubscriptionGroupAction_2_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_2_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_2", "P_PostSubscriptionGroupAction_2_2", "kuchi_test_P_PostSubscriptionGroupAction_2_2_address");
                 $this->createKuchi($manager, $AclManager, $Password, "P_PostSubscriptionGroupAction_3_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "P_PostSubscriptionGroupAction_3", "P_PostSubscriptionGroupAction_3_1", "kuchi_test_P_PostSubscriptionGroupAction_3_1_address");
@@ -413,7 +413,6 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionGroupAction_8_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "N_DeleteSubscriptionGroupAction_8", "N_DeleteSubscriptionGroupAction_8_2", "kuchi_test_N_DeleteSubscriptionGroupAction_8_2_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionGroupAction_9_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "N_DeleteSubscriptionGroupAction_9", "N_DeleteSubscriptionGroupAction_9_1", "kuchi_test_N_DeleteSubscriptionGroupAction_9_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionGroupAction_9_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "N_DeleteSubscriptionGroupAction_9", "N_DeleteSubscriptionGroupAction_9_2", "kuchi_test_N_DeleteSubscriptionGroupAction_9_2_address");
->>>>>>> c886fae1bfb1a16335c42032f47da4b2a8107afe
                 
         }
         

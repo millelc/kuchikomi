@@ -73,9 +73,9 @@ public $kuchiKomiTitle ;
       * test négatif de PostKuchiKomiAction pour un kuchiAccount unknown (ce komi et ce kuchi n'ont pas de kuchiaccount)
       */
     public function test_N_PostKuchiKomiAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('ac81d6f9cb600d38');
-        $kuchi = parent::$repositoryKuchi->findOneById('13');   
-        $kuchi2 = parent::$repositoryKuchi->findOneById('2');
+        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
+        $kuchi = parent::$repositoryKuchi->findOneById('2');   
+        $kuchi2 = parent::$repositoryKuchi->findOneById('12');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi2));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -86,7 +86,7 @@ public $kuchiKomiTitle ;
                 array(),
                 array(),
                 array('Content-Type' => 'application/json'),                
-                json_encode(array ( "kuchikomi" => array ("title"=> uniqid('TIT'),"timestampBegin"=> $dateBegin->getTimestamp(),
+                json_encode(array ( "kuchikomi" => array ("title"=> $this->kuchiKomiTitle,"timestampBegin"=> $dateBegin->getTimestamp(),
                     "timestampEnd"=> $dateEnd->getTimestamp(),"details"=>uniqid('DET'),"photo"=> '', "random_id"=> uniqid('KK'))))
                 );
         $this->assertEquals(504, $this->client->getResponse()->getStatusCode());    
@@ -96,8 +96,8 @@ public $kuchiKomiTitle ;
      * test négatif de PostKuchiKomiAction pour un mauvais kuchi
      */
     public function test_N_PostKuchiKomiAction_2(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('ac81d6f9cb600d38');
-        $kuchi = parent::$repositoryKuchi->findOneById('2'); 
+        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
+        $kuchi = parent::$repositoryKuchi->findOneById('12'); 
         $kuchi2 = 'mauvais_kuchi';
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
@@ -109,7 +109,7 @@ public $kuchiKomiTitle ;
                 array(),
                 array(),
                 array('Content-Type' => 'application/json'),                
-                json_encode(array ( "kuchikomi" => array ("title"=> uniqid('TIT'),"timestampBegin"=> $dateBegin->getTimestamp(),
+                json_encode(array ( "kuchikomi" => array ("title"=> $this->kuchiKomiTitle,"timestampBegin"=> $dateBegin->getTimestamp(),
                     "timestampEnd"=> $dateEnd->getTimestamp(),"details"=>uniqid('DET'),"photo"=> '', "random_id"=> uniqid('KK'))))
                 );
         $this->assertEquals(502, $this->client->getResponse()->getStatusCode());
@@ -120,9 +120,9 @@ public $kuchiKomiTitle ;
     */
     public function test_N_PostKuchiKomiAction_3(){
             
-        $komi = parent::$repositoryKomi->findOneByRandomId('ac81d6f9cb600d38');
+        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
         $komi2= "mauvais_komi";
-        $kuchi = parent::$repositoryKuchi->findOneById('2');        
+        $kuchi = parent::$repositoryKuchi->findOneById('12');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -133,7 +133,7 @@ public $kuchiKomiTitle ;
                 array(),
                 array(),
                 array('Content-Type' => 'application/json'),                
-                json_encode(array ( "kuchikomi" => array ("title"=> uniqid('TIT'),"timestampBegin"=> $dateBegin->getTimestamp(),
+                json_encode(array ( "kuchikomi" => array ("title"=> $this->kuchiKomiTitle,"timestampBegin"=> $dateBegin->getTimestamp(),
                     "timestampEnd"=> $dateEnd->getTimestamp(),"details"=>uniqid('DET'),"photo"=> '', "random_id"=> uniqid('KK'))))
                 );
         $this->assertEquals(501, $this->client->getResponse()->getStatusCode());  
@@ -145,8 +145,8 @@ public $kuchiKomiTitle ;
      */
     public function test_N_PostKuchiKomiAction_4(){   
         
-        $komi = parent::$repositoryKomi->findOneByRandomId('ac81d6f9cb600d38');
-        $kuchi = parent::$repositoryKuchi->findOneById('2');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
+        $kuchi = parent::$repositoryKuchi->findOneById('12');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -157,7 +157,7 @@ public $kuchiKomiTitle ;
                 array(),
                 array(),
                 array('Content-Type' => 'application/json'),                
-                json_encode(array ( "kuchikomi" => array ("title"=> uniqid('TIT'),"timestampBegin"=> $dateBegin->getTimestamp(),
+                json_encode(array ( "kuchikomi" => array ("title"=> $this->kuchiKomiTitle,"timestampBegin"=> $dateBegin->getTimestamp(),
                     "timestampEnd"=> $dateEnd->getTimestamp(),"details"=>uniqid('DET'),"photo"=> '', "random_id"=> uniqid('KK'))))
                 );
         $this->assertEquals(510, $this->client->getResponse()->getStatusCode()); 
@@ -168,8 +168,8 @@ public $kuchiKomiTitle ;
      */
     public function test_N_PostKuchiKomiAction_5(){   
         
-        $komi = parent::$repositoryKomi->findOneByRandomId('ac81d6f9cb600d38');
-        $kuchi = parent::$repositoryKuchi->findOneById('2');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
+        $kuchi = parent::$repositoryKuchi->findOneById('12');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -180,34 +180,13 @@ public $kuchiKomiTitle ;
                 array(),
                 array(),
                 array('Content-Type' => 'application/json'),                
-                json_encode(array ( "kuchikomi" => array ("title"=> uniqid('TIT'),"timestampBegin"=> $dateBegin->getTimestamp(),
+                json_encode(array ( "kuchikomi" => array ("title"=> $this->kuchiKomiTitle,"timestampBegin"=> $dateBegin->getTimestamp(),
                     "timestampEnd"=> $dateEnd->getTimestamp(),"details"=>uniqid('DET'),"photo"=> '', "random_id"=> uniqid('KK'))))
                 );
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode()); 
     }
     
-    /**
-     * test négatif de PostKuchiKomiAction pour une méthode non autorisé (route rest au lieu de rest/kuchikomi)
-     */
-//    public function test_N_PostKuchiKomiAction_6(){   
-//        
-//        $komi = parent::$repositoryKomi->findOneByRandomId('ac81d6f9cb600d38');
-//        $kuchi = parent::$repositoryKuchi->findOneById('2');        
-//        $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
-//        $dateBegin = new \DateTime() ;        
-//        $dateEnd = new \DateTime();
-//        
-//        $crawler = $this->client->request(                
-//                    'POST',
-//                    '/rest/kuchi'.$komi->getRandomId().'/'.$kuchi->getId().'/'.sha1('POST /rest/kuchikomi'.$kuchiAccount->getToken()),               
-//                array(),
-//                array(),
-//                array('Content-Type' => 'application/json'),                
-//                json_encode(array ( "kuchikomi" => array ("title"=> uniqid('TIT'),"timestampBegin"=> $dateBegin->getTimestamp(),
-//                    "timestampEnd"=> $dateEnd->getTimestamp(),"details"=>uniqid('DET'),"photo"=> '', "random_id"=> uniqid('KK'))))
-//                );
-//        $this->assertEquals(405, $this->client->getResponse()->getStatusCode()); 
-//    }
+
     /**
      * test positif DeleteKuchiKomiAction
      * code 200, date de suppression => aujourd'hui
@@ -228,7 +207,7 @@ public $kuchiKomiTitle ;
                 array('Content-Type' => 'application/json')
                 );
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        //parent::$em->close();
+        parent::$em->close();
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
         $this->assertEquals($date->format('Y-m-d'), $kuchikomi->getTimestampSuppression()->format('Y-m-d'));
         $this->assertEquals(FALSE, $kuchikomi->getActive());

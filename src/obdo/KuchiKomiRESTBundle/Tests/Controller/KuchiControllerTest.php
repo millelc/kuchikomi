@@ -55,7 +55,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
     public function test_P_PutKuchiAction_1(){
             
         $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('2');
+        $kuchi = parent::$repositoryKuchi->findOneById('1');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'PUT',
@@ -70,7 +70,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $this->checkKuchiAccountToken($kuchiAccount->getToken(), $komi, $kuchi);
-        $kuchi2 = parent::$repositoryKuchi->findOneById("2");        
+        $kuchi2 = parent::$repositoryKuchi->findOneById("1");        
         $this->assertNotEquals($kuchi->getPassword(), $kuchi2->getPassword());
         $this->assertEquals($kuchi->getId(), $kuchi2->getId());
         ;        
@@ -163,7 +163,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PutKuchiAction_5() {
         $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('13');
+        $kuchi = parent::$repositoryKuchi->findOneById('12');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'PUT',
@@ -313,7 +313,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_P_GetKuchiSyncAction_1(){
         $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('2');
+        $kuchi = parent::$repositoryKuchi->findOneById('1');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));   
                 $kk2 = new KuchiKomi();
 		$kk2->setKuchi($kuchi);
@@ -341,7 +341,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
 
         //$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         parent::$em->close();
-        $kuchi2=parent::$repositoryKuchi->findOneById('2');
+        $kuchi2=parent::$repositoryKuchi->findOneById('1');
         $kuchiAccount2 = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $this->assertNotEquals($kuchiAccount2->getTimestampLastSynchroSaved(),$kuchiAccount->getTimestampLastSynchroSaved());        
         $this->assertNotEquals($kuchiAccount2->getToken(), $kuchiAccount->getToken());
@@ -355,7 +355,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_GetKuchiSyncAction_1(){
         $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('13'); 
+        $kuchi = parent::$repositoryKuchi->findOneById('12'); 
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler= $this->client->request(
                 'GET',
@@ -463,7 +463,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
     public function test_P_DeleteKuchiSyncAction_1(){
         
         $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('2');
+        $kuchi = parent::$repositoryKuchi->findOneById('1');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));        
         $kuchiAccount->setTimestampLastSynchro(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
         sleep(3);
@@ -579,7 +579,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
     public function test_N_DeleteKuchiSyncAction_6(){
         
         $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('2');
+        $kuchi = parent::$repositoryKuchi->findOneById('1');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));        
        
         $crawler= $this->client->request(

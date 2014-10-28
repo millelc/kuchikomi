@@ -200,12 +200,8 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionAction_1_address");
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionAction_3_address");
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionAction_4_address");
-<<<<<<< HEAD
                 $this->createAddress($manager, "kuchi_test_P_PostKuchiKomiAction_1_address");
-                $this->createAddress($manager, "kuchi_test_P_DeleteKuchiKomiAction_1_address");
-                
-		$manager->flush();	
-=======
+                $this->createAddress($manager, "kuchi_test_P_DeleteKuchiKomiAction_1_address");               
                 $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_2_1_address");
                 $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_2_2_address");
                 $this->createAddress($manager, "kuchi_test_P_PostSubscriptionGroupAction_3_1_address");
@@ -226,7 +222,7 @@ class AddressData extends AbstractFixture implements ContainerAwareInterface, Or
                 $this->createAddress($manager, "kuchi_test_N_DeleteSubscriptionGroupAction_9_2_address");
                 
                 $manager->flush();	
->>>>>>> c886fae1bfb1a16335c42032f47da4b2a8107afe
+
 	}
         
         private function createAddress($manager, $name)

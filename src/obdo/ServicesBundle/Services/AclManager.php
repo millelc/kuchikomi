@@ -44,8 +44,8 @@ class AclManager
     }
     
     /*
-     * Retourne les objets apartennant à la table $objet transmise en entrée
-     * et pour lesquels l'utilisatuer $user a des droits.
+     * Retourne les objets appartennant à la table $objet transmise en entrée
+     * et pour lesquels l'utilisateur $user a des droits.
      */
     public function lstObj($user, $objet) 
     {

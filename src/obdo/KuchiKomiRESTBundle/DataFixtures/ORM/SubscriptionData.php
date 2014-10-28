@@ -97,9 +97,9 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_1", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_NFC, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_2", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_QRCode, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_3", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_WEB, false);
-<<<<<<< HEAD
+
                 $this->createSubscription($manager, "P_PostKuchiKomiAction_1_Abonne", "kuchiRef_P_PostKuchiKomiAction_1", Subscription::TYPE_QRCode);
-=======
+
                 $this->createSubscription($manager, "P_PostSubscriptionGroupAction_5_Android_1", "kuchiRef_P_PostSubscriptionGroupAction_5_1", Subscription::TYPE_NFC);
                 $this->createSubscription($manager, "P_PostSubscriptionGroupAction_5_Android_2", "kuchiRef_P_PostSubscriptionGroupAction_5_2", Subscription::TYPE_QRCode);
                 $this->createSubscription($manager, "P_PostSubscriptionGroupAction_5_Android_3", "kuchiRef_P_PostSubscriptionGroupAction_5_1", Subscription::TYPE_WEB);
@@ -188,7 +188,7 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
                 $this->createSubscription($manager, "N_DeleteSubscriptionGroupAction_9_Windows_2", "kuchiRef_N_DeleteSubscriptionGroupAction_9_2", Subscription::TYPE_QRCode, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionGroupAction_9_Windows_3", "kuchiRef_N_DeleteSubscriptionGroupAction_9_1", Subscription::TYPE_WEB, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionGroupAction_9_Windows_3", "kuchiRef_N_DeleteSubscriptionGroupAction_9_2", Subscription::TYPE_WEB, false);
->>>>>>> c886fae1bfb1a16335c42032f47da4b2a8107afe
+
                 
 		$manager->flush();	
 	}
