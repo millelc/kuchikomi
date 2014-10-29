@@ -45,43 +45,36 @@ class KuchiAccountData extends AbstractFixture implements ContainerAwareInterfac
         $manager->getConnection()->exec("ALTER TABLE KuchiAccount AUTO_INCREMENT = 1;");
         
 
-        $kuchiAccount0 = new KuchiAccount();        
-        $kuchiAccount0->setKomi($this->getReference('komi1'));
-        $kuchiAccount0->setKuchi($this->getReference('david'));
-        
-        $kuchiAccount = new KuchiAccount();        
-        $kuchiAccount->setKomi($this->getReference('komi2'));
-        $kuchiAccount->setKuchi($this->getReference('maxime'));
-        
-        $kuchiAccount4 = new KuchiAccount();        
-        $kuchiAccount4->setKomi($this->getReference('komi3'));
-        $kuchiAccount4->setKuchi($this->getReference('maxime'));        
-        
-        $kuchiAccount2 = new KuchiAccount();
-        $kuchiAccount2->setKomi($this->getReference('komi3'));
-        $kuchiAccount2->setKuchi($this->getReference('eva'));
 
-        $kuchiAccount3 = new KuchiAccount();
-        $kuchiAccount3->setKomi($this->getReference('komi3'));
-        $kuchiAccount3->setKuchi($this->getReference('paul'));
+      //  $this->createKuchiAccount($manager, $this->getReference('KomiControllerTest_KomiRandomId'), $this->getReference('david'));
+ 
+        $this->createKuchiAccount($manager, $this->getReference('KuchiControllerTest_KomiRandomId'), $this->getReference('kuchiRef_ControllersTests_Kuchi_Inactif'));
         
-        $kuchiAccount5 = new KuchiAccount();
-        $kuchiAccount5->setKomi($this->getReference('P_PostKuchiKomiAction_1'));
-        $kuchiAccount5->setKuchi($this->getReference("kuchiRef_P_PostKuchiKomiAction_1"));
+        $this->createKuchiAccount($manager, $this->getReference('KuchiControllerTest_KomiRandomId'), $this->getReference('kuchiRef_KuchiControllerTest_Kuchi'));
         
-        $kuchiAccount6 = new KuchiAccount();
-        $kuchiAccount6->setKomi($this->getReference('P_DeleteKuchiKomiAction_1'));
-        $kuchiAccount6->setKuchi($this->getReference("kuchiRef_P_DeleteKuchiKomiAction_1"));        
+        $this->createKuchiAccount($manager, $this->getReference('KuchiControllerTest_KomiRandomId'), $this->getReference('kuchiRef_KuchiControllerTest_KuchiDeleteSync'));
+         
+        $this->createKuchiAccount($manager, $this->getReference('AuthenticateControllerTest_KomiRandomId'), $this->getReference('kuchiRef_ControllersTests_Kuchi_Inactif'));
         
-        $manager->persist($kuchiAccount0);
-        $manager->persist($kuchiAccount);
-        $manager->persist($kuchiAccount2);
-        $manager->persist($kuchiAccount3);
-        $manager->persist($kuchiAccount4);
-        $manager->persist($kuchiAccount5);
-        $manager->persist($kuchiAccount6);
-        $manager->flush();
+        $this->createKuchiAccount($manager, $this->getReference('AuthenticateControllerTest_KomiRandomId'), $this->getReference('kuchiRef_AuthenticateControllerTest_Kuchi'));
+
+        //$this->createKuchiAccount($manager, $this->getReference('AuthenticateControllerTest_KomiRandomId'), $this->getReference('kuchiRef_KuchiControllerTest_Kuchi'));
+        
+        $this->createKuchiAccount($manager, $this->getReference('PostKuchiKomiAction_RandomId'), $this->getReference("kuchiRef_PostKuchiKomiAction_Kuchi"));
+        
+        $this->createKuchiAccount($manager, $this->getReference('DeleteKuchiKomiAction_RandomId'), $this->getReference("kuchiRef_DeleteKuchiKomiAction_Kuchi"));
+
 
     }
+    
+    private function createKuchiAccount ($manager,$komi,$kuchi)
+        {
+        $kuchiaccount = new KuchiAccount();
+        $kuchiaccount->setKomi($komi);
+        $kuchiaccount->setKuchi($kuchi);
+        $manager->persist($kuchiaccount);
+        $manager->flush();
+        
+        }
 
 }

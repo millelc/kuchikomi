@@ -25,7 +25,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
    // public $kuchi;
     //public $address;
     public $passwordKuchi;
-
+    public $KomiRandomId;
     public $address1;
     public $postalCode;       
     public $city;
@@ -38,11 +38,12 @@ class KuchiControllerTest extends CityKomiWebTestCase {
     
     function __construct() {
         parent::__construct();
-        $this->name = ('David');
+        $this->name = ('KuchiControllerTest_Kuchi');
         $this->passwordKuchi =  uniqid('mdp');   
         $this->address1= str_shuffle("rue de la place du rond point");
         $this->postalCode= str_shuffle("26574");
-        $this->city=  str_shuffle("villeincroyable");            
+        $this->city=  str_shuffle("villeincroyable");    
+        $this->KomiRandomId = "KuchiControllerTest_KomiRandomId";
     }
     
     /**
@@ -54,8 +55,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_P_PutKuchiAction_1(){
             
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('1');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'PUT',
@@ -70,7 +71,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
         
         $this->assertEquals(200,$this->client->getResponse()->getStatusCode());   
         $this->checkKuchiAccountToken($kuchiAccount->getToken(), $komi, $kuchi);
-        $kuchi2 = parent::$repositoryKuchi->findOneById("1");        
+        $kuchi2 = parent::$repositoryKuchi->findOneByName($this->name);        
         $this->assertNotEquals($kuchi->getPassword(), $kuchi2->getPassword());
         $this->assertEquals($kuchi->getId(), $kuchi2->getId());
         ;        
@@ -82,7 +83,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PutKuchiAction_1(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
         $kuchi = "pasKuchi";
         $crawler=$this->client->request(
                 'PUT',
@@ -102,7 +103,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PutKuchiAction_2(){
         
-        $kuchi = parent::$repositoryKuchi->findOneById('2');
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         
         $crawler=$this->client->request(
                 'PUT',
@@ -122,8 +123,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PutKuchiAction_3() {
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('11');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
 
         $crawler=$this->client->request(
                 'PUT',
@@ -143,11 +144,13 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
         public function test_N_PutKuchiAction_4(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('11');        
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
+        $kuchi2 = parent::$repositoryKuchi->findOneById('5');
+        $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'PUT',
-                '/rest/kuchi/'.$komi->getRandomId().'/'.$kuchi->getId().'/'.sha1('PUT /rest/kuchi'.'2695b883943700bb58d2995835'),
+                '/rest/kuchi/'.$komi->getRandomId().'/'.$kuchi2->getId().'/'.sha1('PUT /rest/kuchi'.$kuchiAccount->getToken()),
                 array(),
                 array(),
                 array('Content-Type' => 'application/json'),
@@ -162,8 +165,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test négatif PutKuchiAction kuchi inactif
      */
     public function test_N_PutKuchiAction_5() {
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName('ControllersTests_Kuchi_Inactif');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'PUT',
@@ -188,8 +191,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_P_PostKuchiSyncAction_1(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'POST',
@@ -198,9 +201,10 @@ class KuchiControllerTest extends CityKomiWebTestCase {
                 array(),
                 array('HTTP_ACCEPT' => 'application/json')
                 );
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());        
-        $this->checkKuchiAccountToken($kuchiAccount->getToken(), $komi, $kuchi);
-        $this->assertEquals($kuchiAccount->getTimestampLastSynchroSaved(),$kuchiAccount->getTimestampLastSynchro());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());  
+        
+        $this->checkKuchiAccountToken($kuchiAccount->getToken(), $komi, $kuchi,$post=true);           
+       
         
     }
     
@@ -209,7 +213,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PostKuchiSyncAction_1() {
         $komi = "mauvais komi";
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         //$kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'POST',
@@ -226,7 +230,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
  */
     public function test_N_PostKuchiSyncAction_2(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
         $kuchi = 'mauvais_kuchi';
         //$kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
@@ -244,11 +248,13 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PostKuchiSyncAction_3(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('3');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
+        $kuchi2 = parent::$repositoryKuchi->findOneById('7');
+        $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'POST',
-                '/rest/kuchi/sync/'.$komi->getRandomId().'/'.$kuchi->getId().'/'.sha1('POST /rest/kuchi/sync'.'2695b883943700bb58d2995835'),
+                '/rest/kuchi/sync/'.$komi->getRandomId().'/'.$kuchi2->getId().'/'.sha1('POST /rest/kuchi/sync'.$kuchiAccount->getToken()),
                 array(),
                 array(),
                 array('HTTP_ACCEPT' => 'application/json')
@@ -261,8 +267,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_PostKuchiSyncAction_4(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'POST',
@@ -278,8 +284,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test négatif PostKuchiSyncAction mauvaise route
      */
     public function test_N_PostKuchiSyncAction_5(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'POST',
@@ -295,8 +301,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test négatif PostKuchiSyncAction méthode non autorisé (manque sync à la route)
      */
     public function test_N_PostKuchiSyncAction_6(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'POST',
@@ -312,8 +318,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test positif GetKuchiSyncAction
      */
     public function test_P_GetKuchiSyncAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('1');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));   
                 $kk2 = new KuchiKomi();
 		$kk2->setKuchi($kuchi);
@@ -341,7 +347,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
 
         //$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         parent::$em->close();
-        $kuchi2=parent::$repositoryKuchi->findOneById('1');
+        $kuchi2=parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount2 = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $this->assertNotEquals($kuchiAccount2->getTimestampLastSynchroSaved(),$kuchiAccount->getTimestampLastSynchroSaved());        
         $this->assertNotEquals($kuchiAccount2->getToken(), $kuchiAccount->getToken());
@@ -354,8 +360,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test négatif GetKuchiSyncAction kuchi inactif
      */
     public function test_N_GetKuchiSyncAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12'); 
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName('ControllersTests_Kuchi_Inactif'); 
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler= $this->client->request(
                 'GET',
@@ -374,7 +380,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_GetKuchiSyncAction_2(){
         $komi = "mauvais_komi";
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         //$kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         //$kuchikomis = parent::$repositoryKuchiKomi->findBy(array('kuchi'=>$kuchi));
         $crawler= $this->client->request(
@@ -392,7 +398,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_GetKuchiSyncAction_3(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb612345ac81d6f8');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
         $kuchi ="mauvais_kuchi" ;
         $crawler= $this->client->request(
                 'GET',
@@ -409,12 +415,14 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_GetKuchiSyncAction_4(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb612345ac81d6f8');
-        $kuchi =parent::$repositoryKuchi->findOneById('4');;              
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
+        $kuchi2 = parent::$repositoryKuchi->findOneById('7');
+        $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));              
 
         $crawler= $this->client->request(
                 'GET',
-                '/rest/kuchi/sync/'.$komi->getRandomId().'/'.$kuchi->getId().'/'.sha1("GET /rest/kuchi/sync" . '2695b883943700bb58d2995835'),
+                '/rest/kuchi/sync/'.$komi->getRandomId().'/'.$kuchi2->getId().'/'.sha1("GET /rest/kuchi/sync" . $kuchiAccount->getToken()),
                 array(),
                 array(),
                 array('HTTP_ACCEPT' => 'application/json')
@@ -426,8 +434,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      * test négatif pour un mauvais hash
      */
     public function test_N_GetKuchiSyncAction_5(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         
         $crawler= $this->client->request(
@@ -442,8 +450,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
     
     
     public function test_N_GetKuchiSyncAction_6(){
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         
         $crawler= $this->client->request(
@@ -462,8 +470,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_P_DeleteKuchiSyncAction_1(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('1');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName('KuchiControllerTest_KuchiDeleteSync');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));        
         $kuchiAccount->setTimestampLastSynchro(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
         sleep(3);
@@ -490,7 +498,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_DeleteKuchiSyncAction_1() {
         $komi = "mauvais komi";
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         //$kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'DELETE',
@@ -507,7 +515,7 @@ class KuchiControllerTest extends CityKomiWebTestCase {
  */
     public function test_N_DeleteKuchiSyncAction_2(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
         $kuchi = 'mauvais_kuchi';
         //$kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
@@ -525,11 +533,13 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_DeleteKuchiSyncAction_3(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('3');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
+        $kuchi2 = parent::$repositoryKuchi->findOneById('7');
+        $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $crawler=$this->client->request(
                 'DELETE',
-                '/rest/kuchi/sync/'.$komi->getRandomId().'/'.$kuchi->getId().'/'.sha1('DELETE /rest/kuchi/sync'.'2695b883943700bb58d2995835'),
+                '/rest/kuchi/sync/'.$komi->getRandomId().'/'.$kuchi2->getId().'/'.sha1('DELETE /rest/kuchi/sync'.$kuchiAccount->getToken()),
                 array(),
                 array(),
                 array('HTTP_ACCEPT' => 'application/json')
@@ -542,8 +552,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_DeleteKuchiSyncAction_4(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'DELETE',
@@ -560,8 +570,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_DeleteKuchiSyncAction_5(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("cb612345ac81d6f8");
-        $kuchi = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));      
         $crawler= $this->client->request(
                 'DELETE',
@@ -578,8 +588,8 @@ class KuchiControllerTest extends CityKomiWebTestCase {
      */
     public function test_N_DeleteKuchiSyncAction_6(){
         
-        $komi = parent::$repositoryKomi->findOneByRandomId("ac81d6f9cb600d38");
-        $kuchi = parent::$repositoryKuchi->findOneById('1');
+        $komi = parent::$repositoryKomi->findOneByRandomId($this->KomiRandomId);
+        $kuchi = parent::$repositoryKuchi->findOneByName($this->name);
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));        
        
         $crawler= $this->client->request(

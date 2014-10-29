@@ -107,11 +107,14 @@ abstract class CityKomiWebTestCase extends WebTestCase
         $this->assertNotEquals($komi->getToken(), $oldToken);
     }
     
-    protected function checkKuchiAccountToken($oldToken,$komi,$kuchi)
+    protected function checkKuchiAccountToken($oldToken,$komi,$kuchi,$post=false)
     {
         self::$em->close();
         $kuchiaccount = self::$repositoryKuchiAccount->findOneBy(array('komi'=>$komi,'kuchi'=>$kuchi));
         $this->assertNotEquals($oldToken, $kuchiaccount->getToken());
+        if($post==true){
+         $this->assertEquals($kuchiaccount->getTimestampLastSynchroSaved(),$kuchiaccount->getTimestampLastSynchro());
+        }
 
         
     }

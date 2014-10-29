@@ -35,9 +35,9 @@ class KomiControllerTest extends CityKomiWebTestCase {
         parent::__construct();
         $this->prekey = "%%OB-DO-2-0-0%%";
         $this->postkey = "%%OB-DO-2-0-0%%";
-        $this->randomId ="ac81d6f9cb600d38";
-        $this->newRandomId=  uniqid("rdi");
-        $this->newRegId=  uniqid("nwrgid");               
+        $this->randomId ="KomiControllerTest_KomiRandomId";
+        $this->newRandomId=  uniqid("KomiCtrlT");
+        $this->newRegId=  uniqid("KomiCtrlT");               
    
     }
     

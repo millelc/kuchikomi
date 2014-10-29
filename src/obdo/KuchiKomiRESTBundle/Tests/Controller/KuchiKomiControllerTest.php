@@ -34,8 +34,8 @@ public $kuchiKomiTitle ;
 
     
     public function test_P_PostKuchiKomiAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_PostKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_PostKuchiKomiAction_1');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('PostKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('PostKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -73,9 +73,9 @@ public $kuchiKomiTitle ;
       * test négatif de PostKuchiKomiAction pour un kuchiAccount unknown (ce komi et ce kuchi n'ont pas de kuchiaccount)
       */
     public function test_N_PostKuchiKomiAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
-        $kuchi = parent::$repositoryKuchi->findOneById('2');   
-        $kuchi2 = parent::$repositoryKuchi->findOneById('12');
+        $komi = parent::$repositoryKomi->findOneByRandomId('PostKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneById('7');   
+        $kuchi2 = parent::$repositoryKuchi->findOneByName('PostKuchiKomiAction_Kuchi');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi2));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -96,8 +96,8 @@ public $kuchiKomiTitle ;
      * test négatif de PostKuchiKomiAction pour un mauvais kuchi
      */
     public function test_N_PostKuchiKomiAction_2(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
-        $kuchi = parent::$repositoryKuchi->findOneById('12'); 
+        $komi = parent::$repositoryKomi->findOneByRandomId('PostKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('PostKuchiKomiAction_Kuchi'); 
         $kuchi2 = 'mauvais_kuchi';
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
@@ -120,9 +120,9 @@ public $kuchiKomiTitle ;
     */
     public function test_N_PostKuchiKomiAction_3(){
             
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
+        $komi = parent::$repositoryKomi->findOneByRandomId('PostKuchiKomiAction_RandomId');
         $komi2= "mauvais_komi";
-        $kuchi = parent::$repositoryKuchi->findOneById('12');        
+        $kuchi = parent::$repositoryKuchi->findOneByName('PostKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -145,8 +145,8 @@ public $kuchiKomiTitle ;
      */
     public function test_N_PostKuchiKomiAction_4(){   
         
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
-        $kuchi = parent::$repositoryKuchi->findOneById('12');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('PostKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('PostKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -168,8 +168,8 @@ public $kuchiKomiTitle ;
      */
     public function test_N_PostKuchiKomiAction_5(){   
         
-        $komi = parent::$repositoryKomi->findOneByRandomId('cb600d38ac81d6f9');
-        $kuchi = parent::$repositoryKuchi->findOneById('12');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('PostKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('PostKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));   
         $dateBegin = new \DateTime() ;        
         $dateEnd = new \DateTime();
@@ -193,8 +193,8 @@ public $kuchiKomiTitle ;
      * kuchikomi désactivé
      */
     public function test_P_DeleteKuchiKomiAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_DeleteKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_DeleteKuchiKomiAction_1');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('DeleteKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('DeleteKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));  
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
         $date = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;                
@@ -222,8 +222,8 @@ public $kuchiKomiTitle ;
      * test négatif DeleteKuchiKomiAction pour un mauvais komi
      */
     public function test_N_DeleteKuchiKomiAction_1(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_DeleteKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_DeleteKuchiKomiAction_1');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('DeleteKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('DeleteKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
         $komi2= "mauvais_komi";
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
@@ -241,8 +241,8 @@ public $kuchiKomiTitle ;
      * test négatif DeleteKuchiKomiAction pour un mauvais kuchi
      */
     public function test_N_DeleteKuchiKomiAction_2(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_DeleteKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_DeleteKuchiKomiAction_1');        
+        $komi = parent::$repositoryKomi->findOneByRandomId('DeleteKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('DeleteKuchiKomiAction_Kuchi');        
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
         $kuchi2= "mauvais_kuchi";
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
@@ -260,8 +260,8 @@ public $kuchiKomiTitle ;
      * test négatif DeleteKuchiKomiAction pour un mauvais kuchiaccount
      */
     public function test_N_DeleteKuchiKomiAction_3(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_DeleteKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_DeleteKuchiKomiAction_1');  
+        $komi = parent::$repositoryKomi->findOneByRandomId('DeleteKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('DeleteKuchiKomiAction_Kuchi');  
         $kuchi2 = parent::$repositoryKuchi->findOneById('2');
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));        
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
@@ -279,8 +279,8 @@ public $kuchiKomiTitle ;
      * test négatif DeleteKuchiKomiAction pour une mauvais route
      */
     public function test_N_DeleteKuchiKomiAction_4(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_DeleteKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_DeleteKuchiKomiAction_1');          
+        $komi = parent::$repositoryKomi->findOneByRandomId('DeleteKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('DeleteKuchiKomiAction_Kuchi');          
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));        
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
         $crawler = $this->client->request(                
@@ -297,8 +297,8 @@ public $kuchiKomiTitle ;
      * test négatif DeleteKuchiKomiAction pour un mauvais hash
      */
     public function test_N_DeleteKuchiKomiAction_5(){
-        $komi = parent::$repositoryKomi->findOneByRandomId('P_DeleteKuchiKomiAction_1');
-        $kuchi = parent::$repositoryKuchi->findOneByName('P_DeleteKuchiKomiAction_1');          
+        $komi = parent::$repositoryKomi->findOneByRandomId('DeleteKuchiKomiAction_RandomId');
+        $kuchi = parent::$repositoryKuchi->findOneByName('DeleteKuchiKomiAction_Kuchi');          
         $kuchiAccount = parent::$repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));        
         $kuchikomi = parent::$repositoryKuchiKomi->findOneByTitle("Le KuchiKomi qu'on supprime");
         $crawler = $this->client->request(                
