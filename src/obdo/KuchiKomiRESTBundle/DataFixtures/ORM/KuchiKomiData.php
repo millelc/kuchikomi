@@ -46,6 +46,7 @@ class KuchiKomiData extends AbstractFixture implements ContainerAwareInterface, 
                 $this->createKuchiKomi($manager, $AclManager, "Welcome", "kuchiRef_News", "Bienvenue !", "Toute l'équipe CityKomi est heureuse de vous accueillir comme nouveau membre !");
                 $this->createKuchiKomi($manager, $AclManager, 'kk3', 'kuchiRef_DeleteKuchiKomiAction_Kuchi', "Le KuchiKomi qu'on supprime", "Mon kuchikomi raté !");
                 $this->createKuchiKomi($manager, $AclManager, 'kk2', 'kuchiRef_AuthenticateControllerTest_Kuchi', "Eva s'exprime", "Mon premier kuchikomi !");
+                $this->createKuchiKomi($manager, $AclManager, 'ThanksController_Kuchikomi', 'kuchiRef_ThanksController_Kuchi', 'Thanks', 'Merci_mille_fois');
 	}
         
         private function createKuchiKomi($manager, $AclManager, $kuchikomiRef, $kuchiRef, $Title, $Details)

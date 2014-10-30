@@ -250,7 +250,8 @@ class KomiData extends AbstractFixture implements ContainerAwareInterface, Order
                 $this->createKomi($manager, $AclManager, "KuchiControllerTest_KomiRandomId", Komi::OS_TYPE_IOS, "2.0.0", "sdfsdgrstyhrffsdggh");
                 $this->createKomi($manager, $AclManager, "PostKuchiKomiAction_RandomId", Komi::OS_TYPE_ANDROID, "2.0.0", "okuebfjaokidlmoejan");
                 $this->createKomi($manager, $AclManager, "PostKuchiKomiAction_RandomId_Abonne", Komi::OS_TYPE_ANDROID, "2.0.0", "okuebfjaokidlmoejan");
-                $this->createKomi($manager, $AclManager, "DeleteKuchiKomiAction_RandomId", Komi::OS_TYPE_ANDROID, "2.0.0", "okuebfjaokidlmoejan");                   
+                $this->createKomi($manager, $AclManager, "DeleteKuchiKomiAction_RandomId", Komi::OS_TYPE_ANDROID, "2.0.0", "okuebfjaokidlmoejan");                                                  
+                $this->createKomi($manager, $AclManager, "N_PostThanksAction_2_komi", Komi::OS_TYPE_ANDROID, "2.0.0", "okuebfjaokidlmoejan");
         }
         
         private function createKomi($manager, $AclManager, $randomId, $osType, $applicationVersion, $gcmRegId, $active=true)

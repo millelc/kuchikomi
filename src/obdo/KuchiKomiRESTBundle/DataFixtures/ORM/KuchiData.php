@@ -47,13 +47,13 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
 		$AclManager = $this->container->get('obdo_services.AclManager');
                 
   		
-		$this->createKuchi($manager, $AclManager, $Password, 'KuchiControllerTest_Kuchi', '00 00 00 00 10', 'paul.vibert@ob-do.com', 'www.ob-do.com', 'obdoGroup', 'paul', 'addressPaul');
+		$this->createKuchi($manager, $AclManager, $Password, 'KuchiControllerTest_Kuchi', '00 00 00 00 10', 'paul.vibert@ob-do.com', 'www.ob-do.com', "Group_test", 'paul', 'addressPaul');
 	
-                $this->createKuchi($manager, $AclManager, $Password, 'KuchiControllerTest_KuchiDeleteSync', '00 00 00 00 10', 'paul.vibert@ob-do.com', 'www.ob-do.com', 'obdoGroup', 'paul', 'tb1Address');
+                $this->createKuchi($manager, $AclManager, $Password, 'KuchiControllerTest_KuchiDeleteSync', '00 00 00 00 10', 'paul.vibert@ob-do.com', "Group_test", 'obdoGroup', 'paul', 'tb1Address');
                 
-		$this->createKuchi($manager, $AclManager, $Password, 'AuthenticateControllerTest_Kuchi', '00 00 00 00 11', 'eva.landon@ob-do.com', 'www.ob-do.com', 'obdoGroup', "eva", 'addressEva');
+		$this->createKuchi($manager, $AclManager, $Password, 'AuthenticateControllerTest_Kuchi', '00 00 00 00 11', 'eva.landon@ob-do.com', 'www.ob-do.com', "Group_test", "eva", 'addressEva');
                       
-		$this->createKuchi($manager, $AclManager, $Password, 'ControllersTests_Kuchi_Inactif', '00 00 00 00 12', 'maxime.marie@ob-do.com', 'www.ob-do.com', 'obdoGroup', 'maxime', 'addressMaxime',FALSE);
+		$this->createKuchi($manager, $AclManager, $Password, 'ControllersTests_Kuchi_Inactif', '00 00 00 00 12', 'maxime.marie@ob-do.com', 'www.ob-do.com', "Group_test", 'maxime', 'addressMaxime',FALSE);
                 
                 $this->createKuchi($manager, $AclManager, $Password, "PostKuchiKomiAction_Kuchi", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_P_PostKuchiKomiAction_1", "PostKuchiKomiAction", "kuchi_test_P_PostKuchiKomiAction_1_address",$user=true);
                 
@@ -93,6 +93,7 @@ class KuchiData extends AbstractFixture implements ContainerAwareInterface, Orde
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionGroupAction_9_1", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "N_DeleteSubscriptionGroupAction_9", "N_DeleteSubscriptionGroupAction_9_1", "kuchi_test_N_DeleteSubscriptionGroupAction_9_1_address");
                 $this->createKuchi($manager, $AclManager, $Password, "N_DeleteSubscriptionGroupAction_9_2", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "N_DeleteSubscriptionGroupAction_9", "N_DeleteSubscriptionGroupAction_9_2", "kuchi_test_N_DeleteSubscriptionGroupAction_9_2_address");
                 
+                $this->createKuchi($manager, $AclManager, $Password, "ThanksController_Kuchi", "00 00 00 00 00", "test@citykomi.com", "www.citykomi.com", "Group_test", "kuchi_test_ThanksController", 'tb2Address');
         }
         
         private function createKuchi($manager, $AclManager, $Password, $name, $phoneNumber, $mail, $webSite, $kuchiGroupRef, $password, $addressRef, $active=true, $user=false)

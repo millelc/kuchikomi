@@ -39,33 +39,33 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
 	{
 		
 		$manager->getConnection()->exec("ALTER TABLE Subscription AUTO_INCREMENT = 1;");
-                
-                $subscription1 = new Subscription();
-                $subscription1->setKomi($this->getReference('komi1'));
-                $subscription1->setKuchi($this->getReference('david'));
-
-                $manager->persist($subscription1);
-                
-                $subscription2 = new Subscription();
-                $subscription2->setKomi($this->getReference('komi2'));
-                $subscription2->setKuchi($this->getReference('nicolas'));
-                $subscription2->setType(Subscription::TYPE_NFC);
-
-                $manager->persist($subscription2);
-		
-                $subscription3 = new Subscription();
-                $subscription3->setKomi($this->getReference('komi2'));
-                $subscription3->setKuchi($this->getReference('david'));
-                $subscription3->setType(Subscription::TYPE_QRCode);
-
-                $manager->persist($subscription3);
-                
-                $subscription4 = new Subscription();
-                $subscription4->setKomi($this->getReference('komi2'));
-                $subscription4->setKuchi($this->getReference('julien'));
-                $subscription4->setType(3);
-
-                $manager->persist($subscription4);
+//                
+//                $subscription1 = new Subscription();
+//                $subscription1->setKomi($this->getReference('KomiControllerTest_KomiRandomId'));
+//                $subscription1->setKuchi($this->getReference('david'));
+//
+//                $manager->persist($subscription1);
+//                
+//                $subscription2 = new Subscription();
+//                $subscription2->setKomi($this->getReference('KuchiControllerTest_KomiRandomId'));
+//                $subscription2->setKuchi($this->getReference('nicolas'));
+//                $subscription2->setType(Subscription::TYPE_NFC);
+//
+//                $manager->persist($subscription2);
+//		
+//                $subscription3 = new Subscription();
+//                $subscription3->setKomi($this->getReference('KuchiControllerTest_KomiRandomId'));
+//                $subscription3->setKuchi($this->getReference('david'));
+//                $subscription3->setType(Subscription::TYPE_QRCode);
+//
+//                $manager->persist($subscription3);
+//                
+//                $subscription4 = new Subscription();
+//                $subscription4->setKomi($this->getReference('KuchiControllerTest_KomiRandomId'));
+//                $subscription4->setKuchi($this->getReference('julien'));
+//                $subscription4->setType(3);
+//
+//                $manager->persist($subscription4);
                 
                 
                 /****************************************************/
@@ -96,10 +96,7 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_Android_3", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_WEB, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_1", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_NFC, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_2", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_QRCode, false);
-                $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_3", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_WEB, false);
-
-                $this->createSubscription($manager, "P_PostKuchiKomiAction_1_Abonne", "kuchiRef_P_PostKuchiKomiAction_1", Subscription::TYPE_QRCode);
-
+                $this->createSubscription($manager, "N_DeleteSubscriptionAction_4_iOS_3", "kuchiRef_N_DeleteSubscriptionAction_4", Subscription::TYPE_WEB, false);               
                 $this->createSubscription($manager, "P_PostSubscriptionGroupAction_5_Android_1", "kuchiRef_P_PostSubscriptionGroupAction_5_1", Subscription::TYPE_NFC);
                 $this->createSubscription($manager, "P_PostSubscriptionGroupAction_5_Android_2", "kuchiRef_P_PostSubscriptionGroupAction_5_2", Subscription::TYPE_QRCode);
                 $this->createSubscription($manager, "P_PostSubscriptionGroupAction_5_Android_3", "kuchiRef_P_PostSubscriptionGroupAction_5_1", Subscription::TYPE_WEB);
@@ -189,7 +186,8 @@ class SubscriptionData extends AbstractFixture implements ContainerAwareInterfac
                 $this->createSubscription($manager, "N_DeleteSubscriptionGroupAction_9_Windows_3", "kuchiRef_N_DeleteSubscriptionGroupAction_9_1", Subscription::TYPE_WEB, false);
                 $this->createSubscription($manager, "N_DeleteSubscriptionGroupAction_9_Windows_3", "kuchiRef_N_DeleteSubscriptionGroupAction_9_2", Subscription::TYPE_WEB, false);
 
-                
+                $this->createSubscription($manager, "PostKuchiKomiAction_RandomId_Abonne", "kuchiRef_PostKuchiKomiAction_Kuchi", Subscription::TYPE_QRCode);
+
 		$manager->flush();	
 	}
         

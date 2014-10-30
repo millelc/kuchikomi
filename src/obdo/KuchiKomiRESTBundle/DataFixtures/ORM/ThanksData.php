@@ -40,11 +40,11 @@ class ThanksData extends AbstractFixture implements ContainerAwareInterface, Ord
 		$manager->getConnection()->exec("ALTER TABLE Thanks AUTO_INCREMENT = 1;");
 		
 		// Thanks
-// 		$thanks1 = new Thanks();
-// 		$thanks1->setKomi($this->getReference('komi1'));
-// 		$thanks1->setKuchiKomi($this->getReference('kuchikomi1'));
-// 		$manager->persist($thanks1);
-// 		$manager->flush();
+		$thanks1 = new Thanks();
+ 		$thanks1->setKomiRandomId($this->getReference('N_PostThanksAction_2_komi')->getRandomId());
+ 		$thanks1->setKuchiKomi($this->getReference('ThanksController_Kuchikomi'));
+ 		$manager->persist($thanks1);
+ 		$manager->flush();
 			
 	}
 }
