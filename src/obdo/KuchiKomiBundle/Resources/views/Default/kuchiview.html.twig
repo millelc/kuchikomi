@@ -52,9 +52,12 @@
 <br>
 
 <table class="table table-hover table-condensed">
-    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_add', {'id': Kuchi.id}) }}">
+    {% if Kuchi.active == 1 %}
+        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_add', {'id': Kuchi.id}) }}">
             <span class="glyphicon glyphicon-plus"></span> Nouveau KuchiKomi</a>
-            <br><br>
+            <br>
+    {% endif %}
+    <br>
     <thead>
         <tr>
             <th>Etat</th>

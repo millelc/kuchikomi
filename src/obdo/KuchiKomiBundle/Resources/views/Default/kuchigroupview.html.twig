@@ -76,8 +76,10 @@
     <br />
     
     {% if is_granted("ROLE_SUPER_ADMIN") %}
-        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}">
+        {% if KuchiGroup.active == 1 %}
+            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_add', {'groupId': KuchiGroup.id}) }}">
             <span class="glyphicon glyphicon-plus"></span> Ajouter un kuchi</a>
+        {% endif %}
     {% endif %}
     
     <br/><br/>

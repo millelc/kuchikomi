@@ -40,4 +40,5 @@ class SubscriptionGroupRepository extends EntityRepository
     	 
     	return $qb->getQuery()->getSingleScalarResult();
     }
+    
 }
