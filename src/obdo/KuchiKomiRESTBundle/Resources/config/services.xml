@@ -6,8 +6,10 @@
 
     
     <services>
+        
         <service id="obdoKuchiKomiRestBundle.idCheck" class="obdo\KuchiKomiRESTBundle\Services\idCheck">
         </service>
+        
     </services>
     
 </container>

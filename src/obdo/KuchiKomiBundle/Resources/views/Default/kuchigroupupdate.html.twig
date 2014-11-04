@@ -38,8 +38,9 @@
         <br />
         {{ form_rest(form) |nl2br}}
         
+        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchiGroup.id}) }}">Annuler</a>
         <input type="submit" class="btn btn-primary" />
-        <input type="reset" class="btn btn-primary" />
+        
     </form>
     
 </div>

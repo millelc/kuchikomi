@@ -138,6 +138,7 @@ class KuchiKomi
     private $isThanks;
     
     private $photoimg; //pour upload photo
+    private $deletePhoto;
     
     public function __construct()
     {
@@ -151,8 +152,9 @@ class KuchiKomi
         $this->timestampEnd = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->details = "";
         $this->origin = 2;
-        $this->photoLink = "";
+        $this->resetPhotoLink();
         $this->isThanks = false;
+        $this->deletePhoto = false;
     }
 
     /**
@@ -483,6 +485,11 @@ class KuchiKomi
         return $this->photoLink;
     }
     
+    public function resetPhotoLink()
+    {
+        $this->photoLink = "";
+    }
+    
 
     /**
      * Get Photo byte array
@@ -537,7 +544,17 @@ class KuchiKomi
         $this->photoimg = $photoimg;
     }
     
-     /**
+    public function getDeletePhoto() 
+    {
+        return $this->deletePhoto;
+    }
+
+    public function setDeletePhoto($deletePhoto) 
+    {
+        $this->deletePhoto = $deletePhoto;
+    }
+    
+    /**
      * @ORM\PreUpdate
      * @ORM\PrePersist
      */

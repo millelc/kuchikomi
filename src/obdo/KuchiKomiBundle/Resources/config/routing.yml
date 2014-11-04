@@ -180,6 +180,10 @@ obdo_kuchi_komi_kuchikomi_delete:
     pattern:  /kuchikomi/delete/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:delete }
     
+obdo_kuchi_komi_kuchikomi_update:
+    pattern:  /kuchikomi/update/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:update }
+    
 #pour graphiques
 obdo_pChart:
     pattern:  /graphique/{nom}

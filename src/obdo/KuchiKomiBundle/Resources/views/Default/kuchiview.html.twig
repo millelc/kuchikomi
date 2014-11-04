@@ -39,19 +39,22 @@
             {% endif %}  
         </li>
     {% endif %}    
-   </ul>
+   
     {% if is_granted("ROLE_SUPER_ADMIN") %}
-        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_update', {'id': Kuchi.id}) }}">
-            <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+        <li class="list-group-item">
+            <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_update', {'id': Kuchi.id}) }}">
+                <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+        </li>
     {% endif %}
+    </ul>
 </div>
 
 <br>
 
 <table class="table table-hover table-condensed">
     <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_add', {'id': Kuchi.id}) }}">
-            <span class="glyphicon glyphicon-pencil"></span> Nouveau KuchiKomi</a>
-            <br>
+            <span class="glyphicon glyphicon-plus"></span> Nouveau KuchiKomi</a>
+            <br><br>
     <thead>
         <tr>
             <th>Etat</th>

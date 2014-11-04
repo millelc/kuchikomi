@@ -3,7 +3,7 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
-<h3>Ajouter un Kuchi</h3>
+<h3>Modifier un Kuchi</h3>
 <div class="well">
     <form method="post" {{ form_enctype(form) }} >
         {{ form_errors(form) }}
@@ -88,7 +88,7 @@
         <br />
       
         {{ form_rest(form) }}
-        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchiGroup.id}) }}">Annuler</a>
+        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchi.id}) }}">Annuler</a>
         <input type="submit" class="btn btn-primary" />
     </form>
 </div>

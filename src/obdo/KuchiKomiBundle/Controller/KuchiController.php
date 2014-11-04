@@ -138,6 +138,7 @@ class KuchiController extends Controller {
         return $this->render('obdoKuchiKomiBundle:Default:kuchiadd.html.twig', array(
                     'form' => $form->createView(),
                     'action' => 'Ajouter',
+                    'kuchiGroup' => $kuchiGroup
         ));
     }
 
@@ -321,10 +322,9 @@ class KuchiController extends Controller {
                     }
                 }
             }
-            return $this->render('obdoKuchiKomiBundle:Default:kuchiadd.html.twig', array(
+            return $this->render('obdoKuchiKomiBundle:Default:kuchiupdate.html.twig', array(
                         'form' => $form->createView(),
                         'kuchi' => $kuchi,
-                        'action' => 'Modifier',
             ));
         } 
         else
