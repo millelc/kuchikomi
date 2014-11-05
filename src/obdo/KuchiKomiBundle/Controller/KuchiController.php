@@ -110,6 +110,7 @@ class KuchiController extends Controller {
                 $em->flush();
 
                 $Logger->Info("[Kuchi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchi->getName() . " added");
+                $this->get('session')->getFlashBag()->add('success', 'Le kuchi a été ajouté avec succès !');
 
                 return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(
                                     'id' => $kuchi->getId()
@@ -303,7 +304,9 @@ class KuchiController extends Controller {
                             $abonnement = new Abonnements();
                             $abonnement->setTitreabo("Pas d'abonnement en cours");
                         }
-
+                        
+                        $this->get('session')->getFlashBag()->add('success', 'Le kuchi a été mis à jour avec succès !');
+                        
                         return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array(
                                             'Kuchi' => $kuchi,
                                             'Abo'   => $abonnement,

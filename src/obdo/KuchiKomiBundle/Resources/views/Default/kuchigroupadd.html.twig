@@ -3,44 +3,65 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
-<h3>Ajouter un groupe de Kuchi</h3>
-<div class="well">
-    
-    <form method="post" {{ form_enctype(form) }}>
-        {# Les erreurs générales du formulaire. #}
+{# On affiche les messages flash que définissent les contrôleurs du bundle #}
+{% for key, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ key }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Ajouter un groupe de Kuchi</h3>
+    </div>
+   
+    <form class="form-horizontal" method="post" {{ form_enctype(form) }} >
         {{ form_errors(form) }}
+        <br />
         
-        <div>
-            {{ form_label(form.name, "Nom") }}<br />
-            {{ form_errors(form.name) }}
-            {{ form_widget(form.name) }}
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">{{ form_label(form.name, "Nom") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
         </div>
-        <br />
-        <div>
-            {{ form_label(form.nbMaxKuchi, "Nombre MAX de Kuchi") }}<br />
-            {{ form_errors(form.nbMaxKuchi) }}
-            {{ form_widget(form.nbMaxKuchi) }}
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">{{ form_label(form.nbMaxKuchi, "Nombre MAX de Kuchi") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.nbMaxKuchi) }}
+                {{ form_widget(form.nbMaxKuchi) }}
+            </div>
         </div>
-        <br />
-        <div>
-            {{ form_label(form.nbAboPotentiel, "Nombre abonnés potentiel") }}<br />
-            {{ form_errors(form.nbAboPotentiel) }}
-            {{ form_widget(form.nbAboPotentiel) }}
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">{{ form_label(form.nbAboPotentiel, "Nombre abonnés potentiel") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.nbAboPotentiel) }}
+                {{ form_widget(form.nbAboPotentiel) }}
+            </div>
         </div>
-        <br />
-        <div>
-            {{ form_label(form.logoimg, "Logo du groupe") }}<br />
-            {{ form_errors(form.logoimg) }}
-            {{ form_widget(form.logoimg) }}
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">{{ form_label(form.logoimg, "Logo du groupe") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.logoimg) }}
+                {{ form_widget(form.logoimg) }}
+            </div>
         </div>
-        
+       
         {{ form_rest(form) }}
 
         <br />
-        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group', {'page': 1, 'sort': 'active_up'}) }}">Annuler</a>
-        <input type="submit" class="btn btn-primary" />
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-11">
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group', {'page': 1, 'sort': 'active_up'}) }}">Annuler</a>
+                <input type="submit" class="btn btn-primary" />
+            </div>
+        </div>
+        <br/>
     </form>
-    
 </div>
 
 

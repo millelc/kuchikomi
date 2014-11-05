@@ -109,6 +109,7 @@ class KuchiGroup
     private $isSubscribed;
     
     private $logoimg; //pour upload logo
+    
     /**
      * @var ArrayCollection KuchiGroup $users
      *
@@ -162,7 +163,7 @@ class KuchiGroup
     {
         return $this->name;
     }
-
+    
     /**
      * Set timestampCreation
      *

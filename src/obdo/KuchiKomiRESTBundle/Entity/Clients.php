@@ -125,12 +125,12 @@ class Clients
     private $timestampSuppression;
     
     /**
-    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiUserBundle\Entity\User", mappedBy="object")
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiUserBundle\Entity\User", mappedBy="client")
     */
     private $users;
     
     /**
-    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", mappedBy="Abonnements")
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", mappedBy="client")
     */
     private $abonnements;
     

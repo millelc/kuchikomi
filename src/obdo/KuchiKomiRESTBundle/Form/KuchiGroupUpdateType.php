@@ -15,10 +15,10 @@ class KuchiGroupUpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('required' => false,))
-            ->add('nbMaxKuchi','integer', array('required' => false,))
-            ->add('nbAboPotentiel','integer', array('required' => false,))
-            ->add('logoimg','file', array('required' => false,))
+            ->add('name','text')
+            ->add('nbMaxKuchi','integer')
+            ->add('nbAboPotentiel','integer')
+            ->add('logoimg','file', array('required' => false))
         ;
     }
     

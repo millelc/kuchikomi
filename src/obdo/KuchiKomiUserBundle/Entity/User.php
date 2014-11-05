@@ -57,7 +57,6 @@ class User extends BaseUser {
     private $kuchis;
     
    /**
-   * @ORM\Column(type="integer", nullable=true)
    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Clients", inversedBy="users")
    */
     private $client;

@@ -2,6 +2,15 @@
 
 {% block kk_body_KuchiKomiBundle %}
         
+{# On affiche les messages flash que définissent les contrôleurs du bundle #}
+{% for key, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ key }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
 <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading"><h3><img src="{{ asset(Kuchi.logoLink) }}" alt="" width=50 height=50 class="img-thumbnail">  {{ Kuchi.name }}</h3></div>
@@ -51,13 +60,13 @@
 
 <br>
 
-<table class="table table-hover table-condensed">
     {% if Kuchi.active == 1 %}
         <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_add', {'id': Kuchi.id}) }}">
             <span class="glyphicon glyphicon-plus"></span> Nouveau KuchiKomi</a>
             <br>
     {% endif %}
-    <br>
+    
+<table class="table table-hover table-condensed">
     <thead>
         <tr>
             <th>Etat</th>

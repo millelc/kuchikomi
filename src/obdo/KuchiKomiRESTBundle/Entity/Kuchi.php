@@ -163,8 +163,7 @@ class Kuchi
     private $kuchikomis;
     
     /**
-    * @ORM\Column(type="integer", nullable=true)
-    * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", inversedBy="kuchis")
+     * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", inversedBy="kuchis")
     */
     private $abonnement;
     

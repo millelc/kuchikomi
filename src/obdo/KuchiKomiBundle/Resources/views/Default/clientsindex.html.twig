@@ -41,7 +41,6 @@
                 </a>
             </th>
             <th>Ville</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -49,14 +48,12 @@
         <tr>
             <td>{{client.id}}</p></td>
             
-            <td>{{client.raissoc}}</td>
+            <td><a href="{{ path('obdo_kuchi_komi_client_view', {'id': client.id}) }}">{{client.raissoc}}</a></td>
             
             <td>{{client.timestampCreation|date('Y-m-d H:i:s')}}</td>
 
             <td>{{ client.codposcli }} {{ client.villecli }}</td>
                         
-            <td><a href="{{ path('obdo_kuchi_komi_client_view', {'id': client.id}) }}"><span class="glyphicon glyphicon-stats"></span></a></td>
-
         </tr>
         {% endfor %}
     </tbody>

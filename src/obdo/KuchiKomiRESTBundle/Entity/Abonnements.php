@@ -80,13 +80,12 @@ class Abonnements
     private $timestampSuppression;
     
     /**
-    * @ORM\Column(nullable=true)
     * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Clients", inversedBy="abonnements")
     */
     private $client;
     
     /**
-    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="Kuchi")
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", mappedBy="abonnement")
     */
     private $kuchis;
     

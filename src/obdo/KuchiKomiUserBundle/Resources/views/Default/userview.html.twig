@@ -6,31 +6,31 @@
 
 {% block fos_user_content %}
      <ul class="list-group">
-            <li class="list-group-item">Nom : {{ user.username }}</li>
-            <li class="list-group-item">e-mail : {{ user.email }}</li>
-            <li class="list-group-item">Date dernier login : {{ user.lastLogin|date('Y-m-d H:i:s') }}</li>
-            <li class="list-group-item">Role : {{ user.roles[0] }}</li>
-            <li class="list-group-item"> L'utilisateur a droit au(x) KuchiGroup(s) :
-                <ul class="list-group">
-                    {% for kgroup in kgroups %}
-                        <li class="list-group-item">{{ kgroup.name }}</li>
-                    {% endfor %} 
-                </ul>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_user_add_acl_kuchigroup', {'userid': user.id}) }}">
-                    <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
-                {% endif %}
-            </li>
-            <li class="list-group-item"> L'utilisateur a droit au(x) Kuchi(s) :
-                <ul class="list-group">
-                    {% for kuchi in kuchis %}
-                        <li class="list-group-item">{{ kuchi.kuchiGroup.name }}/{{ kuchi.name }}</li>
-                    {% endfor %} 
-                </ul>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_user_add_acl_kuchi', {'userid': user.id}) }}">
-                    <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
-                {% endif %}
-            </li>
+        <li class="list-group-item">Nom : {{ user.username }}</li>
+        <li class="list-group-item">e-mail : {{ user.email }}</li>
+        <li class="list-group-item">Date dernier login : {{ user.lastLogin|date('Y-m-d H:i:s') }}</li>
+        <li class="list-group-item">Role : {{ user.roles[0] }}</li>
+        <li class="list-group-item"> L'utilisateur a droit au(x) KuchiGroup(s) :
+            <ul class="list-group">
+                {% for kgroup in kgroups %}
+                    <li class="list-group-item">{{ kgroup.name }}</li>
+                {% endfor %} 
+            </ul>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_user_add_acl_kuchigroup', {'userid': user.id}) }}">
+                <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+            {% endif %}
+        </li>
+        <li class="list-group-item"> L'utilisateur a droit au(x) Kuchi(s) :
+            <ul class="list-group">
+                {% for kuchi in kuchis %}
+                    <li class="list-group-item">{{ kuchi.kuchiGroup.name }}/{{ kuchi.name }}</li>
+                {% endfor %} 
+            </ul>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_user_add_acl_kuchi', {'userid': user.id}) }}">
+                <span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+            {% endif %}
+        </li>
      </ul>
 {% endblock %}
