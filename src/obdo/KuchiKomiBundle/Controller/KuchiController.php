@@ -54,25 +54,7 @@ class KuchiController extends Controller {
             $form->bind($request);
 
             if ($form->isValid()) 
-            {
-                // En attendant de passer les champs à Null Allowed
-                if ($kuchi->getAddress()->getAddress2() == null)
-                {
-                    $kuchi->getAddress()->setAddress2('');
-                }
-                if ($kuchi->getAddress()->getAddress3() == null)
-                {
-                    $kuchi->getAddress()->setAddress3('');
-                }
-                if ($kuchi->getMailAddress() == null)
-                {
-                    $kuchi->setMailAddress('');
-                }
-                if ($kuchi->getWebSite() == null)
-                {
-                    $kuchi->setWebSite('');
-                }
-                
+            {   
                 // Les user du kuchiGroup deviennent les user du nouveau kuchi
                 foreach($kuchiGroup->getUsers() as $user)
                 {
@@ -132,6 +114,13 @@ class KuchiController extends Controller {
                 return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(
                                     'id' => $kuchi->getId()
                 )));
+            }
+            else
+            {
+                foreach($form->getErrors(true) as $error)
+                {
+                    $this->get('session')->getFlashBag()->add('danger', $error->getMessage());
+                }
             }
         }
         

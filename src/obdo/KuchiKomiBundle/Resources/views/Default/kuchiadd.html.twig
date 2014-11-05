@@ -3,93 +3,120 @@
 
 {% block kk_body_KuchiKomiBundle %}
 
-<h3>Ajouter un Kuchi</h3>
-<div class="well">
-    <form method="post" {{ form_enctype(form) }} >
+{# On affiche les messages flash que définissent les contrôleurs du bundle #}
+{% for key, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="alert alert-{{ key }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Ajouter un Kuchi</h3>
+    </div>
+
+    <form class="form-horizontal" method="post" {{ form_enctype(form) }} >
         {{ form_errors(form) }}
-{#        {{ form_widget(form) }}#}
-        <table>
-            <tr>
-                <td>{{ form_label(form.name, "Nom") }}</td>
-                <td>{{ form_errors(form.name) }}
-                    {{ form_widget(form.name) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.password, "Mot de passe") }}</td>
-                <td>{{ form_errors(form.password) }}
-                    {{ form_widget(form.password) }}
-                </td>
-            </tr>
-        
-            <tr>
-                <td>{{ form_label(form.address.address1, "Adresse 1") }}</td>
-                <td>{{ form_errors(form.address.address1) }}
-                    {{ form_widget(form.address.address1) }}
-                </td>
-            </tr>
-            <tr> 
-                <td>{{ form_label(form.address.address2, "Adresse 2") }}</td>
-                <td>{{ form_errors(form.address.address2) }}
-                    {{ form_widget(form.address.address2) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.address.address3, "Adresse 3") }}</td>
-                <td>{{ form_errors(form.address.address3) }}
-                    {{ form_widget(form.address.address3) }}
-                </td>
-            </tr>
-            
-            <tr>    
-                <td>{{ form_label(form.address.postalCode, "Code Postal") }}</td>
-                <td>{{ form_errors(form.address.postalCode) }}
-                    {{ form_widget(form.address.postalCode) }}
-                </td>
-            </tr>
-            <tr> 
-                <td>{{ form_label(form.address.city, "Ville") }}</td>
-                <td>{{ form_errors(form.address.city) }}
-                    {{ form_widget(form.address.city) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.phoneNumber, "N° téléphone") }}</td>
-                <td>{{ form_errors(form.phoneNumber) }}
-                    {{ form_widget(form.phoneNumber) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.mailAddress, "e-mail") }}</td>
-                <td>{{ form_errors(form.mailAddress) }}
-                    {{ form_widget(form.mailAddress) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.webSite, "site web (http://...)") }}</td>
-                <td>{{ form_errors(form.webSite) }}
-                    {{ form_widget(form.webSite) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.logoimg, "Logo du kuchi") }}</td>
-                <td>{{ form_errors(form.logoimg) }}
-                    {{ form_widget(form.logoimg) }}
-                </td>
-            </tr>
-            <tr>
-                <td>{{ form_label(form.photoimg, "Photo du kuchi") }}</td>
-                <td>{{ form_errors(form.photoimg) }}
-                    {{ form_widget(form.photoimg) }}
-                </td>
-            </tr>
-        </table>
-        
         <br />
-      
+        
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">{{ form_label(form.name, "Nom") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword" class="col-sm-2 control-label">{{ form_label(form.password, "Mot de passe") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.password) }}
+                {{ form_widget(form.password) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress" class="col-sm-2 control-label">{{ form_label(form.address.address1, "Adresse") }}</label>
+            <div class="col-sm-8">
+                {{ form_errors(form.address.address1) }}
+                {{ form_widget(form.address.address1) }}
+            </div>
+        </div>            
+        <div class="form-group">
+            <label for="inputAddress2" class="col-sm-2 control-label"></label>
+            <div class="col-sm-8">
+                {{ form_errors(form.address.address2) }}
+                {{ form_widget(form.address.address2) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputAddress3" class="col-sm-2 control-label"></label>
+            <div class="col-sm-8">
+                {{ form_errors(form.address.address3) }}
+                {{ form_widget(form.address.address3) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputPostalCode" class="col-sm-2 control-label">{{ form_label(form.address.postalCode, "Code Postal") }}</label>
+            <div class="col-sm-3">
+                {{ form_errors(form.address.postalCode) }}
+                {{ form_widget(form.address.postalCode) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputVille" class="col-sm-2 control-label">{{ form_label(form.address.city, "Ville") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.address.city) }}
+                {{ form_widget(form.address.city) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputPhone" class="col-sm-2 control-label">{{ form_label(form.phoneNumber, "Téléphone") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.phoneNumber) }}
+                {{ form_widget(form.phoneNumber) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputMail" class="col-sm-2 control-label">{{ form_label(form.mailAddress, "e-mail") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.mailAddress) }}
+                {{ form_widget(form.mailAddress) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputWeb" class="col-sm-2 control-label">{{ form_label(form.webSite, "site web (http://...)") }}</label>
+            <div class="col-sm-4">
+                {{ form_errors(form.webSite) }}
+                {{ form_widget(form.webSite) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputLogo" class="col-sm-2 control-label">{{ form_label(form.logoimg, "Logo") }}</label>
+            <div class="col-sm-8">
+                {{ form_errors(form.logoimg) }}
+                {{ form_widget(form.logoimg) }}
+            </div>
+        </div> 
+        <div class="form-group">
+            <label for="inputPhoto" class="col-sm-2 control-label">{{ form_label(form.photoimg, "Photo") }}</label>
+            <div class="col-sm-8">
+                {{ form_errors(form.photoimg) }}
+                {{ form_widget(form.photoimg) }}
+            </div>
+        </div> 
+        
         {{ form_rest(form) }}
-        <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchiGroup.id}) }}">Annuler</a>
-        <input type="submit" class="btn btn-primary" />
+        
+        <br/>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-11">
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_group_view', {'id': kuchiGroup.id}) }}">Annuler</a>
+                <input type="submit" class="btn btn-primary" value="Ajouter"/>
+            </div>
+        </div>
+        <br/>
     </form>
 </div>
 

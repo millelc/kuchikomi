@@ -75,11 +75,12 @@ class KuchiKomiController extends Controller
                         $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchikomi' => new JsonEncoder()));
                         $kuchikomiArray = $serializer->decode($json, 'json');
                         
-                        
+                        $response->setStatusCode(200);
                         //on cherche le randomid
                         $kuchikomi = $repositoryKuchiKomi->findOneByRandomId($kuchikomiArray['kuchikomi']['random_id']);
                         if (!$kuchikomi)
                         {
+                            
                             $kuchikomi = new KuchiKomi();
                      
                             $timestampBegin = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
@@ -110,6 +111,7 @@ class KuchiKomiController extends Controller
                                 if (!$fp) 
                                 {
                                     $Logger->Error("[POST /rest/kuchikomi] Photo file open failed - Path = ".$path." - (" . error_get_last() . ")");
+                                    $response->setStatusCode(511);
                                 } 
                                 else 
                                 {
@@ -118,24 +120,25 @@ class KuchiKomiController extends Controller
                                 }
                             }
 
-                            $em->persist($kuchikomi);
-                            $em->flush();
-                            
-                            // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
-                            $AclManager = $this->container->get('obdo_services.AclManager');
-                            foreach($kuchikomi->getKuchi()->getUsers() as $user)
+                            if($response->getStatusCode() == 200 )
                             {
-                                $AclManager->addAcl($kuchikomi, $user);
+                                $em->persist($kuchikomi);
+                                $em->flush();
+
+                                // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
+                                $AclManager = $this->container->get('obdo_services.AclManager');
+                                foreach($kuchikomi->getKuchi()->getUsers() as $user)
+                                {
+                                    $AclManager->addAcl($kuchikomi, $user);
+                                }
+                                foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
+                                {
+                                    $AclManager->addAcl($kuchikomi, $user);
+                                }
+
+                                $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
                             }
-                            foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
-                            {
-                                $AclManager->addAcl($kuchikomi, $user);
-                            }
-                    
-                            $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
                         }    
-                        $response->setStatusCode(200);
-                        //$Logger->Info("[POST rest/kuchikomi] 200 - kuchikomi");
                     } 
                     else 
                     {
@@ -233,6 +236,155 @@ class KuchiKomiController extends Controller
                         // hash invalid
                         $response->setStatusCode(510);
                         $Logger->Error("[DELETE rest/kuchikomi/] 510 - Invalid hash");
+                    }
+
+                    // disable current token
+                    $kuchiAccount->generateToken();
+                    $em->flush();
+                }
+            }
+        }
+
+        $response->headers->set('Content-Type', 'text/html');
+        // affiche les entêtes HTTP suivies du contenu
+        $response->send();
+
+        return $response;
+    }
+
+    /**
+     * @Put("/rest/kuchikomi/{komiId}/{id_kuchi}/{id_kuchikomi}/{hash}")
+     * @return array
+     * @View()
+     */
+    public function putKuchiKomiAction($komiId, $id_kuchi, $id_kuchikomi, $hash) 
+    {
+        $response = new Response();
+
+        $Logger = $this->container->get('obdo_services.Logger');
+        $Notifier = $this->container->get('obdo_services.Notifier');
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+        $repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
+        $repositoryKuchiAccount = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiAccount');
+        $repositoryKomi = $em->getRepository('obdoKuchiKomiRESTBundle:Komi');
+
+        $kuchi = $repositoryKuchi->findOneById($id_kuchi);
+
+        if (!$kuchi) 
+        {
+            // kuchi unknown !
+            $Logger->Error("[PUT rest/kuchikomi/] 502 - Kuchi id=" . $id_kuchi . " unknown...");
+            $response->setStatusCode(502);
+        } 
+        else 
+        {
+            $komi = $repositoryKomi->findOneByRandomId($komiId);
+
+            if (!$komi) 
+            {
+                // Komi unknown !
+                $response->setStatusCode(501);
+                $Logger->Error("[PUT rest/kuchikomi/] 501 - Komi id=" . $komiId . " unknown");
+            } 
+            else 
+            {
+                $kuchiAccount = $repositoryKuchiAccount->findOneBy(array('komi' => $komi, 'kuchi' => $kuchi));
+
+                if (!$kuchiAccount) 
+                {
+                    // kuchi account unknown !
+                    $response->setStatusCode(504);
+                    $Logger->Error("[PUT rest/kuchikomi/] 504 - Kuchi admin account (" . $komi->getRandomId() . "," . $kuchi->getId() . ") unknown");
+                } 
+                else 
+                {
+                    if (true)//$hash == sha1("PUT /rest/kuchikomi" . $kuchiAccount->getToken())) 
+                    {
+                        $kuchikomi = $repositoryKuchiKomi->findOneById($id_kuchikomi);
+
+                        if (!$kuchikomi) 
+                        {
+                            // kuchikomi unknown
+                            $response->setStatusCode(503);
+                            $Logger->Error("[PUT rest/kuchikomi/] 503 - KuchiKomi id=" . $id_kuchikomi . " unknown...");
+                        } 
+                        else 
+                        {
+                            $response->setStatusCode(200);
+                            
+                            $json = $this->getRequest()->getContent();
+                            $serializer = new Serializer(array(new GetSetMethodNormalizer()), array('kuchikomi' => new JsonEncoder()));
+                            $kuchikomiArray = $serializer->decode($json, 'json');
+
+                            $timestampBegin = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+                            $timestampBegin->setTimestamp($kuchikomiArray['kuchikomi']['timestampBegin']);
+
+                            $timestampEnd = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+                            $timestampEnd->setTimestamp($kuchikomiArray['kuchikomi']['timestampEnd']);
+
+                            $kuchikomi->setTitle(ucfirst($kuchikomiArray['kuchikomi']['title']));
+                            $kuchikomi->setDetails(ucfirst($kuchikomiArray['kuchikomi']['details']));
+                            $kuchikomi->setTimestampBegin($timestampBegin);
+                            $kuchikomi->setTimestampEnd($timestampEnd);
+                            $kuchikomi->setOrigin($komi->getOsType());
+                            
+                            if ($kuchikomiArray['kuchikomi']['photo'] != "") 
+                            {
+                                // Update the photo
+                                $photoName = $this->container->get('obdo_services.Name_photo')->newName();
+                                if($kuchikomi->getPhotoLink() != "")
+                                {
+                                    unlink($kuchikomi->getPhotoLink());
+                                }
+                                $kuchikomi->setPhotoLink($kuchi->getPhotoKuchiKomiLink() . $photoName);
+
+                                $photoByteStream = base64_decode($kuchikomiArray['kuchikomi']['photo']);
+
+                                $path = $this->get('kernel')->getRootDir() . "/../web/" . $kuchikomi->getPhotoLink();
+                                
+                                $fp = fopen($path, 'xb');
+
+                                if (!$fp) 
+                                {
+                                    $Logger->Error("[POST /rest/kuchikomi] Photo file open failed - Path = ".$path." - (" . error_get_last() . ")");
+                                    $response->setStatusCode(511);
+                                } 
+                                else 
+                                {
+                                    fwrite($fp, $photoByteStream);
+                                    fclose($fp);
+                                }
+                            }
+                            else
+                            {
+                                // Erase the photo
+                                if($kuchikomi->getPhotoLink() != "")
+                                {
+                                    unlink($kuchikomi->getPhotoLink());
+                                }
+                                $kuchikomi->resetPhotoLink();
+                            }
+
+                            if( $response->getStatusCode() == 200 )
+                            {
+                                $em->persist($kuchikomi);
+                                $em->flush();
+
+                                $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
+
+                                $Logger->Info("[PUT rest/kuchikomi/] 200 - KuchiKomi id=" . $kuchikomi->getId() . " updated");                                
+                            }
+
+                        }
+                    } 
+                    else 
+                    {
+                        // hash invalid
+                        $response->setStatusCode(510);
+                        $Logger->Error("[PUT rest/kuchikomi/] 510 - Invalid hash");
                     }
 
                     // disable current token

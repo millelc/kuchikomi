@@ -122,7 +122,7 @@ class Kuchi
     /**
      * @var string
      *
-     * @ORM\Column(name="mailAddress", type="string", length=255)
+     * @ORM\Column(name="mailAddress", type="string", length=255, nullable=true)
      * @Expose
      * @Groups({"Synchro"})
      * 
@@ -134,7 +134,7 @@ class Kuchi
     /**
      * @var string
      *
-     * @ORM\Column(name="webSite", type="string", length=255)
+     * @ORM\Column(name="webSite", type="string", length=255, nullable=true)
      * @Expose
      * @Groups({"Synchro"})
      * 
