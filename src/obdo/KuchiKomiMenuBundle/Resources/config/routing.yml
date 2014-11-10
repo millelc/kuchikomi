@@ -1,3 +1,0 @@
-obdo_kuchi_komi_menu_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: obdoKuchiKomiMenuBundle:Default:index }

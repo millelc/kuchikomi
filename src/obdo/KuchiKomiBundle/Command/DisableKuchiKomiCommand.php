@@ -23,17 +23,17 @@ class DisableKuchiKomiCommand extends ContainerAwareCommand
         $logger = $this->getContainer()->get('obdo_services.Logger');
         
         $repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
-        //$repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+        $repositoryKuchi = $em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
         $kuchikomis = $repositoryKuchiKomi->getKuchiKomisToDisable();
         $currentDate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         foreach ($kuchikomis as $kuchikomi)
         {
             $kuchikomi->setTimestampSuppression($currentDate);
             $kuchikomi->setActive(false);
-        
-            // Pour le moment, pas de notification envoyé. A définir par la suite !
-            //$kuchi = $repositoryKuchi->find($kuchikomi->getKuchiId());
-            //$notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
+            
+            // Envoie d'une notification silencieuse
+            $kuchi = $repositoryKuchi->find($kuchikomi->getKuchiId());
+            $notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
         }
         
         if(count($kuchikomis)>0)

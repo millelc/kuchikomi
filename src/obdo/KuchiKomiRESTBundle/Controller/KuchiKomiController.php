@@ -220,13 +220,16 @@ class KuchiKomiController extends Controller
                         } 
                         else 
                         {
-                            $kuchikomi->setTimestampSuppression(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
-                            $kuchikomi->setActive(false);
+                            if($kuchikomi->getActive() == false)
+                            {
+                                $kuchikomi->setTimestampSuppression(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+                                $kuchikomi->setActive(false);
 
-                            $em->flush();
+                                $em->flush();
 
-                            $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
-
+                                $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
+                            }
+                            
                             $response->setStatusCode(200);
                             $Logger->Info("[DELETE rest/kuchikomi/] 200 - KuchiKomi id=" . $kuchikomi->getId() . " deleted");
                         }

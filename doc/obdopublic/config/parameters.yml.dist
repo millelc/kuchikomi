@@ -1,0 +1,31 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     localhost
+    database_port:     10443
+    database_name:     kuchikomi
+    database_user:     root
+    database_password: obdo!Mysql
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    aes_key: 00c1125a69814d6ba6c2c9597cfbda21
+    aes_key_size: 128
+    aes_IV: 00c63170ca723e99
+    
+    sha256_salt1 : gdg(!cedhsf(327
+    sha256_salt2 : m58$zed24)BVgRR
+
+    path_kuchikomi_photo: images/kuchikomi/
+    path_kuchi_photo: images/kuchi/
+    path_kuchigroup_photo: images/kuchigroup/
+    
+    CityKomiGroupId: 1
+
+    max_photo_dir: 100
+    alert_photo_dir: 60
