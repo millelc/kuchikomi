@@ -2,12 +2,27 @@ parameters:
 #    obdo_services.example.class: obdo\ServicesBundle\Example
 
 services:
+    citykomi.async_events.dispatcher:
+        class: obdo\ServicesBundle\Services\Event\CitykomiAsynchronousEventDispatcher
+        arguments:
+            - @event_dispatcher
+            
+    async_events.listener.terminate:
+        class: obdo\ServicesBundle\Services\Event\AsynchronousEventListener
+        arguments:
+            - @citykomi.async_events.dispatcher
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.terminate' }   
+            
     obdo_services.AES:
         class: obdo\ServicesBundle\Services\AES
 
     obdo_services.Logger:
         class: obdo\ServicesBundle\Services\Logger
         arguments: [ @doctrine.orm.entity_manager ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'obdo.log.add', method: 'onAddLog' }
+
         
     obdo_services.Password:
         class: obdo\ServicesBundle\Services\Password
@@ -16,6 +31,8 @@ services:
     obdo_services.Notifier:
         class: obdo\ServicesBundle\Services\Notifier
         arguments: [ @kernel, @doctrine.orm.entity_manager ]
+        tags:
+            - { name: 'kernel.event_listener', event: 'obdo.notify.kuchikomi', method: 'onSendKuchiKomiNotification' }
     
     obdo_services.Picture_uploader:
         class: obdo\ServicesBundle\Services\PictureUploader

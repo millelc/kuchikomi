@@ -8,6 +8,8 @@ use RMS\PushNotificationsBundle\Message\iOSMessage;
 use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
 
+use obdo\ServicesBundle\Services\Event\NotificationEvent;
+
 use Doctrine\ORM\EntityManager;
 
 class Notifier
@@ -55,7 +57,11 @@ class Notifier
     }
 
         
-        
+    public function onSendKuchiKomiNotification(NotificationEvent $event)
+    {
+        $this->sendKuchiKomiNotification($event->kuchi, $event->kuchikomi, $event->type);
+    }
+    
     /**
      * Set a new notification to all Komi suscribers
      *

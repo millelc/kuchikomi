@@ -41,7 +41,8 @@ class KuchiKomiController extends Controller {
     {
         $Logger = $this->container->get('obdo_services.Logger');
         $AclManager = $this->container->get('obdo_services.AclManager');
-        
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
+                
         $error = FALSE;
         
         //on recupere le kuchi pour lequel on va créer un kuchikomi
@@ -88,7 +89,8 @@ class KuchiKomiController extends Controller {
 
                     // et on notifie
                     $this->container->get('obdo_services.Notifier')->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
-
+                    //$Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
+                    
                     return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array('id' => $kuchi->getId())));
                 }
             }
