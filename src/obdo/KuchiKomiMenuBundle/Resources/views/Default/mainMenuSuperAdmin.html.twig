@@ -9,4 +9,11 @@
     <li><a href="{{ path('obdo_kuchi_komi_komi', {'page': 1, 'sort': 'active_up'}) }}">Komis</a></li>
     <li><a href="{{ path('obdo_kuchi_komi_logs', {'page': 1, 'sort': 'date_up'}) }}">Logs</a></li>
     <li><a href="{{ path('obdo_kuchi_komi_appel', {'page': 1, 'sort': 'date_up'}) }}">Appels</a></li>
+    <li class="dropdown">
+    <a  class="dropdown-toggle" data-toggle="dropdown">Messages<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+    <li><a href="{{ path('obdo_kuchi_komi_kuchikomi_add',{'id' : 0}) }}">Message immédiat</a></li>
+    <li><a href="{{ path('obdo_kuchi_komi_kuchikomi_addrecurrent') }}">Message récurrent</a></li>
+    </ul>
+    </li>
 {% endblock %}

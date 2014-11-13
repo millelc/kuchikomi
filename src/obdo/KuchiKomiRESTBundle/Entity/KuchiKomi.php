@@ -140,6 +140,15 @@ class KuchiKomi
     private $photoimg; //pour upload photo
     private $deletePhoto;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent", inversedBy="kuchikomis") 
+     *
+     */
+    private $kuchikomirecurrent;
+    
+                
+	
+
     public function __construct()
     {
         $this->active = true;
@@ -156,7 +165,8 @@ class KuchiKomi
         $this->isThanks = false;
         $this->deletePhoto = false;
     }
-
+    
+  
     /**
      * Get id
      *
@@ -489,7 +499,7 @@ class KuchiKomi
     {
         $this->photoLink = "";
     }
-    
+
 
     /**
      * Get Photo byte array
@@ -554,7 +564,7 @@ class KuchiKomi
         $this->deletePhoto = $deletePhoto;
     }
     
-    /**
+     /**
      * @ORM\PreUpdate
      * @ORM\PrePersist
      */
@@ -587,5 +597,61 @@ class KuchiKomi
             $title[0] = strtoupper($title[0]);
         }
         $this->setTitle($title);
+    }    
+
+    /**
+     * Add thanks
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Thanks $thanks
+     * @return KuchiKomi
+     */
+    public function addThank(\obdo\KuchiKomiRESTBundle\Entity\Thanks $thanks)
+    {
+        $this->thanks[] = $thanks;
+
+        return $this;
+    }
+
+    /**
+     * Remove thanks
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Thanks $thanks
+     */
+    public function removeThank(\obdo\KuchiKomiRESTBundle\Entity\Thanks $thanks)
+    {
+        $this->thanks->removeElement($thanks);
+    }
+
+    /**
+     * Get thanks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getThanks()
+    {
+        return $this->thanks;
+    }
+
+    /**
+     * Set kuchikomirecurrent
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent $kuchikomirecurrent
+     * @return KuchiKomi
+     */
+    public function setKuchikomirecurrent(\obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent $kuchikomirecurrent = null)
+    {
+        $this->kuchikomirecurrent = $kuchikomirecurrent;
+
+        return $this;
+    }
+
+    /**
+     * Get kuchikomirecurrent
+     *
+     * @return \obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent 
+     */
+    public function getKuchikomirecurrent()
+    {
+        return $this->kuchikomirecurrent;
     }
 }

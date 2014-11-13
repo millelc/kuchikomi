@@ -11,15 +11,6 @@
         </div>
     {% endfor %}
 {% endfor %}
-    
-<div class="panel panel-default">
-    <div class="panel-heading">
-        {%if Kuchi is not null%}
-        <h3><img src="{{ asset(Kuchi.logoLink) }}" alt="" width=50 height=50  class="img-thumbnail">  {{ Kuchi.name }}</h3>
-        {%endif%}
-    </div>
-</div>
- 
     <form method="post" {{ form_enctype(form) }}>
         {# Les erreurs générales du formulaire. #}
         {{ form_errors(form) }}
@@ -36,6 +27,29 @@
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-3">
+                {{ form_label(form.recurrence) }}<br />
+                {{ form_errors(form.recurrence) }}
+                {{ form_widget(form.recurrence) }}  
+            </div> 
+        </div>
+        <br />
+        <div class="row">   
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                {{ form_label(form.beginRecurrence, "Du :") }}<br />
+                {{ form_errors(form.beginRecurrence) }}
+                {{ form_widget(form.beginRecurrence) }}
+            </div>                   
+            <div class="col-md-3">
+                {{ form_label(form.endRecurrence, "au :") }}<br />
+                {{ form_errors(form.endRecurrence) }}
+                {{ form_widget(form.endRecurrence) }}
+            </div>  
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
                 {{ form_label(form.title, "Titre (40 caractères MAX)") }}<br />
                 {{ form_errors(form.title) }}
                 {{ form_widget(form.title) }}
@@ -44,55 +58,36 @@
         <br />
         <div class="row">
             <div class="col-md-1"></div>
-            <div class="col-md-3">
-                {{ form_label(form.timestampBegin, "Du :") }}<br />
-                {{ form_errors(form.timestampBegin) }}
-                {{ form_widget(form.timestampBegin) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.timestampEnd, "au :") }}<br />
-                {{ form_errors(form.timestampEnd) }}
-                {{ form_widget(form.timestampEnd) }}
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-9">
                 {{ form_label(form.details, "Message (300 caractères MAX)") }}<br />
                 {{ form_errors(form.details) }}
                 {{ form_widget(form.details) }}
             </div>
         </div>
-            
-        <br />
+        <br/>
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-11">
-                {{ form_label(form.photoimg, "Photo") }}<br />
-                {{ form_errors(form.photoimg) }}
-                {{ form_widget(form.photoimg) }}
+                {{ form_label(form.photoLink, "Photo") }}<br />
+                {{ form_errors(form.photoLink) }}
+                {{ form_widget(form.photoLink) }}
                 La taille idéale d'une image est de 640x640, les autres tailles seront redimensionnées
             </div>
-        </div>
-        <br />   
-        <div class="row">
+        </div>       
+        <div class="row">           
                 {{ form_rest(form) }}   
         </div>
         <br/>
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-11">
-                {%if Kuchi is not null%} 
-                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': Kuchi.id}) }}">Annuler</a>
-                {%else%}
-                <a class="btn btn-default" href="{{path('obdo_kuchi_komi_homepage')}}">Annuler</a> 
-                {%endif%} 
+                <a class="btn btn-default" href="{{path('obdo_kuchi_komi_homepage')}}">Annuler</a>                  
                 <input type="submit" class="btn btn-primary" />
             </div>
-        </div>              
+        </div>               
     </form>
-    
 
 
 {% endblock %}
+        
+

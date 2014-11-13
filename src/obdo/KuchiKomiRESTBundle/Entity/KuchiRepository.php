@@ -170,9 +170,9 @@ class KuchiRepository extends EntityRepository
     public function getKuchisByUserId($userid)
     {
         //il faut aller chrercher les groupes du userid puis les kuchis des groupes
+        //pourquoi ?? corrigé...
         $qb = $this->createQueryBuilder('kuchi')
-                ->leftjoin('kuchi.kuchiGroup','kuchiGroup')
-                ->join('kuchiGroup.users', 'users')
+                ->join('kuchi.users','users')                
                 ->where('users.id = :userid')
                 ->setParameter('userid', $userid);
 
@@ -246,5 +246,14 @@ class KuchiRepository extends EntityRepository
 
         return new Paginator($query);
 
+    }
+    
+    public function getKuchiQuery($kuchiid){
+        $qb = $this->createQueryBuilder('kuchi')                        
+        ->where('kuchi.id = :kuchiid')
+        ->setParameter('kuchiid', $kuchiid);
+
+        return $qb;
+        
     }
 }

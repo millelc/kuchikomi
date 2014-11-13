@@ -161,6 +161,11 @@ class Kuchi
     * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomi", mappedBy="kuchi")
     */
     private $kuchikomis;
+
+    /**
+    * @ORM\OneToMany(targetEntity="obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent", mappedBy="kuchi")
+    */
+    private $kuchikomirecurrents;
     
     /**
      * @ORM\ManyToOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Abonnements", inversedBy="kuchis")
@@ -768,4 +773,47 @@ class Kuchi
         $this->abonnement = $abonnement;
     }
 
+
+    /**
+     * Add kuchikomirecurrents
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent $kuchikomirecurrents
+     * @return Kuchi
+     */
+    public function addKuchikomirecurrent(\obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent $kuchikomirecurrents)
+    {
+        $this->kuchikomirecurrents[] = $kuchikomirecurrents;
+
+        return $this;
+    }
+
+    /**
+     * Remove kuchikomirecurrents
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent $kuchikomirecurrents
+     */
+    public function removeKuchikomirecurrent(\obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent $kuchikomirecurrents)
+    {
+        $this->kuchikomirecurrents->removeElement($kuchikomirecurrents);
+    }
+
+    /**
+     * Get kuchikomirecurrents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKuchikomirecurrents()
+    {
+        return $this->kuchikomirecurrents;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \obdo\KuchiKomiUserBundle\Entity\User $users
+     */
+    public function removeUser(\obdo\KuchiKomiUserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
 }
