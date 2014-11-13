@@ -333,7 +333,7 @@ class KomiController extends Controller
                     $em->flush();
 
                     $response->setStatusCode(200);
-                    $Logger->Info("[PUT rest/komi/regid/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated");
+                    //$Logger->Info("[PUT rest/komi/regid/{id}/{hash}] 200 - Komi id=".$komi->getRandomId()." updated");
                 }
                 else
                 {
