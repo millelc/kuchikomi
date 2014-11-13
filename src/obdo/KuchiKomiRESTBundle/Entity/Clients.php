@@ -547,4 +547,27 @@ class Clients
         // on renseigne la date de mise à jour avec la date système lors .... d'une mise à jour !
         $this->setTimestampLastUpdate(new \Datetime());
     }
+
+    /**
+     * Add users
+     *
+     * @param \obdo\KuchiKomiUserBundle\Entity\User $users
+     * @return Clients
+     */
+    public function addUser(\obdo\KuchiKomiUserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \obdo\KuchiKomiUserBundle\Entity\User $users
+     */
+    public function removeUser(\obdo\KuchiKomiUserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
 }

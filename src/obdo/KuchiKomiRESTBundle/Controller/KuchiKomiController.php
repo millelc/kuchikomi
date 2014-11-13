@@ -31,8 +31,8 @@ class KuchiKomiController extends Controller
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');
-        $Notifier = $this->container->get('obdo_services.Notifier');
-
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
+        
         $em = $this->getDoctrine()->getManager();
 
         $repositoryKuchiKomi = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
@@ -136,7 +136,7 @@ class KuchiKomiController extends Controller
                                     $AclManager->addAcl($kuchikomi, $user);
                                 }
 
-                                $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
+                                $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
                             }
                         }    
                     } 
@@ -169,7 +169,7 @@ class KuchiKomiController extends Controller
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');
-        $Notifier = $this->container->get('obdo_services.Notifier');
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
         
         $em = $this->getDoctrine()->getManager();
 
@@ -220,14 +220,14 @@ class KuchiKomiController extends Controller
                         } 
                         else 
                         {
-                            if($kuchikomi->getActive() == false)
+                            if($kuchikomi->getActive() == true)
                             {
                                 $kuchikomi->setTimestampSuppression(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
                                 $kuchikomi->setActive(false);
 
                                 $em->flush();
 
-                                $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
+                                $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "3");
                             }
                             
                             $response->setStatusCode(200);
@@ -249,9 +249,7 @@ class KuchiKomiController extends Controller
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        // affiche les entêtes HTTP suivies du contenu
-        $response->send();
-
+        
         return $response;
     }
 
@@ -265,7 +263,8 @@ class KuchiKomiController extends Controller
         $response = new Response();
 
         $Logger = $this->container->get('obdo_services.Logger');
-        $Notifier = $this->container->get('obdo_services.Notifier');
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
+        //$Notifier = $this->container->get('obdo_services.Notifier');
         
         $em = $this->getDoctrine()->getManager();
 
@@ -376,7 +375,7 @@ class KuchiKomiController extends Controller
                                 $em->persist($kuchikomi);
                                 $em->flush();
 
-                                $Notifier->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
+                                $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
 
                                 $Logger->Info("[PUT rest/kuchikomi/] 200 - KuchiKomi id=" . $kuchikomi->getId() . " updated");                                
                             }
@@ -399,8 +398,7 @@ class KuchiKomiController extends Controller
 
         $response->headers->set('Content-Type', 'text/html');
         // affiche les entêtes HTTP suivies du contenu
-        $response->send();
-
+        
         return $response;
     }
 
