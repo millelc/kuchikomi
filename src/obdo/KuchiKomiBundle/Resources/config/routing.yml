@@ -168,8 +168,12 @@ obdo_kuchi_komi_kuchi_update:
     defaults: { _controller: obdoKuchiKomiBundle:Kuchi:update }
 
 # Route pour les kuchikomis
+obdo_kuchi_komi_kuchikomi_index:
+    pattern:  /kuchikomi/index
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:index }
+    
 obdo_kuchi_komi_kuchikomi_view:
-    pattern:  /kuchikomi/{id}
+    pattern:  /kuchikomi/view/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:view }
 
 obdo_kuchi_komi_kuchikomi_add:
@@ -184,6 +188,10 @@ obdo_kuchi_komi_kuchikomi_update:
     pattern:  /kuchikomi/update/{id}
     defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:update }
     
+obdo_kuchi_komi_kuchikomi_addrecurrent:
+    pattern: /kuchikomi/addrecurrent
+    defaults: {_controller: obdoKuchiKomiBundle:KuchiKomi:addrecurrent }
+
 #pour graphiques
 obdo_pChart:
     pattern:  /graphique/{nom}

@@ -49,8 +49,10 @@ class KuchiKomiController extends Controller {
     {
         $Logger = $this->container->get('obdo_services.Logger');
         $AclManager = $this->container->get('obdo_services.AclManager');
+
         $kuchi = null;
-        
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
+                
         $error = FALSE;
         $securityContext = $this->get('security.context');
             
@@ -63,7 +65,7 @@ class KuchiKomiController extends Controller {
         
         //Check access control
                      
-                 if (false == $securityContext->isGranted('EDIT', $kuchi))
+            if (false == $securityContext->isGranted('EDIT', $kuchi))
                  {
                  throw new AccessDeniedException();
                  }
@@ -86,38 +88,44 @@ class KuchiKomiController extends Controller {
                 $form->bind($request);
                 // récupérer le kuchikomi hydraté !
 
-                    if ($form->isValid()) {                                      
-                  $error = $this->processKuchikomi($kuchikomi);
+                    if ($form->isValid()) 
+                        {                                      
+                        $error = $this->processKuchikomi($kuchikomi);
                 
                         if (!$error) 
-                    {
-                    // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
-                        foreach($kuchikomi->getKuchi()->getUsers() as $user)
                         {
-                            $AclManager->addAcl($kuchikomi, $user);
-                        }
-                        foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
-                        {
-                            $AclManager->addAcl($kuchikomi, $user);
-                        }
+                            // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
+                             foreach($kuchikomi->getKuchi()->getUsers() as $user)
+                             {
+                                $AclManager->addAcl($kuchikomi, $user);
+                            }
+                            foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
+                            {
+                                $AclManager->addAcl($kuchikomi, $user);
+                            }
 
                         // on logge l'ajout
                         $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " added");
 
-                        // et on notifie
-                        $this->container->get('obdo_services.Notifier')->sendKuchiKomiNotification($kuchikomi->getKuchi(),$kuchikomi, "2");
+                   // et on notifie
+                        $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchikomi->getKuchi(), $kuchikomi, "2");
+                    
+                    return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
+                                'kuchikomi' => $kuchikomi,
+                    ));
 
-                        return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array('id' => $kuchikomi->getKuchi()->getId())));
-                    }
+                    }   
                 }
             }
         return $this->render('obdoKuchiKomiBundle:Default:kuchikomiadd.html.twig', array('form' => $form->createView(),'Kuchi' => $kuchi));
-        }
+        
+    } 
     
     
     public function deleteAction($id) 
     {
         $Logger = $this->container->get('obdo_services.Logger');
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
         
         $kuchikomi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomi')
@@ -142,15 +150,12 @@ class KuchiKomiController extends Controller {
 
             $this->getDoctrine()->getManager()->flush();
             
-            $kuchi = $this->getDoctrine()
-                          ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
-                          ->find($kuchikomi->getKuchiId());
-            $this->container->get('obdo_services.Notifier')
-                            ->sendKuchiKomiNotification($kuchi, $kuchikomi, "3");
+            $kuchi = $kuchikomi->getKuchi();
+            $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "3");
             
-            return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array(
-                    'id' => $kuchi->getId()
-            )));
+            return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
+                                'kuchikomi' => $kuchikomi,
+            ));
         }
     }
 
@@ -158,6 +163,7 @@ class KuchiKomiController extends Controller {
     {
         $Logger = $this->container->get('obdo_services.Logger');
         $Password = $this->container->get('obdo_services.Password');
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
 
         $kuchikomi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomi')
@@ -196,8 +202,8 @@ class KuchiKomiController extends Controller {
                         $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " updated");
 
                         // et on notifie
-                        $this->container->get('obdo_services.Notifier')->sendKuchiKomiNotification($kuchi, $kuchikomi, "2");
-
+                        $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
+                        
                         $this->get('session')->getFlashBag()->add('success', 'Le kuchikomi a été mis à jour avec succès !');
                         
                         return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
@@ -252,9 +258,11 @@ class KuchiKomiController extends Controller {
 
         if (!$error) 
         {
+            if($kuchikomi instanceof KuchiKomi){
+                
+                $kuchikomi->setActive(true);
+            }
             
-            $kuchikomi->setActive(true);
-
             if($kuchikomi->getDeletePhoto())
             {
                 $this->deletePhoto($kuchikomi, $oldKuchikomiPhoto);
@@ -320,38 +328,37 @@ class KuchiKomiController extends Controller {
              $form->bind($request);
              
              if($form->isValid()){
-                 $error = $this->processKuchikomi($kuchikomi);
-                 if(!$error){
-                        $this->container->get('obdo_services.Notifier')->sendKuchiKomiNotification($kuchikomi->getKuchi(),$kuchikomi, "2");
+                 $error = $this->processKuchikomi($kuchikomiRecurr);
+                 if(!$error){                        
 
-                        return $this->redirect($this->generateUrl('obdo_kuchi_komi_kuchi_view', array('id' => $kuchikomi->getKuchi()->getId())));
+                        return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
                         }                   
                 }
          }
             
-            
-        //return $this->render('obdoKuchiKomiBundle:Default:kuchikomitype.html.twig');  
-        
-        
-        //on recupere le kuchi pour lequel on va créer un kuchikomi
-//        $kuchi = $this->getDoctrine()
-//                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\Kuchi')
-//                ->find($id);
-//        //Check access control
-//        $securityContext = $this->get('security.context');
-//            if (false == $securityContext->isGranted('EDIT', $kuchi))
-//            {
-//            throw new AccessDeniedException();
-//            }
         return $this->render('obdoKuchiKomiBundle:Default:kuchikomiaddrecurrence.html.twig', array('form' => $form->createView()));
-//        
-//        if($request->isXmlHttpRequest()){
-//            $data = $request->request->all();
-//            return $this->render('obdoKuchiKomiBundle:Default:kuchikomiaddrecurrence.html.twig', array('form' => $form->createView(), 'Kuchi' => $kuchi));
-//        }
-//        else{
-        
+
     }
+    
+//    public function indexAction($page,$sort){
+//                // on retrouve le role du user pour la requete d'affichage
+//        
+//        //XmlHttprequest get $page,$sort,$kuchi
+//        $currentroles = $this->getUser()->getRoles();
+//        $currentrole = $currentroles[0];
+//        $userid = $this->getUser()->getId();
+//        $em = $this->getDoctrine()->getManager();
+//
+//        $kuchikomis = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi')
+//                ->getActiveKuchiKomisForKuchi(25, $page, $sort, $kuchi);
+//
+//        return $this->render('obdoKuchiKomiBundle:Default:kuchiindex.html.twig', array(
+//                    'kuchis' => $kuchis,
+//                    'page' => $page,
+//                    'nombrePage' => ceil(count($kuchis) / 25),
+//                    'sort' => $sort
+//        ));
+//    }
 
 }
     

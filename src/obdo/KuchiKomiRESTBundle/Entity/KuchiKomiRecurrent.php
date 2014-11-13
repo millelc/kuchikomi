@@ -97,6 +97,9 @@ class KuchiKomiRecurrent
      * @ORM\ManytoOne(targetEntity="obdo\KuchiKomiRESTBundle\Entity\Kuchi", inversedBy="kuchikomirecurrents") 
      */
     private $kuchi;
+    
+    private $photoimg; //pour upload photo
+    private $deletePhoto;
 
 
 
@@ -225,6 +228,26 @@ class KuchiKomiRecurrent
     {
         return $this->photoLink;
     }
+    
+    /**
+     * Get Photo byte array
+     *
+     * @return byte array of the photo
+     * @VirtualProperty
+     * @Groups({"Synchro"})
+     */
+    public function getPhoto()
+    {
+    	$photoByteStream = "";
+		if( $this->photoLink != "")
+		{
+			$handle = fopen($this->photoLink, "r");
+     		$contents = fread($handle, filesize($this->photoLink));
+     		fclose($handle);
+     		$photoByteStream = base64_encode( $contents );
+		}
+     	return $photoByteStream;
+    }
 
     /**
      * Set recurrence
@@ -294,6 +317,8 @@ class KuchiKomiRecurrent
     {
         return $this->endRecurrence;
     }
+    
+    
  
 
     /**
@@ -340,5 +365,23 @@ class KuchiKomiRecurrent
     public function getKuchi()
     {
         return $this->kuchi;
+    }
+    
+    public function getPhotoimg() {
+        return $this->photoimg;
+    }
+
+    public function setPhotoimg($photoimg) {
+        $this->photoimg = $photoimg;
+    }
+    
+    public function getDeletePhoto() 
+    {
+        return $this->deletePhoto;
+    }
+
+    public function setDeletePhoto($deletePhoto) 
+    {
+        $this->deletePhoto = $deletePhoto;
     }
 }

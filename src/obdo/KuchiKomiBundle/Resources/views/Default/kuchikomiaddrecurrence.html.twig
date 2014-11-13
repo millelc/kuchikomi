@@ -11,6 +11,15 @@
         </div>
     {% endfor %}
 {% endfor %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-sm-3">
+        <div class="panel panel-heading">
+            <h5 class="panel-title">Message récurrent</h5>
+        </div>
+    </div>
+</div>
+<br />
     <form method="post" {{ form_enctype(form) }}>
         {# Les erreurs générales du formulaire. #}
         {{ form_errors(form) }}
