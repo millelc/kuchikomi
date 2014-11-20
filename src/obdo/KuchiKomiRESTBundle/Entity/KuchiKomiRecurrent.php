@@ -7,6 +7,8 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
+use Symfony\Component\Validator\Constraints\Time;
+
 
 
 /**
@@ -31,6 +33,15 @@ class KuchiKomiRecurrent
      * @Groups({"Synchro"})
      */
     private $id;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean")
+     * @Expose
+     * @Groups({"Synchro"})
+     */
+    private $active;
 
     /**
      * @var string
@@ -62,15 +73,41 @@ class KuchiKomiRecurrent
      *
      * @ORM\Column(name="recurrence", type="string")
      *    
-     * w = weekly , m = monthly
+     * weekly , monthly, yearly
      */
     private $recurrence;
+    
+    
+    /**
+     *
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="beginTime", type ="time")
+     */
+    private $beginTime;
+    
+     /**
+     *
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="endTime", type ="time")
+     */
+    private $endTime;
+    
+    
+     /**
+     *
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="endFirstTime", type ="datetime")
+     */
+    private $endFirstTime;
 
     /**
      *
      * @var \DateTime 
      * 
-     * @ORM\Column(name="beginRecurrence", type="datetime", nullable = true)
+     * @ORM\Column(name="beginRecurrence", type="date", nullable = true)
      */
     private $beginRecurrence;
 
@@ -78,11 +115,44 @@ class KuchiKomiRecurrent
      *
      * @var \DateTime 
      * 
-     * @ORM\Column(name="endRecurrence", type="datetime", nullable = true)
+     * @ORM\Column(name="endRecurrence", type="date", nullable = true)
      */
     private $endRecurrence;
     
+        /**
+     *
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="dateTimeCreation", type ="datetime")
+     */
+    private $dateTimeCreation;
     
+     /**
+     *
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="dateTimeSuppression", type ="datetime", nullable = true)
+     */
+    private $dateTimeSuppression;
+    
+    
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateTimeLastUpdate", type="datetime", nullable = true)
+     */
+    private $dateTimeLastUpdate;
+    
+    /**
+     *
+     * @var integer 
+     * 
+     * @ORM\Column(name="sendDay", type="integer")
+     */
+    private $sendDay;
+
+
+
     /**
     * @var array
     *  
@@ -112,7 +182,12 @@ class KuchiKomiRecurrent
         $this->deletePhoto = false;        
         $this->beginRecurrence = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $this->endRecurrence = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        $this->kuchikomis = new \Doctrine\Common\Collections\ArrayCollection;
+        $this->endFirstTime = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->dateTimeCreation = new \DateTime('now', new \DateTimeZone('Europe/Paris'));    
+        $this->kuchikomis = new \Doctrine\Common\Collections\ArrayCollection;  
+        $this->endTime = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->beginTime = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $this->active = true;
     }
     
     
@@ -383,5 +458,194 @@ class KuchiKomiRecurrent
     public function setDeletePhoto($deletePhoto) 
     {
         $this->deletePhoto = $deletePhoto;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return KuchiKomiRecurrent
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+ 
+        
+
+    /**
+     * Set beginTime
+     *
+     * @param \DateTime $beginTime
+     * @return KuchiKomiRecurrent
+     */
+    public function setBeginTime($beginTime)
+    {
+        $this->beginTime = $beginTime;
+        
+
+        return $this;
+    }
+
+    /**
+     * Get beginTime
+     *
+     * @return integer 
+     */
+    public function getBeginTime()
+    {
+        return $this->beginTime;
+    }
+
+    /**
+     * Set endTime
+     *
+     * @param \DateTime $endTime
+     * @return KuchiKomiRecurrent
+     */
+    public function setEndTime($endTime)
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    /**
+     * Get endTime
+     *
+     * @return \DateTime 
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+
+
+    /**
+     * Set sendDay
+     *
+     * @param integer $sendDay
+     * @return KuchiKomiRecurrent
+     */
+    public function setSendDay($sendDay)
+    {
+        $this->sendDay = $sendDay;
+
+        return $this;
+    }
+
+    /**
+     * Get sendDay
+     *
+     * @return integer 
+     */
+    public function getSendDay()
+    {
+        return $this->sendDay;
+    }
+
+    /**
+     * Set endFirstTime
+     *
+     * @param \DateTime $endFirstTime
+     * @return KuchiKomiRecurrent
+     */
+    public function setEndFirstTime($endFirstTime)
+    {
+        $this->endFirstTime = $endFirstTime;
+
+        return $this;
+    }
+
+    /**
+     * Get endFirstTime
+     *
+     * @return \DateTime 
+     */
+    public function getEndFirstTime()
+    {
+        return $this->endFirstTime;
+    }
+
+    /**
+     * Set dateTimeCreation
+     *
+     * @param \DateTime $dateTimeCreation
+     * @return KuchiKomiRecurrent
+     */
+    public function setDateTimeCreation($dateTimeCreation)
+    {
+        $this->dateTimeCreation = $dateTimeCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateTimeCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateTimeCreation()
+    {
+        return $this->dateTimeCreation;
+    }
+
+    /**
+     * Set dateTimeSuppression
+     *
+     * @param \DateTime $dateTimeSuppression
+     * @return KuchiKomiRecurrent
+     */
+    public function setDateTimeSuppression($dateTimeSuppression)
+    {
+        $this->dateTimeSuppression = $dateTimeSuppression;
+
+        return $this;
+    }
+
+    /**
+     * Get dateTimeSuppression
+     *
+     * @return \DateTime 
+     */
+    public function getDateTimeSuppression()
+    {
+        return $this->dateTimeSuppression;
+    }
+
+    /**
+     * Set dateTimeLastUpdate
+     *
+     * @param \DateTime $dateTimeLastUpdate
+     * @return KuchiKomiRecurrent
+     */
+    public function setDateTimeLastUpdate($dateTimeLastUpdate)
+    {
+        $this->dateTimeLastUpdate = $dateTimeLastUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get dateTimeLastUpdate
+     *
+     * @return \DateTime 
+     */
+    public function getDateTimeLastUpdate()
+    {
+        return $this->dateTimeLastUpdate;
     }
 }

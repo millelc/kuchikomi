@@ -225,6 +225,13 @@ class KuchiKomiController extends Controller {
         }
     }
 
+    
+    /**
+     * 
+     * @param KuchiKomi ou KuchiKomiRecurrent $kuchikomi
+     * @param type $oldKuchikomiPhoto
+     * @return boolean
+     */
     private function processKuchikomi($kuchikomi, $oldKuchikomiPhoto = null)
     {
         $error = FALSE;
@@ -258,10 +265,12 @@ class KuchiKomiController extends Controller {
 
         if (!$error) 
         {
-            if($kuchikomi instanceof KuchiKomi){
+            if($kuchikomi instanceof KuchiKomiRecurrent){
+            $photodir= $this->container->getParameter('path_kuchikomirecurrent_photo').$kuchikomi->getKuchi()->getId().'/';    
                 
-                $kuchikomi->setActive(true);
             }
+            $kuchikomi->setActive(true);
+            
             
             if($kuchikomi->getDeletePhoto())
             {
@@ -329,12 +338,22 @@ class KuchiKomiController extends Controller {
              
              if($form->isValid()){
                  $error = $this->processKuchikomi($kuchikomiRecurr);
-                 if(!$error){                        
-
-                        return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
-                        }                   
+                 if(!$error)
+                        {                     
+                        foreach($kuchikomiRecurr->getKuchi()->getUsers() as $user)
+                        {                        
+                           $AclManager->addAcl($kuchikomiRecurr, $user);
+                        }
+                        foreach($kuchikomiRecurr->getKuchi()->getKuchiGroup()->getUsers() as $user)
+                        {
+                            $AclManager->addAcl($kuchikomiRecurr, $user);
+                        }                    
+                        return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array('kuchikomirecurrent' => $kuchikomiRecurr));
+                        }                      
                 }
          }
+         
+         
             
         return $this->render('obdoKuchiKomiBundle:Default:kuchikomiaddrecurrence.html.twig', array('form' => $form->createView()));
 

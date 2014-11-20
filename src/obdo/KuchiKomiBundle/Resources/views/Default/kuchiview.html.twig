@@ -65,10 +65,17 @@
             <span class="glyphicon glyphicon-plus"></span> Nouveau KuchiKomi</a>
             <br>
     {% endif %}
-    
-<table class="table table-hover table-condensed">
-    <thead>
-        <tr>
+    <br>
+<div role ="tabpanel">
+    <ul class="nav nav-tabs" role="tablist" id="myTab">
+    <li role="presentation" class="active"><a href="#kuchikomi" aria-controls="kuchikomi" role="tab" data-toggle="tab">KuchiKomi</a></li>
+    <li role="presentation"><a href="#recurrent" aria-controls="recurrent" role="tab" data-toggle="tab">KuchiKomi Recurrent</a></li>    
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane fade in active" id="kuchikomi">
+    <table class="table table-hover table-condensed">
+        <thead>
+          <tr>
             <th>Etat</th>
             <th>Titre</th>
             <th>Création</th>
@@ -76,8 +83,8 @@
             <th>Début</th>
             <th>Fin</th>
             <th>Merci</th>
-        </tr>
-    </thead>
+         </tr>
+        </thead>
     <tbody>
         {% for kuchikomi in Kuchi.kuchikomis %}
         <tr>
@@ -89,26 +96,68 @@
             
             <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_view', {'id': kuchikomi.id}) }}">{{kuchikomi.title}}</a></td>
 
-            <td>{{kuchikomi.timestampCreation|date('Y-m-d H:i:s')}}</td>
+            <td>{{kuchikomi.timestampCreation|date('d-m-Y H:i:s')}}</td>
             
             {% if kuchikomi.active %}
                 <td>-</td>
             {% else %}
-                <td>{{kuchikomi.timestampSuppression|date('Y-m-d H:i:s')}}</td>
+                <td>{{kuchikomi.timestampSuppression|date('d-m-Y H:i:s')}}</td>
             {% endif %}
             
-            <td>{{kuchikomi.timestampBegin|date('Y-m-d H:i:s')}}</td>
+            <td>{{kuchikomi.timestampBegin|date('d-m-Y H:i:s')}}</td>
             
-            <td>{{kuchikomi.timestampEnd|date('Y-m-d H:i:s')}}</td>
+            <td>{{kuchikomi.timestampEnd|date('d-m-Y H:i:s')}}</td>
             
             <td>{{kuchikomi.getNbThanks}}</td>
            
         </tr>
-        {% endfor %}
+        {% endfor %}        
     </tbody>
     <foot>
-    </tfoot>
-</table>
+    </foot>
+ </table>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="recurrent">
+          <table class="table table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>Etat</th>
+            <th>Titre</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Fréquence</th>
+         </tr>
+        </thead>
+    <tbody>
+        {% for kuchikomirecurrent in Kuchi.kuchikomirecurrents %}
+        <tr>
+            {% if kuchikomirecurrent.active %}
+                <td><p class="text-info">Actif</p></td>
+            {% else %}
+                <td><p class="text-danger">Inactif</p></td>
+            {% endif %}
+            
+            <td><a href="##">{{kuchikomirecurrent.title}}</a></td>
+
+            <td>{{kuchikomirecurrent.beginRecurrence|date('d-m-Y')}}</td>
+            
+            <td>{{kuchikomirecurrent.endRecurrence|date('d-m-Y')}}</td>                        
+            
+            {% if kuchikomirecurrent.recurrence is same as ('monthly') %}
+                <td>mois</td>
+            {% elseif  kuchikomirecurrent.recurrence is same as ('weekly')  %}
+                <td>semaine</td>
+            {% else %}
+                <td>année</td>
+            {% endif %}
+           
+        </tr>
+        {% endfor %}        
+    </tbody>
+           
+    </div>
+    </div>
+</div>
 
 
 {% endblock %}
