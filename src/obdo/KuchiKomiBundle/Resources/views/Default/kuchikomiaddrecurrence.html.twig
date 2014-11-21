@@ -35,7 +35,7 @@
         <br />
         <div class="row">
             <div class="col-md-1"></div>
-            <div class="col-md-3"><h6>Premier Message :</h6></div>            
+            <div class="col-md-3"><h7>Premier Message :</h7></div>            
         </div>
         <div class="row">   
             <div class="col-md-1"></div>
@@ -48,7 +48,10 @@
                 {{ form_label(form.endFirstTime, "Au") }}<br />
                 {{ form_errors(form.endFirstTime) }}
                 {{ form_widget(form.endFirstTime) }}                  
-            </div>             
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
             <div class="col-md-2">
                 {{ form_label(form.beginTime, "Début :") }}<br />
                 {{ form_errors(form.beginTime) }}
@@ -109,10 +112,23 @@
         <br/>
         <div class="row">
             <div class="col-md-1"></div>
+            {% if kuchikomirecurrent is defined %}
+            <div class="col-md-2">                
+                    {% if kuchikomirecurrent.photoLink != "" %}
+                    <center><img src="{{ asset(kuchikomirecurrent.photoLink) }}" alt="" width=160 height=160></center>
+                {% else %}
+                    <center>Pas de photo</center>
+                    {% endif %}                
+            </div>
+            {% endif %}
             <div class="col-md-11">
                 {{ form_label(form.photoimg, "Photo") }}<br />
                 {{ form_errors(form.photoimg) }}
-                {{ form_widget(form.photoimg) }}
+                {% if kuchikomirecurrent is defined %}    
+                    {{ form_widget(form.photoimg, {'attr':{'attrname': "Photo actuelle"} }) }}
+                {% else%}
+                    {{ form_widget(form.photoimg) }}
+                {%endif%}    
                 La taille idéale d'une image est de 640x640, les autres tailles seront redimensionnées
             </div>
         </div>       

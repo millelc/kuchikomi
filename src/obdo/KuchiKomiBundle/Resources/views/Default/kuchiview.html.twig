@@ -137,7 +137,7 @@
                 <td><p class="text-danger">Inactif</p></td>
             {% endif %}
             
-            <td><a href="##">{{kuchikomirecurrent.title}}</a></td>
+            <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_viewrecurrent', {'id': kuchikomirecurrent.id}) }}">{{kuchikomirecurrent.title}}</a></td>
 
             <td>{{kuchikomirecurrent.beginRecurrence|date('d-m-Y')}}</td>
             

@@ -194,7 +194,7 @@ class KuchiKomiController extends Controller {
 
                 if ($form->isValid()) 
                 {
-                    $error = $this->processKuchikomi($kuchi, $kuchikomi, $kuchikomiPhoto);
+                    $error = $this->processKuchikomi($kuchikomi, $kuchikomiPhoto);
                     
                     if (!$error) 
                     {
@@ -319,6 +319,31 @@ class KuchiKomiController extends Controller {
         }
     }
     
+        public function viewrecurrentAction($id) 
+    {
+        $kuchikomirecurrent = $this->getDoctrine()
+                          ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent')
+                          ->find($id);
+        
+        if( !$kuchikomirecurrent )
+        {
+            $Logger = $this->container->get('obdo_services.Logger');
+            $Logger->Error("[WEB-VIEW kuchikomi] KuchiKomi id=" . $id . " unknown...");
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
+        }
+        else 
+        {
+            //Check access control
+            $securityContext = $this->get('security.context');
+            if (false == $securityContext->isGranted('VIEW', $kuchikomirecurrent))
+            {
+                throw new AccessDeniedException();
+            }
+
+            return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array('kuchikomirecurrent' => $kuchikomirecurrent));
+        }        
+    }
+    
         public function addrecurrentAction (){
             
             
@@ -352,32 +377,91 @@ class KuchiKomiController extends Controller {
                         }                      
                 }
          }
-         
-         
+                  
             
         return $this->render('obdoKuchiKomiBundle:Default:kuchikomiaddrecurrence.html.twig', array('form' => $form->createView()));
 
     }
     
-//    public function indexAction($page,$sort){
-//                // on retrouve le role du user pour la requete d'affichage
-//        
-//        //XmlHttprequest get $page,$sort,$kuchi
-//        $currentroles = $this->getUser()->getRoles();
-//        $currentrole = $currentroles[0];
-//        $userid = $this->getUser()->getId();
-//        $em = $this->getDoctrine()->getManager();
-//
-//        $kuchikomis = $em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi')
-//                ->getActiveKuchiKomisForKuchi(25, $page, $sort, $kuchi);
-//
-//        return $this->render('obdoKuchiKomiBundle:Default:kuchiindex.html.twig', array(
-//                    'kuchis' => $kuchis,
-//                    'page' => $page,
-//                    'nombrePage' => ceil(count($kuchis) / 25),
-//                    'sort' => $sort
-//        ));
-//    }
+        public function updaterecurrentAction ($id){
+            
+            
+        $Logger = $this->container->get('obdo_services.Logger');        
+        $AclManager = $this->container->get('obdo_services.AclManager');
+        $iduser = $this->get('security.context')->getToken()->getUser()->getId();  
+        $kuchikomiRecurr = $this->getDoctrine()->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent')->find($id);
+        
+        // on cree l'entite vide
+        $form = $this->createForm(new KuchiKomiRecurrentType($iduser), $kuchikomiRecurr,array('idkuchi'=>$kuchikomiRecurr->getKuchi()));
+        
+        
+         $request=  $this->get('request');
+         
+         if($request->getMethod()=='POST'){
+             $form->bind($request);
+             
+             if($form->isValid()){
+                 $error = $this->processKuchikomi($kuchikomiRecurr,$kuchikomiRecurr->getPhotoLink());                 
+                    if (!$error) 
+                    {
+                        // on logge l'update
+                        $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " updated");
+
+                        // et on notifie
+                        $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchikomiRecurr->getKuchi(), $kuchikomiRecurr, "2");
+                        
+                        $this->get('session')->getFlashBag()->add('success', 'Le kuchikomi récurrent a été mis à jour avec succès !');
+                        
+                        return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array(
+                                            'kuchikomirecurrent' => $kuchikomiRecurr,
+                        ));
+                    }                      
+                }
+         }
+         
+         
+            
+        return $this->render('obdoKuchiKomiBundle:Default:kuchikomiaddrecurrence.html.twig', array('form' => $form->createView(), 'kuchikomirecurrent'=>$kuchikomiRecurr));
+
+    }
+    
+        public function deleterecurrentAction($id) 
+    {
+        $Logger = $this->container->get('obdo_services.Logger');
+        $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
+        
+        $kuchikomirRecurr = $this->getDoctrine()
+                ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent')
+                ->find($id);
+        
+        if( !$kuchikomirRecurr )
+        {
+            $Logger->Error("[WEB-DELETE kuchikomirecurrent] KuchiKomiRecurrent id=" . $id . " unknown...");
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
+        }
+        else 
+        {
+            //Check access control
+            $securityContext = $this->get('security.context');
+            if (false == $securityContext->isGranted('DELETE', $kuchikomirRecurr))
+            {
+                throw new AccessDeniedException();
+            }
+
+            $kuchikomirRecurr->setDateTimeSuppression(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+            $kuchikomirRecurr->setActive(false);
+
+            $this->getDoctrine()->getManager()->flush();                                    
+            
+            $messagesupp = "Le Kuchikomi recurrent n°".$kuchikomirRecurr->getId()." a bien été supprimé";
+            
+            return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
+//            return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array('Kuchi'=>$kuchikomirRecurr->getKuchi(),
+//                'Abo'=>$kuchikomirRecurr->getKuchi()->getAbonnement(), 'messagesupp' => $messagesupp
+//            ));
+        }
+    }
+    
 
 }
     

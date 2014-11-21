@@ -63,15 +63,14 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
             if($begin <= $now && $now <= $end){                    
                 if($recurrence =='weekly'){                         
                     if($jour==$begin->format('w')){
-                        $this->createRepeatedKuchiKomi($output,$kuchikomirecurrent, $now,$begin);
+                        $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin);
                         $count= $count+1;
                         
                     }                                        
                 }
-                if($recurrence =='monthly'){         
-                    $output->write('-----------'.$begin->format('d').'---');
+                if($recurrence =='monthly'){                             
                     if($jourmois==$begin->format('d')){
-                        $this->createRepeatedKuchiKomi($output,$kuchikomirecurrent, $now,$begin );
+                        $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin );
                         $count= $count+1;
                     }
                 }else{
@@ -92,7 +91,7 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
      * @param type $dureeheure
      * @param type $dureejour
      */
-    public function createRepeatedKuchiKomi($output,$kuchikomirecurrent,$now,$begin) {
+    public function createRepeatedKuchiKomi($kuchikomirecurrent,$now,$begin) {
         $endEve = $kuchikomirecurrent->getEndFirstTime();
         $timeBegin = $kuchikomirecurrent->getBeginTime();
         $dureeheure = $timeBegin->diff($kuchikomirecurrent->getEndTime());            
@@ -101,9 +100,11 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         $kuchikomi->setTitle($kuchikomirecurrent->getTitle());
         $kuchikomi->setDetails($kuchikomirecurrent->getDetails()); 
         
-        if($kuchikomirecurrent->getPhotoLink()<>''){
-        $photoname = $this->getContainer()->get('obdo_services.Name_photo')->newName();        
-        $this->stream_copy('../kuchikomi/web/'.$kuchikomirecurrent->getPhotoLink(), '../kuchikomi/web/'.$kuchikomirecurrent->getKuchi()->getPhotoKuchiKomiLink().'/'.$photoname);
+        if($kuchikomirecurrent->getPhotoLink()<>''){           
+        $photoname = $this->getContainer()->get('obdo_services.Name_photo')->newName();
+        $newPhotolink = $kuchikomirecurrent->getKuchi()->getPhotoKuchiKomiLink().'/'.$photoname; 
+        $this->stream_copy('../kuchikomi/web/'.$kuchikomirecurrent->getPhotoLink(), '../kuchikomi/web/'.$newPhotolink);
+        $kuchikomi->setPhotoLink($newPhotolink);
         }
                 
         $date = new \DateTime();

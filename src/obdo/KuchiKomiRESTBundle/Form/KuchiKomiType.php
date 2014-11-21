@@ -83,17 +83,5 @@ class KuchiKomiType extends AbstractType
     {
         return 'obdo_kuchikomirestbundle_kuchikomi';
     }
-//    
-//    public function onPreSetData(FormEvent $event)
-//    {
-//        $kuchikomi = $event->getData();
-//        $form = $event->getForm();
-//        
-//        
-//            if($kuchikomi->getRecurrence()== 'w' ){
-//                $form ->add('beginRecurrence','datetime');
-//            }
-//            
-//        
-//    }
+
 }

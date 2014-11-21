@@ -190,8 +190,20 @@ obdo_kuchi_komi_kuchikomi_update:
     
 obdo_kuchi_komi_kuchikomi_addrecurrent:
     pattern: /kuchikomi/addrecurrent
-    defaults: {_controller: obdoKuchiKomiBundle:KuchiKomi:addrecurrent }
-
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:addrecurrent }
+    
+obdo_kuchi_komi_kuchikomi_viewrecurrent:
+    pattern: /kuchikomi/viewrecurrent/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:viewrecurrent }
+    
+obdo_kuchi_komi_kuchikomi_updaterecurrent:
+    pattern:  /kuchikomi/updaterecurrent/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:updaterecurrent }
+    
+obdo_kuchi_komi_kuchikomi_deleterecurrent:
+    pattern: /kuchikommi/deleterecurrent/{id}
+    defaults: { _controller: obdoKuchiKomiBundle:KuchiKomi:deleterecurrent }
+    
 #pour graphiques
 obdo_pChart:
     pattern:  /graphique/{nom}
