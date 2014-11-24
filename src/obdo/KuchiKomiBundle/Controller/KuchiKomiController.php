@@ -12,10 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use obdo\ServicesBundle\Services\imageLib;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+use Symfony\Component\HttpFoundation\Response;
 
 class KuchiKomiController extends Controller {
 
-    public function viewAction($id) 
+    public function viewAction($id)             
     {
         $kuchikomi = $this->getDoctrine()
                           ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomi')
@@ -36,7 +37,7 @@ class KuchiKomiController extends Controller {
                 throw new AccessDeniedException();
             }
 
-            return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array('kuchikomi' => $kuchikomi));
+    return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array('kuchikomi' => $kuchikomi));
         }
     }
     
@@ -124,6 +125,7 @@ class KuchiKomiController extends Controller {
     
     public function deleteAction($id) 
     {
+        
         $Logger = $this->container->get('obdo_services.Logger');
         $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
         
@@ -152,7 +154,7 @@ class KuchiKomiController extends Controller {
             
             $kuchi = $kuchikomi->getKuchi();
             $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "3");
-            
+            $this->get('session')->getFlashBag()->add('error', 'Le kuchikomi a été supprimé !');
             return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
                                 'kuchikomi' => $kuchikomi,
             ));
@@ -164,64 +166,75 @@ class KuchiKomiController extends Controller {
         $Logger = $this->container->get('obdo_services.Logger');
         $Password = $this->container->get('obdo_services.Password');
         $Dispatcher = $this->container->get('citykomi.async_events.dispatcher');
-
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         $kuchikomi = $this->getDoctrine()
                 ->getRepository('obdo\KuchiKomiRESTBundle\Entity\KuchiKomi')
                 ->find($id);
         
-        if ($kuchikomi != null) 
-        {
-            $securityContext = $this->get('security.context');
-            $kuchi = $kuchikomi->getKuchi();
-
-            $kuchikomiPhoto = $kuchikomi->getPhotoLink();
-            
-            // check for edit access
-            if (false === $securityContext->isGranted('EDIT', $kuchikomi))
-            {
-                throw new AccessDeniedException();
-            }
+        if($kuchikomi->getActive()){    
         
-            
-            $form = $this->createForm(new KuchiKomiUpdateType, $kuchikomi);
-            
-            // On récupère la requête
-            $request = $this->get('request');
-
-            if ($request->getMethod() == 'POST') 
+            if ($kuchikomi != null) 
             {
-                $form->bind($request);
+                $securityContext = $this->get('security.context');
+                $kuchi = $kuchikomi->getKuchi();
 
-                if ($form->isValid()) 
+                $kuchikomiPhoto = $kuchikomi->getPhotoLink();
+
+                // check for edit access
+                if (false === $securityContext->isGranted('EDIT', $kuchikomi))
                 {
-                    $error = $this->processKuchikomi($kuchikomi, $kuchikomiPhoto);
-                    
-                    if (!$error) 
-                    {
-                        // on logge l'update
-                        $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " updated");
-
-                        // et on notifie
-                        $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
-                        
-                        $this->get('session')->getFlashBag()->add('success', 'Le kuchikomi a été mis à jour avec succès !');
-                        
-                        return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
-                                            'kuchikomi' => $kuchikomi,
-                        ));
-                    }
-                    
+                    throw new AccessDeniedException();
                 }
-            }
+
+
+                $form = $this->createForm(new KuchiKomiUpdateType, $kuchikomi);
+
+                // On récupère la requête
+                $request = $this->get('request');
+
+                if ($request->getMethod() == 'POST') 
+                {
+                    $form->bind($request);
+
+                    if ($form->isValid()) 
+                    {
+                        $error = $this->processKuchikomi($kuchikomi, $kuchikomiPhoto);
+
+                        if (!$error) 
+                        {
+                            // on logge l'update
+                            $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " updated");
+
+                            // et on notifie
+                            $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
+
+                            $this->get('session')->getFlashBag()->add('success', 'Le kuchikomi a été mis à jour avec succès !');
+
+                            return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
+                                                'kuchikomi' => $kuchikomi,
+                            ));                                                        
+                        }
+
+                    }
+                }
+                
             return $this->render('obdoKuchiKomiBundle:Default:kuchikomiupdate.html.twig', array(
                         'form' => $form->createView(),
                         'Kuchi' => $kuchikomi->getKuchi(),
                         'kuchikomi' => $kuchikomi
             ));
-        } 
-        else
-        {
-            return $this->render('obdoKuchiKomiBundle:Dashboard:index');
+
+            } else
+            {
+                $this->get('session')->getFlashBag()->add('error',"Ce kuchikomi n'existe pas !");
+                return $this->render('obdoKuchiKomiBundle:Dashboard:index');
+
+            }
+            
+        } else {
+        $this->get('session')->getFlashBag()->add('error',"Ce kuchikomi a été supprimé !");
+        return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
+                                            'kuchikomi' => $kuchikomi));
         }
     }
 
@@ -405,11 +418,9 @@ class KuchiKomiController extends Controller {
                     if (!$error) 
                     {
                         // on logge l'update
-                        $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " updated");
+                        $Logger->Info("[KuchiKomiRecurrent] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomiRecurr->getTitle() . " updated");
 
-                        // et on notifie
-                        $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchikomiRecurr->getKuchi(), $kuchikomiRecurr, "2");
-                        
+                                                
                         $this->get('session')->getFlashBag()->add('success', 'Le kuchikomi récurrent a été mis à jour avec succès !');
                         
                         return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array(
@@ -453,12 +464,10 @@ class KuchiKomiController extends Controller {
 
             $this->getDoctrine()->getManager()->flush();                                    
             
-            $messagesupp = "Le Kuchikomi recurrent n°".$kuchikomirRecurr->getId()." a bien été supprimé";
+            $this->get('session')->getFlashbag()->add("Le Kuchikomi recurrent n°".$kuchikomirRecurr->getId()." a bien été supprimé");
             
-            return $this->redirect($this->generateUrl('obdo_kuchi_komi_homepage'));
-//            return $this->render('obdoKuchiKomiBundle:Default:kuchiview.html.twig', array('Kuchi'=>$kuchikomirRecurr->getKuchi(),
-//                'Abo'=>$kuchikomirRecurr->getKuchi()->getAbonnement(), 'messagesupp' => $messagesupp
-//            ));
+            return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array('kuchikomirecurrent' => $kuchikomirecurrent));
+
         }
     }
     

@@ -114,18 +114,26 @@
             <div class="col-md-1"></div>
             {% if kuchikomirecurrent is defined %}
             <div class="col-md-2">                
-                    {% if kuchikomirecurrent.photoLink != "" %}
+                    {% if kuchikomirecurrent.photoLink != "" %}                        
                     <center><img src="{{ asset(kuchikomirecurrent.photoLink) }}" alt="" width=160 height=160></center>
-                {% else %}
+                    {% set photo = "Photo actuelle"%} 
+                {% else %}     
+                {% set photo = "Pas de photo"%}
                     <center>Pas de photo</center>
-                    {% endif %}                
+                    {% endif %}                     
             </div>
-            {% endif %}
+            {% else %}
+                {% set photo = "Photo"%}
+            {% endif %}   
+            
+        </div>
+         <div class="row">
+            <div class="col-md-1"></div>
             <div class="col-md-11">
-                {{ form_label(form.photoimg, "Photo") }}<br />
+                {{ form_label(form.photoimg, photo ) }}<br />
                 {{ form_errors(form.photoimg) }}
                 {% if kuchikomirecurrent is defined %}    
-                    {{ form_widget(form.photoimg, {'attr':{'attrname': "Photo actuelle"} }) }}
+                    {{ form_widget(form.photoimg) }}
                 {% else%}
                     {{ form_widget(form.photoimg) }}
                 {%endif%}    
