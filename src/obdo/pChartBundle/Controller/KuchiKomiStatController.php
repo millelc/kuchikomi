@@ -16,11 +16,74 @@ use Symfony\Component\HttpFoundation\Response;
  *
  */
 
-class KuchiKomiStatController extends Controller {
+class KuchiKomiStatController extends Controller 
+{
 
     var $an;
     var $mois;
 
+    /*
+     * Calcul et affichage stat mois en cours
+     * pour les Kuchikomis
+     */
+    public function kuchikomistatAction() 
+    {
+        $graphCreator = $this->container->get('pChartBundle_services.graphCreator');
+        
+        $response = new Response();
+        $response->headers->set('Content-Type', 'image/png');
+        
+        //definir mois et annee du jour en cours
+        $this->aujourdhui();
+        $titre = 'Nbre Kuchikomi/jour mois ' . $this->mois;
+        $ylegende = 'Nbre Kuchikomi';
+        $xdesc = 'jour'; // idem cle du dataset 
+
+        $nbKuchikomimois = SqlStat::getNbKuchikomiMois($this->mois, $this->an, $this, $this->getUser()->getId());
+
+        if (count($nbKuchikomimois) > 0) 
+        {
+            //constitution du dataset
+            $dataset = new pData();
+            $ajour = array();
+            $anbre = array();
+            foreach ($nbKuchikomimois as $nk) 
+            {
+                $ajour[] = $nk['jour'];
+                $anbre[] = $nk['nbre'];
+            }
+            $dataset->addPoints($ajour, 'jour');
+            $dataset->addPoints($anbre, 'nombre'); // C'est cet intitulé qui fait office de légende
+
+
+            $chart = $graphCreator->chartgraph($dataset, $xdesc);
+
+            ob_start();
+            $chart->autoOutput();
+            $response->setContent(ob_get_clean());
+        } 
+        else 
+        {
+            // Render a default error image.
+            $image = imagecreate(675, 75);
+            $dark_grey = imagecolorallocate($image, 102, 102, 102);
+            $white = imagecolorallocate($image, 255, 255, 255);
+            $font_path = __DIR__ . "/../Resources/fonts/calibri.ttf";
+            $string = '0 kuchikomi';
+            imagettftext($image, 50, 0, 10, 60, $white, $font_path, $string);
+
+            ob_start();
+            imagepng($image);
+            $response->setContent(ob_get_clean());
+
+            //Clear up memory 
+            imagedestroy($image);
+        }
+        
+        return $response;
+    }
+
+    
     /*
      * Definition de la route en fonction du param d'entrée
      */
@@ -226,59 +289,6 @@ class KuchiKomiStatController extends Controller {
         return $response;
     }
 
-    /*
-     * Calcul et affichage stat mois en cours
-     * pour les Kuchikomis
-     */
-    public function kuchikomistatAction() {
-        $table = 'KuchiKomi';
-        $response = new Response();
-        $response->headers->set('Content-Type', 'image/png');
-        //definir mois et annee du jour en cours
-        $this->aujourdhui();
-        $titre = 'Nbre Kuchikomi/jour mois ' . $this->mois;
-        $titre1 = date('j M Y');
-        $ylegende = 'Nbre Kuchikomi';
-        $xdesc = 'jour'; // idem cle du dataset 
-
-        $nbKuchikomimois = SqlStat::getNbKuchikomiMois($this->mois, $this->an, $this, $this->getUser()->getId());
-
-        if (count($nbKuchikomimois) > 0) {
-            //constitution du dataset
-            $dataset = new pData();
-            $ajour = array();
-            $anbre = array();
-            foreach ($nbKuchikomimois as $nk) {
-                $ajour[] = $nk['jour'];
-                $anbre[] = $nk['nbre'];
-            }
-            $dataset->addPoints($ajour, 'jour');
-            $dataset->addPoints($anbre, 'nombre'); // C'est cet intitulé qui fait office de légende
-
-
-            $chart = $this->chartgraph($dataset, $titre, $titre1, $ylegende, $xdesc);
-
-            ob_start();
-            $chart->autoOutput();
-            $response->setContent(ob_get_clean());
-        } else {
-            // Render a default error image.
-            $image = imagecreate(675, 75);
-            $dark_grey = imagecolorallocate($image, 102, 102, 102);
-            $white = imagecolorallocate($image, 255, 255, 255);
-            $font_path = __DIR__ . "/../Resources/fonts/calibri.ttf";
-            $string = '0 kuchikomi';
-            imagettftext($image, 50, 0, 10, 60, $white, $font_path, $string);
-
-            ob_start();
-            imagepng($image);
-            $response->setContent(ob_get_clean());
-
-            //Clear up memory 
-            imagedestroy($image);
-        }
-        return $response;
-    }
 
     /*
      * Calcul et affichage stat mois en cours
@@ -1121,7 +1131,7 @@ class KuchiKomiStatController extends Controller {
     $myPicture->setGraphArea(40,10,650,180);
 
     /* Draw the scale */
-    $scaleSettings = array("XMargin"=>10,"YMargin"=>10,"Floating"=>TRUE,"GridR"=>255,
+    $scaleSettings = array("XMargin"=>10,"YMargin"=>10,"Floating"=>TRUE,"Mode" => SCALE_MODE_START0,"GridR"=>255,
         "GridG"=>255,"GridB"=>255,"DrawSubTicks"=>FALSE,"CycleBackground"=>FALSE,
         "AxisR"=>255,"AxisG"=>255,"AxisB"=>255,"TickR"=>255,"TickG"=>255,"TickB"=>255);
     $myPicture->drawScale($scaleSettings);

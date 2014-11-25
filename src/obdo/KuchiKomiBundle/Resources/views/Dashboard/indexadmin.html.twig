@@ -66,17 +66,17 @@
     </div>
     <div id="tuile" class="col-md-6"> 
         <img src="{{ path('obdo_pChart_kuchikomi') }}" class="col-xs-12"/>
+        <h5><p class="text-right">Kuchikomi</p></h5>
     </div>
    </div> 
-    {#
+   
     <div class="row">
         <div id="tuile" class="col-md-6"> 
-            <img src='<div id="tuile" class="col-md-12"> 
-        <img src="{{ render(controller("obdopChartBundle:KomiStat:distributionOs")) }}" class="col-xs-12"/>   
-      </div>' class="col-xs-12"/>
+            <img src="{{ path('obdo_pChart_komi_distribution') }}" class="col-xs-12"/>
+            <h5><p class="text-right">Distribution des Komis</p></h5>
         </div>
     </div> 
-    #}
+   
 {% endif %}
 
 

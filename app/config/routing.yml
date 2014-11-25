@@ -7,6 +7,10 @@ obdo_kuchi_komi:
     resource: "@obdoKuchiKomiBundle/Resources/config/routing.yml"
     prefix:   /
  
+obdo_chart:
+    resource: "@obdopChartBundle/Resources/config/routing.yml"
+    prefix:   /
+    
 rest_Thanks:
     type:       rest
     resource:   obdo\KuchiKomiRESTBundle\Controller\ThanksController

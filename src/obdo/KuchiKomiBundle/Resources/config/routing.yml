@@ -208,10 +208,6 @@ obdo_pChart_komi:
 obdo_pChart_subscription:
     pattern:  /stat/subscription
     defaults: { _controller: obdopChartBundle:KuchiKomiStat:subscriptionstat }
-    
-obdo_pChart_kuchikomi:
-    pattern:  /stat/kuchikomi
-    defaults: { _controller: obdopChartBundle:KuchiKomiStat:kuchikomistat }
 
 obdo_pChart_thanks:
     pattern:  /stat/thanks
@@ -241,19 +237,3 @@ obdo_pChart_appeltype:
     pattern:  /stat/appel/type/{mode}/{clientid}
     defaults: { _controller: obdopChartBundle:KuchiKomiStat:appeltypestat } 
     
-#Route pour test pChart, à virer ASAP
-#pChart:
-#    pattern: /pChart/
-#    defaults: {_controller: obdopChartBundle:Examples:index }
-#    
-#pChart_index: 
-#    pattern:  /index
-#    defaults: { _controller: obdopChartBundle:Examples:index }
-#
-#pChart_view: 
-#    pattern:  /view/{number}
-#    defaults: { _controller: obdopChartBundle:Examples:view }
-#
-#pChart_example: 
-#    pattern:  /example/{number}
-#    defaults: { _controller: obdopChartBundle:Examples:example }

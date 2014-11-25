@@ -25,7 +25,6 @@ class KomiStatController extends Controller
      */
     public function distributionOsAction() 
     {
-        $Logger = $this->container->get('obdo_services.Logger');
         $graphCreator = $this->container->get('pChartBundle_services.graphCreator');
                                                
         $response = new Response();
@@ -57,7 +56,7 @@ class KomiStatController extends Controller
             $i = $i + 1;
         }
         
-        $chart = $graphCreator->piegraph($dataset,'',$absissa);
+        $chart = $graphCreator->piegraph($dataset,$absissa);
 
         ob_start();
         $chart->autoOutput();

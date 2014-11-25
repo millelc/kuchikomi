@@ -1,0 +1,9 @@
+# **************** KOMI *******************
+obdo_pChart_komi_distribution:
+    pattern:  /stat/komi/distribution
+    defaults: { _controller: obdopChartBundle:KomiStat:distributionOs }
+    
+# **************** KUCHIKOMI *******************    
+obdo_pChart_kuchikomi:
+    pattern:  /stat/kuchikomi
+    defaults: { _controller: obdopChartBundle:KuchiKomiStat:kuchikomistat }
