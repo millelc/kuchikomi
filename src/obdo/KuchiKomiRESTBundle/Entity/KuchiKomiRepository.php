@@ -61,6 +61,59 @@ class KuchiKomiRepository extends EntityRepository
     	return $qb->getQuery()->getResult();
     }
     
+        public function getActiveKuchiKomisForKuchi($nombreParPage,$page,$sort,$kuchi)
+    {
+    	$qb = $this->createQueryBuilder('kuchikomis')
+    	->leftJoin('kuchikomis.kuchi', 'kuchi')
+    	->addSelect('kuchi')
+    	->Where('kuchi = :kuchi')
+    	->setParameter('kuchi', $kuchi )
+    	->andWhere('kuchikomi.active = true');
+        
+        if( $sort == "active_up")
+        {
+            $query->orderBy('kuchikomis.active','DESC');
+        }
+        elseif( $sort == "active_down" )
+        {
+            $query->orderBy('kuchikomis.active','ASC');
+        }
+        elseif( $sort == "title_up" )
+        {
+            $query->orderBy('kuchikomis.title','DESC');
+        }
+        elseif( $sort == "title_down" )
+        {
+            $query->orderBy('kuchikomis.title','ASC');
+        }
+        elseif( $sort == "begin_up" )
+        {
+            $query->orderBy('kuchikomis.$timestampBegin','ASC');
+        }
+        elseif( $sort == "begin_down" )
+        {
+            $query->orderBy('kuchikomis.$timestampBegin','DESC');
+        }
+        elseif( $sort == "end_up" )
+        {
+            $query->orderBy('kuchikomis.$timestampEnd','ASC');
+        }
+        elseif( $sort == "end_down" )
+        {
+            $query->orderBy('kuchikomis.$timestampEnd','DESC');
+        }
+        
+        $query->getquery();
+        // On définit l'article à partir duquel commencer la liste
+        $query->setFirstResult(($page-1) * $nombreParPage)
+                // Ainsi que le nombre d'articles à afficher
+                ->setMaxResults($nombreParPage);
+
+        return new Paginator($query);
+    	        	
+    }
+    
+    
     public function getUpdatedKuchiKomis( $komi )
     {
     	$qb = $this->createQueryBuilder('kuchikomi')
@@ -127,5 +180,56 @@ class KuchiKomiRepository extends EntityRepository
                     ->getSingleScalarResult(); 
     }
     
+    
+    public function getKuchiKomisListByUserId($page,$sort,$userid){
+            $this->createQueryBuilder('kuchikomi')                    
+                    ->leftjoin('kuchikomi.kuchi','kuchi')
+                    ->join('kuchis.users', 'users')
+                    ->where('users.id = :userid')
+                    ->setParameter('userid', $userid);
+            
+        if( $sort == "active_up")
+        {
+            $query->orderBy('kuchikomis.active','DESC');
+        }
+        elseif( $sort == "active_down" )
+        {
+            $query->orderBy('kuchikomis.active','ASC');
+        }
+        elseif( $sort == "name_up" )
+        {
+            $query->orderBy('kuchikomis.name','DESC');
+        }
+        elseif( $sort == "name_down" )
+        {
+            $query->orderBy('kuchikomis.name','ASC');
+        }
+        elseif( $sort == "creation_up" )
+        {
+            $query->orderBy('kuchikomis.timestampCreation','ASC');
+        }
+        elseif( $sort == "creation_down" )
+        {
+            $query->orderBy('kuchikomis.timestampCreation','DESC');
+        }
+        elseif( $sort == "suppression_up" )
+        {
+            $query->orderBy('kuchikomis.timestampSuppression','ASC');
+        }
+        elseif( $sort == "suppression_down" )
+        {
+            $query->orderBy('kuchikomis.timestampSuppression','DESC');
+        }
+        
+        $query->getquery();
+        // On définit l'article à partir duquel commencer la liste
+        $query->setFirstResult(($page-1) * $nombreParPage)
+                // Ainsi que le nombre d'articles à afficher
+                ->setMaxResults($nombreParPage);
+
+        return new Paginator($query);
+    }
+    
+ 
     
 }

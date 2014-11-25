@@ -1,0 +1,73 @@
+{% extends "obdoKuchiKomiBundle::base.html.twig" %}
+
+
+{% block kk_body_KuchiKomiBundle %}
+
+    {# On affiche les messages flash que définissent les contrôleurs du bundle #}
+    {% for key, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ key }}" role="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">Supprimer un KuchiKomiRecurrent</h4>
+            </div>
+            <div class="modal-body">
+              Etes vous sur de vouloir supprimer ce KuchiKomiRecurrent ?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+             <a href="{{ path('obdo_kuchi_komi_kuchikomi_deleterecurrent', {'id': kuchikomirecurrent.id }) }}"><button type="button" class="btn btn-primary">Oui</button></a>
+            </div>
+          </div>
+        </div>
+    </div>
+            
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading"><h3>{{ kuchikomirecurrent.title }}</h3></div>
+    <div class="panel-body">
+          {% if kuchikomirecurrent.photoLink != "" %}
+              <center><img src="{{ asset(kuchikomirecurrent.photoLink) }}" alt="" width=160 height=160></center>
+          {% else %}
+              <center>Pas de photo</center>
+          {% endif %}
+    </div>
+
+    <!-- List group -->
+    <ul class="list-group">
+        <li class="list-group-item">Détail : {{ kuchikomirecurrent.details }}</li>
+        <li class="list-group-item">Date de création : {{ kuchikomirecurrent.dateTimeCreation|date('Y-m-d H:i:s') }}</li>
+        {% if kuchikomirecurrent.active != 1 %}
+            <li class="list-group-item">Inactif</li>
+            <li class="list-group-item">Date de suppression : {{ kuchikomirecurrent.dateTimeSuppression|date('Y-m-d H:i:s') }}</li>
+        {% else %}
+            <li class="list-group-item">Actif</li>
+        {% endif %}
+        <li class="list-group-item">Date de début : {{ kuchikomirecurrent.beginRecurrence|date('Y-m-d') }}</li>
+        <li class="list-group-item">Date de fin : {{ kuchikomirecurrent.endRecurrence|date('Y-m-d') }}</li> 
+        <li class="list-group-item">Kuchi : <a href="{{ path('obdo_kuchi_komi_kuchi_view', {'id': kuchikomirecurrent.kuchi.id}) }}">{{kuchikomirecurrent.kuchi.name}}</a></li>
+        <li class="list-group-item">KuchiKomi(s) déjà envoyé(s) : {{kuchikomirecurrent.kuchikomis|length}}</li>
+
+
+        {% if kuchikomirecurrent.active %}
+            <li class="list-group-item">
+                <a class="btn btn-default" href="{{ path('obdo_kuchi_komi_kuchikomi_updaterecurrent', {'id': kuchikomirecurrent.id}) }}">
+                    <span class="glyphicon glyphicon-pencil"></span> Modifier</a>
+                <a class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                            <span class="glyphicon glyphicon-trash"></span> Supprimer</a>
+            </li>
+        {% endif %}
+    </ul>            
+</div>
+
+
+{% endblock %}
