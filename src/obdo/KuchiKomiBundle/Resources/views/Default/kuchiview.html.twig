@@ -123,8 +123,10 @@
           <tr>
             <th>Etat</th>
             <th>Titre</th>
+            <th>Création</th>            
             <th>Début</th>
             <th>Fin</th>
+            <th>Suppression</th>
             <th>Fréquence</th>
          </tr>
         </thead>
@@ -138,15 +140,21 @@
             {% endif %}
             
             <td><a href="{{ path('obdo_kuchi_komi_kuchikomi_viewrecurrent', {'id': kuchikomirecurrent.id}) }}">{{kuchikomirecurrent.title}}</a></td>
-
+            
+            <td>{{kuchikomirecurrent.dateTimeCreation|date('d-m-Y')}}</td>
+            
             <td>{{kuchikomirecurrent.beginRecurrence|date('d-m-Y')}}</td>
             
-            <td>{{kuchikomirecurrent.endRecurrence|date('d-m-Y')}}</td>                        
+            <td>{{kuchikomirecurrent.endRecurrence|date('d-m-Y')}}</td>
+            
+            <td>{{kuchikomirecurrent.dateTimeSuppression|date('d-m-Y')}}</td>
             
             {% if kuchikomirecurrent.recurrence is same as ('monthly') %}
                 <td>mois</td>
             {% elseif  kuchikomirecurrent.recurrence is same as ('weekly')  %}
                 <td>semaine</td>
+            {% elseif  kuchikomirecurrent.recurrence is same as ('unique')  %}
+                <td>unique</td>
             {% else %}
                 <td>année</td>
             {% endif %}

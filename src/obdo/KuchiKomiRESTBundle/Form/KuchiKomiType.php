@@ -69,8 +69,7 @@ class KuchiKomiType extends AbstractType
     {
 
         $resolver->setDefaults(array(
-            'data_class' => 'obdo\KuchiKomiRESTBundle\Entity\KuchiKomi',            
-            'required'=>false,
+            'data_class' => 'obdo\KuchiKomiRESTBundle\Entity\KuchiKomi',                        
             'idkuchi'=>' '
              )); 
         

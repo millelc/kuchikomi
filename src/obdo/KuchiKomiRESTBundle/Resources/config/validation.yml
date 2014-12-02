@@ -19,3 +19,14 @@ obdo\KuchiKomiRESTBundle\Entity\KuchiKomi:
         photoimg:
             - File:
                 mimeTypes: [image/jpg, image/jpeg]
+    constraints:
+        - obdo\ServicesBundle\Services\Constraints\DateRange: ~
+                
+
+obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent:
+    properties:
+        photoimg:
+            - File:
+                mimeTypes: [image/jpg, image/jpeg]
+    constraints:
+        - obdo\ServicesBundle\Services\Constraints\DateRange: ~

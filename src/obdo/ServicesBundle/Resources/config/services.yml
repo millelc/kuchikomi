@@ -1,7 +1,12 @@
-parameters:
+parameters:   
 #    obdo_services.example.class: obdo\ServicesBundle\Example
 
 services:
+    daterange.validator:
+        class: obdo\ServicesBundle\Services\Constraints\DateRangeValidator
+        tags:
+            - { name: validator.constraint_validator, alias: daterange_validator }
+            
     citykomi.async_events.dispatcher:
         class: obdo\ServicesBundle\Services\Event\CitykomiAsynchronousEventDispatcher
         arguments:

@@ -28,7 +28,7 @@
 </div>
 {%endif%}    
  
-    <form method="post" {{ form_enctype(form) }}>
+    <form method="post" name="form" onsubmit="return validateForm()" {{ form_enctype(form) }}  >
         {# Les erreurs générales du formulaire. #}
         {{ form_errors(form) }}
         <br />
@@ -96,7 +96,7 @@
                 {%else%}
                 <a class="btn btn-default" href="{{path('obdo_kuchi_komi_homepage')}}">Annuler</a> 
                 {%endif%} 
-                <input type="submit" class="btn btn-primary" />
+                <input type="submit" class="btn btn-primary" value="Envoyer"/>
             </div>
         </div>              
     </form>

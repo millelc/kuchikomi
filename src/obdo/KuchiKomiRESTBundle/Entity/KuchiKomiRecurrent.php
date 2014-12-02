@@ -73,7 +73,7 @@ class KuchiKomiRecurrent
      *
      * @ORM\Column(name="recurrence", type="string")
      *    
-     * weekly , monthly, yearly
+     * weekly , monthly, yearly, unique
      */
     private $recurrence;
     
@@ -478,7 +478,7 @@ class KuchiKomiRecurrent
      *
      * @return boolean 
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
     }

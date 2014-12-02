@@ -38,8 +38,8 @@ class KuchiKomiController extends Controller {
             }
 
     return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array('kuchikomi' => $kuchikomi));
+            }
         }
-    }
     
 //    public function changeFormAction(\Symfony\Component\HttpFoundation\Request $request) {
 //        $data = $request->request->all();
@@ -212,7 +212,7 @@ class KuchiKomiController extends Controller {
 
                             return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
                                                 'kuchikomi' => $kuchikomi,
-                            ));                                                        
+                            ));                    
                         }
 
                     }
@@ -250,38 +250,30 @@ class KuchiKomiController extends Controller {
         $error = FALSE;
         
         // et on prepare le chemin du repertoire pour l'image
-        
-        $photodir = $kuchikomi->getKuchi()->getPhotoKuchiKomiLink();
-        
+        if($kuchikomi instanceof KuchiKomiRecurrent){
+            $photodir= $this->container->getParameter('path_kuchikomirecurrent_photo').$kuchikomi->getKuchi()->getId().'/';    
+
+        } else {
+            $photodir = $kuchikomi->getKuchi()->getPhotoKuchiKomiLink();
+        }
         
         if ($kuchikomi->getDetails() == null)
         {
             $kuchikomi->setDetails("");
         }
 
-        // on verifie que la date de début est inférieure ou  égale à la date de fin
-//        if ($kuchikomi->getTimestampEndMs() < $kuchikomi->getTimestampBeginMs())
-//        {
-//            $error = TRUE;
-//            $this->get('session')->getFlashBag()->add('danger', 'La date de fin doit être supérieure à la date de début ...');
-//
-//        }
-        // on verifie si il y a une photo alors detail obligatoire
         if ($kuchikomi->getPhotoimg() != null) 
         {
             if ($kuchikomi->getDetails() == null || $kuchikomi->getDetails() == '') 
             {
                 $error = TRUE;
                 $this->get('session')->getFlashBag()->add('danger', 'Pour charger une photo, un message doit être rédigé ...');
-            }
+            }        
         }
 
         if (!$error) 
         {
-            if($kuchikomi instanceof KuchiKomiRecurrent){
-            $photodir= $this->container->getParameter('path_kuchikomirecurrent_photo').$kuchikomi->getKuchi()->getId().'/';    
-                
-            }
+
             $kuchikomi->setActive(true);
             
             
@@ -297,6 +289,7 @@ class KuchiKomiController extends Controller {
                     $this->deletePhoto($kuchikomi, $oldKuchikomiPhoto);
                     
                     $photoname = $this->container->get('obdo_services.Name_photo')->newName();
+                    
                     $photo = $this->container->get('obdo_services.Picture_uploader')
                             ->upload($kuchikomi->getPhotoimg(), $photodir, $photoname);
 
@@ -407,7 +400,12 @@ class KuchiKomiController extends Controller {
         // on cree l'entite vide
         $form = $this->createForm(new KuchiKomiRecurrentType($iduser), $kuchikomiRecurr,array('idkuchi'=>$kuchikomiRecurr->getKuchi()));
         
-        
+        $securityContext = $this->get('security.context');
+        if (false == $securityContext->isGranted('EDIT', $kuchikomiRecurr->getKuchi()))
+            {
+            throw new AccessDeniedException();
+            }
+            
          $request=  $this->get('request');
          
          if($request->getMethod()=='POST'){
@@ -417,9 +415,10 @@ class KuchiKomiController extends Controller {
                  $error = $this->processKuchikomi($kuchikomiRecurr,$kuchikomiRecurr->getPhotoLink());                 
                     if (!$error) 
                     {
-                        // on logge l'update
+                        $kuchikomiRecurr->setDateTimeLastUpdate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+                        $this->getDoctrine()->getManager()->flush();
+                        
                         $Logger->Info("[KuchiKomiRecurrent] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomiRecurr->getTitle() . " updated");
-
                                                 
                         $this->get('session')->getFlashBag()->add('success', 'Le kuchikomi récurrent a été mis à jour avec succès !');
                         

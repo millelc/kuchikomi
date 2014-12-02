@@ -15,19 +15,22 @@
     <div class="col-md-1"></div>
     <div class="col-sm-3">
         <div class="panel panel-heading">
-            <h5 class="panel-title">Message récurrent</h5>
+            <h3 class="panel-title"><strong>Message récurrent</strong></h3>
         </div>
     </div>
 </div>
-<br />
-    <form method="post" {{ form_enctype(form) }}>
+    <form role ="form" method="post" id="form_kuchikomirecurrent" {{ form_enctype(form) }}>
         {# Les erreurs générales du formulaire. #}
         {{ form_errors(form) }}
         <br />
         <div class="row">
             <div class="col-md-1"></div>
+            <div class="col-md-3"><h4>Emetteur :</h4></div>            
+        </div>    
+        <div class="row">
+            <div class="col-md-1"></div>
             <div class="col-md-3">
-                {{ form_label(form.kuchi, "Emetteur") }}<br />
+                {{ form_label(form.kuchi, " ") }}<br />
                 {{ form_errors(form.kuchi) }}
                 {{ form_widget(form.kuchi) }}
             </div>
@@ -35,8 +38,9 @@
         <br />
         <div class="row">
             <div class="col-md-1"></div>
-            <div class="col-md-3"><h7>Premier Message :</h7></div>            
-        </div>
+            <div class="col-md-3"><h4>Message :</h4></div>            
+        </div>        
+        <br />        
         <div class="row">   
             <div class="col-md-1"></div>
             <div class="col-md-2">                
@@ -49,7 +53,9 @@
                 {{ form_errors(form.endFirstTime) }}
                 {{ form_widget(form.endFirstTime) }}                  
             </div>
+            <div class="col-md-4"><label class="label label-info" style='font-size:small'>l'heure d'envoi des messages enregistrés est 12h00</label></div> 
         </div>
+        <br /> 
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-2">
@@ -64,41 +70,13 @@
             </div> 
         </div>
         <br />
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3">                
-                {{ form_label(form.recurrence) }}<br />
-                {{ form_errors(form.recurrence) }}
-                {{ form_widget(form.recurrence) }}  
-                
-            </div> 
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-1"></div>   
-            <div class="col-md-3">
-                {{ form_label(form.endRecurrence, "Jusqu'au :") }}<br />
-                {{ form_errors(form.endRecurrence) }}
-                {{ form_widget(form.endRecurrence) }}
-        </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                {{ form_label(form.sendDay, "Jour d'envoi du message") }}<br />
-                {{ form_errors(form.sendDay) }}
-                {{ form_widget(form.sendDay) }}
-            </div>
-        </div>
-        <br/>
-        <div class="row">
+                <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-3">
                 {{ form_label(form.title, "Titre (40 caractères MAX)") }}<br />
                 {{ form_errors(form.title) }}
                 {{ form_widget(form.title) }}
-            </div>
+            </div>    
         </div>
         <br />
         <div class="row">
@@ -108,8 +86,44 @@
                 {{ form_errors(form.details) }}
                 {{ form_widget(form.details) }}
             </div>
-        </div>
+        </div>      
         <br/>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-3"><h4>Envoyer ce message :</h4></div>            
+     </div>
+        <div class="row">
+        <div class="col-md-1"></div>                                        
+            <div class="col-md-3" >                
+                {{ form_label(form.recurrence," ")}}<br />
+                {{ form_errors(form.recurrence) }}
+                {{ form_widget(form.recurrence) }}  
+                
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                {{ form_label(form.sendDay," ") }}<br />
+                {{ form_errors(form.sendDay) }}
+               <strong> J - </strong> {{ form_widget(form.sendDay) }}
+            </div>
+            <br />
+             <div class="ici"></div>                              
+             <br />
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-1"></div>   
+            <div class="col-md-3" >
+                <div class="recurrence">
+                {{ form_label(form.endRecurrence, "Jusqu'au :") }}<br />
+                {{ form_errors(form.endRecurrence) }}
+                {{ form_widget(form.endRecurrence) }}
+                </div>
+        </div>
+        </div>
+        <br />
         <div class="row">
             <div class="col-md-1"></div>
             {% if kuchikomirecurrent is defined %}
@@ -148,7 +162,7 @@
             <div class="col-md-1"></div>
             <div class="col-md-11">
                 <a class="btn btn-default" href="{{path('obdo_kuchi_komi_homepage')}}">Annuler</a>                  
-                <input type="submit" class="btn btn-primary" />
+                <input type="submit" class="btn btn-primary" value="Enregistrer">
             </div>
         </div>               
     </form>
