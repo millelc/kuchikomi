@@ -20,6 +20,7 @@ parameters:
     path_kuchikomi_photo: images/kuchikomi/
     path_kuchi_photo: images/kuchi/
     path_kuchigroup_photo: images/kuchigroup/
+    path_kuchikomirecurrent_photo : images/kuchikomirecurrent/
     CityKomiGroupId: 1
     max_photo_dir: 100
     alert_photo_dir: 60

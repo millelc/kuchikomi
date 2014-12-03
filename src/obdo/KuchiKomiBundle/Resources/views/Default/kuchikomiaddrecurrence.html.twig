@@ -52,8 +52,7 @@
                 {{ form_label(form.endFirstTime, "Au") }}<br />
                 {{ form_errors(form.endFirstTime) }}
                 {{ form_widget(form.endFirstTime) }}                  
-            </div>
-            <div class="col-md-4"><label class="label label-info" style='font-size:small'>l'heure d'envoi des messages enregistrés est 12h00</label></div> 
+            </div>            
         </div>
         <br /> 
         <div class="row">
@@ -88,40 +87,43 @@
             </div>
         </div>      
         <br/>
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-3"><h4>Envoyer ce message :</h4></div>            
-     </div>
         <div class="row">
         <div class="col-md-1"></div>                                        
-            <div class="col-md-3" >                
-                {{ form_label(form.recurrence," ")}}<br />
+            <div class="col-md-2" >                
+                {{ form_label(form.recurrence,"Envoyer ce message : ")}}<br />
                 {{ form_errors(form.recurrence) }}
-                {{ form_widget(form.recurrence) }}  
-                
-            </div> 
+                {{ form_widget(form.recurrence) }}                  
+            </div>
+            <div class="col-md-2" >
+            <div class="recurrence"></div>   
+            </div>
+            <div class="col-md-2">
+                <label class="label label-info" style='font-size:small'>INFO : l'heure d'envoi des messages enregistrés est 12h00</label>
+            </div>             
         </div>
+        <br />    
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-3">
-                {{ form_label(form.sendDay," ") }}<br />
+                {{ form_label(form.sendDay, "Avant le début de l'évènement") }}<br />
                 {{ form_errors(form.sendDay) }}
-               <strong> J - </strong> {{ form_widget(form.sendDay) }}
+                <strong> J - </strong> {{ form_widget(form.sendDay) }} &nbsp <strong>Premier envoi :</strong>
             </div>
             <br />
-             <div class="ici"></div>                              
+            <div class="col-md-3">
+             <div class="ici"></div> 
+             </div>
              <br />
         </div>
         <br />
         <div class="row">
             <div class="col-md-1"></div>   
-            <div class="col-md-3" >
-                <div class="recurrence">
+            <div class="col-md-4" >                
                 {{ form_label(form.endRecurrence, "Jusqu'au :") }}<br />
                 {{ form_errors(form.endRecurrence) }}
                 {{ form_widget(form.endRecurrence) }}
-                </div>
-        </div>
+               
+            </div>
         </div>
         <br />
         <div class="row">
@@ -167,7 +169,9 @@
         </div>               
     </form>
 
-
+    {% block javascripts2 %}
+    <script type="text/javascript" src="{{ asset('js/kuchikomiform.js') }}"></script>                
+  {% endblock %}              
 {% endblock %}
         
 

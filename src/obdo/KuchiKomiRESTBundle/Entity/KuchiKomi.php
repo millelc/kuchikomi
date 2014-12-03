@@ -120,7 +120,7 @@ class KuchiKomi
      *
      * @ORM\Column(name="origin", type="integer")
      * 
-     * origine du kuchikomi 0 = androïd, 1 = iOS, 2 = web
+     * origine du kuchikomi 0 = androïd, 1 = iOS, 2 = web, 3 = robot
      */
     private $origin;
     

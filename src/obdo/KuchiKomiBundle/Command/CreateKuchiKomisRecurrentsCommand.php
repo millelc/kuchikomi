@@ -50,62 +50,77 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         $count=0;
         
         foreach ($kuchikomirecurrents as $kuchikomirecurrent ){
-            $recurrence = $kuchikomirecurrent->getRecurrence();                        
-            $begin = $kuchikomirecurrent->getBeginRecurrence();
-            $end = $kuchikomirecurrent->getEndRecurrence();           
-            if($kuchikomirecurrent->getSendDay()>0)  {
-                $inter= new \DateInterval('P'.$kuchikomirecurrent->getSendDay().'D');
-                $now=$now->add($inter);                             
-            }   
-            $jour = $now->format('w');
-            $jourmois = $now->format('d');               
-            
-            if($begin <= $now && $now <= $end){                    
-                if($recurrence =='weekly'){                         
-                    if($jour==$begin->format('w')){
-                        $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin);
-                        $count= $count+1;
-                        
-                    }                                        
-                }
-                if($recurrence =='monthly'){                             
-                    if($jourmois==$begin->format('d')){
-                        $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin );
-                        $count= $count+1;
-                    }
-                }else{
-                    
-                }
+            if($kuchikomirecurrent->isActive()){
+                $recurrence = $kuchikomirecurrent->getRecurrence();                        
+                $begin = $kuchikomirecurrent->getBeginRecurrence();
+                $end = $kuchikomirecurrent->getEndRecurrence();    
                 
-            }
-            $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;
+                if($kuchikomirecurrent->getSendDay()>0) 
+                {
+                    $inter= new \DateInterval('P'.$kuchikomirecurrent->getSendDay().'D');
+                    $now=$now->add($inter);                             
+                }   
+                $jour = $now->format('w');
+                $jourmois = $now->format('d');  
+                $year = $now->format('Y');
+                $mois = $now->format('m');
+
+
+                if($begin <= $now && $now <= $end){                    
+                    if($recurrence =='weekly'){                         
+                        if($jour==$begin->format('w')){
+                            $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin);
+                            $count= $count+1;
+                            $output->write('$kuchikomi '.$kuchikomi->getId().' hebdo créé');
+                        }                                        
+                    }
+                    if($recurrence =='monthly'){                             
+                        if($jourmois==$begin->format('d')){
+                            $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin );
+                            $output->write('$kuchikomi '.$kuchikomi->getId().' mensuel créé');
+                            $count= $count+1;
+                        }
+                    }
+                    if($recurrence =='unique'){
+                        if($jour==$begin->format('w') && $mois==$begin->format('m') && $year==$begin->format('Y')){
+                            $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin,false );                        
+                            $logger->Info('Message pré-enregistré n°'.$kuchikomirecurrent->getId().' a bien été envoyé');
+                            $output->write('$kuchikomi '.$kuchikomi->getId().' unique créé');
+                        }   
+                    }
+                }             
+                $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;
+
         }
-        $logger->Info($count.' Kuchikomis créés');                
-        
+        }
+        $logger->Info($count.' Kuchikomis créés');
     }
     /**
      * Crée le kuchikomi en copiant les éléments issus du KuchiKomiRecurrent en parametre
      * 
-     * @param type $kuchikomirecurrent
-     * @param type $now
-     * @param type $dureeheure
-     * @param type $dureejour
+     * @param KuchiKomiRecurrent $kuchikomirecurrent
+     * @param date $now
+     * @param date $begin 
+     * @param boolean $actif true par defaut
+     * @return $kuchikomi de Type KuchiKomi
      */
-    public function createRepeatedKuchiKomi($kuchikomirecurrent,$now,$begin) {
+    public function createRepeatedKuchiKomi($kuchikomirecurrent,$now,$begin,$actif=true) 
+        {
         $endEve = $kuchikomirecurrent->getEndFirstTime();
         $timeBegin = $kuchikomirecurrent->getBeginTime();
         $dureeheure = $timeBegin->diff($kuchikomirecurrent->getEndTime());            
-        $dureejour = $endEve->diff($begin); 
+        $dureejour = $begin->diff($endEve); 
         $kuchikomi= new KuchiKomi();        
         $kuchikomi->setTitle($kuchikomirecurrent->getTitle());
         $kuchikomi->setDetails($kuchikomirecurrent->getDetails()); 
-        
-        if($kuchikomirecurrent->getPhotoLink()<>''){           
-        $photoname = $this->getContainer()->get('obdo_services.Name_photo')->newName();
-        $newPhotolink = $kuchikomirecurrent->getKuchi()->getPhotoKuchiKomiLink().'/'.$photoname; 
-        $this->stream_copy('../kuchikomi/web/'.$kuchikomirecurrent->getPhotoLink(), '../kuchikomi/web/'.$newPhotolink);
-        $kuchikomi->setPhotoLink($newPhotolink);
-        }
+        $kuchikomi->setOrigin(3);
+        if($kuchikomirecurrent->getPhotoLink()<>'')
+            {           
+            $photoname = $this->getContainer()->get('obdo_services.Name_photo')->newName();
+            $newPhotolink = $kuchikomirecurrent->getKuchi()->getPhotoKuchiKomiLink().'/'.$photoname; 
+            $this->stream_copy('../kuchikomi/web/'.$kuchikomirecurrent->getPhotoLink(), '../kuchikomi/web/'.$newPhotolink);
+            $kuchikomi->setPhotoLink($newPhotolink);
+            }
                 
         $date = new \DateTime();
         $datefin = new \DateTime();
@@ -119,6 +134,10 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         $kuchikomi->setKuchi($kuchikomirecurrent->getKuchi());        
         $kuchikomi->setKuchikomirecurrent($kuchikomirecurrent);        
         $this->notifier->sendKuchikomiNotification($kuchikomi->getKuchi(), $kuchikomi, "2");
+        if($actif==false){
+            $kuchikomirecurrent->setActive(false);
+            $this->em->persist($kuchikomirecurrent);
+        }
         $this->em->persist($kuchikomi);               
         $this->em->flush();     
         
@@ -131,6 +150,7 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         {
             $this->AclManager->addAcl($kuchikomi, $user);
         }
+        return $kuchikomi;
     }
 
     //trouver sur http://php.net/manual/en/function.copy.php

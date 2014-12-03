@@ -51,15 +51,17 @@ class KuchiKomiRecurrentType extends AbstractType
             ->add('title','text', array('attr' => array('style' => 'width:100%', 'maxlength' => 40)))
             ->add('details','textarea', array('required' => false,'attr' => array('style' => 'width:100%', 'maxlength' => 300)))
             ->add('photoimg','file', array('required' => false))
-            ->add('recurrence','choice', array('choices'=>(array('weekly'=>'Chaque semaine ','monthly'=>' Chaque mois ','yearly'=>'Chaque année','unique'=>'Une seule fois')),
-                    'required'=> true, 'multiple' => false))
+            ->add('recurrence','choice', array('choices'=>(array('weekly'=>'Chaque semaine','monthly'=>'Chaque mois','yearly'=>'Chaque année','unique'=>'Une seule fois')),
+                    'required'=> true, 'multiple' => false, 'label' => false, 'empty_value'=>'Choisissez la fréquence'))
             ->add('beginRecurrence','date')
             ->add('endRecurrence','date')
-            ->add('beginTime','time', array('widget'=>'choice','input'=>'datetime', 'minutes'=>array(00,15,30,45)))
-            ->add('endTime','time', array('widget'=>'choice','input'=>'datetime', 'minutes'=>array(00,15,30,45)))
+            ->add('beginTime','time', array('widget'=>'choice','input'=>'datetime', 
+                'minutes'=>array(00,15,30,45),'label' => false))
+            ->add('endTime','time', array('widget'=>'choice','input'=>'datetime', 
+                'minutes'=>array(00,15,30,45), 'label' => false))
             ->add('endFirstTime','date')
             ->add('sendDay','choice', array('choices'=>array(range(0,30)),'empty_value'=>'Délai avant envoi'
-                ,'required'=>true, 'multiple'=>false));
+                ,'required'=>true, 'multiple'=>false, 'label' => false));
                 
                                                       
     }
