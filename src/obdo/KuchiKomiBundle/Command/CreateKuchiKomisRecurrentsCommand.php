@@ -37,23 +37,21 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         $logger = $this->getContainer()->get('obdo_services.Logger');
         $this->AclManager= $this->getContainer()->get('obdo_services.AclManager');
         $this->path = $this->getContainer()->getParameter('path_kuchikomi_photo');
-        
-        
-        $repositoryKuchiKomi = $this->em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomi');
-        $repositoryKuchi = $this->em->getRepository('obdoKuchiKomiRESTBundle:Kuchi');
+               
         
         $repositoryKuchiKomiRecu = $this->em->getRepository('obdoKuchiKomiRESTBundle:KuchiKomiRecurrent');
         
         
         $kuchikomirecurrents = $repositoryKuchiKomiRecu->findBy(array('active'=> true));
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;        
         $count=0;
         
         foreach ($kuchikomirecurrents as $kuchikomirecurrent ){
-            if($kuchikomirecurrent->isActive()){
                 $recurrence = $kuchikomirecurrent->getRecurrence();                        
                 $begin = $kuchikomirecurrent->getBeginRecurrence();
                 $end = $kuchikomirecurrent->getEndRecurrence();    
+                //$end->setTime('23','59','59');
+                
                 
                 if($kuchikomirecurrent->getSendDay()>0) 
                 {
@@ -66,33 +64,59 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
                 $mois = $now->format('m');
 
 
-                if($begin <= $now && $now <= $end){                    
-                    if($recurrence =='weekly'){                         
-                        if($jour==$begin->format('w')){
-                            $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin);
-                            $count= $count+1;
-                            $output->write('$kuchikomi '.$kuchikomi->getId().' hebdo créé');
-                        }                                        
-                    }
-                    if($recurrence =='monthly'){                             
-                        if($jourmois==$begin->format('d')){
-                            $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin );
-                            $output->write('$kuchikomi '.$kuchikomi->getId().' mensuel créé');
-                            $count= $count+1;
+                if($begin <= $now && $now <= $end){
+                    switch($recurrence)
+                    {                        
+                        case "weekly":
+                            {                         
+                            if($jour==$begin->format('w'))
+                                {
+                                $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin,true);
+                                $count= $count+1;
+                                $output->write('$kuchikomi '.$kuchikomi->getId().' hebdo créé');
+                                }
+                            break;
+                            }
+                        case "monthly":
+                            {                             
+                            if($jourmois==$begin->format('d'))
+                                {
+                                $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin,true );
+                                $logger->Info('$kuchikomi '.$kuchikomi->getId().' mensuel créé');
+                                $count= $count+1;
+                                }
+                            break;
+                            }
+                        case "unique":
+                            {
+                            if($jour==$begin->format('w') && $mois==$begin->format('m') && $year==$begin->format('Y'))
+                                {
+                                $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin,false );                        
+                                $logger->Info('Message pré-enregistré n°'.$kuchikomirecurrent->getId().' a bien été envoyé');
+                                $logger->Info('$kuchikomi '.$kuchikomi->getId().' unique créé');
+                                }  
+                            break;
+                            }
+                        case "yearly":
+                        {
+                            if($jour==$begin->format('w') && $mois==$begin->format('m')){
+                                $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin,true);
+                                $count= $count+1;
+                                $logger->Info('$kuchikomi '.$kuchikomi->getId().' annuel créé');
+                            }
+                            break;
                         }
                     }
-                    if($recurrence =='unique'){
-                        if($jour==$begin->format('w') && $mois==$begin->format('m') && $year==$begin->format('Y')){
-                            $kuchikomi = $this->createRepeatedKuchiKomi($kuchikomirecurrent, $now,$begin,false );                        
-                            $logger->Info('Message pré-enregistré n°'.$kuchikomirecurrent->getId().' a bien été envoyé');
-                            $output->write('$kuchikomi '.$kuchikomi->getId().' unique créé');
-                        }   
+                }
+                elseif($now > $end)
+                    {
+                    $kuchikomirecurrent->setActive(false);
+                    $this->em->persist($kuchikomirecurrent);               
+                    $this->em->flush();
                     }
-                }             
                 $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;
-
-        }
-        }
+            }
+        
         $logger->Info($count.' Kuchikomis créés');
     }
     /**
@@ -134,22 +158,22 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         $kuchikomi->setKuchi($kuchikomirecurrent->getKuchi());        
         $kuchikomi->setKuchikomirecurrent($kuchikomirecurrent);        
         $this->notifier->sendKuchikomiNotification($kuchikomi->getKuchi(), $kuchikomi, "2");
-        if($actif==false){
+        if($actif==false)
+            {
             $kuchikomirecurrent->setActive(false);
             $this->em->persist($kuchikomirecurrent);
-        }
+            }
         $this->em->persist($kuchikomi);               
         $this->em->flush();     
         
         foreach($kuchikomi->getKuchi()->getUsers() as $user)
-        {            
-           $this->AclManager->addAcl($kuchikomi, $user);
-           
-        }
+            {            
+           $this->AclManager->addAcl($kuchikomi, $user);           
+            }
         foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
-        {
+            {
             $this->AclManager->addAcl($kuchikomi, $user);
-        }
+            }
         return $kuchikomi;
     }
 
@@ -161,7 +185,7 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
      * 
      * permet de copier et créer le document destinataire
      */
-        function stream_copy($src, $dest) 
+     public  function stream_copy($src, $dest) 
     { 
         $fsrc = fopen($src,'r'); 
         $fdest = fopen($dest,'w+'); 

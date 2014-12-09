@@ -29,16 +29,7 @@ class KuchiKomiType extends AbstractType
         $id = $this->iduser;
         $arrayEntity =  array();                
                 
-        if($options['idkuchi']!=' '){
-            $idkuchi = $options['idkuchi'];
-            $arrayEntity = array('class'=>'obdo\KuchiKomiRESTBundle\Entity\Kuchi',                                             
-            'property'=>'name',
-            'label'=>'Emetteur',
-            'query_builder'=> function(KuchiRepository $kr) use ($idkuchi){
-                return $kr->getKuchiQuery($idkuchi);
-            });
-
-        } else {
+        if($options['kuchi']!='Oui'){
             $arrayEntity = array('class'=>'obdo\KuchiKomiRESTBundle\Entity\Kuchi',                                             
             'property'=>'name',
             'query_builder'=> function(KuchiRepository $kr) use ($id){
@@ -46,19 +37,19 @@ class KuchiKomiType extends AbstractType
             'multiple'=>false,
             'expanded'=>false,
             'label'=>'Emetteur',
-            'empty_value'=> "Choisir l'émetteur");
+            'empty_value'=> "Choisir l'émetteur"); 
+            $builder
+            ->add('kuchi','entity', $arrayEntity);
         }
         $builder
-            ->add('kuchi','entity', $arrayEntity)
             ->add('title','text', array('attr' => array('style' => 'width:100%', 'maxlength' => 40)))
-            ->add('timestampBegin','datetime')
-            ->add('timestampEnd','datetime')
-//            ->addEventListener(FormEvents::PRE_SET_DATA, array($this,'onPreSetData'))    
-           // ->add('source')
+            ->add('timestampBegin','datetime', array('minutes'=>array(00,15,30,45)))
+            ->add('timestampEnd','datetime', array('minutes'=>array(00,15,30,45)))
             ->add('details','textarea', array('required' => false,'attr' => array('style' => 'width:100%', 'maxlength' => 300)))
-            ->add('photoimg','file', array('required' => false,))
-        ;
-                }
+            ->add('photoimg','file', array('required' => false,
+                ));
+        
+    }
     
             
     
@@ -70,7 +61,7 @@ class KuchiKomiType extends AbstractType
 
         $resolver->setDefaults(array(
             'data_class' => 'obdo\KuchiKomiRESTBundle\Entity\KuchiKomi',                        
-            'idkuchi'=>' '
+            'kuchi'=>' '
              )); 
         
     }

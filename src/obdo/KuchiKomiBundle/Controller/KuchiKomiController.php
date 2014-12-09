@@ -74,11 +74,12 @@ class KuchiKomiController extends Controller {
         $iduser = $securityContext->getToken()->getUser()->getId();        
         $kuchikomi = new KuchiKomi();
         
-        if($id==='0'){           
+        if($id==='0'){            
             $form = $this->createForm(new KuchiKomiType($iduser), $kuchikomi);
             } 
         else{
-            $option = array('idkuchi'=>$id);                   
+            $option = array('kuchi'=>'Oui'); 
+            $kuchikomi->setKuchi($kuchi);
             $form = $this->createForm(new KuchiKomiType($iduser), $kuchikomi, $option);
                 }
         // On récupère la requête
@@ -252,7 +253,10 @@ class KuchiKomiController extends Controller {
         // et on prepare le chemin du repertoire pour l'image
         if($kuchikomi instanceof KuchiKomiRecurrent){
             $photodir= $this->container->getParameter('path_kuchikomirecurrent_photo').$kuchikomi->getKuchi()->getId().'/';    
-
+            
+            if($kuchikomi->getRecurrence()=='unique'){
+                $kuchikomi->setEndRecurrence($kuchikomi->getEndFirstTime());
+            }
         } else {
             $photodir = $kuchikomi->getKuchi()->getPhotoKuchiKomiLink();
         }
@@ -469,6 +473,7 @@ class KuchiKomiController extends Controller {
 
         }
     }
+    
     
 
 }

@@ -19,7 +19,7 @@
         </div>
     </div>
 </div>
-    <form role ="form" method="post" id="form_kuchikomirecurrent" {{ form_enctype(form) }}>
+    <form method="post" {{ form_enctype(form) }}>
         {# Les erreurs générales du formulaire. #}
         {{ form_errors(form) }}
         <br />
@@ -90,16 +90,13 @@
         <div class="row">
         <div class="col-md-1"></div>                                        
             <div class="col-md-2" >                
-                {{ form_label(form.recurrence,"Envoyer ce message : ")}}<br />
+                {{ form_label(form.recurrence,"L'évènement aura lieu : ")}}<br />
                 {{ form_errors(form.recurrence) }}
                 {{ form_widget(form.recurrence) }}                  
             </div>
             <div class="col-md-2" >
             <div class="recurrence"></div>   
-            </div>
-            <div class="col-md-2">
-                <label class="label label-info" style='font-size:small'>INFO : l'heure d'envoi des messages enregistrés est 12h00</label>
-            </div>             
+            </div>            
         </div>
         <br />    
         <div class="row">
@@ -118,11 +115,12 @@
         <br />
         <div class="row">
             <div class="col-md-1"></div>   
-            <div class="col-md-4" >                
+            <div class="col-md-4" >      
+                <div class="finrecurrence">
                 {{ form_label(form.endRecurrence, "Jusqu'au :") }}<br />
                 {{ form_errors(form.endRecurrence) }}
                 {{ form_widget(form.endRecurrence) }}
-               
+                </div>
             </div>
         </div>
         <br />
@@ -168,10 +166,11 @@
             </div>
         </div>               
     </form>
-
-    {% block javascripts2 %}
-    <script type="text/javascript" src="{{ asset('js/kuchikomiform.js') }}"></script>                
-  {% endblock %}              
+              
 {% endblock %}
         
 
+    {% block javascripts %}
+        {{ parent() }}
+        <script type="text/javascript" src="{{ asset('js/kuchikomiform.js') }}"></script>                
+    {% endblock %}

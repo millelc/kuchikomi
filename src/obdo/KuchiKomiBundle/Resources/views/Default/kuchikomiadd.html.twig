@@ -11,14 +11,6 @@
         </div>
     {% endfor %}
 {% endfor %}
-<div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-sm-3">
-        <div class="panel panel-heading">
-            <h5 class="panel-title">Message instantané</h5>
-        </div>
-    </div>
-</div>
 
 {%if Kuchi is not null%}
 <div class="panel panel-default">
@@ -27,19 +19,29 @@
     </div>
 </div>
 {%endif%}    
- 
-    <form method="post" name="form" onsubmit="return validateForm()" {{ form_enctype(form) }}  >
-        {# Les erreurs générales du formulaire. #}
+
+    <form method="post" {{ form_enctype(form) }}  >
+        {# Les erreurs générales du formulaire. #}        
         {{ form_errors(form) }}
-        <br />
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                {{ form_label(form.kuchi, "Emetteur") }}<br />
-                {{ form_errors(form.kuchi) }}
-                {{ form_widget(form.kuchi) }}
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-sm-3">
+            <div class="panel panel-heading">
+                <h5 class="panel-title">Message instantané</h5>
             </div>
         </div>
+    </div>
+        <br />        
+            {% if Kuchi is null %}
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    {{ form_label(form.kuchi, "Emetteur") }}<br />
+                    {{ form_errors(form.kuchi) }}
+                    {{ form_widget(form.kuchi) }}
+                </div>
+            </div>
+            {%endif%}   
         <br />
         <div class="row">
             <div class="col-md-1"></div>
@@ -85,7 +87,8 @@
         </div>
         <br />   
         <div class="row">
-                {{ form_rest(form) }}   
+            {# Permet d'ajouter le jeton csrf sans afficher tous les champs du formulaire avec form_rest#}
+                {{ form_widget(form._token) }}   
         </div>
         <br/>
         <div class="row">

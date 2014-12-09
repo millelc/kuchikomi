@@ -1,0 +1,15 @@
+{# KuchiKomiBundle/Resources/views/Form/fields.html.twig #}
+
+{% block form_errors %}
+	{% spaceless %}
+		{% if errors|length > 0 %}
+		<div class="alert alert-danger">
+			<ul>
+				{% for error in errors %}
+					<li>{{ error.message }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	{% endspaceless %}
+{% endblock form_errors %}
