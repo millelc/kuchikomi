@@ -40,7 +40,7 @@ class KuchiKomiRecurrentType extends AbstractType
             'property'=>'name',
             'query_builder'=> function(KuchiRepository $kr) use ($id){
                             return $kr->getKuchisByUserId($id); },
-            'label'=>'Emetteur',
+            'label'=>'Emetteur','empty_value'=>"Définir l'émetteur"
             );
                        
         }

@@ -2,6 +2,6 @@ parameters:
 #    obdo_kuchi_komi.example.class: obdo\KuchiKomiBundle\Example
 
 services:
-#    obdo_kuchi_komi.example:
-#        class: %obdo_kuchi_komi.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    obdo_kuchi_komi.replique:
+        class: obdo\KuchiKomiBundle\Services\RepliqueKuchiKomi
+        arguments: [@doctrine.orm.entity_manager,@obdo_services.AclManager ,@obdo_services.Notifier, @obdo_services.Name_photo, @citykomi.async_events.dispatcher ]

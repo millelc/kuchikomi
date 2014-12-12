@@ -6,10 +6,14 @@
 
         
 {% block kk_body %}
-
+ 
   {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
         {% block kk_body_KuchiKomiBundle %}
         {% endblock %}
+        
+        {% block kk_body_KuchiKomiUserBundle %}
+        {% endblock %}
+        
   
         {% block javascripts %}
             {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}

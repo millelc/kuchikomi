@@ -13,6 +13,7 @@ use obdo\ServicesBundle\Services\imageLib;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Symfony\Component\HttpFoundation\Response;
+use obdo\KuchiKomiBundle\Command\CreateKuchiKomisRecurrentsCommand;
 
 class KuchiKomiController extends Controller {
 
@@ -97,26 +98,17 @@ class KuchiKomiController extends Controller {
                         if (!$error) 
                         {
                             // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
-                             foreach($kuchikomi->getKuchi()->getUsers() as $user)
-                             {
-                                $AclManager->addAcl($kuchikomi, $user);
-                            }
-                            foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
-                            {
-                                $AclManager->addAcl($kuchikomi, $user);
-                            }
-
+                            $AclManager->addCascadeUserAcl($kuchikomi);
                         // on logge l'ajout
-                        $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " added");
-
+                            $Logger->Info("[KuchiKomi] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $kuchikomi->getTitle() . " added");
                    // et on notifie
-                        $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchikomi->getKuchi(), $kuchikomi, "2");
-                    
-                    return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
-                                'kuchikomi' => $kuchikomi,
-                    ));
+                            $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchikomi->getKuchi(), $kuchikomi, "2");
 
-                    }   
+                            return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig', array(
+                                        'kuchikomi' => $kuchikomi,
+                            ));
+
+                        }   
                 }
             }
         return $this->render('obdoKuchiKomiBundle:Default:kuchikomiadd.html.twig', array('form' => $form->createView(),'Kuchi' => $kuchi));
@@ -360,32 +352,46 @@ class KuchiKomiController extends Controller {
         $Logger = $this->container->get('obdo_services.Logger');        
         $AclManager = $this->container->get('obdo_services.AclManager');
         $iduser = $this->get('security.context')->getToken()->getUser()->getId();                     
-        
+        $replique = $this->get('obdo_kuchi_komi.replique');
         // on cree l'entite vide
         $kuchikomiRecurr = new KuchiKomiRecurrent();
         $form = $this->createForm(new KuchiKomiRecurrentType($iduser), $kuchikomiRecurr);
-        
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
         
          $request=  $this->get('request');
          
          if($request->getMethod()=='POST'){
-             $form->bind($request);
+             $form->bind($request);             
              
              if($form->isValid()){
-                 $error = $this->processKuchikomi($kuchikomiRecurr);
-                 if(!$error)
-                        {                     
-                        foreach($kuchikomiRecurr->getKuchi()->getUsers() as $user)
-                        {                        
-                           $AclManager->addAcl($kuchikomiRecurr, $user);
+                $active;
+                $intervalEnvoi = new \DateInterval('P'.$kuchikomiRecurr->getSendDay().'D');
+                $jourEnvoi = $kuchikomiRecurr->getBeginRecurrence()->sub($intervalEnvoi);                   
+                $error = $this->processKuchikomi($kuchikomiRecurr);
+                if(!$error)
+                    {                     
+                    $AclManager->addCascadeUserAcl($kuchikomiRecurr);                   
+                    if($jourEnvoi->format('d/M/Y') == $now->format('d/M/Y')) 
+                        {                          
+                            if($kuchikomiRecurr->getRecurrence() == 'unique')
+                            {    
+                               $active = false;
+                            } 
+                            else
+                            {
+                               $active = true;
+                            }
+                            sleep(3);
+                            $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomiRecurr, $now, $active,true);
+                            $Logger->Info($kuchikomi->getPhotoLink());
+                            return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig',array('kuchikomi'=>$kuchikomi));
                         }
-                        foreach($kuchikomiRecurr->getKuchi()->getKuchiGroup()->getUsers() as $user)
-                        {
-                            $AclManager->addAcl($kuchikomiRecurr, $user);
-                        }                    
-                        return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array('kuchikomirecurrent' => $kuchikomiRecurr));
-                        }                      
-                }
+                        else 
+                        {  
+                            return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array('kuchikomirecurrent' => $kuchikomiRecurr));                                                
+                        }
+                    }
+                }                
          }
                   
             

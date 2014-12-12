@@ -159,7 +159,7 @@ class KuchiRepository extends EntityRepository
     {
         return $this->createQueryBuilder('kuchi')
                     ->select('COUNT(kuchi)')
-                    ->join('kuchi.users', 'users')
+                    ->join('kuchi.users', 'users ')
                     ->where('users.id = :userid')
                     ->setParameter('userid', $userid)
                     ->getQuery()
@@ -173,7 +173,7 @@ class KuchiRepository extends EntityRepository
         //pourquoi ?? corrigé...
         $qb = $this->createQueryBuilder('kuchi')
                 ->join('kuchi.users','users')                
-                ->where('users.id = :userid')
+                ->where('users.id = :userid AND kuchi.active = true')
                 ->setParameter('userid', $userid);
 
         return $qb;

@@ -280,10 +280,8 @@ class UserController extends Controller
                     $Logger->Info("[KuchiUser] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $user->getUsername() . " acl kuchigroup update");
                 }
                 
-                return $this->redirect($this->generateUrl('obdo_kuchi_komi_user', array(
-                                    'page' => 1,
-                                    'sort' => 'name_up',
-                )));
+                return $this->redirect($this->generateUrl('obdo_kuchi_komi_user_view', array('id'=>$userid)
+                ));
             }
         }
         return $this->render('obdoKuchiKomiUserBundle:Default:userkuchigroupupdate.html.twig', array(
@@ -327,10 +325,8 @@ class UserController extends Controller
                     $em->flush();
                     $Logger->Info("[KuchiUser] [user : " . $this->get('security.context')->getToken()->getUser()->getUserName() . "] " . $user->getUsername() . " acl kuchi update");
                 }
-                return $this->redirect($this->generateUrl('obdo_kuchi_komi_user', array(
-                                    'page' => 1,
-                                    'sort' => 'name_up',
-                )));
+                return $this->redirect($this->generateUrl('obdo_kuchi_komi_user_view', array('id'=>$userid)
+                ));                
             }
         }
         return $this->render('obdoKuchiKomiUserBundle:Default:userkuchiupdate.html.twig', array(

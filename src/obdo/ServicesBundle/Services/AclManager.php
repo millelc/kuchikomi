@@ -5,6 +5,9 @@ namespace obdo\ServicesBundle\Services;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use obdo\KuchiKomiRESTBundle\Entity\KuchiKomi;
+use \obdo\KuchiKomiRESTBundle\Entity\KuchiKomiRecurrent;
+use obdo\KuchiKomiRESTBundle\Entity\Kuchi;
 
 class AclManager
 {
@@ -64,7 +67,7 @@ class AclManager
                 {
                     if ($ace->getSecurityIdentity()->equals($securityId)) 
                     {
-                        $liste[] = $objet[$i];
+                     $liste[] = $objet[$i];
                     }
                 }
             } 
@@ -76,5 +79,31 @@ class AclManager
 
         return $liste;
     }
-
+    
+    /**
+     * 
+     * @param type $entity
+     * Ajoute l'acl pour tous les users amenés à avoir des droits sur cette entité
+     * 
+     */
+    public function addCascadeUserAcl($entity) 
+    {
+    if($entity instanceof KuchiKomi || $entity instanceof KuchiKomiRecurrent)
+        {
+        foreach($entity->getKuchi()->getUsers() as $user)
+            {            
+             $this->addAcl($entity, $user);           
+            }                         
+        }
+    elseif($entity instanceof Kuchi)
+        {
+        foreach($entity->getUsers() as $user)
+            {            
+             $this->addAcl($entity, $user);           
+            }
+        }
+                    
+    }
+    
+    
 }

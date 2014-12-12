@@ -127,14 +127,8 @@ class KuchiKomiController extends Controller
 
                                 // Add Acl for the object (SUPER_ADMIN + GROUP_ADMIN + CURRENT USER)
                                 $AclManager = $this->container->get('obdo_services.AclManager');
-                                foreach($kuchikomi->getKuchi()->getUsers() as $user)
-                                {
-                                    $AclManager->addAcl($kuchikomi, $user);
-                                }
-                                foreach($kuchikomi->getKuchi()->getKuchiGroup()->getUsers() as $user)
-                                {
-                                    $AclManager->addAcl($kuchikomi, $user);
-                                }
+
+                                $AclManager->addCascadeUserAcl($kuchikomi);
 
                                 $Dispatcher->sendKuchikomiNotificationAsyncEvent($kuchi, $kuchikomi, "2");
                             }

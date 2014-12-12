@@ -91,10 +91,7 @@ class KuchiController extends Controller {
                 $em->flush();
 
                 // Add ACL control for each user of the kuchi
-                foreach($kuchi->getUsers() as $user)
-                {
-                    $AclManager->addAcl($kuchi, $user);
-                }
+                $AclManager->addCascadeUserAcl($kuchi);
                 
                 // Add subscription the new kuchi of each group subscriptions
                 foreach($kuchi->getKuchiGroup()->getSubscriptions() as $subscriptionGroup)
