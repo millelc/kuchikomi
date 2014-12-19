@@ -154,7 +154,9 @@ $(document).ready(function(e) {
        {
           return confirm("Le message du "+ firstSenDay +" va être envoyé maintenant !");
            
-       } 
+       }else {
+           return true;
+       }       
        e.preventDefault();
     });
     

@@ -186,24 +186,12 @@ class KuchiRepository extends EntityRepository
             throw new \InvalidArgumentException('L\'argument $page ne peut être inférieur à 1 (valeur : "'.$page.'").');
         }
         
-        if($userrole == 'ROLE_KUCHI')
-        {
             $query = $this->createQueryBuilder('kuchis')
-                          ->leftJoin('kuchis.kuchiGroup', 'kuchiGroup')
-                          ->addSelect('kuchiGroup')
+
                           ->join('kuchis.users', 'users')
                           ->where('users.id = :userid')
                           ->setParameter('userid', $userid);
-        }
-        else
-        {
-            $query = $this->createQueryBuilder('kuchis')
-                          ->leftJoin('kuchis.kuchiGroup', 'kuchiGroup')
-                          ->addSelect('kuchiGroup')
-                          ->join('kuchiGroup.users', 'users')
-                          ->where('users.id = :userid')
-                          ->setParameter('userid', $userid);
-        }
+
            
         if( $sort == "active_up")
         {

@@ -53,15 +53,20 @@ class RepliqueKuchiKomi {
         $kuchikomi= new KuchiKomi();        
         $kuchikomi->setTitle($kuchikomirecurrent->getTitle());
         $kuchikomi->setDetails($kuchikomirecurrent->getDetails()); 
-        $kuchikomi->setOrigin(3);
+        $kuchikomi->setOrigin(3);       
         if($kuchikomirecurrent->getPhotoLink()<>'')
-            {           
-            $photoname = $this->namePhoto->newName();
-            $newPhotolink = $kuchikomirecurrent->getKuchi()->getPhotoKuchiKomiLink().'/'.$photoname; 
-            $this->stream_copy('../kuchikomi/web/'.$kuchikomirecurrent->getPhotoLink(), '../kuchikomi/web/'.$newPhotolink);
-            $kuchikomi->setPhotoLink($newPhotolink);
+            {
+            if($send!=true)
+                {
+                    $photoname = $this->namePhoto->newName();
+                    $newPhotolink = $kuchikomirecurrent->getKuchi()->getPhotoKuchiKomiLink().'/'.$photoname; 
+                    $this->stream_copy('../kuchikomi/web/'.$kuchikomirecurrent->getPhotoLink(), '../kuchikomi/web/'.$newPhotolink);
+                    $kuchikomi->setPhotoLink($newPhotolink);                    
+                }
+            else{
+                   $kuchikomi->setPhotoLink($kuchikomirecurrent->getPhotoLink());                   
+                }
             }
-                
         $date = new \DateTime();
         $datefin = new \DateTime();
         $date->setDate($now->format('Y'), $now->format('m'), $now->format('d'));
@@ -101,7 +106,7 @@ class RepliqueKuchiKomi {
      */
      public  function stream_copy($src, $dest) 
     { 
-        $fsrc = fopen($src,'r'); 
+        $fsrc = fopen($src,'r+'); 
         $fdest = fopen($dest,'w+'); 
         stream_copy_to_stream($fsrc,$fdest); 
         fclose($fsrc); 

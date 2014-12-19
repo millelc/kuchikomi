@@ -183,4 +183,27 @@ class TypeAppel
         // on renseigne la date de mise à jour avec la date système lors .... d'une mise à jour !
         $this->setTimestampLastUpdate(new \Datetime());
     }
+
+    /**
+     * Set timestampSuppression
+     *
+     * @param \DateTime $timestampSuppression
+     * @return TypeAppel
+     */
+    public function setTimestampSuppression($timestampSuppression)
+    {
+        $this->timestampSuppression = $timestampSuppression;
+
+        return $this;
+    }
+
+    /**
+     * Get timestampSuppression
+     *
+     * @return \DateTime 
+     */
+    public function getTimestampSuppression()
+    {
+        return $this->timestampSuppression;
+    }
 }

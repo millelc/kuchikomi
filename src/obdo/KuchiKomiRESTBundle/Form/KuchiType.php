@@ -17,10 +17,14 @@ class KuchiType extends AbstractType
     {
         $builder
             ->add('name',     		'text')
-            ->add('password',     	'text')
+            ->add('password',     	'repeated', 
+                    array('type'=>'password',
+                        'invalid_message'=>"les mots de passe ne sont pas identiques",
+                        'first_options'=> 'Tapez votre mote de passe',
+                        'second_options'=> 'Tapez à nouveau votre mot de passe'))
             ->add('phoneNumber',     	'text')
-            ->add('mailAddress',        'text', array('required' => false,'empty_data' => ''))
-            ->add('webSite',            'text', array('required' => false,'empty_data' => '', 'data' => 'http://'))
+            ->add('mailAddress',        'email', array('required' => false,'empty_data' => ''))
+            ->add('webSite',            'url', array('required' => false,'empty_data' => '', 'data' => 'http://'))
             ->add('address', 		 new AddressType())
             ->add('logoimg',            'file')
             ->add('photoimg',           'file')

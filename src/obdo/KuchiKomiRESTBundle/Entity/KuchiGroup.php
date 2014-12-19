@@ -467,4 +467,14 @@ class KuchiGroup
     }
  
 
+
+    /**
+     * Remove users
+     *
+     * @param \obdo\KuchiKomiUserBundle\Entity\User $users
+     */
+    public function removeUser(\obdo\KuchiKomiUserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
 }

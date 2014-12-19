@@ -39,75 +39,85 @@ class CreateKuchiKomisRecurrentsCommand extends ContainerAwareCommand {
         $count=0;
         
         foreach ($kuchikomirecurrents as $kuchikomirecurrent ){
+          
+          
                 $recurrence = $kuchikomirecurrent->getRecurrence();                        
                 $begin = $kuchikomirecurrent->getBeginRecurrence();
                 $end = $kuchikomirecurrent->getEndRecurrence();    
-                //$end->setTime('23','59','59');
+                $inter= new \DateInterval('P'.$kuchikomirecurrent->getSendDay().'D');
                 
+                //si la date du jour de creation du kuchikomirecurrent
+                // est égal au jour du premier envoi et est aussi égal à aujourd'hui => pas de création de kuchikomi
+                // puisque le controller l'a déjà envoyé
+                $dateCrea=$kuchikomirecurrent->getDateTimeCreation()->format('d/M/Y');
+                $dateSend=$begin->sub($inter)->format('d/M/Y');
+                if($dateCrea!=$now->format('d/M/Y') && $dateCrea!=$dateSend){
                 
-                if($kuchikomirecurrent->getSendDay()>0) 
-                {
-                    $inter= new \DateInterval('P'.$kuchikomirecurrent->getSendDay().'D');
-                    $now=$now->add($inter);                             
-                }
-                $jour = $now->format('w');
-                $jourmois = $now->format('d');  
-                $year = $now->format('Y');
-                $mois = $now->format('m');
+                    if($kuchikomirecurrent->getSendDay()>0) 
+                    {                    
+                        $now=$now->add($inter);
+
+                    }
+
+                    $jour = $now->format('w');
+                    $jourmois = $now->format('d');  
+                    $year = $now->format('Y');
+                    $mois = $now->format('m');
 
 
-                if($begin <= $now && $now <= $end){
-                    switch($recurrence)
-                    {                        
-                        case "weekly":
-                            {                         
-                            if($jour==$begin->format('w'))
-                                {
-                                $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,true,false);
-                                $count= $count+1;
-                                $output->write('$kuchikomi '.$kuchikomi->getId().' hebdo créé');
+                    if($begin <= $now && $now <= $end){
+                        switch($recurrence)
+                        {                        
+                            case "weekly":
+                                {                         
+                                if($jour==$begin->format('w'))
+                                    {
+                                    $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,true,false);
+                                    $count= $count+1;
+                                    $output->write('$kuchikomi '.$kuchikomi->getId().' hebdo créé');
+                                    }
+                                break;
                                 }
-                            break;
-                            }
-                        case "monthly":
-                            {                             
-                            if($jourmois==$begin->format('d'))
-                                {
-                                $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,true,false );
-                                $logger->Info('$kuchikomi '.$kuchikomi->getId().' mensuel créé');
-                                $count= $count+1;
+                            case "monthly":
+                                {                             
+                                if($jourmois==$begin->format('d'))
+                                    {
+                                    $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,true,false );
+                                    $logger->Info('$kuchikomi '.$kuchikomi->getId().' mensuel créé');
+                                    $count= $count+1;
+                                    }
+                                break;
                                 }
-                            break;
-                            }
-                        case "unique":
+                            case "unique":
+                                {
+                                if($jour==$begin->format('w') && $mois==$begin->format('m') && $year==$begin->format('Y'))
+                                    {
+                                    $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,false,false );                        
+                                    $logger->Info('Message pré-enregistré n°'.$kuchikomirecurrent->getId().' a bien été envoyé');
+                                    $logger->Info('$kuchikomi '.$kuchikomi->getId().' unique créé');
+                                    }  
+                                break;
+                                }
+                            case "yearly":
                             {
-                            if($jour==$begin->format('w') && $mois==$begin->format('m') && $year==$begin->format('Y'))
-                                {
-                                $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,false,false );                        
-                                $logger->Info('Message pré-enregistré n°'.$kuchikomirecurrent->getId().' a bien été envoyé');
-                                $logger->Info('$kuchikomi '.$kuchikomi->getId().' unique créé');
-                                }  
-                            break;
+                                if($jour==$begin->format('w') && $mois==$begin->format('m')){
+                                    $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,true,false);
+                                    $count= $count+1;
+                                    $logger->Info('$kuchikomi '.$kuchikomi->getId().' annuel créé');
+                                }
+                                break;
                             }
-                        case "yearly":
-                        {
-                            if($jour==$begin->format('w') && $mois==$begin->format('m')){
-                                $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomirecurrent, $now,true,false);
-                                $count= $count+1;
-                                $logger->Info('$kuchikomi '.$kuchikomi->getId().' annuel créé');
-                            }
-                            break;
                         }
                     }
-                }
-                elseif($now > $end)
-                    {
-                    $kuchikomirecurrent->setActive(false);
-                    $em->persist($kuchikomirecurrent);               
-                    $em->flush();
-                    }
-                $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;
-            }
+                    elseif($now > $end)
+                        {
+                        $kuchikomirecurrent->setActive(false);
+                        $em->persist($kuchikomirecurrent);               
+                        $em->flush();
+                        }
+                }      
+                    $now = new \DateTime('now', new \DateTimeZone('Europe/Paris')) ;
+        }
         
         $logger->Info($count.' Kuchikomis créés');
     }

@@ -222,4 +222,30 @@ class KuchiAccount
     
 
 
+
+    /**
+     * Set timestampLastSynchroSaved
+     *
+     * @param \DateTime $timestampLastSynchroSaved
+     * @return KuchiAccount
+     */
+    public function setTimestampLastSynchroSaved($timestampLastSynchroSaved)
+    {
+        $this->timestampLastSynchroSaved = $timestampLastSynchroSaved;
+
+        return $this;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return KuchiAccount
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
 }

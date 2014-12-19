@@ -57,23 +57,11 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$manager->persist($obdoGroup);
 		$manager->flush();
                 // ACL
+                $AclManager->addAcl($obdoGroup, $this->getReference('GroupAdmin'));
                 $AclManager->addAcl($obdoGroup, $this->getReference('SuperAdmin'));
-                $AclManager->addAcl($obdoGroup, $this->getReference('Admin'));              
+                $AclManager->addAcl($obdoGroup, $this->getReference('Admin'));
+                          
 
-                // FB Group
-		$FBGroup = new KuchiGroup();
-		$FBGroup->setName("Feuguerolles-Bully");
-                $FBGroup->addUser($this->getReference('SuperAdmin'));
-                $FBGroup->addUser($this->getReference('Admin'));
-		$this->addReference('fb', $FBGroup);
-		$manager->persist($FBGroup);
-		$manager->flush();
-		$FBGroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $FBGroup->getId() . "/logo_groupe.png" );
-		$manager->persist($FBGroup);
-		$manager->flush();
-                // ACL
-                $AclManager->addAcl($FBGroup, $this->getReference('SuperAdmin'));
-                $AclManager->addAcl($FBGroup, $this->getReference('Admin'));
                 
 		// Lycee Group
 		$lyceeGroup = new KuchiGroup();
@@ -87,8 +75,9 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
 		$manager->persist($lyceeGroup);
 		$manager->flush();
                 // ACL
-                $AclManager->addAcl($lyceeGroup, $this->getReference('SuperAdmin'));
-                $AclManager->addAcl($lyceeGroup, $this->getReference('Admin')); 
+                $AclManager->addAcl($lyceeGroup, $this->getReference('GroupAdmin'));
+                $AclManager->addAcl($lyceeGroup, $this->getReference('SuperAdmin')); 
+                $AclManager->addAcl($lyceeGroup, $this->getReference('Admin'));
                 
                 // ToBeDeleted Group
 		$toBeDeletedGroup = new KuchiGroup();
@@ -152,6 +141,11 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
                 $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_8");
                 $this->createKuchiGroup($manager, $AclManager, "N_DeleteSubscriptionGroupAction_9");
                 $this->createKuchiGroup($manager, $AclManager, "Group_P_PostKuchiKomiAction_1");//, "User_test_PostKuchiKomiAction_1", 'Admin');
+        
+                $this->createKuchiGroup2($manager, $AclManager, "KuchiGroupFeuguerolles","KuchiAdmin");
+                $this->createKuchiGroup2($manager, $AclManager, "KuchiGroupDelete","KuchiAdmin");
+                $this->createKuchiGroup2($manager, $AclManager, "KuchiGroupKuchiFutur","KuchiAdmin");
+
         }
         
         private function createKuchiGroup($manager, $AclManager, $name, $active=true)
@@ -174,16 +168,22 @@ class KuchiGroupData extends AbstractFixture implements ContainerAwareInterface,
             $AclManager->addAcl($newGroup, $this->getReference('GroupAdmin'));
         }
         
-//    private  function createKuchiGroup($manager,$AclManager,$name,$refUser,$refUserAcl,$active=true){
-//        $kuchigroup = new KuchiGroup();
-//        $kuchigroup->setName($name);
-//        $kuchigroup->setActive($active);
-//        $kuchigroup->addUser($this->getReference($refUser));
-//        $this->addReference($name,$kuchigroup);
-//        $manager->flush();
-//        $kuchigroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchigroup->getId() . "/logo_lycee.png" );
-//        $manager->persist($kuchigroup);
-//        $manager->flush();
-//        $AclManager->addAcl($kuchigroup,  $this->getReference($refUserAcl));
-//    }
+        private  function createKuchiGroup2($manager,$AclManager,$name,$refUser){
+            $kuchigroup = new KuchiGroup();
+            $kuchigroup->setName($name);
+            $kuchigroup->setActive(true);
+            $kuchigroup->addUser($this->getReference('SuperAdmin'));
+            $kuchigroup->addUser($this->getReference('Admin'));
+            $kuchigroup->addUser($this->getReference('GroupAdmin'));
+            $kuchigroup->addUser($this->getReference($refUser));
+            $this->addReference($name,$kuchigroup);
+            $manager->flush();
+            $kuchigroup->setLogo( $this->container->getParameter('path_kuchigroup_photo') . $kuchigroup->getId() . "/logo_lycee.png" );
+            $manager->persist($kuchigroup);
+            $manager->flush();
+            $AclManager->addAcl($kuchigroup, $this->getReference('SuperAdmin'));
+            $AclManager->addAcl($kuchigroup, $this->getReference('Admin'));
+            $AclManager->addAcl($kuchigroup, $this->getReference('GroupAdmin'));
+            $AclManager->addAcl($kuchigroup,  $this->getReference($refUser));
+        }
 }

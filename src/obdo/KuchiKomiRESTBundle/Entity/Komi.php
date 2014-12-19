@@ -522,4 +522,17 @@ class Komi
     {
         return $this->gcmRegId;
     }
+
+    /**
+     * Set timestampLastSynchroSaved
+     *
+     * @param \DateTime $timestampLastSynchroSaved
+     * @return Komi
+     */
+    public function setTimestampLastSynchroSaved($timestampLastSynchroSaved)
+    {
+        $this->timestampLastSynchroSaved = $timestampLastSynchroSaved;
+
+        return $this;
+    }
 }

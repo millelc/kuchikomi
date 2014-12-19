@@ -310,4 +310,27 @@ class Abonnements
         // on renseigne la date de mise à jour avec la date système lors .... d'une mise à jour !
         $this->setTimestampLastUpdate(new \Datetime());
     }
+
+    /**
+     * Add kuchis
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis
+     * @return Abonnements
+     */
+    public function addKuchi(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis)
+    {
+        $this->kuchis[] = $kuchis;
+
+        return $this;
+    }
+
+    /**
+     * Remove kuchis
+     *
+     * @param \obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis
+     */
+    public function removeKuchi(\obdo\KuchiKomiRESTBundle\Entity\Kuchi $kuchis)
+    {
+        $this->kuchis->removeElement($kuchis);
+    }
 }

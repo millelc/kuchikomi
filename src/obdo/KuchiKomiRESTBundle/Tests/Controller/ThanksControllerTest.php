@@ -26,7 +26,7 @@ class ThanksControllerTest extends CityKomiWebTestCase {
     }
     
     
-    function __construct($randomId_komi, $kuchiName) {
+    function __construct() {
         parent::__construct();
         $this->randomId = uniqid(Komi_ThksTest);
         $this->kuchiKomiTitle = "Thanks";

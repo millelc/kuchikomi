@@ -370,7 +370,9 @@ class KuchiKomiController extends Controller {
                 $error = $this->processKuchikomi($kuchikomiRecurr);
                 if(!$error)
                     {                     
-                    $AclManager->addCascadeUserAcl($kuchikomiRecurr);                   
+                    $AclManager->addCascadeUserAcl($kuchikomiRecurr);
+                    //si le 1er ou l'unique message du kuchikomirecurrent est daté du jour, on créé le kuchikomi
+                    // et on l'envoi de suite 
                     if($jourEnvoi->format('d/M/Y') == $now->format('d/M/Y')) 
                         {                          
                             if($kuchikomiRecurr->getRecurrence() == 'unique')
@@ -381,15 +383,17 @@ class KuchiKomiController extends Controller {
                             {
                                $active = true;
                             }
-                            sleep(3);
                             $kuchikomi = $replique->createRepeatedKuchiKomi($kuchikomiRecurr, $now, $active,true);
-                            $Logger->Info($kuchikomi->getPhotoLink());
+
                             return $this->render('obdoKuchiKomiBundle:Default:kuchikomiview.html.twig',array('kuchikomi'=>$kuchikomi));
                         }
                         else 
                         {  
                             return $this->render('obdoKuchiKomiBundle:Default:kuchikomirecurrentview.html.twig', array('kuchikomirecurrent' => $kuchikomiRecurr));                                                
                         }
+                    }
+                    else {
+                        $Logger->Info('error Process KuchikomiRecurrent');
                     }
                 }                
          }
